@@ -483,23 +483,6 @@ a11ykit/
 └── .changeset/        # Version management
 ```
 
-### Creating a Changeset
-
-When making changes, create a changeset for version management:
-
-```bash
-pnpm changeset
-```
-
-## Contributing
-
-Contributions are welcome! Please ensure:
-
-1. All components have full keyboard navigation
-2. ARIA attributes are correctly applied
-3. Screen reader testing is performed
-4. Tests pass: `pnpm test`
-
 ## License
 
 MIT
