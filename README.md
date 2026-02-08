@@ -22,6 +22,17 @@ A11yKit provides fully accessible UI components for React and vanilla JavaScript
 - **Tree-Shakeable** — Import only what you need
 - **TypeScript First** — Full type safety included
 
+## Release Status
+
+A11yKit is currently in **alpha (v0.1.0)**.  
+We are actively adding more components. Current components are:
+
+- Combobox
+- Dialog
+- Menu
+- Tabs
+- Toast
+
 ## Packages
 
 | Package                            | Description                       | Install                      |
@@ -55,7 +66,6 @@ function App() {
 
   return (
     <ToastProvider>
-      {/* Dialog */}
       <Dialog.Trigger onClick={() => setDialogOpen(true)}>
         Open Dialog
       </Dialog.Trigger>
@@ -70,7 +80,6 @@ function App() {
         </Dialog.Actions>
       </Dialog>
 
-      {/* Tabs */}
       <Tabs defaultValue="general">
         <Tabs.List aria-label="Settings">
           <Tabs.Tab value="general">General</Tabs.Tab>
@@ -80,7 +89,6 @@ function App() {
         <Tabs.Panel value="security">Security settings...</Tabs.Panel>
       </Tabs>
 
-      {/* Action Menu */}
       <ActionMenu>
         <ActionMenu.Trigger>Actions</ActionMenu.Trigger>
         <ActionMenu.Content>
@@ -94,7 +102,6 @@ function App() {
         </ActionMenu.Content>
       </ActionMenu>
 
-      {/* Combobox */}
       <Combobox options={countries} value={country} onValueChange={setCountry}>
         <Combobox.Input placeholder="Select country..." clearable />
         <Combobox.Listbox emptyMessage="No results found" />
