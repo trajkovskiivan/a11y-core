@@ -14,7 +14,7 @@ A11yKit provides fully accessible UI components for React and vanilla JavaScript
 ## Features
 
 - **Zero Configuration** — Components are accessible by default
-- **Framework Agnostic** — Works with React, Next.js, or plain HTML/JS
+- **Framework Agnostic** — Works with React, Next.js, or plain HTML/JS (Vue, Svelte, Angular coming soon)
 - **Dev Warnings** — Get console feedback when accessibility is missing
 - **Full Keyboard Support** — Arrow keys, Tab, Enter, Escape all work correctly
 - **Screen Reader Ready** — Proper ARIA roles, live regions, and announcements
