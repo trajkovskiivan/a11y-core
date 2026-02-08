@@ -1,0 +1,65 @@
+{
+  "name": "@a11ykit/core",
+  "version": "0.1.0",
+  "description": "Framework-agnostic accessibility primitives",
+  "author": "Ivan Trajkovski",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./focus": {
+      "types": "./dist/focus/index.d.ts",
+      "import": "./dist/focus/index.js",
+      "require": "./dist/focus/index.cjs"
+    },
+    "./keyboard": {
+      "types": "./dist/keyboard/index.d.ts",
+      "import": "./dist/keyboard/index.js",
+      "require": "./dist/keyboard/index.cjs"
+    },
+    "./announcer": {
+      "types": "./dist/announcer/index.d.ts",
+      "import": "./dist/announcer/index.js",
+      "require": "./dist/announcer/index.cjs"
+    },
+    "./aria": {
+      "types": "./dist/aria/index.d.ts",
+      "import": "./dist/aria/index.js",
+      "require": "./dist/aria/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.2.0"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "focus",
+    "keyboard",
+    "aria",
+    "screen-reader"
+  ]
+}

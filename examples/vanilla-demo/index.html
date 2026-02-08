@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A11yKit Vanilla JS Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    button:focus-visible {
+      outline: 2px solid #0066cc;
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       CRITICAL: Hide web component content before JavaScript loads
+       This prevents FOUC (Flash of Unstyled Content)
+       ========================================================================== */
+
+    /* Hide custom elements until they are defined */
+    a11y-dialog:not(:defined),
+    a11y-menu:not(:defined),
+    a11y-tabs:not(:defined),
+    a11y-combobox:not(:defined) {
+      display: none;
+    }
+
+    /* Alternative: Show a loading state instead of hiding */
+    /*
+    a11y-dialog:not(:defined)::before,
+    a11y-menu:not(:defined)::before,
+    a11y-tabs:not(:defined)::before,
+    a11y-combobox:not(:defined)::before {
+      content: 'Loading...';
+      display: block;
+      padding: 1rem;
+      color: #666;
+    }
+    */
+
+    /* ==========================================================================
+       A11yKit Web Components Theming (CSS Custom Properties)
+       ========================================================================== */
+
+    /* Dialog theming */
+    a11y-dialog {
+      --a11ykit-dialog-bg: white;
+      --a11ykit-dialog-radius: 8px;
+      --a11ykit-dialog-padding: 1.5rem;
+      --a11ykit-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+      --a11ykit-dialog-max-width: 400px;
+    }
+
+    /* Menu theming */
+    a11y-menu {
+      --a11ykit-menu-bg: white;
+      --a11ykit-menu-border: 1px solid #e0e0e0;
+      --a11ykit-menu-radius: 4px;
+      --a11ykit-menu-item-hover-bg: #f5f5f5;
+    }
+
+    /* Tabs theming */
+    a11y-tabs {
+      --a11ykit-tabs-border: 1px solid #e0e0e0;
+      --a11ykit-tab-color: #666;
+      --a11ykit-tab-active-color: #0066cc;
+    }
+
+    /* Combobox theming */
+    a11y-combobox {
+      --a11ykit-combobox-width: 300px;
+      --a11ykit-combobox-border: 1px solid #ccc;
+      --a11ykit-combobox-radius: 4px;
+      --a11ykit-combobox-option-hover-bg: #f5f5f5;
+      --a11ykit-combobox-option-selected-bg: #e6f0ff;
+    }
+
+    /* ==========================================================================
+       Slotted content styling (for Dialog and Menu)
+       ========================================================================== */
+
+    [role="menuitem"] {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    [role="menuitem"]:hover,
+    [role="menuitem"][data-highlighted="true"] {
+      background: var(--a11ykit-menu-item-hover-bg, #f5f5f5);
+    }
+
+    [role="separator"] {
+      height: 1px;
+      background: #e0e0e0;
+      margin: 0.25rem 0;
+    }
+
+    [role="tab"] {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+      color: #666;
+    }
+
+    [role="tab"][aria-selected="true"] {
+      color: #0066cc;
+      border-bottom-color: #0066cc;
+    }
+
+    [role="tabpanel"] {
+      padding: 1rem 0;
+    }
+
+    [slot="title"] {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+
+    [slot="description"] {
+      color: #666;
+      margin: 0 0 1rem 0;
+    }
+
+    [slot="actions"] {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* ==========================================================================
+       Demo-specific styles
+       ========================================================================== */
+
+    .keyboard-hints {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f8f8f8;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+
+    .keyboard-hints h3 {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .keyboard-hints ul {
+      margin-left: 1.5rem;
+    }
+
+    .keyboard-hints li {
+      margin-bottom: 0.25rem;
+    }
+
+    kbd {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 0.1rem 0.4rem;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+
+    .button-primary {
+      background: #0066cc;
+      color: white;
+      border-color: #0066cc;
+    }
+
+    .button-primary:hover {
+      background: #0052a3;
+    }
+
+    .button-danger {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+
+    .button-danger:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>A11yKit Vanilla JS Demo</h1>
+  <p style="margin-bottom: 1.5rem;">
+    These components work with just HTML and the A11yKit script. No framework required.
+  </p>
+
+  <section>
+    <h2>Dialog</h2>
+    <p style="margin-bottom: 1rem;">A modal dialog with focus trap and keyboard support.</p>
+    <button id="open-dialog">Open Dialog</button>
+
+    <a11y-dialog trigger="#open-dialog">
+      <h2 slot="title">Confirm Delete</h2>
+      <p slot="description">
+        Are you sure you want to delete this item? This action cannot be undone.
+      </p>
+      <div slot="actions">
+        <button onclick="this.closest('a11y-dialog').close()">Cancel</button>
+        <button class="button-danger" onclick="handleDelete()">Delete</button>
+      </div>
+    </a11y-dialog>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>Tab</kbd> moves between focusable elements</li>
+        <li><kbd>Escape</kbd> closes the dialog</li>
+        <li>Focus is trapped within the dialog</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Action Menu</h2>
+    <p style="margin-bottom: 1rem;">A dropdown menu for actions.</p>
+    <a11y-menu>
+      <button slot="trigger">Actions ▾</button>
+      <button role="menuitem" onclick="console.log('Edit clicked')">Edit</button>
+      <button role="menuitem" onclick="console.log('Duplicate clicked')">Duplicate</button>
+      <button role="menuitem" onclick="console.log('Share clicked')">Share</button>
+      <div role="separator"></div>
+      <button role="menuitem" onclick="console.log('Delete clicked')">Delete</button>
+    </a11y-menu>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>Enter</kbd> or <kbd>Space</kbd> opens the menu</li>
+        <li><kbd>↑</kbd> <kbd>↓</kbd> navigates items</li>
+        <li><kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last</li>
+        <li><kbd>Escape</kbd> closes the menu</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tabs</h2>
+    <p style="margin-bottom: 1rem;">Accessible tabbed interface.</p>
+    <a11y-tabs>
+      <button role="tab" aria-controls="panel-general">General</button>
+      <button role="tab" aria-controls="panel-security">Security</button>
+      <button role="tab" aria-controls="panel-notifications">Notifications</button>
+
+      <div role="tabpanel" id="panel-general">
+        <p><strong>General Settings</strong></p>
+        <p>Configure your basic account settings here.</p>
+      </div>
+      <div role="tabpanel" id="panel-security">
+        <p><strong>Security Settings</strong></p>
+        <p>Manage your password and two-factor authentication.</p>
+      </div>
+      <div role="tabpanel" id="panel-notifications">
+        <p><strong>Notification Settings</strong></p>
+        <p>Control how and when you receive notifications.</p>
+      </div>
+    </a11y-tabs>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>←</kbd> <kbd>→</kbd> switches between tabs</li>
+        <li><kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last tab</li>
+        <li>Tab panels are automatically shown/hidden</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Combobox</h2>
+    <p style="margin-bottom: 1rem;">An autocomplete/select component with filtering.</p>
+
+    <label for="country-select" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+      Select a country:
+    </label>
+    <a11y-combobox placeholder="Type to search..." clearable>
+      <option value="us">United States</option>
+      <option value="uk">United Kingdom</option>
+      <option value="ca">Canada</option>
+      <option value="au">Australia</option>
+      <option value="de">Germany</option>
+      <option value="fr">France</option>
+      <option value="jp">Japan</option>
+      <option value="br">Brazil</option>
+      <option value="in">India</option>
+      <option value="mx">Mexico</option>
+    </a11y-combobox>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>↑</kbd> <kbd>↓</kbd> navigates options</li>
+        <li><kbd>Enter</kbd> selects the highlighted option</li>
+        <li><kbd>Escape</kbd> closes the dropdown</li>
+        <li>Type to filter options</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Screen Reader Announcements</h2>
+    <p>Click the buttons to trigger screen reader announcements:</p>
+    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+      <button onclick="A11yKit.announcePolite('This is a polite announcement')">
+        Polite Announcement
+      </button>
+      <button onclick="A11yKit.announceAssertive('This is an urgent announcement!')">
+        Assertive Announcement
+      </button>
+    </div>
+    <p style="margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
+      Enable a screen reader (VoiceOver, NVDA, JAWS) to hear the announcements.
+    </p>
+  </section>
+
+  <!-- Load A11yKit - this registers all custom elements automatically -->
+  <script type="module">
+    // For local development with Vite:
+    import * as A11yKit from '@a11ykit/web';
+
+    // For production CDN usage, use one of:
+    // import * as A11yKit from 'https://unpkg.com/@a11ykit/web';
+    // import * as A11yKit from 'https://cdn.jsdelivr.net/npm/@a11ykit/web';
+
+    // Expose globally for onclick handlers
+    window.A11yKit = A11yKit;
+
+    // Example: Custom event handling
+    document.querySelector('a11y-dialog')?.addEventListener('a11y-dialog-open', () => {
+      console.log('Dialog opened');
+    });
+
+    document.querySelector('a11y-dialog')?.addEventListener('a11y-dialog-close', () => {
+      console.log('Dialog closed');
+    });
+
+    document.querySelector('a11y-menu')?.addEventListener('a11y-menu-select', (e) => {
+      console.log('Menu item selected:', e.detail.item);
+    });
+
+    document.querySelector('a11y-tabs')?.addEventListener('a11y-tabs-change', (e) => {
+      console.log('Tab changed:', e.detail);
+    });
+
+    document.querySelector('a11y-combobox')?.addEventListener('a11y-combobox-change', (e) => {
+      console.log('Combobox changed:', e.detail);
+    });
+  </script>
+
+  <script>
+    function handleDelete() {
+      alert('Item deleted!');
+      document.querySelector('a11y-dialog').close();
+    }
+  </script>
+</body>
+
+</html>
