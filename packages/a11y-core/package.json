@@ -1,6 +1,6 @@
 {
   "name": "@a11y-core/a11y-core",
-"version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.4",
   "description": "The complete accessibility toolkit. React primitives and Web Components.",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -10,6 +10,11 @@
   "files": [
     "README.md"
   ],
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/trajkovskiivan/a11y-core.git",
+  "directory": "packages/a11y-core"
+  },
   "dependencies": {
     "@a11y-core/core": "workspace:*",
     "@a11y-core/react": "workspace:*",

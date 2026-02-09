@@ -1,6 +1,6 @@
 {
   "name": "@a11y-core/web",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.4",
   "description": "Accessible Web Components for any HTML page - CDN ready",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -8,9 +8,18 @@
   "publishConfig": {
     "access": "public"
   },
-"main": "./dist/index.js",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/trajkovskiivan/a11y-core#readme",
+  "bugs": {
+    "url": "https://github.com/trajkovskiivan/a11y-core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trajkovskiivan/a11y-core.git",
+    "directory": "packages/web"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

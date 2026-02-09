@@ -26,10 +26,10 @@ echo ""
 
 # Confirm before proceeding
 echo -e "${YELLOW}⚠️  You are about to publish the following packages:${NC}"
-echo "   - @a11y-core/core@0.1.0-alpha.2"
-echo "   - @a11y-core/react@0.1.0-alpha.2"
-echo "   - @a11y-core/web@0.1.0-alpha.2"
-echo "   - @a11y-core/a11y-core@0.1.0-alpha.2"
+echo "   - @a11y-core/core@0.1.0-alpha.4"
+echo "   - @a11y-core/react@0.1.0-alpha.4"
+echo "   - @a11y-core/web@0.1.0-alpha.4"
+echo "   - @a11y-core/a11y-core@0.1.0-alpha.4"
 echo ""
 read -p "Continue? (y/N) " -n 1 -r
 echo
