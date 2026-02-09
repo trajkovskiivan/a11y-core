@@ -1,0 +1,24 @@
+{
+  "name": "@a11y-core/a11y-core",
+"version": "0.1.0-alpha.2",
+  "description": "The complete accessibility toolkit. React primitives and Web Components.",
+  "author": "Ivan Trajkovski",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "README.md"
+  ],
+  "dependencies": {
+    "@a11y-core/core": "workspace:*",
+    "@a11y-core/react": "workspace:*",
+    "@a11y-core/web": "workspace:*"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "react",
+    "web-components"
+  ]
+}

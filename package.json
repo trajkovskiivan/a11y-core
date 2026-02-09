@@ -1,13 +1,13 @@
 {
-  "name": "a11ykit",
+  "name": "a11y-core",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "description": "Accessible components that just work. React + Web Components.",
   "author": "Ivan Trajkovski",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trajkovskiivan/a11ykit.git"
+    "url": "https://github.com/trajkovskiivan/a11y-core.git"
   },
   "keywords": [
     "accessibility",

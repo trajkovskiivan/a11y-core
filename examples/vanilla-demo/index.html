@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A11yKit Vanilla JS Demo</title>
+  <title>a11y-core Vanilla JS Demo</title>
   <style>
     * {
       box-sizing: border-box;
@@ -65,7 +65,8 @@
     a11y-dialog:not(:defined),
     a11y-menu:not(:defined),
     a11y-tabs:not(:defined),
-    a11y-combobox:not(:defined) {
+    a11y-combobox:not(:defined),
+    a11y-switch:not(:defined) {
       display: none;
     }
 
@@ -83,40 +84,49 @@
     */
 
     /* ==========================================================================
-       A11yKit Web Components Theming (CSS Custom Properties)
+       a11y-core Web Components Theming (CSS Custom Properties)
        ========================================================================== */
 
     /* Dialog theming */
     a11y-dialog {
-      --a11ykit-dialog-bg: white;
-      --a11ykit-dialog-radius: 8px;
-      --a11ykit-dialog-padding: 1.5rem;
-      --a11ykit-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
-      --a11ykit-dialog-max-width: 400px;
+      --a11y-core-dialog-bg: white;
+      --a11y-core-dialog-radius: 8px;
+      --a11y-core-dialog-padding: 1.5rem;
+      --a11y-core-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+      --a11y-core-dialog-max-width: 400px;
     }
 
     /* Menu theming */
     a11y-menu {
-      --a11ykit-menu-bg: white;
-      --a11ykit-menu-border: 1px solid #e0e0e0;
-      --a11ykit-menu-radius: 4px;
-      --a11ykit-menu-item-hover-bg: #f5f5f5;
+      --a11y-core-menu-bg: white;
+      --a11y-core-menu-border: 1px solid #e0e0e0;
+      --a11y-core-menu-radius: 4px;
+      --a11y-core-menu-item-hover-bg: #f5f5f5;
     }
 
     /* Tabs theming */
     a11y-tabs {
-      --a11ykit-tabs-border: 1px solid #e0e0e0;
-      --a11ykit-tab-color: #666;
-      --a11ykit-tab-active-color: #0066cc;
+      --a11y-core-tabs-border: 1px solid #e0e0e0;
+      --a11y-core-tab-color: #666;
+      --a11y-core-tab-active-color: #0066cc;
     }
 
     /* Combobox theming */
     a11y-combobox {
-      --a11ykit-combobox-width: 300px;
-      --a11ykit-combobox-border: 1px solid #ccc;
-      --a11ykit-combobox-radius: 4px;
-      --a11ykit-combobox-option-hover-bg: #f5f5f5;
-      --a11ykit-combobox-option-selected-bg: #e6f0ff;
+      --a11y-core-combobox-width: 300px;
+      --a11y-core-combobox-border: 1px solid #ccc;
+      --a11y-core-combobox-radius: 4px;
+      --a11y-core-combobox-option-hover-bg: #f5f5f5;
+      --a11y-core-combobox-option-selected-bg: #e6f0ff;
+    }
+
+    /* Switch theming */
+    a11y-switch {
+      --a11y-core-switch-bg: #d1d5db;
+      --a11y-core-switch-checked-bg: #0066cc;
+      --a11y-core-switch-thumb-bg: white;
+      --a11y-core-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --a11y-core-focus-color: #0066cc;
     }
 
     /* ==========================================================================
@@ -136,7 +146,7 @@
 
     [role="menuitem"]:hover,
     [role="menuitem"][data-highlighted="true"] {
-      background: var(--a11ykit-menu-item-hover-bg, #f5f5f5);
+      background: var(--a11y-core-menu-item-hover-bg, #f5f5f5);
     }
 
     [role="separator"] {
@@ -239,9 +249,9 @@
 </head>
 
 <body>
-  <h1>A11yKit Vanilla JS Demo</h1>
+  <h1>a11y-core Vanilla JS Demo</h1>
   <p style="margin-bottom: 1.5rem;">
-    These components work with just HTML and the A11yKit script. No framework required.
+    These components work with just HTML and the a11y-core script. No framework required.
   </p>
 
   <section>
@@ -357,13 +367,50 @@
   </section>
 
   <section>
+    <h2>Switch</h2>
+    <p style="margin-bottom: 1rem;">An accessible toggle switch (on/off control).</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <!-- Basic switch -->
+      <a11y-switch id="notifications-switch" label="Enable notifications"></a11y-switch>
+
+      <!-- Checked by default -->
+      <a11y-switch id="darkmode-switch" checked label="Dark mode"></a11y-switch>
+
+      <!-- Different sizes -->
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <a11y-switch size="sm" label="Small switch"></a11y-switch>
+        <a11y-switch size="md" label="Medium switch (default)"></a11y-switch>
+        <a11y-switch size="lg" label="Large switch"></a11y-switch>
+      </div>
+
+      <!-- Disabled state -->
+      <a11y-switch disabled label="Disabled switch (unavailable)"></a11y-switch>
+    </div>
+
+    <div id="switch-status"
+      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+      <strong>Last change:</strong> <span id="switch-last-change">None</span>
+    </div>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>Space</kbd> toggles the switch</li>
+        <li><kbd>Enter</kbd> toggles the switch</li>
+        <li>Switch state is announced to screen readers</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
     <h2>Screen Reader Announcements</h2>
     <p>Click the buttons to trigger screen reader announcements:</p>
     <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-      <button onclick="A11yKit.announcePolite('This is a polite announcement')">
+      <button onclick="a11yCore.announcePolite('This is a polite announcement')">
         Polite Announcement
       </button>
-      <button onclick="A11yKit.announceAssertive('This is an urgent announcement!')">
+      <button onclick="a11yCore.announceAssertive('This is an urgent announcement!')">
         Assertive Announcement
       </button>
     </div>
@@ -372,17 +419,17 @@
     </p>
   </section>
 
-  <!-- Load A11yKit - this registers all custom elements automatically -->
+  <!-- Load a11y-core - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
-    import * as A11yKit from '@a11ykit/web';
+    import * as a11yCore from '@a11y-core/web';
 
     // For production CDN usage, use one of:
-    // import * as A11yKit from 'https://unpkg.com/@a11ykit/web';
-    // import * as A11yKit from 'https://cdn.jsdelivr.net/npm/@a11ykit/web';
+    // import * as a11yCore from 'https://unpkg.com/@a11y-core/web';
+    // import * as a11yCore from 'https://cdn.jsdelivr.net/npm/@a11y-core/web';
 
     // Expose globally for onclick handlers
-    window.A11yKit = A11yKit;
+    window.a11yCore = a11yCore;
 
     // Example: Custom event handling
     document.querySelector('a11y-dialog')?.addEventListener('a11y-dialog-open', () => {
@@ -403,6 +450,22 @@
 
     document.querySelector('a11y-combobox')?.addEventListener('a11y-combobox-change', (e) => {
       console.log('Combobox changed:', e.detail);
+    });
+
+    // Switch event listeners
+    const switches = document.querySelectorAll('a11y-switch');
+    const switchStatus = document.getElementById('switch-last-change');
+
+    switches.forEach(sw => {
+      sw.addEventListener('change', (e) => {
+        const label = sw.getAttribute('label') || 'Switch';
+        const state = e.detail.checked ? 'ON' : 'OFF';
+        console.log(`Switch changed: ${label} = ${state}`, e.detail);
+
+        if (switchStatus) {
+          switchStatus.textContent = `${label} turned ${state}`;
+        }
+      });
     });
   </script>
 

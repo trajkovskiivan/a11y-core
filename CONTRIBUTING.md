@@ -1,6 +1,6 @@
-# Contributing to A11yKit
+# Contributing to A11yCore
 
-Thank you for your interest in contributing to A11yKit! This guide will help you get started.
+Thank you for your interest in contributing to A11yCore! This guide will help you get started.
 
 ## Development Setup
 
@@ -13,8 +13,8 @@ Thank you for your interest in contributing to A11yKit! This guide will help you
 
 ```bash
 # Clone the repository
-git clone https://github.com/a11ykit/a11ykit.git
-cd a11ykit
+git clone https://github.com/a11y-core/a11y-core.git
+cd a11y-core
 
 # Install dependencies
 pnpm install
@@ -29,7 +29,7 @@ pnpm test
 ### Project Structure
 
 ```
-a11ykit/
+a11y-core/
 ├── packages/
 │   ├── core/          # Framework-agnostic primitives
 │   ├── react/         # React components & hooks
@@ -100,7 +100,7 @@ test(web): add Tab component tests
 ## Adding a New Component
 
 1. **Core Utilities First**
-   - Add any needed utilities to `@a11ykit/core`
+   - Add any needed utilities to `@a11y-core/core`
    - Keep framework-specific code out of core
 
 2. **React Component**

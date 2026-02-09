@@ -52,7 +52,7 @@ function createLiveRegion(politeness: AriaLivePoliteness): LiveRegion {
   element.setAttribute('aria-live', politeness);
   element.setAttribute('aria-atomic', 'true');
   element.setAttribute('aria-relevant', 'additions text');
-  element.id = `a11ykit-announcer-${politeness}`;
+  element.id = `a11y-core-announcer-${politeness}`;
 
   // Apply visually hidden styles
   const styles = getHiddenStyles();

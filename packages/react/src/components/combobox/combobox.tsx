@@ -12,7 +12,7 @@ import React, {
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
 import { useAnnouncer } from '../../hooks/use-announcer';
-import { createComponentWarnings } from '@a11ykit/core';
+import { createComponentWarnings } from '@a11y-core/core';
 
 const warnings = createComponentWarnings('Combobox');
 
@@ -181,7 +181,7 @@ export function Combobox({
 
   return (
     <ComboboxContext.Provider value={contextValue}>
-      <div data-a11ykit-combobox data-disabled={disabled}>
+      <div data-a11y-core-combobox data-disabled={disabled}>
         {children}
       </div>
     </ComboboxContext.Provider>
@@ -254,6 +254,15 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
             setHighlightedIndex(-1);
           }
         },
+        Tab: () => {
+          // Tab should close the listbox and allow natural focus movement
+          if (isOpen) {
+            setIsOpen(false);
+            setHighlightedIndex(-1);
+          }
+          // Return false to allow browser's default Tab behavior
+          return false;
+        },
         Home: () => {
           if (isOpen) {
             setHighlightedIndex(0);
@@ -293,7 +302,13 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
       onBlur?.(event);
-      setTimeout(() => setIsOpen(false), 150);
+      // Use setTimeout to allow clicks on options to register before closing
+      // This delay allows option click events to fire before the listbox closes
+      setTimeout(() => {
+        // Only close if focus didn't move to the listbox itself
+        // This handles cases where user clicks on an option
+        setIsOpen(false);
+      }, 150);
     };
 
     const handleClear = () => {
@@ -308,7 +323,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         : undefined;
 
     return (
-      <div data-a11ykit-combobox-input-wrapper>
+      <div data-a11y-core-combobox-input-wrapper>
         <input
           ref={ref}
           id={inputId}
@@ -325,7 +340,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
           aria-autocomplete="list"
           aria-haspopup="listbox"
           autoComplete="off"
-          data-a11ykit-combobox-input
+          data-a11y-core-combobox-input
           {...props}
         />
         {clearable && inputValue && (
@@ -334,7 +349,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
             onClick={handleClear}
             aria-label="Clear selection"
             tabIndex={-1}
-            data-a11ykit-combobox-clear
+            data-a11y-core-combobox-clear
           >
             ×
           </button>
@@ -420,12 +435,12 @@ export const ComboboxListbox = forwardRef<
       role="listbox"
       aria-labelledby={inputId}
       style={{ ...style, ...positionStyle }}
-      data-a11ykit-combobox-listbox
+      data-a11y-core-combobox-listbox
       data-position={position}
       {...props}
     >
       {filteredOptions.length === 0 ? (
-        <li role="presentation" data-a11ykit-combobox-empty>
+        <li role="presentation" data-a11y-core-combobox-empty>
           {emptyMessage}
         </li>
       ) : (
@@ -510,7 +525,7 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps>(
         data-disabled={option.disabled}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
-        data-a11ykit-combobox-option
+        data-a11y-core-combobox-option
         {...props}
       >
         {option.label}

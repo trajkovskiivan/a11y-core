@@ -3,7 +3,7 @@ import {
   initFocusVisible,
   isFocusVisible as checkFocusVisible,
   focusWithVisibleRing,
-} from '@a11ykit/core';
+} from '@a11y-core/core';
 
 /**
  * Hook to detect if focus should be visible (keyboard navigation)

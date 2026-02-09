@@ -1,7 +1,7 @@
 {
-  "name": "@a11ykit/react-demo",
+  "name": "@a11y-core/react-demo",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@a11ykit/react": "workspace:*",
+    "@a11y-core/react": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

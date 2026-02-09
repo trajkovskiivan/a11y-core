@@ -1,4 +1,4 @@
-# A11yKit
+# A11yCore
 
 **Accessible components that just work.** React + Web Components.
 
@@ -7,7 +7,7 @@
 
 ---
 
-A11yKit provides fully accessible UI components for React and vanilla JavaScript. Focus on building your app—we handle keyboard navigation, ARIA attributes, screen reader announcements, and more.
+A11yCore provides fully accessible UI components for React and vanilla JavaScript. Focus on building your app—we handle keyboard navigation, ARIA attributes, screen reader announcements, and more.
 
 **By Ivan Trajkovski**
 
@@ -24,7 +24,7 @@ A11yKit provides fully accessible UI components for React and vanilla JavaScript
 
 ## Release Status
 
-A11yKit is currently in **alpha (v0.1.0)**.  
+a11y-core is currently in **alpha (v0.1.0)**.  
 We are actively adding more components. Current components are:
 
 - Combobox
@@ -35,18 +35,18 @@ We are actively adding more components. Current components are:
 
 ## Packages
 
-| Package                            | Description                       | Install                      |
-| ---------------------------------- | --------------------------------- | ---------------------------- |
-| [@a11ykit/react](./packages/react) | React components and hooks        | `npm install @a11ykit/react` |
-| [@a11ykit/web](./packages/web)     | Web Components for CDN/vanilla JS | `npm install @a11ykit/web`   |
-| [@a11ykit/core](./packages/core)   | Framework-agnostic primitives     | `npm install @a11ykit/core`  |
+| Package                              | Description                       | Install                        |
+| ------------------------------------ | --------------------------------- | ------------------------------ |
+| [@a11y-core/react](./packages/react) | React components and hooks        | `npm install @a11y-core/react` |
+| [@a11y-core/web](./packages/web)     | Web Components for CDN/vanilla JS | `npm install @a11y-core/web`   |
+| [@a11y-core/core](./packages/core)   | Framework-agnostic primitives     | `npm install @a11y-core/core`  |
 
 ## Quick Start
 
 ### React
 
 ```bash
-npm install @a11ykit/react
+npm install @a11y-core/react
 ```
 
 ```tsx
@@ -59,7 +59,7 @@ import {
   ToastProvider,
   ToastViewport,
   useToastHelpers,
-} from '@a11ykit/react';
+} from '@a11y-core/react';
 
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -116,7 +116,7 @@ function App() {
 ### Web Components (Vanilla HTML)
 
 ```html
-<script src="https://unpkg.com/@a11ykit/web"></script>
+<script src="https://unpkg.com/@a11y-core/web"></script>
 
 <!-- Dialog -->
 <button id="open-dialog">Open Dialog</button>
@@ -268,7 +268,7 @@ import {
   useKeyboard, // Keyboard event handling
   useFocusVisible, // Detect keyboard vs mouse focus
   useRovingTabindex, // Roving tabindex pattern
-} from '@a11ykit/react';
+} from '@a11y-core/react';
 
 // Focus Trap
 function Modal({ isOpen }) {
@@ -310,7 +310,7 @@ function Toolbar() {
 
 ## Core Primitives
 
-Use `@a11ykit/core` to build your own accessible components:
+Use `@a11y-core/core` to build your own accessible components:
 
 ```ts
 import {
@@ -333,7 +333,7 @@ import {
   // Platform detection
   prefersReducedMotion,
   prefersHighContrast,
-} from '@a11ykit/core';
+} from '@a11y-core/core';
 
 // Create a focus trap
 const trap = createFocusTrap(dialogElement, {
@@ -360,11 +360,11 @@ Components use `data-*` attributes for state-based styling:
 
 ```css
 /* Dialog */
-[data-a11ykit-dialog-overlay] {
+[data-a11y-core-dialog-overlay] {
   background: rgba(0, 0, 0, 0.5);
 }
 
-[data-a11ykit-dialog] {
+[data-a11y-core-dialog] {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
@@ -372,24 +372,24 @@ Components use `data-*` attributes for state-based styling:
 }
 
 /* Menu */
-[data-a11ykit-action-menu-content] {
+[data-a11y-core-action-menu-content] {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 }
 
-[data-a11ykit-action-menu-item][data-highlighted='true'] {
+[data-a11y-core-action-menu-item][data-highlighted='true'] {
   background: #f0f0f0;
 }
 
 /* Tabs */
-[data-a11ykit-tab][data-selected='true'] {
+[data-a11y-core-tab][data-selected='true'] {
   color: #0066cc;
   border-bottom: 2px solid #0066cc;
 }
 
 /* Combobox */
-[data-a11ykit-combobox-option][data-highlighted='true'] {
+[data-a11y-core-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
 }
 ```
@@ -414,22 +414,22 @@ Use CSS custom properties:
 
 ```css
 a11y-dialog {
-  --a11ykit-dialog-bg: white;
-  --a11ykit-dialog-radius: 8px;
-  --a11ykit-dialog-padding: 1.5rem;
-  --a11ykit-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --a11ykit-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+  --a11y-core-dialog-bg: white;
+  --a11y-core-dialog-radius: 8px;
+  --a11y-core-dialog-padding: 1.5rem;
+  --a11y-core-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --a11y-core-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
 }
 
 a11y-menu {
-  --a11ykit-menu-bg: white;
-  --a11ykit-menu-border: 1px solid #e0e0e0;
-  --a11ykit-menu-item-hover-bg: #f5f5f5;
+  --a11y-core-menu-bg: white;
+  --a11y-core-menu-border: 1px solid #e0e0e0;
+  --a11y-core-menu-item-hover-bg: #f5f5f5;
 }
 
 a11y-tabs {
-  --a11ykit-tabs-border: 1px solid #e0e0e0;
-  --a11ykit-tab-active-color: #0066cc;
+  --a11y-core-tabs-border: 1px solid #e0e0e0;
+  --a11y-core-tab-active-color: #0066cc;
 }
 ```
 
@@ -447,10 +447,10 @@ a11y-dialog::part(dialog) {
 
 ## Dev Warnings
 
-A11yKit warns you in development when accessibility is missing:
+a11y-core warns you in development when accessibility is missing:
 
 ```
-[A11yKit/Dialog] Missing accessible title. Add a DialogTitle or aria-label prop.
+[a11y-core/Dialog] Missing accessible title. Add a DialogTitle or aria-label prop.
 Suggestion: Use <Dialog.Title> or provide aria-label="..."
 ```
 
@@ -479,7 +479,7 @@ pnpm dev
 ### Project Structure
 
 ```
-a11ykit/
+a11y-core/
 ├── packages/
 │   ├── core/          # Framework-agnostic primitives
 │   ├── react/         # React components

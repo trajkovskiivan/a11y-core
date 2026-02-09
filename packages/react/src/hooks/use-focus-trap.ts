@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { createFocusTrap, type FocusTrapOptions } from '@a11ykit/core';
+import { createFocusTrap, type FocusTrapOptions } from '@a11y-core/core';
 
 export interface UseFocusTrapOptions extends FocusTrapOptions {
   /** Whether the focus trap is active */

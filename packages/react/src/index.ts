@@ -1,5 +1,5 @@
 /**
- * @a11ykit/react
+ * @a11y-core/react
  *
  * Accessible React components that just work
  */
@@ -131,6 +131,12 @@ export {
 } from './components/combobox';
 
 // ============================================================================
+// Switch
+// ============================================================================
+
+export { Switch, type SwitchProps } from './components/switch';
+
+// ============================================================================
 // Re-export core utilities
 // ============================================================================
 
@@ -160,4 +166,4 @@ export {
   prefersReducedMotion,
   prefersHighContrast,
   prefersDarkMode,
-} from '@a11ykit/core';
+} from '@a11y-core/core';

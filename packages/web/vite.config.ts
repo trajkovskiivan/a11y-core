@@ -11,12 +11,12 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'A11yKit',
+      name: 'a11yCore',
       formats: ['es', 'iife', 'umd'],
       fileName: (format) => {
-        if (format === 'es') return 'a11ykit.js';
-        if (format === 'iife') return 'a11ykit.iife.js';
-        return 'a11ykit.umd.cjs';
+        if (format === 'es') return 'a11y-core.js';
+        if (format === 'iife') return 'a11y-core.iife.js';
+        return 'a11y-core.umd.cjs';
       },
     },
     rollupOptions: {

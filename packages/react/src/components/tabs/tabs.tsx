@@ -80,7 +80,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
       <div
         ref={ref}
         data-orientation={orientation}
-        data-a11ykit-tabs
+        data-a11y-core-tabs
         {...props}
       >
         {children}
@@ -134,7 +134,7 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(
         const newValue = values[newIndex];
         if (newValue) {
           const tabElement = document.querySelector(
-            `[data-a11ykit-tab][data-value="${newValue}"]`
+            `[data-a11y-core-tab][data-value="${newValue}"]`
           ) as HTMLElement;
           tabElement?.focus();
 
@@ -180,7 +180,7 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(
         aria-label={ariaLabel}
         aria-orientation={orientation}
         onKeyDown={handleKeyDown}
-        data-a11ykit-tablist
+        data-a11y-core-tablist
         {...props}
       >
         {children}
@@ -245,7 +245,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab(
       data-selected={isSelected}
       data-disabled={disabled}
       data-value={value}
-      data-a11ykit-tab
+      data-a11y-core-tab
       {...props}
     >
       {children}
@@ -282,7 +282,7 @@ export const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
         tabIndex={0}
         hidden={!isSelected}
         data-selected={isSelected}
-        data-a11ykit-tabpanel
+        data-a11y-core-tabpanel
         {...props}
       >
         {children}

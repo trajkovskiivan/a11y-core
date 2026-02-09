@@ -7,7 +7,8 @@ import {
   ToastViewport,
   useToastHelpers,
   Combobox,
-} from '@a11ykit/react';
+  Switch,
+} from '@a11y-core/react';
 
 const countries = [
   { value: 'us', label: 'United States' },
@@ -23,7 +24,7 @@ export function App() {
   return (
     <ToastProvider>
       <div className="app">
-        <h1>A11yKit React Demo</h1>
+        <h1>a11y-core React Demo</h1>
         <h3>Powered by Ivan Trajkovski</h3>
         <p>
           All components below are fully accessible with keyboard navigation,
@@ -53,6 +54,11 @@ export function App() {
         <section>
           <h2>Combobox</h2>
           <ComboboxDemo />
+        </section>
+
+        <section>
+          <h2>Switch</h2>
+          <SwitchDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -265,6 +271,96 @@ function ComboboxDemo() {
             <kbd>Escape</kbd> closes the dropdown
           </li>
           <li>Type to filter options</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function SwitchDemo() {
+  const [notifications, setNotifications] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [lastChange, setLastChange] = useState<string>('None');
+
+  const handleChange = (label: string, checked: boolean) => {
+    setLastChange(`${label} turned ${checked ? 'ON' : 'OFF'}`);
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {/* Basic switch with visible label */}
+        <Switch
+          checked={notifications}
+          onCheckedChange={(checked) => {
+            setNotifications(checked);
+            handleChange('Enable notifications', checked);
+          }}
+          label="Enable notifications"
+        />
+
+        {/* Checked by default */}
+        <Switch
+          checked={darkMode}
+          onCheckedChange={(checked) => {
+            setDarkMode(checked);
+            handleChange('Dark mode', checked);
+          }}
+          label="Dark mode"
+        />
+
+        {/* Different sizes */}
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
+        >
+          <Switch
+            size="sm"
+            defaultChecked={false}
+            onCheckedChange={(checked) => handleChange('Small switch', checked)}
+            label="Small switch"
+          />
+          <Switch
+            size="md"
+            defaultChecked={false}
+            onCheckedChange={(checked) =>
+              handleChange('Medium switch (default)', checked)
+            }
+            label="Medium switch (default)"
+          />
+          <Switch
+            size="lg"
+            defaultChecked={false}
+            onCheckedChange={(checked) => handleChange('Large switch', checked)}
+            label="Large switch"
+          />
+        </div>
+
+        {/* Disabled state */}
+        <Switch disabled label="Disabled switch (unavailable)" />
+      </div>
+
+      <div
+        style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          background: '#f8f8f8',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Last change:</strong> <span>{lastChange}</span>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>Space</kbd> toggles the switch
+          </li>
+          <li>
+            <kbd>Enter</kbd> toggles the switch
+          </li>
+          <li>Switch state is announced to screen readers</li>
         </ul>
       </div>
     </div>

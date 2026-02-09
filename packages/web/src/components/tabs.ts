@@ -1,5 +1,5 @@
 /**
- * A11yKit Tabs Web Component
+ * a11y-core Tabs Web Component
  *
  * Usage:
  * <a11y-tabs>
@@ -10,7 +10,7 @@
  * </a11y-tabs>
  */
 
-import { announce } from '@a11ykit/core';
+import { announce } from '@a11y-core/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { TABS_STYLES } from '../utils/styles';
 
@@ -35,11 +35,17 @@ export class A11yTabs extends A11yKitElement {
   }
 
   get orientation(): 'horizontal' | 'vertical' {
-    return (this.getAttribute('orientation') as 'horizontal' | 'vertical') || 'horizontal';
+    return (
+      (this.getAttribute('orientation') as 'horizontal' | 'vertical') ||
+      'horizontal'
+    );
   }
 
   get activationMode(): 'automatic' | 'manual' {
-    return (this.getAttribute('activation-mode') as 'automatic' | 'manual') || 'automatic';
+    return (
+      (this.getAttribute('activation-mode') as 'automatic' | 'manual') ||
+      'automatic'
+    );
   }
 
   protected setupAccessibility(): void {
@@ -157,7 +163,8 @@ export class A11yTabs extends A11yKitElement {
         break;
       case prevKey:
         event.preventDefault();
-        newIndex = (this._selectedIndex - 1 + this._tabs.length) % this._tabs.length;
+        newIndex =
+          (this._selectedIndex - 1 + this._tabs.length) % this._tabs.length;
         break;
       case 'Home':
         event.preventDefault();
@@ -226,7 +233,9 @@ export class A11yTabs extends A11yKitElement {
    * Select previous tab
    */
   previous(): void {
-    this.selectTab((this._selectedIndex - 1 + this._tabs.length) % this._tabs.length);
+    this.selectTab(
+      (this._selectedIndex - 1 + this._tabs.length) % this._tabs.length
+    );
   }
 }
 

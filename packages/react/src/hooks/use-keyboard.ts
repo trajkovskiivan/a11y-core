@@ -5,7 +5,7 @@ import {
   normalizeKey,
   getKeyCombo,
   type KeyboardHandlers,
-} from '@a11ykit/core';
+} from '@a11y-core/core';
 
 /**
  * Hook for keyboard event handling

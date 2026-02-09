@@ -1,5 +1,5 @@
 /**
- * A11yKit Menu Web Component
+ * a11y-core Menu Web Component
  *
  * Usage:
  * <a11y-menu>
@@ -76,7 +76,10 @@ export class A11yMenu extends A11yKitElement {
     // Trigger click - attach to light DOM element
     const trigger = this.querySelector('[slot="trigger"]');
     trigger?.addEventListener('click', this.handleTriggerClick);
-    trigger?.addEventListener('keydown', this.handleTriggerKeyDown as EventListener);
+    trigger?.addEventListener(
+      'keydown',
+      this.handleTriggerKeyDown as EventListener
+    );
 
     // Safari fix: Also listen on the trigger slot for clicks
     // Safari has issues with click events on slotted content not bubbling properly
@@ -167,19 +170,25 @@ export class A11yMenu extends A11yKitElement {
     if (!this._open) return;
 
     const target = event.target as HTMLElement;
-    if (!target.hasAttribute('role') || target.getAttribute('role') !== 'menuitem') {
+    if (
+      !target.hasAttribute('role') ||
+      target.getAttribute('role') !== 'menuitem'
+    ) {
       return;
     }
 
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        this.highlightItem((this._highlightedIndex + 1) % this._menuItems.length);
+        this.highlightItem(
+          (this._highlightedIndex + 1) % this._menuItems.length
+        );
         break;
       case 'ArrowUp':
         event.preventDefault();
         this.highlightItem(
-          (this._highlightedIndex - 1 + this._menuItems.length) % this._menuItems.length
+          (this._highlightedIndex - 1 + this._menuItems.length) %
+            this._menuItems.length
         );
         break;
       case 'Home':

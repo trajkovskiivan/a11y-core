@@ -1,18 +1,21 @@
 {
-  "name": "@a11ykit/web",
-  "version": "0.1.0",
+  "name": "@a11y-core/web",
+  "version": "0.1.0-alpha.2",
   "description": "Accessible Web Components for any HTML page - CDN ready",
   "author": "Ivan Trajkovski",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/a11ykit.js",
-  "module": "./dist/a11ykit.js",
+  "publishConfig": {
+    "access": "public"
+  },
+"main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/a11ykit.js",
-      "require": "./dist/a11ykit.umd.cjs"
+      "import": "./dist/a11y-core.js",
+      "require": "./dist/a11y-core.umd.cjs"
     },
     "./dialog": {
       "types": "./dist/components/dialog.d.ts",
@@ -29,13 +32,18 @@
     "./combobox": {
       "types": "./dist/components/combobox.d.ts",
       "import": "./dist/components/combobox.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch.d.ts",
+      "import": "./dist/components/switch.js"
     }
   },
-  "unpkg": "./dist/a11ykit.iife.js",
-  "jsdelivr": "./dist/a11ykit.iife.js",
+  "unpkg": "./dist/a11y-core.iife.js",
+  "jsdelivr": "./dist/a11y-core.iife.js",
   "files": [
-    "dist",
-    "README.md"
+    "dist",     
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "vite build",
@@ -46,7 +54,7 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@a11ykit/core": "workspace:*"
+    "@a11y-core/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
@@ -68,6 +76,8 @@
     "tabs",
     "combobox",
     "autocomplete",
-    "select"
+    "select",
+    "switch",
+    "toggle"
   ]
 }

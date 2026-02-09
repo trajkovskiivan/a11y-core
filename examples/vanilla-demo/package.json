@@ -1,7 +1,7 @@
 {
-  "name": "@a11ykit/vanilla-demo",
+  "name": "@a11y-core/vanilla-demo",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,6 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@a11ykit/web": "workspace:*"
+    "@a11y-core/web": "workspace:*"
   }
 }

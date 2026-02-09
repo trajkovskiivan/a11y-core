@@ -1,11 +1,11 @@
-# @a11ykit/react
+# @a11y-core/react
 
 Accessible React components that just work.
 
 ## Installation
 
 ```bash
-npm install @a11ykit/react
+npm install @a11y-core/react
 ```
 
 ## Components
@@ -13,7 +13,7 @@ npm install @a11ykit/react
 ### Dialog
 
 ```tsx
-import { Dialog } from '@a11ykit/react';
+import { Dialog } from '@a11y-core/react';
 
 function ConfirmDialog({ open, onClose, onConfirm }) {
   return (
@@ -34,7 +34,7 @@ function ConfirmDialog({ open, onClose, onConfirm }) {
 ### Menu
 
 ```tsx
-import { Menu } from '@a11ykit/react';
+import { Menu } from '@a11y-core/react';
 
 function ActionMenu() {
   return (
@@ -54,7 +54,7 @@ function ActionMenu() {
 ### Tabs
 
 ```tsx
-import { Tabs } from '@a11ykit/react';
+import { Tabs } from '@a11y-core/react';
 
 function SettingsTabs() {
   return (
@@ -75,7 +75,11 @@ function SettingsTabs() {
 ### Toast
 
 ```tsx
-import { ToastProvider, ToastViewport, useToastHelpers } from '@a11ykit/react';
+import {
+  ToastProvider,
+  ToastViewport,
+  useToastHelpers,
+} from '@a11y-core/react';
 
 function App() {
   return (
@@ -89,18 +93,14 @@ function App() {
 function Content() {
   const { success, error } = useToastHelpers();
 
-  return (
-    <button onClick={() => success('Settings saved!')}>
-      Save
-    </button>
-  );
+  return <button onClick={() => success('Settings saved!')}>Save</button>;
 }
 ```
 
 ### Combobox
 
 ```tsx
-import { Combobox } from '@a11ykit/react';
+import { Combobox } from '@a11y-core/react';
 
 const countries = [
   { value: 'us', label: 'United States' },
@@ -130,7 +130,7 @@ function CountrySelect() {
 ### useFocusTrap
 
 ```tsx
-import { useFocusTrap } from '@a11ykit/react';
+import { useFocusTrap } from '@a11y-core/react';
 
 function Modal({ isOpen }) {
   const trapRef = useFocusTrap({ active: isOpen });
@@ -146,7 +146,7 @@ function Modal({ isOpen }) {
 ### useAnnouncer
 
 ```tsx
-import { useAnnouncer } from '@a11ykit/react';
+import { useAnnouncer } from '@a11y-core/react';
 
 function SearchResults({ count }) {
   const { announce } = useAnnouncer();
@@ -160,7 +160,7 @@ function SearchResults({ count }) {
 ### useKeyboard
 
 ```tsx
-import { useKeyboard } from '@a11ykit/react';
+import { useKeyboard } from '@a11y-core/react';
 
 function CustomList() {
   const keyboardProps = useKeyboard({
@@ -176,16 +176,13 @@ function CustomList() {
 ### useFocusVisible
 
 ```tsx
-import { useFocusVisible } from '@a11ykit/react';
+import { useFocusVisible } from '@a11y-core/react';
 
 function Button({ children }) {
   const { isFocusVisible, focusProps } = useFocusVisible();
 
   return (
-    <button
-      {...focusProps}
-      className={isFocusVisible ? 'focus-ring' : ''}
-    >
+    <button {...focusProps} className={isFocusVisible ? 'focus-ring' : ''}>
       {children}
     </button>
   );
@@ -195,7 +192,7 @@ function Button({ children }) {
 ### useRovingTabindex
 
 ```tsx
-import { useRovingTabindex } from '@a11ykit/react';
+import { useRovingTabindex } from '@a11y-core/react';
 
 function Toolbar() {
   const { getItemProps } = useRovingTabindex({
@@ -219,33 +216,33 @@ All components are unstyled. Use `data-*` attributes for state-based styling:
 
 ```css
 /* Dialog */
-[data-a11ykit-dialog-overlay] {
+[data-a11y-core-dialog-overlay] {
   background: rgba(0, 0, 0, 0.5);
 }
 
-[data-a11ykit-dialog] {
+[data-a11y-core-dialog] {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 /* Menu */
-[data-a11ykit-menu-content] {
+[data-a11y-core-menu-content] {
   background: white;
   border: 1px solid #e0e0e0;
 }
 
-[data-a11ykit-menu-item][data-highlighted="true"] {
+[data-a11y-core-menu-item][data-highlighted='true'] {
   background: #f0f0f0;
 }
 
 /* Tabs */
-[data-a11ykit-tab][data-selected="true"] {
+[data-a11y-core-tab][data-selected='true'] {
   border-bottom: 2px solid blue;
 }
 
 /* Combobox */
-[data-a11ykit-combobox-option][data-highlighted="true"] {
+[data-a11y-core-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
 }
 ```

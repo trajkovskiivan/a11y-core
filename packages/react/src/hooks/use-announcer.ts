@@ -7,7 +7,7 @@ import {
   clearAnnouncements,
   initAnnouncer,
   type AnnouncerOptions,
-} from '@a11ykit/core';
+} from '@a11y-core/core';
 
 /**
  * Hook for screen reader announcements

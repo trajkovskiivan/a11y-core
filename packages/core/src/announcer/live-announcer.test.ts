@@ -19,15 +19,17 @@ describe('Live Announcer', () => {
   });
 
   it('should create live regions on init', () => {
-    const politeRegion = document.getElementById('a11ykit-announcer-polite');
-    const assertiveRegion = document.getElementById('a11ykit-announcer-assertive');
+    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const assertiveRegion = document.getElementById(
+      'a11y-core-announcer-assertive'
+    );
 
     expect(politeRegion).not.toBeNull();
     expect(assertiveRegion).not.toBeNull();
   });
 
   it('should have correct ARIA attributes', () => {
-    const politeRegion = document.getElementById('a11ykit-announcer-polite');
+    const politeRegion = document.getElementById('a11y-core-announcer-polite');
 
     expect(politeRegion?.getAttribute('aria-live')).toBe('polite');
     expect(politeRegion?.getAttribute('aria-atomic')).toBe('true');
@@ -39,7 +41,7 @@ describe('Live Announcer', () => {
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    const politeRegion = document.getElementById('a11ykit-announcer-polite');
+    const politeRegion = document.getElementById('a11y-core-announcer-polite');
     expect(politeRegion?.textContent).toBe('Test message');
   });
 
@@ -48,7 +50,9 @@ describe('Live Announcer', () => {
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    const assertiveRegion = document.getElementById('a11ykit-announcer-assertive');
+    const assertiveRegion = document.getElementById(
+      'a11y-core-announcer-assertive'
+    );
     expect(assertiveRegion?.textContent).toBe('Urgent message');
   });
 
@@ -58,15 +62,17 @@ describe('Live Announcer', () => {
 
     clearAnnouncements();
 
-    const politeRegion = document.getElementById('a11ykit-announcer-polite');
+    const politeRegion = document.getElementById('a11y-core-announcer-polite');
     expect(politeRegion?.textContent).toBe('');
   });
 
   it('should remove regions on cleanup', () => {
     cleanup();
 
-    const politeRegion = document.getElementById('a11ykit-announcer-polite');
-    const assertiveRegion = document.getElementById('a11ykit-announcer-assertive');
+    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const assertiveRegion = document.getElementById(
+      'a11y-core-announcer-assertive'
+    );
 
     expect(politeRegion).toBeNull();
     expect(assertiveRegion).toBeNull();

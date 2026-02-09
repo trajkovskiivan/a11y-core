@@ -1,8 +1,8 @@
 /**
- * Base class for A11yKit Web Components
+ * Base class for a11y-core Web Components
  */
 
-import { generateId } from '@a11ykit/core';
+import { generateId } from '@a11y-core/core';
 
 export abstract class A11yKitElement extends HTMLElement {
   protected _internals: ElementInternals | null = null;
@@ -109,7 +109,9 @@ export abstract class A11yKitElement extends HTMLElement {
    */
   protected getSlottedElements(slotName?: string): Element[] {
     const selector = slotName ? `slot[name="${slotName}"]` : 'slot:not([name])';
-    const slot = this.shadowRoot?.querySelector(selector) as HTMLSlotElement | null;
+    const slot = this.shadowRoot?.querySelector(
+      selector
+    ) as HTMLSlotElement | null;
     return slot?.assignedElements() ?? [];
   }
 }
@@ -117,7 +119,10 @@ export abstract class A11yKitElement extends HTMLElement {
 /**
  * Helper to define a custom element safely
  */
-export function defineElement(name: string, constructor: CustomElementConstructor): void {
+export function defineElement(
+  name: string,
+  constructor: CustomElementConstructor
+): void {
   if (!customElements.get(name)) {
     customElements.define(name, constructor);
   }

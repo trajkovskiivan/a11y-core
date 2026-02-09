@@ -1,5 +1,5 @@
 /**
- * A11yKit Dialog Web Component
+ * a11y-core Dialog Web Component
  *
  * Usage:
  * <a11y-dialog trigger="#open-btn">
@@ -9,7 +9,7 @@
  * </a11y-dialog>
  */
 
-import { announce } from '@a11ykit/core';
+import { announce } from '@a11y-core/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { DIALOG_STYLES } from '../utils/styles';
 
@@ -95,7 +95,10 @@ export class A11yDialog extends A11yKitElement {
       const setupTrigger = () => {
         this._triggerElement = document.querySelector(triggerSelector);
         if (this._triggerElement) {
-          this._triggerElement.addEventListener('click', this.handleTriggerClick);
+          this._triggerElement.addEventListener(
+            'click',
+            this.handleTriggerClick
+          );
           // Safari fix: Ensure trigger is in tab order (Safari skips buttons by default)
           if (!this._triggerElement.hasAttribute('tabindex')) {
             this._triggerElement.setAttribute('tabindex', '0');
@@ -158,7 +161,8 @@ export class A11yDialog extends A11yKitElement {
 
     // Get focusable elements from shadow DOM LAST (close button)
     if (this.shadowRoot) {
-      const shadowElements = this.shadowRoot.querySelectorAll(FOCUSABLE_SELECTOR);
+      const shadowElements =
+        this.shadowRoot.querySelectorAll(FOCUSABLE_SELECTOR);
       shadowElements.forEach((el) => {
         // Skip the overlay
         if (!el.classList.contains('overlay')) {
@@ -198,10 +202,13 @@ export class A11yDialog extends A11yKitElement {
       if (focusableElements.length === 0) return;
 
       // Find currently focused element in either shadow or light DOM
-      const activeElement = this.shadowRoot?.activeElement || document.activeElement;
+      const activeElement =
+        this.shadowRoot?.activeElement || document.activeElement;
 
       // Find current index
-      let currentIndex = focusableElements.findIndex((el) => el === activeElement);
+      let currentIndex = focusableElements.findIndex(
+        (el) => el === activeElement
+      );
 
       // If not found, start from beginning (or end for shift+tab)
       if (currentIndex === -1) {
@@ -212,10 +219,12 @@ export class A11yDialog extends A11yKitElement {
       let nextIndex: number;
       if (event.shiftKey) {
         // Shift+Tab: go backwards, wrap to end
-        nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        nextIndex =
+          currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
       } else {
         // Tab: go forwards, wrap to beginning
-        nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        nextIndex =
+          currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
       }
 
       // Focus the next element

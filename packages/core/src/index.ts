@@ -1,10 +1,10 @@
 /**
- * @a11ykit/core
+ * @a11y-core/core
  *
  * Framework-agnostic accessibility primitives
  *
  * This package provides the foundational utilities used by all
- * A11yKit packages (React, Web Components, etc.)
+ * a11y-core packages (React, Web Components, etc.)
  */
 
 // Types
@@ -31,7 +31,7 @@ export * from './aria';
 export * from './dev';
 
 /**
- * Initialize all A11yKit systems
+ * Initialize all a11y-core systems
  * Call this once at app startup for optimal behavior
  */
 export function initA11yKit(): () => void {

@@ -16,8 +16,7 @@ const issuedWarnings = new Set<string>();
 // Check if we're in development mode
 function isDev(): boolean {
   return (
-    typeof process !== 'undefined' &&
-    process.env?.NODE_ENV !== 'production'
+    typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production'
   );
 }
 
@@ -50,7 +49,7 @@ export function warn(warning: DevWarning): void {
     return;
   }
 
-  const prefix = `[A11yKit/${warning.component}]`;
+  const prefix = `[a11y-core/${warning.component}]`;
   const style = getConsoleStyle(warning.type);
 
   const message = warning.suggestion
@@ -123,11 +122,7 @@ export const checks = {
   /**
    * Check for missing required prop
    */
-  requiredProp(
-    value: unknown,
-    propName: string,
-    component: string
-  ): void {
+  requiredProp(value: unknown, propName: string, component: string): void {
     if (value === undefined || value === null || value === '') {
       warn({
         type: 'error',
@@ -141,21 +136,83 @@ export const checks = {
   /**
    * Check for invalid ARIA role
    */
-  validRole(role: string | undefined, component: string, element?: HTMLElement): void {
+  validRole(
+    role: string | undefined,
+    component: string,
+    element?: HTMLElement
+  ): void {
     if (!role) return;
 
     const validRoles = new Set([
-      'alert', 'alertdialog', 'application', 'article', 'banner', 'button',
-      'cell', 'checkbox', 'columnheader', 'combobox', 'complementary',
-      'contentinfo', 'definition', 'dialog', 'directory', 'document', 'feed',
-      'figure', 'form', 'grid', 'gridcell', 'group', 'heading', 'img', 'link',
-      'list', 'listbox', 'listitem', 'log', 'main', 'marquee', 'math', 'menu',
-      'menubar', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'navigation',
-      'none', 'note', 'option', 'presentation', 'progressbar', 'radio',
-      'radiogroup', 'region', 'row', 'rowgroup', 'rowheader', 'scrollbar',
-      'search', 'searchbox', 'separator', 'slider', 'spinbutton', 'status',
-      'switch', 'tab', 'table', 'tablist', 'tabpanel', 'term', 'textbox',
-      'timer', 'toolbar', 'tooltip', 'tree', 'treegrid', 'treeitem',
+      'alert',
+      'alertdialog',
+      'application',
+      'article',
+      'banner',
+      'button',
+      'cell',
+      'checkbox',
+      'columnheader',
+      'combobox',
+      'complementary',
+      'contentinfo',
+      'definition',
+      'dialog',
+      'directory',
+      'document',
+      'feed',
+      'figure',
+      'form',
+      'grid',
+      'gridcell',
+      'group',
+      'heading',
+      'img',
+      'link',
+      'list',
+      'listbox',
+      'listitem',
+      'log',
+      'main',
+      'marquee',
+      'math',
+      'menu',
+      'menubar',
+      'menuitem',
+      'menuitemcheckbox',
+      'menuitemradio',
+      'navigation',
+      'none',
+      'note',
+      'option',
+      'presentation',
+      'progressbar',
+      'radio',
+      'radiogroup',
+      'region',
+      'row',
+      'rowgroup',
+      'rowheader',
+      'scrollbar',
+      'search',
+      'searchbox',
+      'separator',
+      'slider',
+      'spinbutton',
+      'status',
+      'switch',
+      'tab',
+      'table',
+      'tablist',
+      'tabpanel',
+      'term',
+      'textbox',
+      'timer',
+      'toolbar',
+      'tooltip',
+      'tree',
+      'treegrid',
+      'treeitem',
     ]);
 
     if (!validRoles.has(role)) {
@@ -217,7 +274,8 @@ export const checks = {
         type: 'warning',
         component,
         message: `Positive tabIndex (${tabIndex}) disrupts natural tab order.`,
-        suggestion: 'Use tabIndex={0} or tabIndex={-1} instead. Rely on DOM order for tab sequence.',
+        suggestion:
+          'Use tabIndex={0} or tabIndex={-1} instead. Rely on DOM order for tab sequence.',
         element,
       });
     }
@@ -226,10 +284,7 @@ export const checks = {
   /**
    * Check for autofocus in dialogs
    */
-  dialogAutoFocus(
-    hasAutoFocus: boolean,
-    component: string
-  ): void {
+  dialogAutoFocus(hasAutoFocus: boolean, component: string): void {
     if (!hasAutoFocus) {
       warn({
         type: 'info',
@@ -270,10 +325,7 @@ export const checks = {
   /**
    * Check for missing alt text on images
    */
-  imageAlt(
-    element: HTMLElement | null,
-    component: string
-  ): void {
+  imageAlt(element: HTMLElement | null, component: string): void {
     if (!element || element.tagName !== 'IMG') return;
 
     const alt = element.getAttribute('alt');
@@ -284,7 +336,8 @@ export const checks = {
         type: 'error',
         component,
         message: 'Image is missing alt attribute.',
-        suggestion: 'Add alt="" for decorative images or descriptive alt text for meaningful images.',
+        suggestion:
+          'Add alt="" for decorative images or descriptive alt text for meaningful images.',
         element,
       });
     }
@@ -297,18 +350,38 @@ export const checks = {
 export function createComponentWarnings(componentName: string) {
   return {
     error: (message: string, suggestion?: string, element?: Element) =>
-      warn({ type: 'error', component: componentName, message, suggestion, element }),
+      warn({
+        type: 'error',
+        component: componentName,
+        message,
+        suggestion,
+        element,
+      }),
     warning: (message: string, suggestion?: string, element?: Element) =>
-      warn({ type: 'warning', component: componentName, message, suggestion, element }),
+      warn({
+        type: 'warning',
+        component: componentName,
+        message,
+        suggestion,
+        element,
+      }),
     info: (message: string, suggestion?: string, element?: Element) =>
-      warn({ type: 'info', component: componentName, message, suggestion, element }),
+      warn({
+        type: 'info',
+        component: componentName,
+        message,
+        suggestion,
+        element,
+      }),
     checks: {
       accessibleLabel: (element: HTMLElement | null, propName?: string) =>
         checks.accessibleLabel(element, componentName, propName),
       requiredProp: (value: unknown, propName: string) =>
         checks.requiredProp(value, propName, componentName),
-      keyboardAccessible: (element: HTMLElement | null, handlers: { onClick?: unknown; onKeyDown?: unknown }) =>
-        checks.keyboardAccessible(element, componentName, handlers),
+      keyboardAccessible: (
+        element: HTMLElement | null,
+        handlers: { onClick?: unknown; onKeyDown?: unknown }
+      ) => checks.keyboardAccessible(element, componentName, handlers),
       tabIndex: (tabIndex: number | undefined, element?: HTMLElement) =>
         checks.tabIndex(tabIndex, componentName, element),
     },

@@ -1,12 +1,15 @@
 {
-  "name": "@a11ykit/core",
-  "version": "0.1.0",
+  "name": "@a11y-core/core",
+  "version": "0.1.0-alpha.2",
   "description": "Framework-agnostic accessibility primitives",
   "author": "Ivan Trajkovski",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -35,9 +38,10 @@
       "require": "./dist/aria/index.cjs"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
+ "files": [
+    "dist",      
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",

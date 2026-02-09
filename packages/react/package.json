@@ -1,12 +1,15 @@
 {
-  "name": "@a11ykit/react",
-  "version": "0.1.0",
+  "name": "@a11y-core/react",
+  "version": "0.1.0-alpha.2",
   "description": "Accessible React components that just work",
   "author": "Ivan Trajkovski",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -40,9 +43,10 @@
       "require": "./dist/components/combobox/index.cjs"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
+ "files": [
+    "dist",      
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
@@ -53,7 +57,7 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@a11ykit/core": "workspace:*"
+    "@a11y-core/core": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

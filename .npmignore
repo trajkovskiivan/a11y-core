@@ -1,0 +1,11 @@
+# .npmignore
+.changeset/
+.claude/
+examples/
+scripts/
+tests/
+vitest.config.ts
+turbo.json
+pnpm-lock.yaml
+*.test.ts
+*.test.tsx

@@ -32,7 +32,7 @@ importers:
 
   examples/react-demo:
     dependencies:
-      '@a11ykit/react':
+      '@a11y-core/react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -60,13 +60,25 @@ importers:
 
   examples/vanilla-demo:
     dependencies:
-      '@a11ykit/web':
+      '@a11y-core/web':
         specifier: workspace:*
         version: link:../../packages/web
     devDependencies:
       vite:
         specifier: ^5.0.0
         version: 5.4.21(@types/node@20.19.32)
+
+  packages/a11y-core:
+    dependencies:
+      '@a11y-core/core':
+        specifier: workspace:*
+        version: link:../core
+      '@a11y-core/react':
+        specifier: workspace:*
+        version: link:../react
+      '@a11y-core/web':
+        specifier: workspace:*
+        version: link:../web
 
   packages/core:
     devDependencies:
@@ -85,7 +97,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@a11ykit/core':
+      '@a11y-core/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -119,7 +131,7 @@ importers:
 
   packages/web:
     dependencies:
-      '@a11ykit/core':
+      '@a11y-core/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

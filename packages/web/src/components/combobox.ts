@@ -1,5 +1,5 @@
 /**
- * A11yKit Combobox Web Component
+ * a11y-core Combobox Web Component
  *
  * Usage:
  * <a11y-combobox placeholder="Search...">
@@ -9,7 +9,7 @@
  * </a11y-combobox>
  */
 
-import { announce } from '@a11ykit/core';
+import { announce } from '@a11y-core/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { COMBOBOX_STYLES } from '../utils/styles';
 
@@ -55,7 +55,7 @@ export class A11yCombobox extends A11yKitElement {
 
   set value(val: string | null) {
     this._selectedValue = val;
-    const option = this._options.find(o => o.value === val);
+    const option = this._options.find((o) => o.value === val);
     if (option) {
       this._inputValue = option.label;
       if (this._inputElement) {
@@ -92,7 +92,9 @@ export class A11yCombobox extends A11yKitElement {
             placeholder="${placeholder}"
             part="input"
           />
-          ${clearable ? `
+          ${
+            clearable
+              ? `
             <button
               type="button"
               class="clear-button"
@@ -101,7 +103,9 @@ export class A11yCombobox extends A11yKitElement {
               hidden
               part="clear-button"
             >×</button>
-          ` : ''}
+          `
+              : ''
+          }
           <span class="chevron" aria-hidden="true" part="chevron">▼</span>
         </div>
         <ul
@@ -187,9 +191,12 @@ export class A11yCombobox extends A11yKitElement {
   private renderOptions(): void {
     if (!this._listboxElement) return;
 
-    this._listboxElement.innerHTML = this._filteredOptions.length === 0
-      ? '<li role="presentation" class="empty-message" part="empty">No results found</li>'
-      : this._filteredOptions.map((option, index) => `
+    this._listboxElement.innerHTML =
+      this._filteredOptions.length === 0
+        ? '<li role="presentation" class="empty-message" part="empty">No results found</li>'
+        : this._filteredOptions
+            .map(
+              (option, index) => `
           <li
             id="${this._id}-option-${index}"
             role="option"
@@ -200,13 +207,17 @@ export class A11yCombobox extends A11yKitElement {
             part="option"
             ${option.disabled ? 'class="disabled"' : ''}
           >${option.label}</li>
-        `).join('');
+        `
+            )
+            .join('');
 
     // Add click handlers to options
-    this._listboxElement.querySelectorAll('[role="option"]').forEach(option => {
-      option.addEventListener('click', this.handleOptionClick);
-      option.addEventListener('mouseenter', this.handleOptionHover);
-    });
+    this._listboxElement
+      .querySelectorAll('[role="option"]')
+      .forEach((option) => {
+        option.addEventListener('click', this.handleOptionClick);
+        option.addEventListener('mouseenter', this.handleOptionHover);
+      });
   }
 
   private handleInput = (event: Event): void => {
@@ -216,7 +227,7 @@ export class A11yCombobox extends A11yKitElement {
     // Filter options
     const query = this._inputValue.toLowerCase();
     this._filteredOptions = query
-      ? this._options.filter(opt => opt.label.toLowerCase().includes(query))
+      ? this._options.filter((opt) => opt.label.toLowerCase().includes(query))
       : [...this._options];
 
     this.renderOptions();
@@ -228,7 +239,9 @@ export class A11yCombobox extends A11yKitElement {
     // Announce results
     const count = this._filteredOptions.length;
     announce(
-      count === 0 ? 'No results' : `${count} result${count === 1 ? '' : 's'} available`
+      count === 0
+        ? 'No results'
+        : `${count} result${count === 1 ? '' : 's'} available`
     );
   };
 
@@ -368,15 +381,23 @@ export class A11yCombobox extends A11yKitElement {
     this.updateClearButton();
 
     announce(`${option.label} selected`);
-    this.emit('a11y-combobox-select', { value: option.value, label: option.label });
-    this.emit('a11y-combobox-change', { value: option.value, label: option.label });
+    this.emit('a11y-combobox-select', {
+      value: option.value,
+      label: option.label,
+    });
+    this.emit('a11y-combobox-change', {
+      value: option.value,
+      label: option.label,
+    });
   }
 
   private updateHighlight(): void {
     // Remove all highlights
-    this._listboxElement?.querySelectorAll('[role="option"]').forEach((el, i) => {
-      el.classList.toggle('highlighted', i === this._highlightedIndex);
-    });
+    this._listboxElement
+      ?.querySelectorAll('[role="option"]')
+      .forEach((el, i) => {
+        el.classList.toggle('highlighted', i === this._highlightedIndex);
+      });
 
     // Update aria-activedescendant
     if (this._highlightedIndex >= 0) {
@@ -450,7 +471,9 @@ export class A11yCombobox extends A11yKitElement {
   }
 
   private updateClearButton(): void {
-    const clearButton = this.shadowRoot?.querySelector('.clear-button') as HTMLElement;
+    const clearButton = this.shadowRoot?.querySelector(
+      '.clear-button'
+    ) as HTMLElement;
     if (clearButton) {
       clearButton.hidden = !this._inputValue;
     }

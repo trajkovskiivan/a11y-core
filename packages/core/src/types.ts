@@ -1,5 +1,5 @@
 /**
- * Core types used across A11yKit
+ * Core types used across a11y-core
  */
 
 export type AriaRole =
