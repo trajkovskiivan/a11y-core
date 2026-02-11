@@ -7,6 +7,7 @@ import {
   ToastViewport,
   useToastHelpers,
   Combobox,
+  Select,
   Switch,
   Checkbox,
 } from '@compa11y/react';
@@ -19,6 +20,17 @@ const countries = [
   { value: 'de', label: 'Germany' },
   { value: 'fr', label: 'France' },
   { value: 'jp', label: 'Japan' },
+];
+
+const fruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'dragonfruit', label: 'Dragon Fruit', disabled: true },
+  { value: 'elderberry', label: 'Elderberry' },
+  { value: 'fig', label: 'Fig' },
+  { value: 'grape', label: 'Grape' },
+  { value: 'honeydew', label: 'Honeydew' },
 ];
 
 export function App() {
@@ -50,6 +62,11 @@ export function App() {
         <section>
           <h2>Toast</h2>
           <ToastDemo />
+        </section>
+
+        <section>
+          <h2>Select</h2>
+          <SelectDemo />
         </section>
 
         <section>
@@ -243,6 +260,46 @@ function ToastDemo() {
         </ul>
       </div>
     </>
+  );
+}
+
+function SelectDemo() {
+  const [fruit, setFruit] = useState<string | null>(null);
+
+  return (
+    <div>
+      <Select
+        options={fruits}
+        value={fruit}
+        onValueChange={setFruit}
+        aria-label="Select a fruit"
+      >
+        <Select.Trigger placeholder="Choose a fruit..." />
+        <Select.Listbox />
+      </Select>
+      <p style={{ marginTop: '0.5rem', color: '#666' }}>
+        Selected: {fruit || 'None'}
+      </p>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>↑</kbd> <kbd>↓</kbd> navigates options
+          </li>
+          <li>
+            <kbd>Enter</kbd> or <kbd>Space</kbd> selects the highlighted option
+          </li>
+          <li>
+            <kbd>Escape</kbd> closes the dropdown
+          </li>
+          <li>
+            <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last option
+          </li>
+          <li>Type characters to jump to matching options</li>
+        </ul>
+      </div>
+    </div>
   );
 }
 

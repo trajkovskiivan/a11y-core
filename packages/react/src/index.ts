@@ -131,6 +131,23 @@ export {
 } from './components/combobox';
 
 // ============================================================================
+// Select
+// ============================================================================
+
+export {
+  SelectCompound as Select,
+  Select as SelectBase,
+  SelectTrigger,
+  SelectListbox,
+  SelectOptionItem,
+  type SelectProps,
+  type SelectTriggerProps,
+  type SelectListboxProps,
+  type SelectOptionProps,
+  type SelectOptionType,
+} from './components/select';
+
+// ============================================================================
 // Switch
 // ============================================================================
 

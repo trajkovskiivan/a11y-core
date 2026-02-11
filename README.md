@@ -31,6 +31,7 @@ We are actively adding more components. Current components are:
 - Combobox
 - Dialog
 - Menu
+- Select
 - Switch
 - Tabs
 - Toast

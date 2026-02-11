@@ -55,6 +55,11 @@
       "types": "./dist/components/checkbox/index.d.ts",
       "import": "./dist/components/checkbox/index.js",
       "require": "./dist/components/checkbox/index.cjs"
+    },
+    "./select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.js",
+      "require": "./dist/components/select/index.cjs"
     }
   },
  "files": [

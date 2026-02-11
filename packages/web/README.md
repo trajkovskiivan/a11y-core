@@ -199,6 +199,71 @@ combobox.addEventListener('change', (e) => {
 });
 ```
 
+### Select
+
+```html
+<a11y-select aria-label="Choose a fruit" placeholder="Pick a fruit...">
+  <option value="apple">Apple</option>
+  <option value="banana">Banana</option>
+  <option value="cherry">Cherry</option>
+  <option value="dragonfruit" disabled>Dragon Fruit (unavailable)</option>
+  <option value="elderberry">Elderberry</option>
+</a11y-select>
+```
+
+#### Attributes
+
+| Attribute          | Description                     | Default               |
+| ------------------ | ------------------------------- | --------------------- |
+| `placeholder`      | Trigger placeholder text        | `'Select an option...'` |
+| `value`            | Currently selected value        | —                     |
+| `disabled`         | Disable the select              | `false`               |
+| `aria-label`       | Accessible label                | —                     |
+| `aria-labelledby`  | ID of labelling element         | —                     |
+
+#### Properties
+
+```js
+const select = document.querySelector('a11y-select');
+select.value = 'apple'; // Set value programmatically
+```
+
+#### Methods
+
+```js
+const select = document.querySelector('a11y-select');
+select.show();  // Open
+select.close(); // Close
+```
+
+#### Events
+
+```js
+select.addEventListener('change', (e) => {
+  console.log('Value:', e.detail.value);
+  console.log('Label:', e.detail.label);
+});
+
+select.addEventListener('a11y-select-change', (e) => {
+  console.log('Selected:', e.detail);
+});
+
+select.addEventListener('a11y-select-open', () => {});
+select.addEventListener('a11y-select-close', () => {});
+```
+
+#### Keyboard Navigation
+
+| Key | Action |
+| --- | --- |
+| `Enter` / `Space` | Open listbox or select highlighted option |
+| `ArrowDown` | Open listbox / move highlight down |
+| `ArrowUp` | Open listbox / move highlight up |
+| `Home` / `End` | Jump to first / last option |
+| `Escape` | Close listbox |
+| `Tab` | Close listbox and move focus |
+| Type characters | Jump to matching option (type-ahead) |
+
 ### Switch
 
 ```html
@@ -322,6 +387,20 @@ a11y-combobox {
   --compa11y-combobox-radius: 4px;
   --compa11y-combobox-option-hover-bg: #f5f5f5;
   --compa11y-combobox-option-selected-bg: #e6f0ff;
+}
+
+/* Select */
+a11y-select {
+  --compa11y-select-width: 300px;
+  --compa11y-select-border: 1px solid #ccc;
+  --compa11y-select-radius: 4px;
+  --compa11y-select-bg: white;
+  --compa11y-select-placeholder-color: #999;
+  --compa11y-select-chevron-color: #666;
+  --compa11y-select-option-hover-bg: #f5f5f5;
+  --compa11y-select-option-selected-bg: #e6f0ff;
+  --compa11y-select-check-color: #0066cc;
+  --compa11y-select-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Switch */

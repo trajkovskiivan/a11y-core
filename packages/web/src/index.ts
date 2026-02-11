@@ -17,9 +17,10 @@ import { A11yTabs } from './components/tabs';
 import { A11yCombobox } from './components/combobox';
 import { A11ySwitch } from './components/switch';
 import { A11yCheckbox } from './components/checkbox';
+import { A11ySelect } from './components/select';
 
 // Re-export components
-export { A11yDialog, A11yMenu, A11yTabs, A11yCombobox, A11ySwitch, A11yCheckbox };
+export { A11yDialog, A11yMenu, A11yTabs, A11yCombobox, A11ySwitch, A11yCheckbox, A11ySelect };
 
 // Core utilities for vanilla JS usage
 import {
@@ -97,6 +98,7 @@ if (typeof window !== 'undefined') {
     A11yCombobox,
     A11ySwitch,
     A11yCheckbox,
+    A11ySelect,
     // Announcer utilities
     initAnnouncer,
     announce,

@@ -49,6 +49,10 @@
     "./checkbox": {
       "types": "./dist/components/checkbox.d.ts",
       "import": "./dist/components/checkbox.js"
+    },
+    "./select": {
+      "types": "./dist/components/select.d.ts",
+      "import": "./dist/components/select.js"
     }
   },
   "unpkg": "./dist/compa11y.iife.js",

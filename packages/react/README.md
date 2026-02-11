@@ -125,6 +125,61 @@ function CountrySelect() {
 }
 ```
 
+### Select
+
+```tsx
+import { Select } from '@compa11y/react';
+
+const fruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'dragonfruit', label: 'Dragon Fruit', disabled: true },
+  { value: 'elderberry', label: 'Elderberry' },
+];
+
+function FruitPicker() {
+  const [value, setValue] = useState(null);
+
+  return (
+    <Select
+      options={fruits}
+      value={value}
+      onValueChange={setValue}
+      aria-label="Choose a fruit"
+    >
+      <Select.Trigger placeholder="Pick a fruit..." />
+      <Select.Listbox />
+    </Select>
+  );
+}
+```
+
+**Keyboard Navigation:**
+
+| Key | Action |
+| --- | --- |
+| `Enter` / `Space` | Open listbox or select highlighted option |
+| `ArrowDown` | Open listbox / move highlight down |
+| `ArrowUp` | Open listbox / move highlight up |
+| `Home` / `End` | Jump to first / last option |
+| `Escape` | Close listbox |
+| `Tab` | Close listbox and move focus |
+| Type characters | Jump to matching option (type-ahead) |
+
+**Props:**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `SelectOption[]` | — | List of options |
+| `value` | `string \| null` | — | Controlled selected value |
+| `defaultValue` | `string` | — | Default value (uncontrolled) |
+| `onValueChange` | `(value: string \| null) => void` | — | Change handler |
+| `placeholder` | `string` | `'Select an option...'` | Trigger placeholder text |
+| `disabled` | `boolean` | `false` | Disable the select |
+| `aria-label` | `string` | — | Accessible label |
+| `aria-labelledby` | `string` | — | ID of labelling element |
+
 ### Switch
 
 ```tsx
@@ -333,6 +388,51 @@ All components are unstyled. Use `data-*` attributes for state-based styling:
 /* Combobox */
 [data-compa11y-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
+}
+
+/* Select */
+[data-compa11y-select] {
+  position: relative;
+  width: 300px;
+}
+
+[data-compa11y-select-trigger] {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  text-align: left;
+}
+
+[data-compa11y-select-listbox] {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+}
+
+[data-compa11y-select-option][data-highlighted='true'] {
+  background: #f0f0f0;
+}
+
+[data-compa11y-select-option][data-selected='true'] {
+  background: #e6f0ff;
+  font-weight: 600;
 }
 ```
 
