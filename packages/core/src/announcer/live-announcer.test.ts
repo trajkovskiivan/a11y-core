@@ -19,9 +19,9 @@ describe('Live Announcer', () => {
   });
 
   it('should create live regions on init', () => {
-    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const politeRegion = document.getElementById('compa11y-announcer-polite');
     const assertiveRegion = document.getElementById(
-      'a11y-core-announcer-assertive'
+      'compa11y-announcer-assertive'
     );
 
     expect(politeRegion).not.toBeNull();
@@ -29,7 +29,7 @@ describe('Live Announcer', () => {
   });
 
   it('should have correct ARIA attributes', () => {
-    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const politeRegion = document.getElementById('compa11y-announcer-polite');
 
     expect(politeRegion?.getAttribute('aria-live')).toBe('polite');
     expect(politeRegion?.getAttribute('aria-atomic')).toBe('true');
@@ -41,7 +41,7 @@ describe('Live Announcer', () => {
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
-    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const politeRegion = document.getElementById('compa11y-announcer-polite');
     expect(politeRegion?.textContent).toBe('Test message');
   });
 
@@ -51,7 +51,7 @@ describe('Live Announcer', () => {
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     const assertiveRegion = document.getElementById(
-      'a11y-core-announcer-assertive'
+      'compa11y-announcer-assertive'
     );
     expect(assertiveRegion?.textContent).toBe('Urgent message');
   });
@@ -62,16 +62,16 @@ describe('Live Announcer', () => {
 
     clearAnnouncements();
 
-    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const politeRegion = document.getElementById('compa11y-announcer-polite');
     expect(politeRegion?.textContent).toBe('');
   });
 
   it('should remove regions on cleanup', () => {
     cleanup();
 
-    const politeRegion = document.getElementById('a11y-core-announcer-polite');
+    const politeRegion = document.getElementById('compa11y-announcer-polite');
     const assertiveRegion = document.getElementById(
-      'a11y-core-announcer-assertive'
+      'compa11y-announcer-assertive'
     );
 
     expect(politeRegion).toBeNull();

@@ -4,7 +4,7 @@ import { useId } from '../../hooks/use-id';
 import { useFocusTrap } from '../../hooks/use-focus-trap';
 import { useAnnouncer } from '../../hooks/use-announcer';
 import { DialogProvider, useDialogContext } from './dialog-context';
-import { createComponentWarnings } from '@a11y-core/core';
+import { createComponentWarnings } from '@compa11y/core';
 
 const warnings = createComponentWarnings('Dialog');
 
@@ -204,7 +204,7 @@ function DialogOverlay({
       className={className}
       style={overlayStyles}
       onClick={handleOverlayClick}
-      data-a11y-core-dialog-overlay
+      data-compa11y-dialog-overlay
     >
       <div
         ref={trapRef}
@@ -216,7 +216,7 @@ function DialogOverlay({
         aria-describedby={describedBy}
         onClick={handleDialogClick}
         style={dialogStyles}
-        data-a11y-core-dialog
+        data-compa11y-dialog
       >
         {children}
       </div>
@@ -236,7 +236,7 @@ export const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
         type="button"
         // Safari fix: Ensure button is in tab order (Safari skips buttons by default)
         tabIndex={0}
-        data-a11y-core-dialog-trigger
+        data-compa11y-dialog-trigger
         {...props}
       >
         {children}
@@ -260,7 +260,7 @@ export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
     }, [setHasTitle]);
 
     return (
-      <Component ref={ref} id={titleId} data-a11y-core-dialog-title {...props}>
+      <Component ref={ref} id={titleId} data-compa11y-dialog-title {...props}>
         {children}
       </Component>
     );
@@ -283,12 +283,7 @@ export const DialogDescription = forwardRef<
   }, [setHasDescription]);
 
   return (
-    <p
-      ref={ref}
-      id={descriptionId}
-      data-a11y-core-dialog-description
-      {...props}
-    >
+    <p ref={ref} id={descriptionId} data-compa11y-dialog-description {...props}>
       {children}
     </p>
   );
@@ -317,7 +312,7 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
         tabIndex={0}
         onClick={handleClick}
         aria-label={children ? undefined : 'Close dialog'}
-        data-a11y-core-dialog-close
+        data-compa11y-dialog-close
         {...props}
       >
         {children ?? '×'}
@@ -333,7 +328,7 @@ export interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement>
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent({ children, ...props }, ref) {
     return (
-      <div ref={ref} data-a11y-core-dialog-content {...props}>
+      <div ref={ref} data-compa11y-dialog-content {...props}>
         {children}
       </div>
     );
@@ -347,7 +342,7 @@ export interface DialogActionsProps extends React.HTMLAttributes<HTMLDivElement>
 export const DialogActions = forwardRef<HTMLDivElement, DialogActionsProps>(
   function DialogActions({ children, ...props }, ref) {
     return (
-      <div ref={ref} data-a11y-core-dialog-actions {...props}>
+      <div ref={ref} data-compa11y-dialog-actions {...props}>
         {children}
       </div>
     );

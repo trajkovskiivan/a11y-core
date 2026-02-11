@@ -108,7 +108,7 @@ export function ActionMenu({
     <ActionMenuProvider value={contextValue}>
       <div
         style={{ position: 'relative', display: 'inline-block' }}
-        data-a11y-core-action-menu
+        data-compa11y-action-menu
       >
         {children}
       </div>
@@ -182,7 +182,7 @@ export const ActionMenuTrigger = forwardRef<
       aria-controls={isOpen ? menuId : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      data-a11y-core-action-menu-trigger
+      data-compa11y-action-menu-trigger
       {...props}
     >
       {children}
@@ -325,7 +325,7 @@ export const ActionMenuContent = forwardRef<
       tabIndex={-1}
       onKeyDown={handleKeyDown}
       style={{ ...contentStyles, ...style }}
-      data-a11y-core-action-menu-content
+      data-compa11y-action-menu-content
       {...props}
     >
       {children}
@@ -424,7 +424,7 @@ export const ActionMenuItem = forwardRef<HTMLDivElement, ActionMenuItemProps>(
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         style={{ ...itemStyles, ...style }}
-        data-a11y-core-action-menu-item
+        data-compa11y-action-menu-item
         {...props}
       >
         {children}
@@ -443,7 +443,7 @@ export const ActionMenuSeparator = forwardRef<
     <div
       ref={ref}
       role="separator"
-      data-a11y-core-action-menu-separator
+      data-compa11y-action-menu-separator
       {...props}
     />
   );
@@ -459,7 +459,7 @@ export const ActionMenuLabel = forwardRef<HTMLDivElement, ActionMenuLabelProps>(
       <div
         ref={ref}
         role="presentation"
-        data-a11y-core-action-menu-label
+        data-compa11y-action-menu-label
         {...props}
       >
         {children}

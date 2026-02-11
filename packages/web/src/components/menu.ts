@@ -1,5 +1,5 @@
 /**
- * a11y-core Menu Web Component
+ * compa11y Menu Web Component
  *
  * Usage:
  * <a11y-menu>

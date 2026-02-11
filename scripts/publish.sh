@@ -4,7 +4,7 @@ set -e
 # Store the root directory to avoid pathing issues
 ROOT_DIR=$(pwd)
 
-echo "🚀 Publishing compa11y Alpha Release to NPM"
+echo "🚀 Publishing compa11y Stable Release to NPM"
 echo "==========================================="
 echo ""
 
@@ -16,7 +16,6 @@ NC='\033[0m' # No Color
 
 # Check if logged into npm
 echo "📋 Checking NPM authentication..."
-# Using pnpm whoami for consistency
 if ! pnpm whoami > /dev/null 2>&1; then
     echo -e "${RED}❌ Not logged into NPM. Please run: pnpm login${NC}"
     exit 1
@@ -24,12 +23,20 @@ fi
 echo -e "${GREEN}✓ Logged in as: $(pnpm whoami)${NC}"
 echo ""
 
+# Get current versions from package.json files
+CORE_VERSION=$(node -p "require('./packages/core/package.json').version")
+REACT_VERSION=$(node -p "require('./packages/react/package.json').version")
+WEB_VERSION=$(node -p "require('./packages/web/package.json').version")
+A11Y_VERSION=$(node -p "require('./packages/compa11y/package.json').version")
+
 # Confirm before proceeding
-echo -e "${YELLOW}⚠️  You are about to publish the following packages:${NC}"
-echo "   - @compa11y/core@0.1.0-alpha.7"
-echo "   - @compa11y/react@0.1.0-alpha.7"
-echo "   - @compa11y/web@0.1.0-alpha.7"
-echo "   - @compa11y/compa11y@0.1.0-alpha.7"
+echo -e "${YELLOW}⚠️  You are about to publish the following packages as STABLE (latest):${NC}"
+echo "   - @compa11y/core@${CORE_VERSION}"
+echo "   - @compa11y/react@${REACT_VERSION}"
+echo "   - @compa11y/web@${WEB_VERSION}"
+echo "   - @compa11y/compa11y@${A11Y_VERSION}"
+echo ""
+echo -e "${YELLOW}⚠️  This will set these versions as the DEFAULT on npm!${NC}"
 echo ""
 read -p "Continue? (y/N) " -n 1 -r
 echo
@@ -43,7 +50,6 @@ echo ""
 echo "🔨 Building all packages..."
 pnpm build
 
-# Build check (set -e handles this, but explicit is better)
 if [ $? -ne 0 ]; then
     echo -e "${RED}❌ Build failed${NC}"
     exit 1
@@ -58,11 +64,10 @@ publish_pkg() {
 
     echo "📦 Publishing $pkg_name..."
     cd "$ROOT_DIR/$pkg_path"
-    
-    # We use pnpm publish to handle 'workspace:*' conversion
-    # --no-git-checks allows publishing even if the local git state isn't perfectly clean
-    pnpm publish --access public --tag alpha --no-git-checks
-    
+
+    # Publish with 'latest' tag (this is the default when no tag is specified)
+    pnpm publish --access public --no-git-checks
+
     if [ $? -ne 0 ]; then
         echo -e "${RED}❌ Failed to publish $pkg_name${NC}"
         exit 1
@@ -81,11 +86,16 @@ echo ""
 publish_pkg "packages/compa11y" "@compa11y/compa11y"
 
 echo ""
-echo -e "${GREEN}✨ All packages published successfully!${NC}"
+echo -e "${GREEN}✨ All packages published successfully as STABLE!${NC}"
+echo ""
+echo "📋 What was done:"
+echo "   ✓ Published all packages"
+echo "   ✓ Automatically set as 'latest' tag (default on npm)"
+echo "   ✓ Users running 'npm install @compa11y/web' will get this version"
 echo ""
 echo "📋 Next steps:"
-echo "   1. Tag release: git tag -a v0.1.0-alpha.0 -m 'Alpha release v0.1.0-alpha.0'"
-echo "   2. Push tag: git push origin v0.1.0-alpha.0"
-echo "   3. Test installation: pnpm add @compa11y/react@alpha"
+echo "   1. Tag release: git tag -a v${CORE_VERSION} -m 'Release v${CORE_VERSION}'"
+echo "   2. Push tag: git push origin v${CORE_VERSION}"
+echo "   3. Verify on npm: https://www.npmjs.com/package/@compa11y/web"
 echo ""
 echo "🎉 Done!"

@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
-import { createComponentWarnings } from '@a11y-core/core';
+import { createComponentWarnings } from '@compa11y/core';
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
 import { useAnnouncer } from '../../hooks/use-announcer';
@@ -220,7 +220,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     return (
       <div
         style={wrapperStructuralStyles}
-        data-a11y-core-switch-wrapper
+        data-compa11y-switch-wrapper
         data-size={size}
       >
         <button
@@ -236,7 +236,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           className={className}
           style={{ ...trackStructuralStyles, ...trackVisualStyles }}
           tabIndex={disabled ? -1 : 0}
-          data-a11y-core-switch
+          data-compa11y-switch
           data-checked={checked}
           data-disabled={disabled || undefined}
           data-size={size}
@@ -260,7 +260,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         >
           <span
             style={{ ...thumbStructuralStyles, ...thumbVisualStyles }}
-            data-a11y-core-switch-thumb
+            data-compa11y-switch-thumb
             aria-hidden="true"
           />
         </button>
@@ -269,7 +269,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             id={labelId}
             onClick={disabled ? undefined : () => toggleSwitch()}
             style={labelStyles}
-            data-a11y-core-switch-label
+            data-compa11y-switch-label
           >
             {label}
           </label>

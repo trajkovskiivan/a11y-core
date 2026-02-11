@@ -1,4 +1,4 @@
-# @a11y-core/web
+# @compa11y/web
 
 Accessible Web Components for any HTML page. No framework required.
 
@@ -7,17 +7,17 @@ Accessible Web Components for any HTML page. No framework required.
 ### CDN (Recommended for quick start)
 
 ```html
-<script src="https://unpkg.com/@a11y-core/web"></script>
+<script src="https://unpkg.com/@compa11y/web"></script>
 ```
 
 ### npm
 
 ```bash
-npm install @a11y-core/web
+npm install @compa11y/web
 ```
 
 ```js
-import '@a11y-core/web';
+import '@compa11y/web';
 ```
 
 ## Components
@@ -150,6 +150,139 @@ tabs.addEventListener('a11y-tabs-change', (e) => {
 });
 ```
 
+### Combobox
+
+```html
+<a11y-combobox
+  label="Choose a country"
+  placeholder="Search countries..."
+></a11y-combobox>
+
+<script>
+  const combobox = document.querySelector('a11y-combobox');
+  combobox.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'ca', label: 'Canada' },
+  ];
+
+  combobox.addEventListener('change', (e) => {
+    console.log('Selected:', e.detail.value);
+  });
+</script>
+```
+
+#### Attributes
+
+| Attribute      | Description                           | Default |
+| -------------- | ------------------------------------- | ------- |
+| `label`        | Label text (required for a11y)        | —       |
+| `placeholder`  | Input placeholder                     | —       |
+| `value`        | Currently selected value              | —       |
+| `disabled`     | Disable the combobox                  | `false` |
+| `clearable`    | Show clear button when value selected | `false` |
+| `empty-message`| Message when no options match         | `'No results found'` |
+
+#### Properties
+
+```js
+const combobox = document.querySelector('a11y-combobox');
+combobox.options = [...]; // Set options
+combobox.value = 'us'; // Set value
+```
+
+#### Events
+
+```js
+combobox.addEventListener('change', (e) => {
+  console.log(e.detail.value, e.detail.option);
+});
+```
+
+### Switch
+
+```html
+<a11y-switch label="Enable notifications"></a11y-switch>
+
+<!-- Checked by default -->
+<a11y-switch checked label="Dark mode"></a11y-switch>
+
+<!-- Disabled -->
+<a11y-switch disabled label="Premium feature"></a11y-switch>
+```
+
+#### Attributes
+
+| Attribute  | Description            | Default |
+| ---------- | ---------------------- | ------- |
+| `label`    | Label text             | —       |
+| `checked`  | Whether switch is on   | `false` |
+| `disabled` | Disable the switch     | `false` |
+| `value`    | Value for form submission | —    |
+| `name`     | Name for form submission  | —    |
+
+#### Properties
+
+```js
+const switchEl = document.querySelector('a11y-switch');
+switchEl.checked = true; // Set checked state
+```
+
+#### Events
+
+```js
+switchEl.addEventListener('change', (e) => {
+  console.log('Checked:', e.detail.checked);
+  console.log('Value:', e.detail.value);
+  console.log('Name:', e.detail.name);
+});
+```
+
+### Checkbox
+
+```html
+<a11y-checkbox label="I accept the terms"></a11y-checkbox>
+
+<!-- Checked by default -->
+<a11y-checkbox checked label="Subscribe to newsletter"></a11y-checkbox>
+
+<!-- Indeterminate state (for "select all" pattern) -->
+<a11y-checkbox indeterminate label="Select all"></a11y-checkbox>
+
+<!-- Disabled -->
+<a11y-checkbox disabled label="Disabled option"></a11y-checkbox>
+```
+
+#### Attributes
+
+| Attribute       | Description                  | Default |
+| --------------- | ---------------------------- | ------- |
+| `label`         | Label text                   | —       |
+| `checked`       | Whether checkbox is checked  | `false` |
+| `indeterminate` | Indeterminate state (mixed)  | `false` |
+| `disabled`      | Disable the checkbox         | `false` |
+| `value`         | Value for form submission    | —       |
+| `name`          | Name for form submission     | —       |
+
+#### Properties
+
+```js
+const checkbox = document.querySelector('a11y-checkbox');
+checkbox.checked = true; // Set checked
+checkbox.indeterminate = true; // Set indeterminate
+```
+
+#### Events
+
+```js
+checkbox.addEventListener('change', (e) => {
+  console.log('Checked:', e.detail.checked);
+  console.log('Indeterminate:', e.detail.indeterminate);
+  console.log('Value:', e.detail.value);
+  console.log('Name:', e.detail.name);
+});
+```
+
 ## Styling
 
 Use CSS custom properties for theming:
@@ -157,34 +290,68 @@ Use CSS custom properties for theming:
 ```css
 /* Dialog */
 a11y-dialog {
-  --a11y-core-dialog-bg: white;
-  --a11y-core-dialog-radius: 8px;
-  --a11y-core-dialog-padding: 1.5rem;
-  --a11y-core-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --a11y-core-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
-  --a11y-core-dialog-z-index: 9999;
+  --compa11y-dialog-bg: white;
+  --compa11y-dialog-radius: 8px;
+  --compa11y-dialog-padding: 1.5rem;
+  --compa11y-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --compa11y-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+  --compa11y-dialog-z-index: 9999;
 }
 
 /* Menu */
 a11y-menu {
-  --a11y-core-menu-bg: white;
-  --a11y-core-menu-border: 1px solid #e0e0e0;
-  --a11y-core-menu-radius: 4px;
-  --a11y-core-menu-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --a11y-core-menu-item-hover-bg: #f5f5f5;
+  --compa11y-menu-bg: white;
+  --compa11y-menu-border: 1px solid #e0e0e0;
+  --compa11y-menu-radius: 4px;
+  --compa11y-menu-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --compa11y-menu-item-hover-bg: #f5f5f5;
 }
 
 /* Tabs */
 a11y-tabs {
-  --a11y-core-tabs-border: 1px solid #e0e0e0;
-  --a11y-core-tab-padding: 0.75rem 1rem;
-  --a11y-core-tab-color: #666;
-  --a11y-core-tab-active-color: #0066cc;
+  --compa11y-tabs-border: 1px solid #e0e0e0;
+  --compa11y-tab-padding: 0.75rem 1rem;
+  --compa11y-tab-color: #666;
+  --compa11y-tab-active-color: #0066cc;
+}
+
+/* Combobox */
+a11y-combobox {
+  --compa11y-combobox-width: 300px;
+  --compa11y-combobox-border: 1px solid #ccc;
+  --compa11y-combobox-radius: 4px;
+  --compa11y-combobox-option-hover-bg: #f5f5f5;
+  --compa11y-combobox-option-selected-bg: #e6f0ff;
+}
+
+/* Switch */
+a11y-switch {
+  --compa11y-switch-bg: #d1d5db;
+  --compa11y-switch-checked-bg: #0066cc;
+  --compa11y-switch-thumb-bg: white;
+  --compa11y-switch-width: 2.75rem;
+  --compa11y-switch-height: 1.5rem;
+  --compa11y-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Checkbox */
+a11y-checkbox {
+  --compa11y-checkbox-size: 1.25rem;
+  --compa11y-checkbox-border: 2px solid #666;
+  --compa11y-checkbox-radius: 4px;
+  --compa11y-checkbox-bg: white;
+  --compa11y-checkbox-checked-bg: #0066cc;
+  --compa11y-checkbox-checked-border: #0066cc;
+  --compa11y-checkbox-check-color: white;
+  --compa11y-checkbox-label-color: inherit;
+  --compa11y-checkbox-label-size: 1rem;
+  --compa11y-checkbox-disabled-color: #999;
+  --compa11y-checkbox-hover-border: #0066cc;
 }
 
 /* Focus ring */
 :root {
-  --a11y-core-focus-color: #0066cc;
+  --compa11y-focus-color: #0066cc;
 }
 ```
 
@@ -227,7 +394,7 @@ import {
   // Platform
   prefersReducedMotion,
   prefersHighContrast,
-} from '@a11y-core/web';
+} from '@compa11y/web';
 
 // Make announcements
 announcePolite('Item added to cart');

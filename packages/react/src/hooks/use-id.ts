@@ -12,7 +12,7 @@ export function useId(prefix?: string): string {
   return useMemo(() => {
     // Clean up React's ID format (removes colons)
     const cleanId = reactId.replace(/:/g, '');
-    return prefix ? `a11y-core-${prefix}-${cleanId}` : `a11y-core-${cleanId}`;
+    return prefix ? `compa11y-${prefix}-${cleanId}` : `compa11y-${cleanId}`;
   }, [reactId, prefix]);
 }
 

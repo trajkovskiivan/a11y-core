@@ -1,13 +1,13 @@
 /**
- * @a11y-core/web
+ * @compa11y/web
  *
  * Accessible Web Components for any HTML page
  *
  * Usage via CDN:
- * <script src="https://unpkg.com/@a11y-core/web"></script>
+ * <script src="https://unpkg.com/@compa11y/web"></script>
  *
  * Or import specific components:
- * import '@a11y-core/web/dialog';
+ * import '@compa11y/web/dialog';
  */
 
 // Components - importing auto-registers them as custom elements
@@ -16,9 +16,10 @@ import { A11yMenu } from './components/menu';
 import { A11yTabs } from './components/tabs';
 import { A11yCombobox } from './components/combobox';
 import { A11ySwitch } from './components/switch';
+import { A11yCheckbox } from './components/checkbox';
 
 // Re-export components
-export { A11yDialog, A11yMenu, A11yTabs, A11yCombobox, A11ySwitch };
+export { A11yDialog, A11yMenu, A11yTabs, A11yCombobox, A11ySwitch, A11yCheckbox };
 
 // Core utilities for vanilla JS usage
 import {
@@ -47,7 +48,7 @@ import {
   prefersReducedMotion,
   prefersHighContrast,
   prefersDarkMode,
-} from '@a11y-core/core';
+} from '@compa11y/core';
 
 // Re-export core utilities
 export {
@@ -87,14 +88,15 @@ if (typeof window !== 'undefined') {
   }
 
   // Expose on window for CDN usage (IIFE bundle)
-  // This allows: a11yCore.announcePolite('message')
-  (window as any).a11yCore = {
+  // This allows: compa11y.announcePolite('message')
+  (window as any).compa11y = {
     // Components (classes)
     A11yDialog,
     A11yMenu,
     A11yTabs,
     A11yCombobox,
     A11ySwitch,
+    A11yCheckbox,
     // Announcer utilities
     initAnnouncer,
     announce,

@@ -11,17 +11,20 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'a11yCore',
+      name: 'compa11y',
       formats: ['es', 'iife', 'umd'],
       fileName: (format) => {
-        if (format === 'es') return 'a11y-core.js';
-        if (format === 'iife') return 'a11y-core.iife.js';
-        return 'a11y-core.umd.cjs';
+        if (format === 'es') return 'compa11y.js';
+        if (format === 'iife') return 'compa11y.iife.js';
+        return 'compa11y.umd.cjs';
       },
     },
     rollupOptions: {
+      external: ['@compa11y/core'],
       output: {
-        globals: {},
+        globals: {
+          '@compa11y/core': 'compa11yCore',
+        },
       },
     },
     sourcemap: true,

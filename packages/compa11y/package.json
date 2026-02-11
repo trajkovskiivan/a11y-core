@@ -1,0 +1,33 @@
+{
+  "name": "@compa11y/compa11y",
+  "version": "0.1.0",
+  "description": "The complete accessibility toolkit. React primitives and Web Components.",
+  "author": "Ivan Trajkovski",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "README.md"
+  ],
+  "homepage": "https://github.com/trajkovskiivan/compa11y#readme",
+  "bugs": {
+    "url": "https://github.com/trajkovskiivan/compa11y/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trajkovskiivan/compa11y.git",
+    "directory": "packages/compa11y"
+  },
+  "dependencies": {
+    "@compa11y/core": "workspace:*",
+    "@compa11y/react": "workspace:*",
+    "@compa11y/web": "workspace:*"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "react",
+    "web-components"
+  ]
+}

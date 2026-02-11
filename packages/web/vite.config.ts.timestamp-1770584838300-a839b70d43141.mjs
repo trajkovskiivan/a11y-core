@@ -13,12 +13,12 @@ var vite_config_default = defineConfig({
   build: {
     lib: {
       entry: resolve(__vite_injected_original_dirname, 'src/index.ts'),
-      name: 'a11y-core',
+      name: 'compa11y',
       formats: ['es', 'iife', 'umd'],
       fileName: (format) => {
-        if (format === 'es') return 'a11y-core.js';
-        if (format === 'iife') return 'a11y-core.iife.js';
-        return 'a11y-core.umd.cjs';
+        if (format === 'es') return 'compa11y.js';
+        if (format === 'iife') return 'compa11y.iife.js';
+        return 'compa11y.umd.cjs';
       },
     },
     rollupOptions: {

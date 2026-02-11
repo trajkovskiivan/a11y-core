@@ -12,7 +12,7 @@ import React, {
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
 import { useAnnouncer } from '../../hooks/use-announcer';
-import { createComponentWarnings } from '@a11y-core/core';
+import { createComponentWarnings } from '@compa11y/core';
 
 const warnings = createComponentWarnings('Combobox');
 
@@ -181,7 +181,7 @@ export function Combobox({
 
   return (
     <ComboboxContext.Provider value={contextValue}>
-      <div data-a11y-core-combobox data-disabled={disabled}>
+      <div data-compa11y-combobox data-disabled={disabled}>
         {children}
       </div>
     </ComboboxContext.Provider>
@@ -323,7 +323,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         : undefined;
 
     return (
-      <div data-a11y-core-combobox-input-wrapper>
+      <div data-compa11y-combobox-input-wrapper>
         <input
           ref={ref}
           id={inputId}
@@ -340,7 +340,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
           aria-autocomplete="list"
           aria-haspopup="listbox"
           autoComplete="off"
-          data-a11y-core-combobox-input
+          data-compa11y-combobox-input
           {...props}
         />
         {clearable && inputValue && (
@@ -349,7 +349,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
             onClick={handleClear}
             aria-label="Clear selection"
             tabIndex={-1}
-            data-a11y-core-combobox-clear
+            data-compa11y-combobox-clear
           >
             ×
           </button>
@@ -435,12 +435,12 @@ export const ComboboxListbox = forwardRef<
       role="listbox"
       aria-labelledby={inputId}
       style={{ ...style, ...positionStyle }}
-      data-a11y-core-combobox-listbox
+      data-compa11y-combobox-listbox
       data-position={position}
       {...props}
     >
       {filteredOptions.length === 0 ? (
-        <li role="presentation" data-a11y-core-combobox-empty>
+        <li role="presentation" data-compa11y-combobox-empty>
           {emptyMessage}
         </li>
       ) : (
@@ -525,7 +525,7 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps>(
         data-disabled={option.disabled}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
-        data-a11y-core-combobox-option
+        data-compa11y-combobox-option
         {...props}
       >
         {option.label}

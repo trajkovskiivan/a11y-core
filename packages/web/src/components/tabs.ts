@@ -1,5 +1,5 @@
 /**
- * a11y-core Tabs Web Component
+ * compa11y Tabs Web Component
  *
  * Usage:
  * <a11y-tabs>
@@ -10,7 +10,7 @@
  * </a11y-tabs>
  */
 
-import { announce } from '@a11y-core/core';
+import { announce } from '@compa11y/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { TABS_STYLES } from '../utils/styles';
 

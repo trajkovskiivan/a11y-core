@@ -5,7 +5,7 @@ import {
   normalizeKey,
   getKeyCombo,
   type KeyboardHandlers,
-} from '@a11y-core/core';
+} from '@compa11y/core';
 
 /**
  * Hook for keyboard event handling
@@ -32,7 +32,11 @@ export function useKeyboard(
     disabled?: boolean;
   } = {}
 ) {
-  const { preventDefault = true, stopPropagation = true, disabled = false } = options;
+  const {
+    preventDefault = true,
+    stopPropagation = true,
+    disabled = false,
+  } = options;
 
   // Memoize handlers to prevent unnecessary re-renders
   const handlersRef = useRef(handlers);
@@ -173,9 +177,7 @@ export function useTypeAhead(
  * Hook for tracking which key is currently pressed
  * Useful for showing keyboard shortcuts or modifier states
  */
-export function useKeyPressed(
-  targetKey: string
-): boolean {
+export function useKeyPressed(targetKey: string): boolean {
   const [pressed, setPressed] = useState(false);
 
   useEffect(() => {

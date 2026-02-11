@@ -1,5 +1,5 @@
 /**
- * a11y-core Switch Web Component
+ * compa11y Switch Web Component
  *
  * An accessible toggle switch (on/off control) following WAI-ARIA Switch pattern.
  *
@@ -34,15 +34,15 @@
  * @attr {string} size - Size variant: 'sm' | 'md' | 'lg' (default: 'md')
  * @attr {string} aria-label - Accessible label (if no visible label)
  *
- * @cssprop --a11y-core-switch-bg - Background color when unchecked
- * @cssprop --a11y-core-switch-checked-bg - Background color when checked
- * @cssprop --a11y-core-switch-thumb-bg - Thumb background color
- * @cssprop --a11y-core-switch-thumb-shadow - Thumb shadow
- * @cssprop --a11y-core-switch-label-color - Label text color
- * @cssprop --a11y-core-focus-color - Focus outline color
+ * @cssprop --compa11y-switch-bg - Background color when unchecked
+ * @cssprop --compa11y-switch-checked-bg - Background color when checked
+ * @cssprop --compa11y-switch-thumb-bg - Thumb background color
+ * @cssprop --compa11y-switch-thumb-shadow - Thumb shadow
+ * @cssprop --compa11y-switch-label-color - Label text color
+ * @cssprop --compa11y-focus-color - Focus outline color
  */
 
-import { announcePolite } from '@a11y-core/core';
+import { announcePolite } from '@compa11y/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { SWITCH_STYLES } from '../utils/styles';
 
@@ -126,7 +126,7 @@ export class A11ySwitch extends A11yKitElement {
     ) {
       if (!this.label && !this.getAttribute('aria-label')) {
         console.warn(
-          '[a11y-core/Switch] Switch has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
+          '[compa11y/Switch] Switch has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
             '💡 Suggestion: <a11y-switch label="Enable feature"></a11y-switch>'
         );
       }

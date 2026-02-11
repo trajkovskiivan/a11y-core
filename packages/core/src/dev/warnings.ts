@@ -49,7 +49,7 @@ export function warn(warning: DevWarning): void {
     return;
   }
 
-  const prefix = `[a11y-core/${warning.component}]`;
+  const prefix = `[compa11y/${warning.component}]`;
   const style = getConsoleStyle(warning.type);
 
   const message = warning.suggestion

@@ -1,5 +1,5 @@
 /**
- * Shared styles for a11y-core Web Components
+ * Shared styles for compa11y Web Components
  */
 
 export const VISUALLY_HIDDEN_STYLES = `
@@ -28,7 +28,7 @@ export const RESET_BUTTON_STYLES = `
 export const FOCUS_VISIBLE_STYLES = `
   :host(:focus-visible),
   :focus-visible {
-    outline: 2px solid var(--a11y-core-focus-color, #0066cc);
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
     outline-offset: 2px;
   }
 `;
@@ -64,7 +64,7 @@ export const DIALOG_STYLES = `
   :host {
     position: fixed;
     inset: 0;
-    z-index: var(--a11y-core-dialog-z-index, 9999);
+    z-index: var(--compa11y-dialog-z-index, 9999);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,18 +73,18 @@ export const DIALOG_STYLES = `
   .overlay {
     position: absolute;
     inset: 0;
-    background: var(--a11y-core-dialog-overlay-bg, rgba(0, 0, 0, 0.5));
+    background: var(--compa11y-dialog-overlay-bg, rgba(0, 0, 0, 0.5));
   }
 
   .dialog {
     position: relative;
-    background: var(--a11y-core-dialog-bg, white);
-    border-radius: var(--a11y-core-dialog-radius, 8px);
-    padding: var(--a11y-core-dialog-padding, 1.5rem);
-    max-width: var(--a11y-core-dialog-max-width, 500px);
-    max-height: var(--a11y-core-dialog-max-height, 85vh);
+    background: var(--compa11y-dialog-bg, white);
+    border-radius: var(--compa11y-dialog-radius, 8px);
+    padding: var(--compa11y-dialog-padding, 1.5rem);
+    max-width: var(--compa11y-dialog-max-width, 500px);
+    max-height: var(--compa11y-dialog-max-height, 85vh);
     overflow: auto;
-    box-shadow: var(--a11y-core-dialog-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+    box-shadow: var(--compa11y-dialog-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
   }
 
   ::slotted([slot="title"]) {
@@ -95,7 +95,7 @@ export const DIALOG_STYLES = `
 
   ::slotted([slot="description"]) {
     margin: 0 0 1rem 0;
-    color: var(--a11y-core-dialog-description-color, #666);
+    color: var(--compa11y-dialog-description-color, #666);
   }
 `;
 
@@ -114,14 +114,14 @@ export const MENU_STYLES = `
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: var(--a11y-core-menu-z-index, 1000);
-    min-width: var(--a11y-core-menu-min-width, 160px);
-    background: var(--a11y-core-menu-bg, white);
-    border: var(--a11y-core-menu-border, 1px solid #e0e0e0);
-    border-radius: var(--a11y-core-menu-radius, 4px);
-    box-shadow: var(--a11y-core-menu-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
-    padding: var(--a11y-core-menu-padding, 0.25rem 0);
-    margin-top: var(--a11y-core-menu-offset, 4px);
+    z-index: var(--compa11y-menu-z-index, 1000);
+    min-width: var(--compa11y-menu-min-width, 160px);
+    background: var(--compa11y-menu-bg, white);
+    border: var(--compa11y-menu-border, 1px solid #e0e0e0);
+    border-radius: var(--compa11y-menu-radius, 4px);
+    box-shadow: var(--compa11y-menu-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    padding: var(--compa11y-menu-padding, 0.25rem 0);
+    margin-top: var(--compa11y-menu-offset, 4px);
   }
 
   .menu-content[hidden] {
@@ -141,7 +141,7 @@ export const MENU_STYLES = `
 
   ::slotted([role="menuitem"]:hover),
   ::slotted([role="menuitem"][data-highlighted="true"]) {
-    background: var(--a11y-core-menu-item-hover-bg, #f5f5f5);
+    background: var(--compa11y-menu-item-hover-bg, #f5f5f5);
   }
 
   ::slotted([role="menuitem"][aria-disabled="true"]) {
@@ -152,7 +152,7 @@ export const MENU_STYLES = `
   ::slotted([role="separator"]) {
     height: 1px;
     margin: 0.25rem 0;
-    background: var(--a11y-core-menu-separator-color, #e0e0e0);
+    background: var(--compa11y-menu-separator-color, #e0e0e0);
   }
 `;
 
@@ -164,32 +164,32 @@ export const TABS_STYLES = `
 
   .tablist {
     display: flex;
-    border-bottom: var(--a11y-core-tabs-border, 1px solid #e0e0e0);
-    gap: var(--a11y-core-tabs-gap, 0);
+    border-bottom: var(--compa11y-tabs-border, 1px solid #e0e0e0);
+    gap: var(--compa11y-tabs-gap, 0);
   }
 
   :host([orientation="vertical"]) .tablist {
     flex-direction: column;
     border-bottom: none;
-    border-right: var(--a11y-core-tabs-border, 1px solid #e0e0e0);
+    border-right: var(--compa11y-tabs-border, 1px solid #e0e0e0);
   }
 
   ::slotted([role="tab"]) {
     ${RESET_BUTTON_STYLES}
-    padding: var(--a11y-core-tab-padding, 0.75rem 1rem);
+    padding: var(--compa11y-tab-padding, 0.75rem 1rem);
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     font-weight: 500;
-    color: var(--a11y-core-tab-color, #666);
+    color: var(--compa11y-tab-color, #666);
     transition: all 0.15s ease;
   }
 
   ::slotted([role="tab"]:hover) {
-    color: var(--a11y-core-tab-hover-color, #333);
+    color: var(--compa11y-tab-hover-color, #333);
   }
 
   ::slotted([role="tab"][aria-selected="true"]) {
-    color: var(--a11y-core-tab-active-color, #0066cc);
+    color: var(--compa11y-tab-active-color, #0066cc);
     border-bottom-color: currentColor;
   }
 
@@ -199,7 +199,7 @@ export const TABS_STYLES = `
   }
 
   ::slotted([role="tabpanel"]) {
-    padding: var(--a11y-core-tabpanel-padding, 1rem 0);
+    padding: var(--compa11y-tabpanel-padding, 1rem 0);
   }
 
   ::slotted([role="tabpanel"][hidden]) {
@@ -216,7 +216,7 @@ export const COMBOBOX_STYLES = `
   :host {
     display: inline-block;
     position: relative;
-    width: var(--a11y-core-combobox-width, 250px);
+    width: var(--compa11y-combobox-width, 250px);
   }
 
   .combobox-wrapper {
@@ -231,26 +231,26 @@ export const COMBOBOX_STYLES = `
 
   input {
     width: 100%;
-    padding: var(--a11y-core-combobox-input-padding, 0.5rem 2rem 0.5rem 0.75rem);
-    border: var(--a11y-core-combobox-border, 1px solid #ccc);
-    border-radius: var(--a11y-core-combobox-radius, 4px);
+    padding: var(--compa11y-combobox-input-padding, 0.5rem 2rem 0.5rem 0.75rem);
+    border: var(--compa11y-combobox-border, 1px solid #ccc);
+    border-radius: var(--compa11y-combobox-radius, 4px);
     font: inherit;
-    background: var(--a11y-core-combobox-bg, white);
-    color: var(--a11y-core-combobox-color, inherit);
+    background: var(--compa11y-combobox-bg, white);
+    color: var(--compa11y-combobox-color, inherit);
   }
 
   input:focus {
-    outline: 2px solid var(--a11y-core-focus-color, #0066cc);
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
     outline-offset: -1px;
-    border-color: var(--a11y-core-focus-color, #0066cc);
+    border-color: var(--compa11y-focus-color, #0066cc);
   }
 
   input::placeholder {
-    color: var(--a11y-core-combobox-placeholder-color, #999);
+    color: var(--compa11y-combobox-placeholder-color, #999);
   }
 
   input:disabled {
-    background: var(--a11y-core-combobox-disabled-bg, #f5f5f5);
+    background: var(--compa11y-combobox-disabled-bg, #f5f5f5);
     cursor: not-allowed;
     opacity: 0.7;
   }
@@ -260,7 +260,7 @@ export const COMBOBOX_STYLES = `
     right: 0.5rem;
     pointer-events: none;
     font-size: 0.75rem;
-    color: var(--a11y-core-combobox-chevron-color, #666);
+    color: var(--compa11y-combobox-chevron-color, #666);
     transition: transform 0.15s ease;
   }
 
@@ -279,11 +279,11 @@ export const COMBOBOX_STYLES = `
     justify-content: center;
     border-radius: 50%;
     font-size: 1rem;
-    color: var(--a11y-core-combobox-clear-color, #666);
+    color: var(--compa11y-combobox-clear-color, #666);
   }
 
   .clear-button:hover {
-    background: var(--a11y-core-combobox-clear-hover-bg, rgba(0, 0, 0, 0.1));
+    background: var(--compa11y-combobox-clear-hover-bg, rgba(0, 0, 0, 0.1));
   }
 
   .clear-button[hidden] {
@@ -295,15 +295,15 @@ export const COMBOBOX_STYLES = `
     top: 100%;
     left: 0;
     right: 0;
-    z-index: var(--a11y-core-combobox-z-index, 1000);
-    max-height: var(--a11y-core-combobox-max-height, 200px);
+    z-index: var(--compa11y-combobox-z-index, 1000);
+    max-height: var(--compa11y-combobox-max-height, 200px);
     overflow-y: auto;
     margin: 0;
-    padding: var(--a11y-core-combobox-listbox-padding, 0.25rem 0);
-    background: var(--a11y-core-combobox-listbox-bg, white);
-    border: var(--a11y-core-combobox-listbox-border, 1px solid #e0e0e0);
-    border-radius: var(--a11y-core-combobox-radius, 4px);
-    box-shadow: var(--a11y-core-combobox-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    padding: var(--compa11y-combobox-listbox-padding, 0.25rem 0);
+    background: var(--compa11y-combobox-listbox-bg, white);
+    border: var(--compa11y-combobox-listbox-border, 1px solid #e0e0e0);
+    border-radius: var(--compa11y-combobox-radius, 4px);
+    box-shadow: var(--compa11y-combobox-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
     list-style: none;
   }
 
@@ -321,18 +321,18 @@ export const COMBOBOX_STYLES = `
   }
 
   .listbox li[role="option"] {
-    padding: var(--a11y-core-combobox-option-padding, 0.5rem 0.75rem);
+    padding: var(--compa11y-combobox-option-padding, 0.5rem 0.75rem);
     cursor: pointer;
     transition: background 0.1s ease;
   }
 
   .listbox li[role="option"]:hover,
   .listbox li[role="option"].highlighted {
-    background: var(--a11y-core-combobox-option-hover-bg, #f5f5f5);
+    background: var(--compa11y-combobox-option-hover-bg, #f5f5f5);
   }
 
   .listbox li[role="option"][aria-selected="true"] {
-    background: var(--a11y-core-combobox-option-selected-bg, #e6f0ff);
+    background: var(--compa11y-combobox-option-selected-bg, #e6f0ff);
     font-weight: 500;
   }
 
@@ -343,8 +343,8 @@ export const COMBOBOX_STYLES = `
   }
 
   .empty-message {
-    padding: var(--a11y-core-combobox-option-padding, 0.5rem 0.75rem);
-    color: var(--a11y-core-combobox-empty-color, #666);
+    padding: var(--compa11y-combobox-option-padding, 0.5rem 0.75rem);
+    color: var(--compa11y-combobox-empty-color, #666);
     font-style: italic;
   }
 
@@ -366,18 +366,18 @@ export const SWITCH_STYLES = `
   .switch-wrapper {
     display: inline-flex;
     align-items: center;
-    gap: var(--a11y-core-switch-gap, 0.5rem);
+    gap: var(--compa11y-switch-gap, 0.5rem);
   }
 
   /* Size variants */
   .switch-wrapper.size-sm .switch-track {
-    width: var(--a11y-core-switch-width-sm, 32px);
-    height: var(--a11y-core-switch-height-sm, 18px);
+    width: var(--compa11y-switch-width-sm, 32px);
+    height: var(--compa11y-switch-height-sm, 18px);
   }
 
   .switch-wrapper.size-sm .switch-thumb {
-    width: var(--a11y-core-switch-thumb-sm, 14px);
-    height: var(--a11y-core-switch-thumb-sm, 14px);
+    width: var(--compa11y-switch-thumb-sm, 14px);
+    height: var(--compa11y-switch-thumb-sm, 14px);
   }
 
   .switch-wrapper.size-sm .switch-track.checked .switch-thumb {
@@ -385,13 +385,13 @@ export const SWITCH_STYLES = `
   }
 
   .switch-wrapper.size-md .switch-track {
-    width: var(--a11y-core-switch-width-md, 44px);
-    height: var(--a11y-core-switch-height-md, 24px);
+    width: var(--compa11y-switch-width-md, 44px);
+    height: var(--compa11y-switch-height-md, 24px);
   }
 
   .switch-wrapper.size-md .switch-thumb {
-    width: var(--a11y-core-switch-thumb-md, 20px);
-    height: var(--a11y-core-switch-thumb-md, 20px);
+    width: var(--compa11y-switch-thumb-md, 20px);
+    height: var(--compa11y-switch-thumb-md, 20px);
   }
 
   .switch-wrapper.size-md .switch-track.checked .switch-thumb {
@@ -399,13 +399,13 @@ export const SWITCH_STYLES = `
   }
 
   .switch-wrapper.size-lg .switch-track {
-    width: var(--a11y-core-switch-width-lg, 56px);
-    height: var(--a11y-core-switch-height-lg, 30px);
+    width: var(--compa11y-switch-width-lg, 56px);
+    height: var(--compa11y-switch-height-lg, 30px);
   }
 
   .switch-wrapper.size-lg .switch-thumb {
-    width: var(--a11y-core-switch-thumb-lg, 26px);
-    height: var(--a11y-core-switch-thumb-lg, 26px);
+    width: var(--compa11y-switch-thumb-lg, 26px);
+    height: var(--compa11y-switch-thumb-lg, 26px);
   }
 
   .switch-wrapper.size-lg .switch-track.checked .switch-thumb {
@@ -419,20 +419,20 @@ export const SWITCH_STYLES = `
     flex-shrink: 0;
     padding: 2px;
     border: none;
-    border-radius: var(--a11y-core-switch-radius, 9999px);
-    background: var(--a11y-core-switch-bg, #d1d5db);
+    border-radius: var(--compa11y-switch-radius, 9999px);
+    background: var(--compa11y-switch-bg, #d1d5db);
     cursor: pointer;
     transition: background-color 0.2s ease;
     outline: none;
   }
 
   .switch-track:focus-visible {
-    outline: 2px solid var(--a11y-core-focus-color, #0066cc);
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
     outline-offset: 2px;
   }
 
   .switch-track.checked {
-    background: var(--a11y-core-switch-checked-bg, #0066cc);
+    background: var(--compa11y-switch-checked-bg, #0066cc);
   }
 
   .switch-track:disabled {
@@ -443,9 +443,9 @@ export const SWITCH_STYLES = `
   .switch-thumb {
     position: absolute;
     left: 2px;
-    background: var(--a11y-core-switch-thumb-bg, white);
+    background: var(--compa11y-switch-thumb-bg, white);
     border-radius: 50%;
-    box-shadow: var(--a11y-core-switch-thumb-shadow, 0 1px 3px rgba(0, 0, 0, 0.2));
+    box-shadow: var(--compa11y-switch-thumb-shadow, 0 1px 3px rgba(0, 0, 0, 0.2));
     transition: transform 0.2s ease;
     pointer-events: none;
   }
@@ -453,7 +453,7 @@ export const SWITCH_STYLES = `
   .switch-label {
     user-select: none;
     cursor: pointer;
-    color: var(--a11y-core-switch-label-color, inherit);
+    color: var(--compa11y-switch-label-color, inherit);
   }
 
   .switch-label.disabled {

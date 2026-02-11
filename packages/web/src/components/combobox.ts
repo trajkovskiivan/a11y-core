@@ -1,5 +1,5 @@
 /**
- * a11y-core Combobox Web Component
+ * compa11y Combobox Web Component
  *
  * Usage:
  * <a11y-combobox placeholder="Search...">
@@ -9,7 +9,7 @@
  * </a11y-combobox>
  */
 
-import { announce } from '@a11y-core/core';
+import { announce } from '@compa11y/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { COMBOBOX_STYLES } from '../utils/styles';
 

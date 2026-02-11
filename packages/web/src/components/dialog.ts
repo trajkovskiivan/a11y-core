@@ -1,5 +1,5 @@
 /**
- * a11y-core Dialog Web Component
+ * compa11y Dialog Web Component
  *
  * Usage:
  * <a11y-dialog trigger="#open-btn">
@@ -9,7 +9,7 @@
  * </a11y-dialog>
  */
 
-import { announce } from '@a11y-core/core';
+import { announce } from '@compa11y/core';
 import { A11yKitElement, defineElement } from '../utils/base-element';
 import { DIALOG_STYLES } from '../utils/styles';
 

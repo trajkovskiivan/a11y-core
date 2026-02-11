@@ -1,5 +1,5 @@
 /**
- * Core types used across a11y-core
+ * Core types used across compa11y
  */
 
 export type AriaRole =

@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { announce, announceAssertive } from '@a11y-core/core';
+import { announce, announceAssertive } from '@compa11y/core';
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 
 export interface Toast {
@@ -162,7 +162,7 @@ export const ToastViewport = forwardRef<HTMLDivElement, ToastViewportProps>(
           ...positionStyles[position],
           ...style,
         }}
-        data-a11y-core-toast-viewport
+        data-compa11y-toast-viewport
         data-position={position}
         {...props}
       >
@@ -245,11 +245,11 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
       onKeyDown={handleKeyDown}
       data-type={toast.type}
       data-visible={isVisible}
-      data-a11y-core-toast
+      data-compa11y-toast
     >
-      {toast.title && <div data-a11y-core-toast-title>{toast.title}</div>}
+      {toast.title && <div data-compa11y-toast-title>{toast.title}</div>}
       {toast.description && (
-        <div data-a11y-core-toast-description>{toast.description}</div>
+        <div data-compa11y-toast-description>{toast.description}</div>
       )}
       {toast.action && (
         <button
@@ -260,7 +260,7 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
             toast.action?.onClick();
             onClose();
           }}
-          data-a11y-core-toast-action
+          data-compa11y-toast-action
         >
           {toast.action.label}
         </button>
@@ -271,7 +271,7 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
         tabIndex={0}
         aria-label="Dismiss"
         onClick={onClose}
-        data-a11y-core-toast-close
+        data-compa11y-toast-close
       >
         ×
       </button>

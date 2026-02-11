@@ -1,6 +1,6 @@
 {
-  "name": "@a11y-core/core",
-  "version": "0.1.0-alpha.4",
+  "name": "@compa11y/core",
+  "version": "0.1.0",
   "description": "Framework-agnostic accessibility primitives",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -11,13 +11,13 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "homepage": "https://github.com/trajkovskiivan/a11y-core#readme",
+  "homepage": "https://github.com/trajkovskiivan/compa11y#readme",
   "bugs": {
-    "url": "https://github.com/trajkovskiivan/a11y-core/issues"
+    "url": "https://github.com/trajkovskiivan/compa11y/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trajkovskiivan/a11y-core.git",
+    "url": "https://github.com/trajkovskiivan/compa11y.git",
     "directory": "packages/core"
   },
   "exports": {

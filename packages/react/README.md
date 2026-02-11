@@ -1,11 +1,11 @@
-# @a11y-core/react
+# @compa11y/react
 
 Accessible React components that just work.
 
 ## Installation
 
 ```bash
-npm install @a11y-core/react
+npm install @compa11y/react
 ```
 
 ## Components
@@ -13,7 +13,7 @@ npm install @a11y-core/react
 ### Dialog
 
 ```tsx
-import { Dialog } from '@a11y-core/react';
+import { Dialog } from '@compa11y/react';
 
 function ConfirmDialog({ open, onClose, onConfirm }) {
   return (
@@ -34,7 +34,7 @@ function ConfirmDialog({ open, onClose, onConfirm }) {
 ### Menu
 
 ```tsx
-import { Menu } from '@a11y-core/react';
+import { Menu } from '@compa11y/react';
 
 function ActionMenu() {
   return (
@@ -54,7 +54,7 @@ function ActionMenu() {
 ### Tabs
 
 ```tsx
-import { Tabs } from '@a11y-core/react';
+import { Tabs } from '@compa11y/react';
 
 function SettingsTabs() {
   return (
@@ -79,7 +79,7 @@ import {
   ToastProvider,
   ToastViewport,
   useToastHelpers,
-} from '@a11y-core/react';
+} from '@compa11y/react';
 
 function App() {
   return (
@@ -100,7 +100,7 @@ function Content() {
 ### Combobox
 
 ```tsx
-import { Combobox } from '@a11y-core/react';
+import { Combobox } from '@compa11y/react';
 
 const countries = [
   { value: 'us', label: 'United States' },
@@ -125,12 +125,101 @@ function CountrySelect() {
 }
 ```
 
+### Switch
+
+```tsx
+import { Switch } from '@compa11y/react';
+
+function NotificationSettings() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <Switch checked={enabled} onCheckedChange={setEnabled}>
+      Enable notifications
+    </Switch>
+  );
+}
+```
+
+**Customization:**
+
+```css
+.my-switch {
+  --compa11y-switch-bg: #d1d5db;
+  --compa11y-switch-checked-bg: #10b981;
+  --compa11y-switch-thumb-bg: white;
+  --compa11y-switch-width: 3rem;
+  --compa11y-switch-height: 1.75rem;
+  --compa11y-focus-color: #10b981;
+}
+```
+
+### Checkbox
+
+```tsx
+import { Checkbox } from '@compa11y/react';
+
+function TermsAcceptance() {
+  const [accepted, setAccepted] = useState(false);
+
+  return (
+    <Checkbox checked={accepted} onCheckedChange={setAccepted}>
+      I accept the terms and conditions
+    </Checkbox>
+  );
+}
+
+// Indeterminate state (for "select all" pattern)
+function SelectAllCheckbox({ items, selectedIds, onSelectedChange }) {
+  const allSelected = selectedIds.length === items.length;
+  const someSelected = selectedIds.length > 0 && !allSelected;
+
+  return (
+    <Checkbox
+      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+      onCheckedChange={(checked) => {
+        onSelectedChange(checked ? items.map((item) => item.id) : []);
+      }}
+    >
+      Select all
+    </Checkbox>
+  );
+}
+```
+
+**Customization:**
+
+```css
+.my-checkbox {
+  --compa11y-checkbox-size: 1.5rem;
+  --compa11y-checkbox-checked-bg: #10b981;
+  --compa11y-checkbox-checked-border: #10b981;
+  --compa11y-checkbox-check-color: white;
+  --compa11y-checkbox-radius: 8px;
+  --compa11y-checkbox-label-size: 1.125rem;
+  --compa11y-focus-color: #10b981;
+}
+```
+
+**Available CSS variables:**
+- `--compa11y-checkbox-size` - Size of the checkbox box (default: `1.25rem`)
+- `--compa11y-checkbox-radius` - Border radius (default: `4px`)
+- `--compa11y-checkbox-bg` - Background color unchecked (default: `white`)
+- `--compa11y-checkbox-border` - Border style unchecked (default: `2px solid #666`)
+- `--compa11y-checkbox-checked-bg` - Background color checked (default: `#0066cc`)
+- `--compa11y-checkbox-checked-border` - Border color checked (default: `#0066cc`)
+- `--compa11y-checkbox-check-color` - Checkmark/icon color (default: `white`)
+- `--compa11y-checkbox-label-color` - Label text color (default: `inherit`)
+- `--compa11y-checkbox-label-size` - Label font size (default: `1rem`)
+- `--compa11y-checkbox-disabled-color` - Disabled label color (default: `#999`)
+- `--compa11y-focus-color` - Focus outline color (default: `#0066cc`)
+
 ## Hooks
 
 ### useFocusTrap
 
 ```tsx
-import { useFocusTrap } from '@a11y-core/react';
+import { useFocusTrap } from '@compa11y/react';
 
 function Modal({ isOpen }) {
   const trapRef = useFocusTrap({ active: isOpen });
@@ -146,7 +235,7 @@ function Modal({ isOpen }) {
 ### useAnnouncer
 
 ```tsx
-import { useAnnouncer } from '@a11y-core/react';
+import { useAnnouncer } from '@compa11y/react';
 
 function SearchResults({ count }) {
   const { announce } = useAnnouncer();
@@ -160,7 +249,7 @@ function SearchResults({ count }) {
 ### useKeyboard
 
 ```tsx
-import { useKeyboard } from '@a11y-core/react';
+import { useKeyboard } from '@compa11y/react';
 
 function CustomList() {
   const keyboardProps = useKeyboard({
@@ -176,7 +265,7 @@ function CustomList() {
 ### useFocusVisible
 
 ```tsx
-import { useFocusVisible } from '@a11y-core/react';
+import { useFocusVisible } from '@compa11y/react';
 
 function Button({ children }) {
   const { isFocusVisible, focusProps } = useFocusVisible();
@@ -192,7 +281,7 @@ function Button({ children }) {
 ### useRovingTabindex
 
 ```tsx
-import { useRovingTabindex } from '@a11y-core/react';
+import { useRovingTabindex } from '@compa11y/react';
 
 function Toolbar() {
   const { getItemProps } = useRovingTabindex({
@@ -216,33 +305,33 @@ All components are unstyled. Use `data-*` attributes for state-based styling:
 
 ```css
 /* Dialog */
-[data-a11y-core-dialog-overlay] {
+[data-compa11y-dialog-overlay] {
   background: rgba(0, 0, 0, 0.5);
 }
 
-[data-a11y-core-dialog] {
+[data-compa11y-dialog] {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 /* Menu */
-[data-a11y-core-menu-content] {
+[data-compa11y-menu-content] {
   background: white;
   border: 1px solid #e0e0e0;
 }
 
-[data-a11y-core-menu-item][data-highlighted='true'] {
+[data-compa11y-menu-item][data-highlighted='true'] {
   background: #f0f0f0;
 }
 
 /* Tabs */
-[data-a11y-core-tab][data-selected='true'] {
+[data-compa11y-tab][data-selected='true'] {
   border-bottom: 2px solid blue;
 }
 
 /* Combobox */
-[data-a11y-core-combobox-option][data-highlighted='true'] {
+[data-compa11y-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
 }
 ```

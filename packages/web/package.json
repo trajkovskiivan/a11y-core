@@ -1,6 +1,6 @@
 {
-  "name": "@a11y-core/web",
-  "version": "0.1.0-alpha.4",
+  "name": "@compa11y/web",
+  "version": "0.1.0",
   "description": "Accessible Web Components for any HTML page - CDN ready",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -11,20 +11,20 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "homepage": "https://github.com/trajkovskiivan/a11y-core#readme",
+  "homepage": "https://github.com/trajkovskiivan/compa11y#readme",
   "bugs": {
-    "url": "https://github.com/trajkovskiivan/a11y-core/issues"
+    "url": "https://github.com/trajkovskiivan/compa11y/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trajkovskiivan/a11y-core.git",
+    "url": "https://github.com/trajkovskiivan/compa11y.git",
     "directory": "packages/web"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/a11y-core.js",
-      "require": "./dist/a11y-core.umd.cjs"
+      "import": "./dist/compa11y.js",
+      "require": "./dist/compa11y.umd.cjs"
     },
     "./dialog": {
       "types": "./dist/components/dialog.d.ts",
@@ -45,10 +45,14 @@
     "./switch": {
       "types": "./dist/components/switch.d.ts",
       "import": "./dist/components/switch.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/checkbox.d.ts",
+      "import": "./dist/components/checkbox.js"
     }
   },
-  "unpkg": "./dist/a11y-core.iife.js",
-  "jsdelivr": "./dist/a11y-core.iife.js",
+  "unpkg": "./dist/compa11y.iife.js",
+  "jsdelivr": "./dist/compa11y.iife.js",
   "files": [
     "dist",     
     "README.md",
@@ -63,7 +67,7 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@a11y-core/core": "workspace:*"
+    "@compa11y/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
@@ -87,6 +91,8 @@
     "autocomplete",
     "select",
     "switch",
-    "toggle"
+    "toggle",
+    "checkbox",
+    "form"
   ]
 }

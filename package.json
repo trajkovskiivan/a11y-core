@@ -1,5 +1,5 @@
 {
-  "name": "a11y-core",
+  "name": "compa11y",
   "version": "0.0.0",
   "private": false,
   "description": "Accessible components that just work. React + Web Components.",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trajkovskiivan/a11y-core.git"
+    "url": "https://github.com/trajkovskiivan/compa11y.git"
   },
   "keywords": [
     "accessibility",
@@ -30,6 +30,8 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "turbo run build && changeset publish",
+    "publish:latest": "bash scripts/publish.sh",
+    "publish:alpha": "bash scripts/publish-alpha.sh",
     "prepare": "husky"
   },
   "devDependencies": {

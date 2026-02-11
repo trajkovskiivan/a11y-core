@@ -24,29 +24,31 @@ A11yCore provides fully accessible UI components for React and vanilla JavaScrip
 
 ## Release Status
 
-a11y-core is currently in **alpha (v0.1.0)**.  
+compa11y is currently in **alpha (v0.1.0)**.
 We are actively adding more components. Current components are:
 
+- Checkbox
 - Combobox
 - Dialog
 - Menu
+- Switch
 - Tabs
 - Toast
 
 ## Packages
 
-| Package                              | Description                       | Install                        |
-| ------------------------------------ | --------------------------------- | ------------------------------ |
-| [@a11y-core/react](./packages/react) | React components and hooks        | `npm install @a11y-core/react` |
-| [@a11y-core/web](./packages/web)     | Web Components for CDN/vanilla JS | `npm install @a11y-core/web`   |
-| [@a11y-core/core](./packages/core)   | Framework-agnostic primitives     | `npm install @a11y-core/core`  |
+| Package                             | Description                       | Install                       |
+| ----------------------------------- | --------------------------------- | ----------------------------- |
+| [@compa11y/react](./packages/react) | React components and hooks        | `npm install @compa11y/react` |
+| [@compa11y/web](./packages/web)     | Web Components for CDN/vanilla JS | `npm install @compa11y/web`   |
+| [@compa11y/core](./packages/core)   | Framework-agnostic primitives     | `npm install @compa11y/core`  |
 
 ## Quick Start
 
 ### React
 
 ```bash
-npm install @a11y-core/react
+npm install @compa11y/react
 ```
 
 ```tsx
@@ -59,7 +61,7 @@ import {
   ToastProvider,
   ToastViewport,
   useToastHelpers,
-} from '@a11y-core/react';
+} from '@compa11y/react';
 
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -116,7 +118,7 @@ function App() {
 ### Web Components (Vanilla HTML)
 
 ```html
-<script src="https://unpkg.com/@a11y-core/web"></script>
+<script src="https://unpkg.com/@compa11y/web"></script>
 
 <!-- Dialog -->
 <button id="open-dialog">Open Dialog</button>
@@ -259,6 +261,92 @@ const countries = [
 | `Escape` | Close dropdown |
 | Type to filter | Filter options |
 
+### Switch
+
+Toggle switch component with support for controlled/uncontrolled modes.
+
+```tsx
+import { Switch } from '@compa11y/react';
+
+function Settings() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <Switch checked={enabled} onCheckedChange={setEnabled}>
+      Enable notifications
+    </Switch>
+  );
+}
+```
+
+**Keyboard Navigation:**
+| Key | Action |
+|-----|--------|
+| `Space` / `Enter` | Toggle switch |
+
+**Customization:**
+```css
+.my-switch {
+  --compa11y-switch-bg: #d1d5db;
+  --compa11y-switch-checked-bg: #10b981;
+  --compa11y-switch-thumb-bg: white;
+  --compa11y-switch-width: 3rem;
+  --compa11y-switch-height: 1.75rem;
+}
+```
+
+### Checkbox
+
+Accessible checkbox with support for indeterminate state (for "select all" patterns).
+
+```tsx
+import { Checkbox } from '@compa11y/react';
+
+function TermsAcceptance() {
+  const [accepted, setAccepted] = useState(false);
+
+  return (
+    <Checkbox checked={accepted} onCheckedChange={setAccepted}>
+      I accept the terms and conditions
+    </Checkbox>
+  );
+}
+
+// Indeterminate state
+function SelectAll({ items, selectedIds, onSelectedChange }) {
+  const allSelected = selectedIds.length === items.length;
+  const someSelected = selectedIds.length > 0 && !allSelected;
+
+  return (
+    <Checkbox
+      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+      onCheckedChange={(checked) => {
+        onSelectedChange(checked ? items.map((item) => item.id) : []);
+      }}
+    >
+      Select all
+    </Checkbox>
+  );
+}
+```
+
+**Keyboard Navigation:**
+| Key | Action |
+|-----|--------|
+| `Space` / `Enter` | Toggle checkbox |
+
+**Customization:**
+```css
+.my-checkbox {
+  --compa11y-checkbox-size: 1.5rem;
+  --compa11y-checkbox-checked-bg: #10b981;
+  --compa11y-checkbox-checked-border: #10b981;
+  --compa11y-checkbox-check-color: white;
+  --compa11y-checkbox-radius: 8px;
+  --compa11y-checkbox-label-size: 1.125rem;
+}
+```
+
 ## React Hooks
 
 ```tsx
@@ -268,7 +356,7 @@ import {
   useKeyboard, // Keyboard event handling
   useFocusVisible, // Detect keyboard vs mouse focus
   useRovingTabindex, // Roving tabindex pattern
-} from '@a11y-core/react';
+} from '@compa11y/react';
 
 // Focus Trap
 function Modal({ isOpen }) {
@@ -310,7 +398,7 @@ function Toolbar() {
 
 ## Core Primitives
 
-Use `@a11y-core/core` to build your own accessible components:
+Use `@compa11y/core` to build your own accessible components:
 
 ```ts
 import {
@@ -333,7 +421,7 @@ import {
   // Platform detection
   prefersReducedMotion,
   prefersHighContrast,
-} from '@a11y-core/core';
+} from '@compa11y/core';
 
 // Create a focus trap
 const trap = createFocusTrap(dialogElement, {
@@ -360,11 +448,11 @@ Components use `data-*` attributes for state-based styling:
 
 ```css
 /* Dialog */
-[data-a11y-core-dialog-overlay] {
+[data-compa11y-dialog-overlay] {
   background: rgba(0, 0, 0, 0.5);
 }
 
-[data-a11y-core-dialog] {
+[data-compa11y-dialog] {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
@@ -372,24 +460,24 @@ Components use `data-*` attributes for state-based styling:
 }
 
 /* Menu */
-[data-a11y-core-action-menu-content] {
+[data-compa11y-action-menu-content] {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 }
 
-[data-a11y-core-action-menu-item][data-highlighted='true'] {
+[data-compa11y-action-menu-item][data-highlighted='true'] {
   background: #f0f0f0;
 }
 
 /* Tabs */
-[data-a11y-core-tab][data-selected='true'] {
+[data-compa11y-tab][data-selected='true'] {
   color: #0066cc;
   border-bottom: 2px solid #0066cc;
 }
 
 /* Combobox */
-[data-a11y-core-combobox-option][data-highlighted='true'] {
+[data-compa11y-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
 }
 ```
@@ -414,22 +502,22 @@ Use CSS custom properties:
 
 ```css
 a11y-dialog {
-  --a11y-core-dialog-bg: white;
-  --a11y-core-dialog-radius: 8px;
-  --a11y-core-dialog-padding: 1.5rem;
-  --a11y-core-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --a11y-core-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+  --compa11y-dialog-bg: white;
+  --compa11y-dialog-radius: 8px;
+  --compa11y-dialog-padding: 1.5rem;
+  --compa11y-dialog-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --compa11y-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
 }
 
 a11y-menu {
-  --a11y-core-menu-bg: white;
-  --a11y-core-menu-border: 1px solid #e0e0e0;
-  --a11y-core-menu-item-hover-bg: #f5f5f5;
+  --compa11y-menu-bg: white;
+  --compa11y-menu-border: 1px solid #e0e0e0;
+  --compa11y-menu-item-hover-bg: #f5f5f5;
 }
 
 a11y-tabs {
-  --a11y-core-tabs-border: 1px solid #e0e0e0;
-  --a11y-core-tab-active-color: #0066cc;
+  --compa11y-tabs-border: 1px solid #e0e0e0;
+  --compa11y-tab-active-color: #0066cc;
 }
 ```
 
@@ -447,10 +535,10 @@ a11y-dialog::part(dialog) {
 
 ## Dev Warnings
 
-a11y-core warns you in development when accessibility is missing:
+compa11y warns you in development when accessibility is missing:
 
 ```
-[a11y-core/Dialog] Missing accessible title. Add a DialogTitle or aria-label prop.
+[compa11y/Dialog] Missing accessible title. Add a DialogTitle or aria-label prop.
 Suggestion: Use <Dialog.Title> or provide aria-label="..."
 ```
 
@@ -479,7 +567,7 @@ pnpm dev
 ### Project Structure
 
 ```
-a11y-core/
+compa11y/
 ├── packages/
 │   ├── core/          # Framework-agnostic primitives
 │   ├── react/         # React components

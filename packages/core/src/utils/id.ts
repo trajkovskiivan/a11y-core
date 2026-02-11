@@ -6,7 +6,7 @@
 
 let idCounter = 0;
 
-const PREFIX = 'a11y-core';
+const PREFIX = 'compa11y';
 
 /**
  * Generate a unique ID with optional prefix

@@ -1,5 +1,5 @@
 /**
- * @a11y-core/react
+ * @compa11y/react
  *
  * Accessible React components that just work
  */
@@ -137,6 +137,12 @@ export {
 export { Switch, type SwitchProps } from './components/switch';
 
 // ============================================================================
+// Checkbox
+// ============================================================================
+
+export { Checkbox, type CheckboxProps } from './components/checkbox';
+
+// ============================================================================
 // Re-export core utilities
 // ============================================================================
 
@@ -166,4 +172,4 @@ export {
   prefersReducedMotion,
   prefersHighContrast,
   prefersDarkMode,
-} from '@a11y-core/core';
+} from '@compa11y/core';

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>a11y-core Vanilla JS Demo</title>
+  <title>compa11y Vanilla JS Demo</title>
   <style>
     * {
       box-sizing: border-box;
@@ -66,7 +66,8 @@
     a11y-menu:not(:defined),
     a11y-tabs:not(:defined),
     a11y-combobox:not(:defined),
-    a11y-switch:not(:defined) {
+    a11y-switch:not(:defined),
+    a11y-checkbox:not(:defined) {
       display: none;
     }
 
@@ -84,49 +85,61 @@
     */
 
     /* ==========================================================================
-       a11y-core Web Components Theming (CSS Custom Properties)
+       compa11y Web Components Theming (CSS Custom Properties)
        ========================================================================== */
 
     /* Dialog theming */
     a11y-dialog {
-      --a11y-core-dialog-bg: white;
-      --a11y-core-dialog-radius: 8px;
-      --a11y-core-dialog-padding: 1.5rem;
-      --a11y-core-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
-      --a11y-core-dialog-max-width: 400px;
+      --compa11y-dialog-bg: white;
+      --compa11y-dialog-radius: 8px;
+      --compa11y-dialog-padding: 1.5rem;
+      --compa11y-dialog-overlay-bg: rgba(0, 0, 0, 0.5);
+      --compa11y-dialog-max-width: 400px;
     }
 
     /* Menu theming */
     a11y-menu {
-      --a11y-core-menu-bg: white;
-      --a11y-core-menu-border: 1px solid #e0e0e0;
-      --a11y-core-menu-radius: 4px;
-      --a11y-core-menu-item-hover-bg: #f5f5f5;
+      --compa11y-menu-bg: white;
+      --compa11y-menu-border: 1px solid #e0e0e0;
+      --compa11y-menu-radius: 4px;
+      --compa11y-menu-item-hover-bg: #f5f5f5;
     }
 
     /* Tabs theming */
     a11y-tabs {
-      --a11y-core-tabs-border: 1px solid #e0e0e0;
-      --a11y-core-tab-color: #666;
-      --a11y-core-tab-active-color: #0066cc;
+      --compa11y-tabs-border: 1px solid #e0e0e0;
+      --compa11y-tab-color: #666;
+      --compa11y-tab-active-color: #0066cc;
     }
 
     /* Combobox theming */
     a11y-combobox {
-      --a11y-core-combobox-width: 300px;
-      --a11y-core-combobox-border: 1px solid #ccc;
-      --a11y-core-combobox-radius: 4px;
-      --a11y-core-combobox-option-hover-bg: #f5f5f5;
-      --a11y-core-combobox-option-selected-bg: #e6f0ff;
+      --compa11y-combobox-width: 300px;
+      --compa11y-combobox-border: 1px solid #ccc;
+      --compa11y-combobox-radius: 4px;
+      --compa11y-combobox-option-hover-bg: #f5f5f5;
+      --compa11y-combobox-option-selected-bg: #e6f0ff;
     }
 
     /* Switch theming */
     a11y-switch {
-      --a11y-core-switch-bg: #d1d5db;
-      --a11y-core-switch-checked-bg: #0066cc;
-      --a11y-core-switch-thumb-bg: white;
-      --a11y-core-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-      --a11y-core-focus-color: #0066cc;
+      --compa11y-switch-bg: #d1d5db;
+      --compa11y-switch-checked-bg: #0066cc;
+      --compa11y-switch-thumb-bg: white;
+      --compa11y-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --compa11y-focus-color: #0066cc;
+    }
+
+    /* Checkbox theming */
+    a11y-checkbox {
+      --compa11y-checkbox-size: 1.25rem;
+      --compa11y-checkbox-border: 2px solid #666;
+      --compa11y-checkbox-radius: 4px;
+      --compa11y-checkbox-bg: white;
+      --compa11y-checkbox-checked-bg: #0066cc;
+      --compa11y-checkbox-checked-border: #0066cc;
+      --compa11y-checkbox-check-color: white;
+      --compa11y-focus-color: #0066cc;
     }
 
     /* ==========================================================================
@@ -146,7 +159,7 @@
 
     [role="menuitem"]:hover,
     [role="menuitem"][data-highlighted="true"] {
-      background: var(--a11y-core-menu-item-hover-bg, #f5f5f5);
+      background: var(--compa11y-menu-item-hover-bg, #f5f5f5);
     }
 
     [role="separator"] {
@@ -249,9 +262,9 @@
 </head>
 
 <body>
-  <h1>a11y-core Vanilla JS Demo</h1>
+  <h1>compa11y Vanilla JS Demo</h1>
   <p style="margin-bottom: 1.5rem;">
-    These components work with just HTML and the a11y-core script. No framework required.
+    These components work with just HTML and the compa11y script. No framework required.
   </p>
 
   <section>
@@ -404,13 +417,51 @@
   </section>
 
   <section>
+    <h2>Checkbox</h2>
+    <p style="margin-bottom: 1rem;">An accessible checkbox with support for checked, unchecked, and indeterminate
+      states.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <!-- Basic checkbox -->
+      <a11y-checkbox id="terms-checkbox" label="I accept the terms and conditions"></a11y-checkbox>
+
+      <!-- Checked by default -->
+      <a11y-checkbox id="notifications-checkbox" checked label="Enable email notifications"></a11y-checkbox>
+
+      <!-- Disabled state -->
+      <a11y-checkbox disabled checked label="Disabled checkbox (cannot change)"></a11y-checkbox>
+
+      <!-- Disabled state but discoverable via keyboard -->
+      <a11y-checkbox disabled discoverable label="Disabled checkbox (but discoverable via keyboard)"></a11y-checkbox>
+
+      <!-- Without label attribute (uses slot) -->
+      <a11y-checkbox id="newsletter-checkbox">Subscribe to newsletter</a11y-checkbox>
+    </div>
+
+    <div id="checkbox-status"
+      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+      <strong>Last change:</strong> <span id="checkbox-last-change">None</span>
+    </div>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>Space</kbd> toggles the checkbox</li>
+        <li><kbd>Enter</kbd> also toggles the checkbox (web component)</li>
+        <li>Checkbox state is announced to screen readers</li>
+        <li>Indeterminate state represents partial selection (mixed state)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
     <h2>Screen Reader Announcements</h2>
     <p>Click the buttons to trigger screen reader announcements:</p>
     <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-      <button onclick="a11yCore.announcePolite('This is a polite announcement')">
+      <button onclick="compa11y.announcePolite('This is a polite announcement')">
         Polite Announcement
       </button>
-      <button onclick="a11yCore.announceAssertive('This is an urgent announcement!')">
+      <button onclick="compa11y.announceAssertive('This is an urgent announcement!')">
         Assertive Announcement
       </button>
     </div>
@@ -419,17 +470,17 @@
     </p>
   </section>
 
-  <!-- Load a11y-core - this registers all custom elements automatically -->
+  <!-- Load compa11y - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
-    import * as a11yCore from '@a11y-core/web';
+    import * as compa11y from '@compa11y/web';
 
     // For production CDN usage, use one of:
-    // import * as a11yCore from 'https://unpkg.com/@a11y-core/web';
-    // import * as a11yCore from 'https://cdn.jsdelivr.net/npm/@a11y-core/web';
+    // import * as compa11y from 'https://unpkg.com/@compa11y/web';
+    // import * as compa11y from 'https://cdn.jsdelivr.net/npm/@compa11y/web';
 
     // Expose globally for onclick handlers
-    window.a11yCore = a11yCore;
+    window.compa11y = compa11y;
 
     // Example: Custom event handling
     document.querySelector('a11y-dialog')?.addEventListener('a11y-dialog-open', () => {
@@ -464,6 +515,26 @@
 
         if (switchStatus) {
           switchStatus.textContent = `${label} turned ${state}`;
+        }
+      });
+    });
+
+    // Checkbox event listeners
+    const checkboxes = document.querySelectorAll('a11y-checkbox');
+    const checkboxStatus = document.getElementById('checkbox-last-change');
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const label = cb.getAttribute('label') || cb.textContent || 'Checkbox';
+        const state = e.detail.indeterminate
+          ? 'indeterminate'
+          : e.detail.checked
+            ? 'checked'
+            : 'unchecked';
+        console.log(`Checkbox changed: ${label} = ${state}`, e.detail);
+
+        if (checkboxStatus) {
+          checkboxStatus.textContent = `${label}: ${state}`;
         }
       });
     });

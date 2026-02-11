@@ -1,8 +1,8 @@
 /**
- * Base class for a11y-core Web Components
+ * Base class for compa11y Web Components
  */
 
-import { generateId } from '@a11y-core/core';
+import { generateId } from '@compa11y/core';
 
 export abstract class A11yKitElement extends HTMLElement {
   protected _internals: ElementInternals | null = null;

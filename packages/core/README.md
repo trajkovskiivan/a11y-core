@@ -1,11 +1,11 @@
-# @a11y-core/core
+# @compa11y/core
 
 Framework-agnostic accessibility primitives for building accessible UI components.
 
 ## Installation
 
 ```bash
-npm install @a11y-core/core
+npm install @compa11y/core
 ```
 
 ## Features
@@ -21,7 +21,7 @@ npm install @a11y-core/core
 ### Focus Trap
 
 ```ts
-import { createFocusTrap } from '@a11y-core/core';
+import { createFocusTrap } from '@compa11y/core';
 
 const dialog = document.getElementById('dialog');
 const trap = createFocusTrap(dialog, {
@@ -39,7 +39,7 @@ trap.deactivate();
 ### Announcements
 
 ```ts
-import { announce, announcePolite, announceAssertive } from '@a11y-core/core';
+import { announce, announcePolite, announceAssertive } from '@compa11y/core';
 
 // Polite announcement (doesn't interrupt)
 announcePolite('Item added to cart');
@@ -51,7 +51,7 @@ announceAssertive('Error: Form submission failed');
 ### Keyboard Navigation
 
 ```ts
-import { createKeyboardManager, KeyboardPatterns } from '@a11y-core/core';
+import { createKeyboardManager, KeyboardPatterns } from '@compa11y/core';
 
 const manager = createKeyboardManager(
   KeyboardPatterns.menu({
@@ -68,7 +68,7 @@ manager.attach(menuElement);
 ### ARIA Utilities
 
 ```ts
-import { aria, buildAriaProps, hasAccessibleName } from '@a11y-core/core';
+import { aria, buildAriaProps, hasAccessibleName } from '@compa11y/core';
 
 // Set individual ARIA attributes
 aria.setExpanded(button, true);
@@ -90,7 +90,7 @@ if (!hasAccessibleName(element)) {
 ### Dev Warnings
 
 ```ts
-import { checks, createComponentWarnings } from '@a11y-core/core';
+import { checks, createComponentWarnings } from '@compa11y/core';
 
 // Use pre-built checks
 checks.accessibleLabel(element, 'MyComponent');

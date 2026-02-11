@@ -5,9 +5,9 @@ export default defineConfig({
   // Allow importing from packages directory
   resolve: {
     alias: {
-      '@a11y-core/web': resolve(
+      '@compa11y/web': resolve(
         __dirname,
-        '../../packages/web/dist/a11y-core.js'
+        '../../packages/web/dist/compa11y.js'
       ),
     },
   },

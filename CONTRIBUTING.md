@@ -13,8 +13,8 @@ Thank you for your interest in contributing to A11yCore! This guide will help yo
 
 ```bash
 # Clone the repository
-git clone https://github.com/a11y-core/a11y-core.git
-cd a11y-core
+git clone https://github.com/compa11y/compa11y.git
+cd compa11y
 
 # Install dependencies
 pnpm install
@@ -29,7 +29,7 @@ pnpm test
 ### Project Structure
 
 ```
-a11y-core/
+compa11y/
 ├── packages/
 │   ├── core/          # Framework-agnostic primitives
 │   ├── react/         # React components & hooks
@@ -100,7 +100,7 @@ test(web): add Tab component tests
 ## Adding a New Component
 
 1. **Core Utilities First**
-   - Add any needed utilities to `@a11y-core/core`
+   - Add any needed utilities to `@compa11y/core`
    - Keep framework-specific code out of core
 
 2. **React Component**

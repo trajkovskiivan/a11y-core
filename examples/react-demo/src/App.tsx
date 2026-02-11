@@ -8,7 +8,8 @@ import {
   useToastHelpers,
   Combobox,
   Switch,
-} from '@a11y-core/react';
+  Checkbox,
+} from '@compa11y/react';
 
 const countries = [
   { value: 'us', label: 'United States' },
@@ -24,7 +25,7 @@ export function App() {
   return (
     <ToastProvider>
       <div className="app">
-        <h1>a11y-core React Demo</h1>
+        <h1>compa11y React Demo</h1>
         <h3>Powered by Ivan Trajkovski</h3>
         <p>
           All components below are fully accessible with keyboard navigation,
@@ -59,6 +60,11 @@ export function App() {
         <section>
           <h2>Switch</h2>
           <SwitchDemo />
+        </section>
+
+        <section>
+          <h2>Checkbox</h2>
+          <CheckboxDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -361,6 +367,96 @@ function SwitchDemo() {
             <kbd>Enter</kbd> toggles the switch
           </li>
           <li>Switch state is announced to screen readers</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function CheckboxDemo() {
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [lastChange, setLastChange] = useState<string>('None');
+
+  const handleChange = (label: string, checked: boolean | 'indeterminate') => {
+    const state =
+      checked === 'indeterminate'
+        ? 'indeterminate'
+        : checked
+          ? 'checked'
+          : 'unchecked';
+    setLastChange(`${label}: ${state}`);
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {/* Basic checkbox */}
+        <Checkbox
+          checked={termsAccepted}
+          onCheckedChange={(checked) => {
+            setTermsAccepted(checked as boolean);
+            handleChange('Accept terms', checked);
+          }}
+        >
+          I accept the terms and conditions
+        </Checkbox>
+
+        {/* Checked by default */}
+        <Checkbox
+          checked={notifications}
+          onCheckedChange={(checked) => {
+            setNotifications(checked as boolean);
+            handleChange('Email notifications', checked);
+          }}
+        >
+          Enable email notifications
+        </Checkbox>
+
+        {/* Disabled state */}
+        <Checkbox disabled defaultChecked>
+          Disabled checkbox (cannot change)
+        </Checkbox>
+
+        {/* Disabled state */}
+        <Checkbox disabled discoverable>
+          Disabled checkbox (but discoverable via keyboard)
+        </Checkbox>
+
+        {/* Uncontrolled with default */}
+        <Checkbox
+          defaultChecked={false}
+          onCheckedChange={(checked) => handleChange('Newsletter', checked)}
+        >
+          Subscribe to newsletter (uncontrolled)
+        </Checkbox>
+      </div>
+
+      <div
+        style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          background: '#f8f8f8',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Last change:</strong> {lastChange}
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>Space</kbd> toggles the checkbox
+          </li>
+          <li>
+            <kbd>Enter</kbd> also toggles the checkbox
+          </li>
+          <li>Checkbox state is announced to screen readers</li>
+          <li>
+            Indeterminate state represents partial selection (mixed state)
+          </li>
         </ul>
       </div>
     </div>

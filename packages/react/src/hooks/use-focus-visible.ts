@@ -3,7 +3,7 @@ import {
   initFocusVisible,
   isFocusVisible as checkFocusVisible,
   focusWithVisibleRing,
-} from '@a11y-core/core';
+} from '@compa11y/core';
 
 /**
  * Hook to detect if focus should be visible (keyboard navigation)
@@ -64,12 +64,18 @@ export function useFocusVisible() {
  * }
  * ```
  */
-export function useFocusManager<T extends HTMLElement = HTMLElement>(options: {
-  autoFocus?: boolean;
-  restoreFocus?: boolean;
-  focusVisible?: boolean;
-} = {}) {
-  const { autoFocus = false, restoreFocus = false, focusVisible = true } = options;
+export function useFocusManager<T extends HTMLElement = HTMLElement>(
+  options: {
+    autoFocus?: boolean;
+    restoreFocus?: boolean;
+    focusVisible?: boolean;
+  } = {}
+) {
+  const {
+    autoFocus = false,
+    restoreFocus = false,
+    focusVisible = true,
+  } = options;
 
   const elementRef = useCallback(
     (node: T | null) => {
