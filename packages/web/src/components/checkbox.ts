@@ -12,7 +12,7 @@
  * ```
  */
 
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { BASE_STYLES, FOCUS_VISIBLE_STYLES } from '../utils/styles';
 import { announcePolite } from '@compa11y/core';
 
@@ -102,7 +102,7 @@ const CHECKBOX_STYLES = `
   }
 `;
 
-export class A11yCheckbox extends A11yKitElement {
+export class A11yCheckbox extends Compa11yElement {
   private _checked = false;
   private _indeterminate = false;
   private _disabled = false;
@@ -111,7 +111,15 @@ export class A11yCheckbox extends A11yKitElement {
   private _name = '';
 
   static get observedAttributes() {
-    return ['checked', 'indeterminate', 'disabled', 'discoverable', 'label', 'value', 'name'];
+    return [
+      'checked',
+      'indeterminate',
+      'disabled',
+      'discoverable',
+      'label',
+      'value',
+      'name',
+    ];
   }
 
   get checked(): boolean {
@@ -223,10 +231,12 @@ export class A11yCheckbox extends A11yKitElement {
     this.updateAriaChecked();
 
     const hasLabel =
-      this.hasAttribute('label') || this.hasAttribute('aria-label') || this.hasAttribute('aria-labelledby');
+      this.hasAttribute('label') ||
+      this.hasAttribute('aria-label') ||
+      this.hasAttribute('aria-labelledby');
     if (!hasLabel && process.env.NODE_ENV !== 'production') {
       console.warn(
-        '[A11yKit Checkbox]: Checkbox has no accessible label. ' +
+        '[Compa11y Checkbox]: Checkbox has no accessible label. ' +
           'Use label attribute or aria-label.'
       );
     }

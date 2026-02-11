@@ -12,10 +12,10 @@
  */
 
 // No core imports needed - using base element
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { MENU_STYLES } from '../utils/styles';
 
-export class A11yMenu extends A11yKitElement {
+export class A11yMenu extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _menuItems: HTMLElement[] = [];

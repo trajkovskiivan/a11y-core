@@ -10,7 +10,7 @@
  */
 
 import { announce } from '@compa11y/core';
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { COMBOBOX_STYLES } from '../utils/styles';
 
 interface ComboboxOption {
@@ -20,7 +20,7 @@ interface ComboboxOption {
   element: HTMLElement;
 }
 
-export class A11yCombobox extends A11yKitElement {
+export class A11yCombobox extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _options: ComboboxOption[] = [];

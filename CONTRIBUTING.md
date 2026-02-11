@@ -110,7 +110,7 @@ test(web): add Tab component tests
 
 3. **Web Component**
    - Create in `packages/web/src/components/`
-   - Extend `A11yKitElement` base class
+   - Extend `Compa11yElement` base class
    - Use Shadow DOM for encapsulation
 
 4. **Documentation**

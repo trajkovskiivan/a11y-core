@@ -1,9 +1,9 @@
 // vite.config.ts
-import { defineConfig } from 'file:///Users/ivantrajkovski/Desktop/Development/A11yKitJs/node_modules/.pnpm/vite@5.4.21_@types+node@20.19.32/node_modules/vite/dist/node/index.js';
+import { defineConfig } from 'file:///Users/ivantrajkovski/Desktop/Development/Compa11yJs/node_modules/.pnpm/vite@5.4.21_@types+node@20.19.32/node_modules/vite/dist/node/index.js';
 import { resolve } from 'path';
-import dts from 'file:///Users/ivantrajkovski/Desktop/Development/A11yKitJs/node_modules/.pnpm/vite-plugin-dts@3.9.1_@types+node@20.19.32_typescript@5.9.3_vite@5.4.21/node_modules/vite-plugin-dts/dist/index.mjs';
+import dts from 'file:///Users/ivantrajkovski/Desktop/Development/Compa11yJs/node_modules/.pnpm/vite-plugin-dts@3.9.1_@types+node@20.19.32_typescript@5.9.3_vite@5.4.21/node_modules/vite-plugin-dts/dist/index.mjs';
 var __vite_injected_original_dirname =
-  '/Users/ivantrajkovski/Desktop/Development/A11yKitJs/packages/web';
+  '/Users/ivantrajkovski/Desktop/Development/Compa11yJs/packages/web';
 var vite_config_default = defineConfig({
   plugins: [
     dts({

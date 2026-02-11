@@ -34,7 +34,7 @@ export * from './dev';
  * Initialize all compa11y systems
  * Call this once at app startup for optimal behavior
  */
-export function initA11yKit(): () => void {
+export function initCompa11y(): () => void {
   const cleanups: Array<() => void> = [];
 
   // Dynamic imports to support tree-shaking

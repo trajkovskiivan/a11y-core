@@ -150,7 +150,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       if (process.env.NODE_ENV !== 'production') {
         if (!children && !label && !ariaLabel && !ariaLabelledBy) {
           console.warn(
-            '[A11yKit Checkbox]: Checkbox has no accessible label. Screen readers need this. ' +
+            '[Compa11y Checkbox]: Checkbox has no accessible label. Screen readers need this. ' +
               'Use children, label prop, or provide aria-label/aria-labelledby.'
           );
         }
@@ -165,7 +165,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         }
 
         // Indeterminate always transitions to checked
-        const newChecked = checked === 'indeterminate' ? true : event.target.checked;
+        const newChecked =
+          checked === 'indeterminate' ? true : event.target.checked;
 
         if (controlledChecked === undefined) {
           setUncontrolledChecked(newChecked);

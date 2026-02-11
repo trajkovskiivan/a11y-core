@@ -13,7 +13,7 @@
  */
 
 import { announce, createTypeAhead } from '@compa11y/core';
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { SELECT_STYLES } from '../utils/styles';
 
 interface SelectOption {
@@ -23,7 +23,7 @@ interface SelectOption {
   element: HTMLElement;
 }
 
-export class A11ySelect extends A11yKitElement {
+export class A11ySelect extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _options: SelectOption[] = [];
@@ -69,7 +69,8 @@ export class A11ySelect extends A11yKitElement {
     const shadow = this.attachShadow({ mode: 'open' });
     const triggerId = `${this._id}-trigger`;
     const listboxId = `${this._id}-listbox`;
-    const placeholder = this.getAttribute('placeholder') || 'Select an option...';
+    const placeholder =
+      this.getAttribute('placeholder') || 'Select an option...';
     const ariaLabel = this.getAttribute('aria-label') || '';
     const ariaLabelledBy = this.getAttribute('aria-labelledby') || '';
 
@@ -116,7 +117,10 @@ export class A11ySelect extends A11yKitElement {
     this._triggerElement?.addEventListener('blur', this.handleBlur);
 
     // Prevent trigger blur when clicking in listbox
-    this._listboxElement?.addEventListener('mousedown', this.handleListboxMouseDown);
+    this._listboxElement?.addEventListener(
+      'mousedown',
+      this.handleListboxMouseDown
+    );
 
     // Outside click
     document.addEventListener('mousedown', this.handleOutsideClick);
@@ -294,7 +298,12 @@ export class A11ySelect extends A11yKitElement {
 
       default:
         // Type-ahead: single printable characters
-        if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        if (
+          event.key.length === 1 &&
+          !event.ctrlKey &&
+          !event.altKey &&
+          !event.metaKey
+        ) {
           const match = this._typeAhead?.type(event.key);
           if (match) {
             const index = this._options.findIndex(
@@ -512,10 +521,7 @@ export class A11ySelect extends A11yKitElement {
 
     const triggerRect = this._triggerElement.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const listboxHeight = Math.min(
-      this._listboxElement.scrollHeight,
-      200
-    );
+    const listboxHeight = Math.min(this._listboxElement.scrollHeight, 200);
 
     const spaceBelow = viewportHeight - triggerRect.bottom;
     const spaceAbove = triggerRect.top;

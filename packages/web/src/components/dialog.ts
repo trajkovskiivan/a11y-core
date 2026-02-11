@@ -10,13 +10,13 @@
  */
 
 import { announce } from '@compa11y/core';
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { DIALOG_STYLES } from '../utils/styles';
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export class A11yDialog extends A11yKitElement {
+export class A11yDialog extends Compa11yElement {
   private _open = false;
   private _previouslyFocused: HTMLElement | null = null;
   private _triggerElement: HTMLElement | null = null;

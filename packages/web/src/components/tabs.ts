@@ -11,10 +11,10 @@
  */
 
 import { announce } from '@compa11y/core';
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { TABS_STYLES } from '../utils/styles';
 
-export class A11yTabs extends A11yKitElement {
+export class A11yTabs extends Compa11yElement {
   private _tabs: HTMLElement[] = [];
   private _panels: HTMLElement[] = [];
   private _selectedIndex = 0;

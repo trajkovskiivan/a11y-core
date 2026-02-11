@@ -43,10 +43,10 @@
  */
 
 import { announcePolite } from '@compa11y/core';
-import { A11yKitElement, defineElement } from '../utils/base-element';
+import { Compa11yElement, defineElement } from '../utils/base-element';
 import { SWITCH_STYLES } from '../utils/styles';
 
-export class A11ySwitch extends A11yKitElement {
+export class A11ySwitch extends Compa11yElement {
   private _checked = false;
   private _button: HTMLButtonElement | null = null;
   private _label: HTMLLabelElement | null = null;

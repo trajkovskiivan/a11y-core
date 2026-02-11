@@ -4,7 +4,7 @@
 
 import { generateId } from '@compa11y/core';
 
-export abstract class A11yKitElement extends HTMLElement {
+export abstract class Compa11yElement extends HTMLElement {
   protected _internals: ElementInternals | null = null;
   protected _id: string;
 
