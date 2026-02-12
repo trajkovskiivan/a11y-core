@@ -269,6 +269,83 @@ function SelectAllCheckbox({ items, selectedIds, onSelectedChange }) {
 - `--compa11y-checkbox-disabled-color` - Disabled label color (default: `#999`)
 - `--compa11y-focus-color` - Focus outline color (default: `#0066cc`)
 
+### Input
+
+```tsx
+import { Input } from '@compa11y/react';
+
+function ContactForm() {
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState('');
+
+  const validate = () => {
+    if (!name.trim()) setNameError('Name is required');
+    else setNameError('');
+  };
+
+  return (
+    <Input
+      label="Full Name"
+      hint="Enter your first and last name"
+      error={nameError || undefined}
+      required
+      placeholder="John Doe"
+      value={name}
+      onValueChange={setName}
+      onBlur={validate}
+    />
+  );
+}
+
+// Compound mode for custom layouts
+function CustomInput() {
+  const [value, setValue] = useState('');
+
+  return (
+    <Input value={value} onValueChange={setValue}>
+      <Input.Label>Email</Input.Label>
+      <Input.Field type="email" placeholder="you@example.com" />
+      <Input.Hint>We'll never share your email</Input.Hint>
+      <Input.Error>{/* error message here */}</Input.Error>
+    </Input>
+  );
+}
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | — | Visible label text |
+| `hint` | `ReactNode` | — | Hint/description text |
+| `error` | `ReactNode` | — | Error message (enables `aria-invalid`) |
+| `value` | `string` | — | Controlled value |
+| `defaultValue` | `string` | `''` | Default value (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | — | Change handler |
+| `type` | `string` | `'text'` | Input type (text, email, password, number, tel, url, search) |
+| `placeholder` | `string` | — | Placeholder text |
+| `required` | `boolean` | `false` | Required field |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `readOnly` | `boolean` | `false` | Read-only input |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+| `aria-label` | `string` | — | Accessible label (when no visible label) |
+| `aria-labelledby` | `string` | — | ID of labelling element |
+
+**Customization:**
+
+```css
+.my-input {
+  --compa11y-input-border: 1px solid #ccc;
+  --compa11y-input-border-focus: #10b981;
+  --compa11y-input-border-error: #ef4444;
+  --compa11y-input-radius: 8px;
+  --compa11y-input-label-weight: 600;
+  --compa11y-input-error-color: #ef4444;
+  --compa11y-input-hint-color: #666;
+  --compa11y-focus-color: #10b981;
+}
+```
+
 ## Hooks
 
 ### useFocusTrap

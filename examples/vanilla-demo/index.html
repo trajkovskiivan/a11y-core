@@ -68,7 +68,8 @@
     a11y-combobox:not(:defined),
     a11y-switch:not(:defined),
     a11y-checkbox:not(:defined),
-    a11y-select:not(:defined) {
+    a11y-select:not(:defined),
+    a11y-input:not(:defined) {
       display: none;
     }
 
@@ -139,6 +140,19 @@
       --compa11y-select-option-hover-bg: #f5f5f5;
       --compa11y-select-option-selected-bg: #e6f0ff;
       --compa11y-select-check-color: #0066cc;
+      --compa11y-focus-color: #0066cc;
+    }
+
+    /* Input theming */
+    a11y-input {
+      --compa11y-input-border: 1px solid #ccc;
+      --compa11y-input-border-focus: #0066cc;
+      --compa11y-input-border-error: #ef4444;
+      --compa11y-input-radius: 4px;
+      --compa11y-input-label-weight: 500;
+      --compa11y-input-required-color: #ef4444;
+      --compa11y-input-error-color: #ef4444;
+      --compa11y-input-hint-color: #666;
       --compa11y-focus-color: #0066cc;
     }
 
@@ -396,6 +410,61 @@
   </section>
 
   <section>
+    <h2>Input</h2>
+    <p style="margin-bottom: 1rem;">Accessible text input with label, hint, and error support.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+      <a11y-input
+        label="Full Name"
+        hint="Enter your first and last name"
+        required
+        placeholder="John Doe"
+        type="text"
+      ></a11y-input>
+
+      <a11y-input
+        label="Email Address"
+        hint="We will never share your email"
+        required
+        placeholder="john@example.com"
+        type="email"
+      ></a11y-input>
+
+      <a11y-input
+        label="User ID"
+        value="USR-12345"
+        readonly
+      ></a11y-input>
+
+      <a11y-input
+        label="Organization"
+        value="Compa11y Inc."
+        disabled
+      ></a11y-input>
+    </div>
+
+    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+      <button onclick="validateInputs()">Validate</button>
+      <button onclick="clearInputErrors()">Clear Errors</button>
+    </div>
+
+    <div id="input-status"
+      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+      <strong>Last input:</strong> <span id="input-last-change">None</span>
+    </div>
+
+    <div class="keyboard-hints">
+      <h3>Accessibility Features</h3>
+      <ul>
+        <li>Labels are programmatically associated</li>
+        <li>Hints and errors linked via <code>aria-describedby</code></li>
+        <li>Errors use <code>role="alert"</code> for auto-announcement</li>
+        <li><kbd>Tab</kbd> moves between inputs</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
     <h2>Combobox</h2>
     <p style="margin-bottom: 1rem;">An autocomplete/select component with filtering.</p>
 
@@ -549,6 +618,44 @@
     document.querySelector('a11y-combobox')?.addEventListener('a11y-combobox-change', (e) => {
       console.log('Combobox changed:', e.detail);
     });
+
+    // Input event listeners
+    const inputs = document.querySelectorAll('a11y-input');
+    const inputStatus = document.getElementById('input-last-change');
+
+    inputs.forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        const label = inp.getAttribute('label') || 'Input';
+        console.log(`Input changed: ${label} = "${e.detail.value}"`);
+
+        if (inputStatus) {
+          inputStatus.textContent = `${label}: "${e.detail.value}"`;
+        }
+      });
+    });
+
+    // Validate / clear error helpers
+    window.validateInputs = () => {
+      inputs.forEach(inp => {
+        const label = inp.getAttribute('label') || '';
+        const val = inp.value || '';
+        const isRequired = inp.hasAttribute('required');
+
+        if (isRequired && !val.trim()) {
+          inp.error = `${label} is required`;
+        } else if (label.toLowerCase().includes('email') && val && !val.includes('@')) {
+          inp.error = 'Please enter a valid email address';
+        } else {
+          inp.error = '';
+        }
+      });
+    };
+
+    window.clearInputErrors = () => {
+      inputs.forEach(inp => {
+        inp.error = '';
+      });
+    };
 
     // Select event listener
     const selectEl = document.querySelector('a11y-select');

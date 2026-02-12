@@ -596,3 +596,87 @@ export const SWITCH_STYLES = `
     cursor: not-allowed;
   }
 `;
+
+/**
+ * Input-specific styles
+ */
+export const INPUT_STYLES = `
+  ${BASE_STYLES}
+
+  :host {
+    display: block;
+    width: var(--compa11y-input-width, 100%);
+  }
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .input-label {
+    display: block;
+    color: var(--compa11y-input-label-color, inherit);
+    font-size: var(--compa11y-input-label-size, 0.875rem);
+    font-weight: var(--compa11y-input-label-weight, 500);
+  }
+
+  :host([disabled]) .input-label {
+    color: var(--compa11y-input-disabled-color, #999);
+  }
+
+  .input-required {
+    color: var(--compa11y-input-required-color, #ef4444);
+    margin-left: 0.125rem;
+  }
+
+  input {
+    width: 100%;
+    padding: var(--compa11y-input-padding, 0.5rem 0.75rem);
+    border: var(--compa11y-input-border, 1px solid #ccc);
+    border-radius: var(--compa11y-input-radius, 4px);
+    font: inherit;
+    font-size: var(--compa11y-input-font-size, 0.875rem);
+    background: var(--compa11y-input-bg, white);
+    color: inherit;
+  }
+
+  input:focus {
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
+    outline-offset: -1px;
+    border-color: var(--compa11y-input-border-focus, #0066cc);
+  }
+
+  input::placeholder {
+    color: var(--compa11y-input-placeholder-color, #999);
+  }
+
+  input:disabled {
+    background: var(--compa11y-input-disabled-bg, #f5f5f5);
+    cursor: not-allowed;
+    opacity: var(--compa11y-input-disabled-opacity, 0.7);
+  }
+
+  input[readonly] {
+    background: var(--compa11y-input-readonly-bg, #f9f9f9);
+  }
+
+  :host([data-error="true"]) input {
+    border-color: var(--compa11y-input-border-error, #ef4444);
+  }
+
+  :host([data-error="true"]) input:focus {
+    outline-color: var(--compa11y-input-border-error, #ef4444);
+    border-color: var(--compa11y-input-border-error, #ef4444);
+  }
+
+  .input-hint {
+    color: var(--compa11y-input-hint-color, #666);
+    font-size: var(--compa11y-input-hint-size, 0.8125rem);
+  }
+
+  .input-error {
+    color: var(--compa11y-input-error-color, #ef4444);
+    font-size: var(--compa11y-input-error-size, 0.8125rem);
+  }
+`;

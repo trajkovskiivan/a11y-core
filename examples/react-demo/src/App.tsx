@@ -10,6 +10,7 @@ import {
   Select,
   Switch,
   Checkbox,
+  Input,
 } from '@compa11y/react';
 
 const countries = [
@@ -77,6 +78,11 @@ export function App() {
         <section>
           <h2>Switch</h2>
           <SwitchDemo />
+        </section>
+
+        <section>
+          <h2>Input</h2>
+          <InputDemo />
         </section>
 
         <section>
@@ -424,6 +430,109 @@ function SwitchDemo() {
             <kbd>Enter</kbd> toggles the switch
           </li>
           <li>Switch state is announced to screen readers</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function InputDemo() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateName = () => {
+    if (!name.trim()) {
+      setNameError('Name is required');
+    } else if (name.trim().length < 2) {
+      setNameError('Name must be at least 2 characters');
+    } else {
+      setNameError('');
+    }
+  };
+
+  const validateEmail = () => {
+    if (!email.trim()) {
+      setEmailError('Email is required');
+    } else if (!email.includes('@')) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          maxWidth: '400px',
+        }}
+      >
+        {/* Basic required input with validation */}
+        <Input
+          label="Full Name"
+          hint="Enter your first and last name"
+          error={nameError || undefined}
+          required
+          type="text"
+          placeholder="John Doe"
+          value={name}
+          onValueChange={setName}
+          onBlur={validateName}
+        />
+
+        {/* Email with validation */}
+        <Input
+          label="Email Address"
+          hint="We will never share your email"
+          error={emailError || undefined}
+          required
+          type="email"
+          placeholder="john@example.com"
+          value={email}
+          onValueChange={setEmail}
+          onBlur={validateEmail}
+        />
+
+        {/* Read-only */}
+        <Input label="User ID" value="USR-12345" readOnly />
+
+        {/* Disabled */}
+        <Input label="Organization" value="Compa11y Inc." disabled />
+
+        {/* Compound mode example */}
+        <Input value={name} onValueChange={setName}>
+          <Input.Label>Full Name (Compound)</Input.Label>
+          <Input.Field placeholder="Jane Doe" />
+          <Input.Hint>Custom layout using compound components</Input.Hint>
+          {nameError && <Input.Error>{nameError}</Input.Error>}
+        </Input>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Accessibility Features</h3>
+        <ul>
+          <li>
+            Labels are programmatically associated via{' '}
+            <code>for</code>/<code>id</code>
+          </li>
+          <li>
+            Hints and errors linked via <code>aria-describedby</code>
+          </li>
+          <li>
+            Errors use <code>role=&quot;alert&quot;</code> for screen reader
+            announcements
+          </li>
+          <li>
+            <code>aria-invalid</code> set when errors are present
+          </li>
+          <li>
+            <code>aria-required</code> set for required fields
+          </li>
         </ul>
       </div>
     </div>

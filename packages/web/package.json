@@ -53,6 +53,10 @@
     "./select": {
       "types": "./dist/components/select.d.ts",
       "import": "./dist/components/select.js"
+    },
+    "./input": {
+      "types": "./dist/components/input.d.ts",
+      "import": "./dist/components/input.js"
     }
   },
   "unpkg": "./dist/compa11y.iife.js",
@@ -97,6 +101,7 @@
     "switch",
     "toggle",
     "checkbox",
+    "input",
     "form"
   ]
 }

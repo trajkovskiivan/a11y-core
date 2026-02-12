@@ -60,6 +60,11 @@
       "types": "./dist/components/select/index.d.ts",
       "import": "./dist/components/select/index.js",
       "require": "./dist/components/select/index.cjs"
+    },
+    "./input": {
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/components/input/index.js",
+      "require": "./dist/components/input/index.cjs"
     }
   },
  "files": [
@@ -104,6 +109,8 @@
     "menu",
     "tabs",
     "wcag",
-    "aria"
+    "aria",
+    "input",
+    "form"
   ]
 }

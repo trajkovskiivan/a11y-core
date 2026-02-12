@@ -348,6 +348,82 @@ checkbox.addEventListener('change', (e) => {
 });
 ```
 
+### Input
+
+```html
+<a11y-input
+  label="Full Name"
+  hint="Enter your first and last name"
+  required
+  placeholder="John Doe"
+  type="text"
+></a11y-input>
+
+<!-- With error -->
+<a11y-input
+  label="Email"
+  error="Please enter a valid email"
+  type="email"
+></a11y-input>
+
+<!-- Read-only -->
+<a11y-input label="User ID" value="USR-12345" readonly></a11y-input>
+
+<!-- Disabled -->
+<a11y-input label="Organization" value="Compa11y Inc." disabled></a11y-input>
+```
+
+#### Attributes
+
+| Attribute      | Description                     | Default  |
+| -------------- | ------------------------------- | -------- |
+| `label`        | Visible label text              | —        |
+| `hint`         | Hint/description text           | —        |
+| `error`        | Error message text              | —        |
+| `type`         | Input type                      | `'text'` |
+| `placeholder`  | Placeholder text                | —        |
+| `value`        | Current value                   | —        |
+| `disabled`     | Disable the input               | `false`  |
+| `readonly`     | Read-only input                 | `false`  |
+| `required`     | Required field                  | `false`  |
+| `name`         | Name for form submission        | —        |
+| `aria-label`   | Accessible label                | —        |
+| `aria-labelledby` | ID of labelling element      | —        |
+
+#### Properties
+
+```js
+const input = document.querySelector('a11y-input');
+input.value = 'Hello';      // Set value
+input.error = 'Required';   // Set error (shows role="alert")
+input.error = '';            // Clear error
+input.disabled = true;       // Disable
+```
+
+#### Methods
+
+```js
+const input = document.querySelector('a11y-input');
+input.focus();   // Focus the input
+input.blur();    // Blur the input
+input.select();  // Select all text
+```
+
+#### Events
+
+```js
+input.addEventListener('input', (e) => {
+  console.log('Value:', e.detail.value);
+});
+
+input.addEventListener('change', (e) => {
+  console.log('Final value:', e.detail.value);
+});
+
+input.addEventListener('a11y-input-focus', () => {});
+input.addEventListener('a11y-input-blur', () => {});
+```
+
 ## Styling
 
 Use CSS custom properties for theming:
@@ -426,6 +502,27 @@ a11y-checkbox {
   --compa11y-checkbox-label-size: 1rem;
   --compa11y-checkbox-disabled-color: #999;
   --compa11y-checkbox-hover-border: #0066cc;
+}
+
+/* Input */
+a11y-input {
+  --compa11y-input-border: 1px solid #ccc;
+  --compa11y-input-border-focus: #0066cc;
+  --compa11y-input-border-error: #ef4444;
+  --compa11y-input-bg: white;
+  --compa11y-input-radius: 4px;
+  --compa11y-input-padding: 0.5rem 0.75rem;
+  --compa11y-input-font-size: 0.875rem;
+  --compa11y-input-label-color: inherit;
+  --compa11y-input-label-size: 0.875rem;
+  --compa11y-input-label-weight: 500;
+  --compa11y-input-hint-color: #666;
+  --compa11y-input-hint-size: 0.8125rem;
+  --compa11y-input-error-color: #ef4444;
+  --compa11y-input-error-size: 0.8125rem;
+  --compa11y-input-required-color: #ef4444;
+  --compa11y-input-disabled-bg: #f5f5f5;
+  --compa11y-input-placeholder-color: #999;
 }
 
 /* Focus ring */

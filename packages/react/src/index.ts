@@ -160,6 +160,26 @@ export { Switch, type SwitchProps } from './components/switch';
 export { Checkbox, type CheckboxProps } from './components/checkbox';
 
 // ============================================================================
+// Input
+// ============================================================================
+
+export {
+  InputCompound as Input,
+  Input as InputBase,
+  InputLabel,
+  InputField,
+  InputHint,
+  InputError,
+  useInputContext,
+  type InputProps,
+  type InputFieldProps,
+  type InputLabelProps,
+  type InputHintProps,
+  type InputErrorProps,
+  type InputContextValue,
+} from './components/input';
+
+// ============================================================================
 // Re-export core utilities
 // ============================================================================
 

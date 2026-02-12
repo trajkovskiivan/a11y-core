@@ -384,6 +384,73 @@ button:focus-visible {
   margin-left: 0.5rem;
 }
 
+/* Input Styles */
+[data-compa11y-input] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+[data-compa11y-input-label] {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+[data-compa11y-input][data-disabled='true'] [data-compa11y-input-label] {
+  color: #999;
+}
+
+[data-compa11y-input-required] {
+  color: #ef4444;
+  margin-left: 0.125rem;
+}
+
+[data-compa11y-input-field] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: white;
+}
+
+[data-compa11y-input-field]:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: -1px;
+  border-color: #0066cc;
+}
+
+[data-compa11y-input-field]:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+[data-compa11y-input-field][readonly] {
+  background: #f9f9f9;
+}
+
+[data-compa11y-input][data-error='true'] [data-compa11y-input-field] {
+  border-color: #ef4444;
+}
+
+[data-compa11y-input][data-error='true'] [data-compa11y-input-field]:focus {
+  outline-color: #ef4444;
+  border-color: #ef4444;
+}
+
+[data-compa11y-input-hint] {
+  color: #666;
+  font-size: 0.8125rem;
+}
+
+[data-compa11y-input-error] {
+  color: #ef4444;
+  font-size: 0.8125rem;
+}
+
 /* Keyboard Hints */
 .keyboard-hints {
   margin-top: 1rem;

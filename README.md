@@ -30,6 +30,7 @@ We are actively adding more components. Current components are:
 - Checkbox
 - Combobox
 - Dialog
+- Input
 - Menu
 - Select
 - Switch
