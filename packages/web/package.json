@@ -57,6 +57,14 @@
     "./input": {
       "types": "./dist/components/input.d.ts",
       "import": "./dist/components/input.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/textarea.d.ts",
+      "import": "./dist/components/textarea.js"
+    },
+    "./button": {
+      "types": "./dist/components/button.d.ts",
+      "import": "./dist/components/button.js"
     }
   },
   "unpkg": "./dist/compa11y.iife.js",
@@ -102,6 +110,8 @@
     "toggle",
     "checkbox",
     "input",
+    "textarea",
+    "button",
     "form"
   ]
 }

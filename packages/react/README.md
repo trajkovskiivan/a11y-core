@@ -346,6 +346,152 @@ function CustomInput() {
 }
 ```
 
+### Button
+
+```tsx
+import { Button } from '@compa11y/react';
+
+function Actions() {
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <Button variant="primary" onClick={handleSave}>Save</Button>
+      <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+      <Button variant="danger" onClick={handleDelete}>Delete</Button>
+    </div>
+  );
+}
+
+// Loading state
+function SaveButton() {
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    await saveData();
+    setLoading(false);
+  };
+
+  return (
+    <Button variant="primary" loading={loading} onClick={handleSave}>
+      {loading ? 'Saving...' : 'Save Changes'}
+    </Button>
+  );
+}
+
+// Disabled but discoverable (stays in tab order)
+<Button variant="primary" disabled discoverable>
+  Unavailable
+</Button>
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `'primary' \| 'secondary' \| 'danger' \| 'outline' \| 'ghost'` | `'secondary'` | Visual variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size |
+| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | HTML button type |
+| `disabled` | `boolean` | `false` | Disable the button |
+| `discoverable` | `boolean` | `false` | Keep disabled button in tab order with `aria-disabled` |
+| `loading` | `boolean` | `false` | Loading state (shows spinner, sets `aria-busy`) |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+| `aria-label` | `string` | — | Accessible label |
+
+**Customization:**
+
+```css
+[data-compa11y-button] {
+  --compa11y-button-radius: 8px;
+  --compa11y-button-font-weight: 600;
+  --compa11y-button-primary-bg: #10b981;
+  --compa11y-button-primary-color: white;
+  --compa11y-button-danger-bg: #ef4444;
+  --compa11y-button-danger-color: white;
+  --compa11y-button-disabled-opacity: 0.5;
+  --compa11y-focus-color: #10b981;
+}
+```
+
+### Textarea
+
+```tsx
+import { Textarea } from '@compa11y/react';
+
+function FeedbackForm() {
+  const [desc, setDesc] = useState('');
+  const [descError, setDescError] = useState('');
+
+  const validate = () => {
+    if (!desc.trim()) setDescError('Description is required');
+    else if (desc.trim().length < 10) setDescError('Must be at least 10 characters');
+    else setDescError('');
+  };
+
+  return (
+    <Textarea
+      label="Description"
+      hint="Provide at least 10 characters"
+      error={descError || undefined}
+      required
+      rows={4}
+      placeholder="Enter a description..."
+      value={desc}
+      onValueChange={setDesc}
+      onBlur={validate}
+    />
+  );
+}
+
+// Compound mode for custom layouts
+function CustomTextarea() {
+  const [value, setValue] = useState('');
+
+  return (
+    <Textarea value={value} onValueChange={setValue}>
+      <Textarea.Label>Bio</Textarea.Label>
+      <Textarea.Field rows={5} placeholder="Tell us about yourself..." />
+      <Textarea.Hint>Markdown is supported</Textarea.Hint>
+      <Textarea.Error>{/* error message here */}</Textarea.Error>
+    </Textarea>
+  );
+}
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | — | Visible label text |
+| `hint` | `ReactNode` | — | Hint/description text |
+| `error` | `ReactNode` | — | Error message (enables `aria-invalid`) |
+| `value` | `string` | — | Controlled value |
+| `defaultValue` | `string` | `''` | Default value (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | — | Change handler |
+| `rows` | `number` | `3` | Number of visible text rows |
+| `resize` | `string` | `'vertical'` | Resize behavior (none, both, horizontal, vertical) |
+| `placeholder` | `string` | — | Placeholder text |
+| `required` | `boolean` | `false` | Required field |
+| `disabled` | `boolean` | `false` | Disable the textarea |
+| `readOnly` | `boolean` | `false` | Read-only textarea |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+| `aria-label` | `string` | — | Accessible label (when no visible label) |
+| `aria-labelledby` | `string` | — | ID of labelling element |
+
+**Customization:**
+
+```css
+.my-textarea {
+  --compa11y-textarea-border: 1px solid #ccc;
+  --compa11y-textarea-border-focus: #10b981;
+  --compa11y-textarea-border-error: #ef4444;
+  --compa11y-textarea-radius: 8px;
+  --compa11y-textarea-label-weight: 600;
+  --compa11y-textarea-error-color: #ef4444;
+  --compa11y-textarea-hint-color: #666;
+  --compa11y-focus-color: #10b981;
+}
+```
+
 ## Hooks
 
 ### useFocusTrap

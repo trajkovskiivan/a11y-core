@@ -424,6 +424,156 @@ input.addEventListener('a11y-input-focus', () => {});
 input.addEventListener('a11y-input-blur', () => {});
 ```
 
+### Textarea
+
+```html
+<a11y-textarea
+  label="Description"
+  hint="Provide at least 10 characters"
+  required
+  rows="4"
+  placeholder="Enter a description..."
+></a11y-textarea>
+
+<!-- With error -->
+<a11y-textarea
+  label="Bio"
+  error="Bio is required"
+  rows="5"
+></a11y-textarea>
+
+<!-- Read-only -->
+<a11y-textarea label="Terms" value="Read only content..." readonly rows="3"></a11y-textarea>
+
+<!-- Disabled -->
+<a11y-textarea label="Notes" value="Disabled content" disabled rows="2"></a11y-textarea>
+```
+
+#### Attributes
+
+| Attribute      | Description                     | Default      |
+| -------------- | ------------------------------- | ------------ |
+| `label`        | Visible label text              | —            |
+| `hint`         | Hint/description text           | —            |
+| `error`        | Error message text              | —            |
+| `rows`         | Number of visible rows          | `3`          |
+| `resize`       | Resize behavior                 | `'vertical'` |
+| `placeholder`  | Placeholder text                | —            |
+| `value`        | Current value                   | —            |
+| `disabled`     | Disable the textarea            | `false`      |
+| `readonly`     | Read-only textarea              | `false`      |
+| `required`     | Required field                  | `false`      |
+| `name`         | Name for form submission        | —            |
+| `aria-label`   | Accessible label                | —            |
+| `aria-labelledby` | ID of labelling element      | —            |
+
+#### Properties
+
+```js
+const textarea = document.querySelector('a11y-textarea');
+textarea.value = 'Hello';      // Set value
+textarea.error = 'Required';   // Set error (shows role="alert")
+textarea.error = '';            // Clear error
+textarea.disabled = true;       // Disable
+```
+
+#### Methods
+
+```js
+const textarea = document.querySelector('a11y-textarea');
+textarea.focus();   // Focus the textarea
+textarea.blur();    // Blur the textarea
+textarea.select();  // Select all text
+```
+
+#### Events
+
+```js
+textarea.addEventListener('input', (e) => {
+  console.log('Value:', e.detail.value);
+});
+
+textarea.addEventListener('change', (e) => {
+  console.log('Final value:', e.detail.value);
+});
+
+textarea.addEventListener('a11y-textarea-focus', () => {});
+textarea.addEventListener('a11y-textarea-blur', () => {});
+```
+
+### Button
+
+```html
+<a11y-button variant="primary">Save</a11y-button>
+<a11y-button variant="danger">Delete</a11y-button>
+<a11y-button variant="outline">Cancel</a11y-button>
+
+<!-- Loading state -->
+<a11y-button variant="primary" loading>Saving...</a11y-button>
+
+<!-- Disabled but discoverable (stays in tab order) -->
+<a11y-button variant="primary" disabled discoverable>Unavailable</a11y-button>
+
+<!-- Sizes -->
+<a11y-button variant="primary" size="sm">Small</a11y-button>
+<a11y-button variant="primary" size="md">Medium</a11y-button>
+<a11y-button variant="primary" size="lg">Large</a11y-button>
+```
+
+#### Attributes
+
+| Attribute      | Description                                  | Default       |
+| -------------- | -------------------------------------------- | ------------- |
+| `variant`      | Visual variant (primary, secondary, danger, outline, ghost) | `'secondary'` |
+| `size`         | Size (sm, md, lg)                            | `'md'`        |
+| `type`         | Button type (button, submit, reset)          | `'button'`    |
+| `disabled`     | Disable the button                           | `false`       |
+| `discoverable` | Keep disabled button in tab order            | `false`       |
+| `loading`      | Loading state (shows spinner, aria-busy)     | `false`       |
+| `aria-label`   | Accessible label                             | —             |
+
+#### Properties
+
+```js
+const btn = document.querySelector('a11y-button');
+btn.disabled = true;      // Disable
+btn.loading = true;       // Set loading
+btn.variant = 'danger';   // Change variant
+btn.size = 'lg';          // Change size
+```
+
+#### Methods
+
+```js
+const btn = document.querySelector('a11y-button');
+btn.focus();   // Focus the button
+btn.blur();    // Blur the button
+btn.click();   // Programmatic click
+```
+
+#### Events
+
+```js
+btn.addEventListener('a11y-button-click', () => {
+  console.log('Button clicked');
+});
+```
+
+#### CSS Custom Properties
+
+```css
+a11y-button {
+  --compa11y-button-radius: 4px;
+  --compa11y-button-font-weight: 500;
+  --compa11y-button-disabled-opacity: 0.5;
+  --compa11y-button-primary-bg: #0066cc;
+  --compa11y-button-primary-color: white;
+  --compa11y-button-danger-bg: #ef4444;
+  --compa11y-button-danger-color: white;
+  --compa11y-focus-color: #0066cc;
+}
+```
+
 ## Styling
 
 Use CSS custom properties for theming:
@@ -523,6 +673,39 @@ a11y-input {
   --compa11y-input-required-color: #ef4444;
   --compa11y-input-disabled-bg: #f5f5f5;
   --compa11y-input-placeholder-color: #999;
+}
+
+/* Textarea */
+a11y-textarea {
+  --compa11y-textarea-border: 1px solid #ccc;
+  --compa11y-textarea-border-focus: #0066cc;
+  --compa11y-textarea-border-error: #ef4444;
+  --compa11y-textarea-bg: white;
+  --compa11y-textarea-radius: 4px;
+  --compa11y-textarea-padding: 0.5rem 0.75rem;
+  --compa11y-textarea-font-size: 0.875rem;
+  --compa11y-textarea-resize: vertical;
+  --compa11y-textarea-label-color: inherit;
+  --compa11y-textarea-label-size: 0.875rem;
+  --compa11y-textarea-label-weight: 500;
+  --compa11y-textarea-hint-color: #666;
+  --compa11y-textarea-hint-size: 0.8125rem;
+  --compa11y-textarea-error-color: #ef4444;
+  --compa11y-textarea-error-size: 0.8125rem;
+  --compa11y-textarea-required-color: #ef4444;
+  --compa11y-textarea-disabled-bg: #f5f5f5;
+  --compa11y-textarea-placeholder-color: #999;
+}
+
+/* Button */
+a11y-button {
+  --compa11y-button-radius: 4px;
+  --compa11y-button-font-weight: 500;
+  --compa11y-button-disabled-opacity: 0.5;
+  --compa11y-button-primary-bg: #0066cc;
+  --compa11y-button-primary-color: white;
+  --compa11y-button-danger-bg: #ef4444;
+  --compa11y-button-danger-color: white;
 }
 
 /* Focus ring */

@@ -180,6 +180,32 @@ export {
 } from './components/input';
 
 // ============================================================================
+// Button
+// ============================================================================
+
+export { Button, type ButtonProps } from './components/button';
+
+// ============================================================================
+// Textarea
+// ============================================================================
+
+export {
+  TextareaCompound as Textarea,
+  Textarea as TextareaBase,
+  TextareaLabel,
+  TextareaField,
+  TextareaHint,
+  TextareaError,
+  useTextareaContext,
+  type TextareaProps,
+  type TextareaFieldProps,
+  type TextareaLabelProps,
+  type TextareaHintProps,
+  type TextareaErrorProps,
+  type TextareaContextValue,
+} from './components/textarea';
+
+// ============================================================================
 // Re-export core utilities
 // ============================================================================
 

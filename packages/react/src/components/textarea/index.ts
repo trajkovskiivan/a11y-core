@@ -1,0 +1,15 @@
+export {
+  Textarea,
+  TextareaCompound,
+  TextareaLabel,
+  TextareaField,
+  TextareaHint,
+  TextareaError,
+  useTextareaContext,
+  type TextareaProps,
+  type TextareaFieldProps,
+  type TextareaLabelProps,
+  type TextareaHintProps,
+  type TextareaErrorProps,
+  type TextareaContextValue,
+} from './textarea';

@@ -11,6 +11,8 @@ import {
   Switch,
   Checkbox,
   Input,
+  Textarea,
+  Button,
 } from '@compa11y/react';
 
 const countries = [
@@ -86,6 +88,16 @@ export function App() {
         </section>
 
         <section>
+          <h2>Textarea</h2>
+          <TextareaDemo />
+        </section>
+
+        <section>
+          <h2>Button</h2>
+          <ButtonDemo />
+        </section>
+
+        <section>
           <h2>Checkbox</h2>
           <CheckboxDemo />
         </section>
@@ -110,19 +122,18 @@ function DialogDemo() {
           undone.
         </Dialog.Description>
         <Dialog.Actions>
-          <button tabIndex={0} onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
-          </button>
-          <button
-            tabIndex={0}
-            className="button-danger"
+          </Button>
+          <Button
+            variant="danger"
             onClick={() => {
               console.log('Deleted!');
               setOpen(false);
             }}
           >
             Delete
-          </button>
+          </Button>
         </Dialog.Actions>
       </Dialog>
 
@@ -230,31 +241,31 @@ function ToastDemo() {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
-        <button
-          tabIndex={0}
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <Button
+          variant="outline"
           onClick={() => success('Success!', 'Your changes have been saved.')}
         >
           Success Toast
-        </button>
-        <button
-          tabIndex={0}
+        </Button>
+        <Button
+          variant="outline"
           onClick={() => error('Error!', 'Something went wrong.')}
         >
           Error Toast
-        </button>
-        <button
-          tabIndex={0}
+        </Button>
+        <Button
+          variant="outline"
           onClick={() => info('Info', 'Here is some information.')}
         >
           Info Toast
-        </button>
-        <button
-          tabIndex={0}
+        </Button>
+        <Button
+          variant="outline"
           onClick={() => warning('Warning', 'Please review your input.')}
         >
           Warning Toast
-        </button>
+        </Button>
       </div>
 
       <div className="keyboard-hints">
@@ -533,6 +544,220 @@ function InputDemo() {
           <li>
             <code>aria-required</code> set for required fields
           </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function TextareaDemo() {
+  const [description, setDescription] = useState('');
+  const [descError, setDescError] = useState('');
+  const [feedback, setFeedback] = useState('');
+
+  const validateDescription = () => {
+    if (!description.trim()) {
+      setDescError('Description is required');
+    } else if (description.trim().length < 10) {
+      setDescError('Description must be at least 10 characters');
+    } else {
+      setDescError('');
+    }
+  };
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          maxWidth: '400px',
+        }}
+      >
+        {/* Basic required textarea with validation */}
+        <Textarea
+          label="Description"
+          hint="Provide at least 10 characters"
+          error={descError || undefined}
+          required
+          rows={4}
+          placeholder="Enter a description..."
+          value={description}
+          onValueChange={setDescription}
+          onBlur={validateDescription}
+        />
+
+        {/* Read-only */}
+        <Textarea
+          label="Terms of Service"
+          value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          readOnly
+          rows={3}
+        />
+
+        {/* Disabled */}
+        <Textarea
+          label="Admin Notes"
+          value="This field is disabled."
+          disabled
+          rows={2}
+        />
+
+        {/* Resize control */}
+        <Textarea
+          label="Feedback"
+          hint="Resize is disabled on this textarea"
+          placeholder="Share your feedback..."
+          resize="none"
+          rows={3}
+          value={feedback}
+          onValueChange={setFeedback}
+        />
+
+        {/* Compound mode example */}
+        <Textarea value={description} onValueChange={setDescription}>
+          <Textarea.Label>Description (Compound)</Textarea.Label>
+          <Textarea.Field rows={3} placeholder="Custom layout..." />
+          <Textarea.Hint>Using compound components for custom layout</Textarea.Hint>
+          {descError && <Textarea.Error>{descError}</Textarea.Error>}
+        </Textarea>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Accessibility Features</h3>
+        <ul>
+          <li>
+            Labels are programmatically associated via{' '}
+            <code>for</code>/<code>id</code>
+          </li>
+          <li>
+            Hints and errors linked via <code>aria-describedby</code>
+          </li>
+          <li>
+            Errors use <code>role=&quot;alert&quot;</code> for screen reader
+            announcements
+          </li>
+          <li>
+            <code>aria-invalid</code> set when errors are present
+          </li>
+          <li>
+            <code>aria-required</code> set for required fields
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function ButtonDemo() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastClick, setLastClick] = useState<string>('None');
+
+  const handleLoadingClick = () => {
+    setIsLoading(true);
+    setLastClick('Save (loading...)');
+    setTimeout(() => {
+      setIsLoading(false);
+      setLastClick('Save completed!');
+    }, 2000);
+  };
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
+        {/* Variants */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Variants</h3>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <Button variant="primary" onClick={() => setLastClick('Primary')}>
+              Primary
+            </Button>
+            <Button variant="secondary" onClick={() => setLastClick('Secondary')}>
+              Secondary
+            </Button>
+            <Button variant="danger" onClick={() => setLastClick('Danger')}>
+              Danger
+            </Button>
+            <Button variant="outline" onClick={() => setLastClick('Outline')}>
+              Outline
+            </Button>
+            <Button variant="ghost" onClick={() => setLastClick('Ghost')}>
+              Ghost
+            </Button>
+          </div>
+        </div>
+
+        {/* Sizes */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Sizes</h3>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <Button variant="primary" size="sm" onClick={() => setLastClick('Small')}>
+              Small
+            </Button>
+            <Button variant="primary" size="md" onClick={() => setLastClick('Medium')}>
+              Medium
+            </Button>
+            <Button variant="primary" size="lg" onClick={() => setLastClick('Large')}>
+              Large
+            </Button>
+          </div>
+        </div>
+
+        {/* Loading state */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Loading</h3>
+          <Button variant="primary" loading={isLoading} onClick={handleLoadingClick}>
+            {isLoading ? 'Saving...' : 'Save Changes'}
+          </Button>
+        </div>
+
+        {/* Disabled states */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Disabled</h3>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <Button variant="primary" disabled>
+              Disabled (removed from tab order)
+            </Button>
+            <Button variant="primary" disabled discoverable>
+              Disabled (discoverable via keyboard)
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          background: '#f8f8f8',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Last click:</strong> <span>{lastClick}</span>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Accessibility Features</h3>
+        <ul>
+          <li>
+            <kbd>Enter</kbd> or <kbd>Space</kbd> activates the button
+          </li>
+          <li>
+            Loading state sets <code>aria-busy</code> and prevents interaction
+          </li>
+          <li>
+            Discoverable disabled buttons stay in tab order with{' '}
+            <code>aria-disabled</code>
+          </li>
+          <li>Focus ring appears only on keyboard navigation</li>
         </ul>
       </div>
     </div>

@@ -27,6 +27,7 @@ A11yCore provides fully accessible UI components for React and vanilla JavaScrip
 compa11y is currently in **alpha (v0.1.0)**.
 We are actively adding more components. Current components are:
 
+- Button
 - Checkbox
 - Combobox
 - Dialog
@@ -35,6 +36,7 @@ We are actively adding more components. Current components are:
 - Select
 - Switch
 - Tabs
+- Textarea
 - Toast
 
 ## Packages
