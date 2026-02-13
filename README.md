@@ -1,4 +1,4 @@
-# A11yCore
+# Compa11y
 
 **Accessible components that just work.** React + Web Components.
 
@@ -7,7 +7,7 @@
 
 ---
 
-A11yCore provides fully accessible UI components for React and vanilla JavaScript. Focus on building your app—we handle keyboard navigation, ARIA attributes, screen reader announcements, and more.
+Compa11y provides fully accessible UI components for React and vanilla JavaScript. Focus on building your app—we handle keyboard navigation, ARIA attributes, screen reader announcements, and more.
 
 **By Ivan Trajkovski**
 
@@ -33,6 +33,7 @@ We are actively adding more components. Current components are:
 - Dialog
 - Input
 - Menu
+- RadioGroup
 - Select
 - Switch
 - Tabs
@@ -289,6 +290,7 @@ function Settings() {
 | `Space` / `Enter` | Toggle switch |
 
 **Customization:**
+
 ```css
 .my-switch {
   --compa11y-switch-bg: #d1d5db;
@@ -340,6 +342,7 @@ function SelectAll({ items, selectedIds, onSelectedChange }) {
 | `Space` / `Enter` | Toggle checkbox |
 
 **Customization:**
+
 ```css
 .my-checkbox {
   --compa11y-checkbox-size: 1.5rem;
@@ -348,6 +351,50 @@ function SelectAll({ items, selectedIds, onSelectedChange }) {
   --compa11y-checkbox-check-color: white;
   --compa11y-checkbox-radius: 8px;
   --compa11y-checkbox-label-size: 1.125rem;
+}
+```
+
+### RadioGroup
+
+Accessible radio group for single-selection from a set of options with roving tabindex.
+
+```tsx
+import { RadioGroup } from '@compa11y/react';
+
+function FavoriteColor() {
+  const [color, setColor] = useState('red');
+
+  return (
+    <RadioGroup
+      value={color}
+      onValueChange={setColor}
+      aria-label="Favorite color"
+    >
+      <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
+      <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
+      <RadioGroup.Radio value="blue">Blue</RadioGroup.Radio>
+    </RadioGroup>
+  );
+}
+```
+
+**Keyboard Navigation:**
+| Key | Action |
+|-----|--------|
+| `Arrow Up` / `Arrow Down` | Move to previous/next radio and select |
+| `Arrow Left` / `Arrow Right` | Move to previous/next radio and select |
+| `Home` / `End` | Jump to first / last radio |
+
+**Customization:**
+
+```css
+.my-radiogroup {
+  --compa11y-radio-gap: 1rem;
+  --compa11y-radio-size: 1.5rem;
+  --compa11y-radio-checked-bg: #10b981;
+  --compa11y-radio-checked-border: #10b981;
+  --compa11y-radio-dot-color: white;
+  --compa11y-radio-label-size: 1.125rem;
 }
 ```
 

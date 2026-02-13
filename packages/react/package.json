@@ -75,6 +75,16 @@
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",
       "require": "./dist/components/button/index.cjs"
+    },
+    "./radio-group": {
+      "types": "./dist/components/radio-group/index.d.ts",
+      "import": "./dist/components/radio-group/index.js",
+      "require": "./dist/components/radio-group/index.cjs"
+    },
+    "./listbox": {
+      "types": "./dist/components/listbox/index.d.ts",
+      "import": "./dist/components/listbox/index.js",
+      "require": "./dist/components/listbox/index.cjs"
     }
   },
  "files": [
@@ -123,6 +133,8 @@
     "input",
     "textarea",
     "button",
+    "radio-group",
+    "listbox",
     "form"
   ]
 }

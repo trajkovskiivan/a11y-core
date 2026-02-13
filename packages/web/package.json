@@ -65,6 +65,14 @@
     "./button": {
       "types": "./dist/components/button.d.ts",
       "import": "./dist/components/button.js"
+    },
+    "./radio-group": {
+      "types": "./dist/components/radio-group.d.ts",
+      "import": "./dist/components/radio-group.js"
+    },
+    "./listbox": {
+      "types": "./dist/components/listbox.d.ts",
+      "import": "./dist/components/listbox.js"
     }
   },
   "unpkg": "./dist/compa11y.iife.js",
@@ -112,6 +120,9 @@
     "input",
     "textarea",
     "button",
+    "radio-group",
+    "radio",
+    "listbox",
     "form"
   ]
 }

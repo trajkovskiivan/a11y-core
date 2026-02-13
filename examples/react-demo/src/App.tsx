@@ -13,6 +13,8 @@ import {
   Input,
   Textarea,
   Button,
+  RadioGroup,
+  Listbox,
 } from '@compa11y/react';
 
 const countries = [
@@ -95,6 +97,16 @@ export function App() {
         <section>
           <h2>Button</h2>
           <ButtonDemo />
+        </section>
+
+        <section>
+          <h2>RadioGroup</h2>
+          <RadioGroupDemo />
+        </section>
+
+        <section>
+          <h2>Listbox</h2>
+          <ListboxDemo />
         </section>
 
         <section>
@@ -758,6 +770,217 @@ function ButtonDemo() {
             <code>aria-disabled</code>
           </li>
           <li>Focus ring appears only on keyboard navigation</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function RadioGroupDemo() {
+  const [color, setColor] = useState('red');
+  const [size, setSize] = useState('md');
+  const [plan, setPlan] = useState('pro');
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.5rem',
+        }}
+      >
+        {/* Basic vertical radio group */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Favorite Color (Vertical)
+          </h3>
+          <RadioGroup
+            value={color}
+            onValueChange={setColor}
+            aria-label="Favorite color"
+          >
+            <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
+            <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
+            <RadioGroup.Radio value="blue">Blue</RadioGroup.Radio>
+            <RadioGroup.Radio value="purple">Purple</RadioGroup.Radio>
+          </RadioGroup>
+        </div>
+
+        {/* Horizontal orientation */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Size (Horizontal)
+          </h3>
+          <RadioGroup
+            value={size}
+            onValueChange={setSize}
+            orientation="horizontal"
+            aria-label="Size"
+          >
+            <RadioGroup.Radio value="sm">Small</RadioGroup.Radio>
+            <RadioGroup.Radio value="md">Medium</RadioGroup.Radio>
+            <RadioGroup.Radio value="lg">Large</RadioGroup.Radio>
+          </RadioGroup>
+        </div>
+
+        {/* Individual disabled radio */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Plan (with disabled option)
+          </h3>
+          <RadioGroup
+            value={plan}
+            onValueChange={setPlan}
+            aria-label="Select plan"
+          >
+            <RadioGroup.Radio value="free">Free</RadioGroup.Radio>
+            <RadioGroup.Radio value="pro">Pro</RadioGroup.Radio>
+            <RadioGroup.Radio value="enterprise" disabled>
+              Enterprise (contact sales)
+            </RadioGroup.Radio>
+          </RadioGroup>
+        </div>
+
+        {/* Fully disabled group */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Disabled Group
+          </h3>
+          <RadioGroup
+            defaultValue="option1"
+            disabled
+            aria-label="Disabled options"
+          >
+            <RadioGroup.Radio value="option1">Option 1</RadioGroup.Radio>
+            <RadioGroup.Radio value="option2">Option 2</RadioGroup.Radio>
+            <RadioGroup.Radio value="option3">Option 3</RadioGroup.Radio>
+          </RadioGroup>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          background: '#f8f8f8',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Selected:</strong> Color: {color} | Size: {size} | Plan: {plan}
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> moves between
+            radios and selects
+          </li>
+          <li>
+            <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last radio
+          </li>
+          <li>
+            <kbd>Tab</kbd> moves to the selected radio, then out of the group
+          </li>
+          <li>Disabled radios are skipped during arrow key navigation</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function ListboxDemo() {
+  const [fruit, setFruit] = useState<string>('apple');
+  const [toppings, setToppings] = useState<string[]>(['cheese', 'mushrooms']);
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '2rem',
+          flexWrap: 'wrap',
+        }}
+      >
+        {/* Single-select with groups */}
+        <div style={{ flex: '1 1 250px' }}>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Favorite Fruit (Single Select)
+          </h3>
+          <Listbox
+            value={fruit}
+            onValueChange={(v) => setFruit(v as string)}
+            aria-label="Favorite fruit"
+          >
+            <Listbox.Group label="Citrus">
+              <Listbox.Option value="orange">Orange</Listbox.Option>
+              <Listbox.Option value="lemon">Lemon</Listbox.Option>
+              <Listbox.Option value="grapefruit">Grapefruit</Listbox.Option>
+            </Listbox.Group>
+            <Listbox.Group label="Berries">
+              <Listbox.Option value="strawberry">Strawberry</Listbox.Option>
+              <Listbox.Option value="blueberry">Blueberry</Listbox.Option>
+              <Listbox.Option value="raspberry" disabled>
+                Raspberry (sold out)
+              </Listbox.Option>
+            </Listbox.Group>
+            <Listbox.Option value="apple">Apple</Listbox.Option>
+            <Listbox.Option value="banana">Banana</Listbox.Option>
+          </Listbox>
+          <p style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}>
+            Selected: {fruit || 'None'}
+          </p>
+        </div>
+
+        {/* Multi-select */}
+        <div style={{ flex: '1 1 250px' }}>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Pizza Toppings (Multi Select)
+          </h3>
+          <Listbox
+            value={toppings}
+            onValueChange={(v) => setToppings(v as string[])}
+            multiple
+            aria-label="Pizza toppings"
+          >
+            <Listbox.Option value="cheese">Cheese</Listbox.Option>
+            <Listbox.Option value="pepperoni">Pepperoni</Listbox.Option>
+            <Listbox.Option value="mushrooms">Mushrooms</Listbox.Option>
+            <Listbox.Option value="onions">Onions</Listbox.Option>
+            <Listbox.Option value="peppers">Peppers</Listbox.Option>
+            <Listbox.Option value="olives">Olives</Listbox.Option>
+            <Listbox.Option value="pineapple" disabled>
+              Pineapple (unavailable)
+            </Listbox.Option>
+          </Listbox>
+          <p style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}>
+            Selected: {toppings.length > 0 ? toppings.join(', ') : 'None'}
+          </p>
+        </div>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>↑</kbd> <kbd>↓</kbd> navigates options
+          </li>
+          <li>
+            Single-select: arrow keys move focus <strong>and</strong> select
+          </li>
+          <li>
+            Multi-select: <kbd>Space</kbd> toggles selection,{' '}
+            <kbd>Shift+↑</kbd> <kbd>Shift+↓</kbd> extends selection
+          </li>
+          <li>
+            <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last option
+          </li>
+          <li>
+            Multi-select: <kbd>Ctrl+A</kbd> toggles select all
+          </li>
+          <li>Type characters to jump to matching options</li>
         </ul>
       </div>
     </div>

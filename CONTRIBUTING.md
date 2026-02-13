@@ -1,6 +1,6 @@
-# Contributing to A11yCore
+# Contributing to Compa11y
 
-Thank you for your interest in contributing to A11yCore! This guide will help you get started.
+Thank you for your interest in contributing to Compa11y! This guide will help you get started.
 
 ## Development Setup
 

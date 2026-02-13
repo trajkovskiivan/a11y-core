@@ -348,6 +348,230 @@ checkbox.addEventListener('change', (e) => {
 });
 ```
 
+### RadioGroup
+
+```html
+<a11y-radio-group aria-label="Favorite color" value="red">
+  <a11y-radio value="red" label="Red"></a11y-radio>
+  <a11y-radio value="green" label="Green"></a11y-radio>
+  <a11y-radio value="blue" label="Blue"></a11y-radio>
+</a11y-radio-group>
+
+<!-- Horizontal orientation -->
+<a11y-radio-group aria-label="Size" orientation="horizontal" value="md">
+  <a11y-radio value="sm" label="Small"></a11y-radio>
+  <a11y-radio value="md" label="Medium"></a11y-radio>
+  <a11y-radio value="lg" label="Large"></a11y-radio>
+</a11y-radio-group>
+
+<!-- Individual disabled radio -->
+<a11y-radio-group aria-label="Plan" value="pro">
+  <a11y-radio value="free" label="Free"></a11y-radio>
+  <a11y-radio value="pro" label="Pro"></a11y-radio>
+  <a11y-radio value="enterprise" label="Enterprise" disabled></a11y-radio>
+</a11y-radio-group>
+```
+
+#### RadioGroup Attributes
+
+| Attribute          | Description                     | Default      |
+| ------------------ | ------------------------------- | ------------ |
+| `value`            | Currently selected value        | —            |
+| `disabled`         | Disable all radios              | `false`      |
+| `discoverable`     | Keep disabled radios in tab order | `true`     |
+| `orientation`      | `horizontal` or `vertical`      | `vertical`   |
+| `required`         | Required selection              | `false`      |
+| `name`             | Group name                      | —            |
+| `aria-label`       | Accessible label                | —            |
+| `aria-labelledby`  | ID of labelling element         | —            |
+
+#### Radio Attributes
+
+| Attribute      | Description                     | Default |
+| -------------- | ------------------------------- | ------- |
+| `value`        | Value for this option           | —       |
+| `label`        | Label text                      | —       |
+| `disabled`     | Disable this radio              | `false` |
+| `discoverable` | Keep disabled radio in tab order | `true` |
+| `checked`      | Whether radio is selected       | `false` |
+
+#### Properties
+
+```js
+const group = document.querySelector('a11y-radio-group');
+group.value = 'blue';         // Set selected value
+group.disabled = true;        // Disable all radios
+group.orientation = 'horizontal'; // Change layout
+```
+
+#### Methods
+
+```js
+const group = document.querySelector('a11y-radio-group');
+group.selectRadio('blue');    // Select a radio by value
+```
+
+#### Events
+
+```js
+group.addEventListener('change', (e) => {
+  console.log('Value:', e.detail.value);
+});
+
+group.addEventListener('a11y-radiogroup-change', (e) => {
+  console.log('Selected:', e.detail.value);
+});
+```
+
+#### Keyboard Navigation
+
+| Key | Action |
+| --- | --- |
+| `ArrowDown` / `ArrowRight` | Move to next radio and select |
+| `ArrowUp` / `ArrowLeft` | Move to previous radio and select |
+| `Home` / `End` | Jump to first / last radio |
+| `Tab` | Move to selected radio, then out of group |
+
+#### CSS Custom Properties
+
+```css
+a11y-radio-group {
+  --compa11y-radio-gap: 0.75rem;
+}
+
+a11y-radio {
+  --compa11y-radio-size: 1.25rem;
+  --compa11y-radio-border: 2px solid #666;
+  --compa11y-radio-bg: white;
+  --compa11y-radio-checked-bg: #0066cc;
+  --compa11y-radio-checked-border: #0066cc;
+  --compa11y-radio-dot-size: 0.5rem;
+  --compa11y-radio-dot-color: white;
+  --compa11y-radio-label-color: inherit;
+  --compa11y-radio-label-size: 1rem;
+  --compa11y-radio-disabled-color: #999;
+  --compa11y-radio-hover-border: #0066cc;
+  --compa11y-focus-color: #0066cc;
+}
+```
+
+### Listbox
+
+```html
+<!-- Single select -->
+<a11y-listbox aria-label="Favorite fruit" value="apple">
+  <a11y-optgroup label="Citrus">
+    <a11y-option value="orange">Orange</a11y-option>
+    <a11y-option value="lemon">Lemon</a11y-option>
+    <a11y-option value="grapefruit">Grapefruit</a11y-option>
+  </a11y-optgroup>
+  <a11y-optgroup label="Berries">
+    <a11y-option value="strawberry">Strawberry</a11y-option>
+    <a11y-option value="blueberry">Blueberry</a11y-option>
+    <a11y-option value="raspberry" disabled>Raspberry (sold out)</a11y-option>
+  </a11y-optgroup>
+  <a11y-option value="apple">Apple</a11y-option>
+  <a11y-option value="banana">Banana</a11y-option>
+</a11y-listbox>
+
+<!-- Multi select -->
+<a11y-listbox multiple aria-label="Pizza toppings" value="cheese,mushrooms">
+  <a11y-option value="cheese">Cheese</a11y-option>
+  <a11y-option value="pepperoni">Pepperoni</a11y-option>
+  <a11y-option value="mushrooms">Mushrooms</a11y-option>
+  <a11y-option value="onions">Onions</a11y-option>
+  <a11y-option value="pineapple" disabled>Pineapple (unavailable)</a11y-option>
+</a11y-listbox>
+```
+
+#### Listbox Attributes
+
+| Attribute          | Description                       | Default      |
+| ------------------ | --------------------------------- | ------------ |
+| `value`            | Selected value(s) (comma-separated for multi) | — |
+| `multiple`         | Enable multi-select mode          | `false`      |
+| `disabled`         | Disable all options               | `false`      |
+| `discoverable`     | Keep disabled listbox in tab order | `true`      |
+| `orientation`      | `horizontal` or `vertical`        | `vertical`   |
+| `aria-label`       | Accessible label                  | —            |
+| `aria-labelledby`  | ID of labelling element           | —            |
+
+#### Option Attributes
+
+| Attribute      | Description                     | Default |
+| -------------- | ------------------------------- | ------- |
+| `value`        | Value for this option           | —       |
+| `disabled`     | Disable this option             | `false` |
+| `discoverable` | Keep disabled option in tab order | `true` |
+
+#### Optgroup Attributes
+
+| Attribute  | Description                     | Default |
+| ---------- | ------------------------------- | ------- |
+| `label`    | Group label (visible, required) | —       |
+| `disabled` | Disable all options in group    | `false` |
+
+#### Properties
+
+```js
+const listbox = document.querySelector('a11y-listbox');
+listbox.value = 'apple';        // Set selected value (single)
+listbox.value = 'cheese,onions'; // Set selected values (multi, comma-separated)
+listbox.multiple = true;         // Toggle multi-select mode
+listbox.disabled = true;         // Disable all options
+```
+
+#### Events
+
+```js
+listbox.addEventListener('change', (e) => {
+  console.log('Value:', e.detail.value);
+  console.log('Label:', e.detail.label);
+});
+
+listbox.addEventListener('a11y-listbox-change', (e) => {
+  console.log('Selected:', e.detail);
+});
+```
+
+#### Keyboard Navigation
+
+| Key | Single Select | Multi Select |
+| --- | --- | --- |
+| `ArrowDown` / `ArrowUp` | Move focus and select | Move focus only |
+| `Home` / `End` | First/last option and select | Move focus only |
+| `Space` | — | Toggle focused option |
+| `Shift+ArrowDown/Up` | — | Move focus and toggle selection |
+| `Ctrl+Shift+Home/End` | — | Select range to first/last |
+| `Ctrl+A` / `Cmd+A` | — | Toggle select all |
+| Type characters | Jump to matching option and select | Jump to matching option |
+
+#### CSS Custom Properties
+
+```css
+a11y-listbox {
+  --compa11y-listbox-bg: white;
+  --compa11y-listbox-border: 1px solid #ccc;
+  --compa11y-listbox-radius: 6px;
+  --compa11y-listbox-max-height: 300px;
+  --compa11y-listbox-padding: 4px;
+}
+
+a11y-option {
+  --compa11y-option-padding: 0.5rem 0.75rem;
+  --compa11y-option-radius: 4px;
+  --compa11y-option-hover-bg: #f5f5f5;
+  --compa11y-option-focused-bg: #e6f0ff;
+  --compa11y-option-focused-border: #0066cc;
+  --compa11y-option-selected-bg: #e6f0ff;
+  --compa11y-option-selected-color: #0066cc;
+  --compa11y-option-check-color: #0066cc;
+  --compa11y-option-disabled-color: #999;
+  --compa11y-option-disabled-bg: transparent;
+  --compa11y-focus-color: #0066cc;
+}
+```
+
 ### Input
 
 ```html
@@ -706,6 +930,44 @@ a11y-button {
   --compa11y-button-primary-color: white;
   --compa11y-button-danger-bg: #ef4444;
   --compa11y-button-danger-color: white;
+}
+
+/* Listbox */
+a11y-listbox {
+  --compa11y-listbox-bg: white;
+  --compa11y-listbox-border: 1px solid #ccc;
+  --compa11y-listbox-radius: 6px;
+  --compa11y-listbox-max-height: 300px;
+  --compa11y-listbox-padding: 4px;
+}
+
+a11y-option {
+  --compa11y-option-padding: 0.5rem 0.75rem;
+  --compa11y-option-radius: 4px;
+  --compa11y-option-hover-bg: #f5f5f5;
+  --compa11y-option-focused-bg: #e6f0ff;
+  --compa11y-option-selected-bg: #e6f0ff;
+  --compa11y-option-check-color: #0066cc;
+  --compa11y-option-disabled-color: #999;
+}
+
+/* RadioGroup */
+a11y-radio-group {
+  --compa11y-radio-gap: 0.75rem;
+}
+
+a11y-radio {
+  --compa11y-radio-size: 1.25rem;
+  --compa11y-radio-border: 2px solid #666;
+  --compa11y-radio-bg: white;
+  --compa11y-radio-checked-bg: #0066cc;
+  --compa11y-radio-checked-border: #0066cc;
+  --compa11y-radio-dot-size: 0.5rem;
+  --compa11y-radio-dot-color: white;
+  --compa11y-radio-label-color: inherit;
+  --compa11y-radio-label-size: 1rem;
+  --compa11y-radio-disabled-color: #999;
+  --compa11y-radio-hover-border: #0066cc;
 }
 
 /* Focus ring */

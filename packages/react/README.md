@@ -269,6 +269,202 @@ function SelectAllCheckbox({ items, selectedIds, onSelectedChange }) {
 - `--compa11y-checkbox-disabled-color` - Disabled label color (default: `#999`)
 - `--compa11y-focus-color` - Focus outline color (default: `#0066cc`)
 
+### RadioGroup
+
+```tsx
+import { RadioGroup } from '@compa11y/react';
+
+function FavoriteColor() {
+  const [color, setColor] = useState('red');
+
+  return (
+    <RadioGroup value={color} onValueChange={setColor} aria-label="Favorite color">
+      <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
+      <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
+      <RadioGroup.Radio value="blue">Blue</RadioGroup.Radio>
+    </RadioGroup>
+  );
+}
+
+// Horizontal orientation
+function SizePicker() {
+  const [size, setSize] = useState('md');
+
+  return (
+    <RadioGroup
+      value={size}
+      onValueChange={setSize}
+      orientation="horizontal"
+      aria-label="Size"
+    >
+      <RadioGroup.Radio value="sm">Small</RadioGroup.Radio>
+      <RadioGroup.Radio value="md">Medium</RadioGroup.Radio>
+      <RadioGroup.Radio value="lg">Large</RadioGroup.Radio>
+    </RadioGroup>
+  );
+}
+
+// Individual disabled radio
+<RadioGroup value={plan} onValueChange={setPlan} aria-label="Plan">
+  <RadioGroup.Radio value="free">Free</RadioGroup.Radio>
+  <RadioGroup.Radio value="pro">Pro</RadioGroup.Radio>
+  <RadioGroup.Radio value="enterprise" disabled>Enterprise</RadioGroup.Radio>
+</RadioGroup>
+```
+
+**Props (RadioGroup):**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Controlled selected value |
+| `defaultValue` | `string` | — | Default value (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | — | Change handler |
+| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` | Layout orientation |
+| `disabled` | `boolean` | `false` | Disable all radios |
+| `discoverable` | `boolean` | `true` | Keep disabled radios in tab order |
+| `required` | `boolean` | `false` | Required selection |
+| `name` | `string` | — | Radio group name |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+| `aria-label` | `string` | — | Accessible label |
+| `aria-labelledby` | `string` | — | ID of labelling element |
+
+**Props (RadioGroup.Radio):**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Value for this option (required) |
+| `disabled` | `boolean` | `false` | Disable this radio |
+| `label` | `string` | — | Label text (alternative to children) |
+| `unstyled` | `boolean` | — | Remove default styles (inherits from group) |
+| `aria-label` | `string` | — | Accessible label |
+
+**Customization:**
+
+```css
+.my-radiogroup {
+  --compa11y-radio-gap: 1rem;
+  --compa11y-radio-size: 1.5rem;
+  --compa11y-radio-border: 2px solid #666;
+  --compa11y-radio-bg: white;
+  --compa11y-radio-checked-bg: #10b981;
+  --compa11y-radio-checked-border: #10b981;
+  --compa11y-radio-dot-size: 0.5rem;
+  --compa11y-radio-dot-color: white;
+  --compa11y-radio-label-color: inherit;
+  --compa11y-radio-label-size: 1rem;
+  --compa11y-radio-disabled-color: #999;
+  --compa11y-focus-color: #10b981;
+}
+```
+
+### Listbox
+
+```tsx
+import { Listbox } from '@compa11y/react';
+
+// Single select (selection follows focus)
+function FruitPicker() {
+  const [fruit, setFruit] = useState('apple');
+
+  return (
+    <Listbox value={fruit} onValueChange={setFruit} aria-label="Favorite fruit">
+      <Listbox.Group label="Citrus">
+        <Listbox.Option value="orange">Orange</Listbox.Option>
+        <Listbox.Option value="lemon">Lemon</Listbox.Option>
+        <Listbox.Option value="grapefruit">Grapefruit</Listbox.Option>
+      </Listbox.Group>
+      <Listbox.Option value="apple">Apple</Listbox.Option>
+      <Listbox.Option value="banana" disabled>Banana (sold out)</Listbox.Option>
+    </Listbox>
+  );
+}
+
+// Multi select (focus independent of selection)
+function ToppingsPicker() {
+  const [toppings, setToppings] = useState(['cheese']);
+
+  return (
+    <Listbox
+      multiple
+      value={toppings}
+      onValueChange={setToppings}
+      aria-label="Pizza toppings"
+    >
+      <Listbox.Option value="cheese">Cheese</Listbox.Option>
+      <Listbox.Option value="pepperoni">Pepperoni</Listbox.Option>
+      <Listbox.Option value="mushrooms">Mushrooms</Listbox.Option>
+      <Listbox.Option value="olives">Olives</Listbox.Option>
+    </Listbox>
+  );
+}
+```
+
+**Props (Listbox):**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string \| string[]` | — | Controlled value (string for single, array for multi) |
+| `defaultValue` | `string \| string[]` | — | Default value (uncontrolled) |
+| `onValueChange` | `(value: string \| string[]) => void` | — | Change handler |
+| `multiple` | `boolean` | `false` | Enable multi-select mode |
+| `disabled` | `boolean` | `false` | Disable all options |
+| `discoverable` | `boolean` | `true` | Keep disabled listbox in tab order |
+| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` | Layout orientation |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+| `aria-label` | `string` | — | Accessible label |
+| `aria-labelledby` | `string` | — | ID of labelling element |
+
+**Props (Listbox.Option):**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Value for this option (required) |
+| `disabled` | `boolean` | `false` | Disable this option |
+| `discoverable` | `boolean` | `true` | Keep disabled option discoverable |
+| `unstyled` | `boolean` | — | Remove default styles (inherits from root) |
+| `aria-label` | `string` | — | Accessible label override |
+
+**Props (Listbox.Group):**
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | — | Group label (required, visible) |
+| `disabled` | `boolean` | `false` | Disable all options in group |
+| `unstyled` | `boolean` | — | Remove default styles (inherits from root) |
+
+**Keyboard Navigation:**
+
+| Key | Single Select | Multi Select |
+| --- | --- | --- |
+| `ArrowDown` / `ArrowUp` | Move focus and select | Move focus only |
+| `Home` / `End` | First/last option and select | Move focus only |
+| `Space` | — | Toggle focused option |
+| `Shift+Arrow` | — | Move focus and toggle |
+| `Ctrl+Shift+Home/End` | — | Select range to first/last |
+| `Ctrl+A` | — | Toggle select all |
+| Type characters | Jump to match and select | Jump to match |
+
+**Customization:**
+
+```css
+[data-compa11y-listbox] {
+  --compa11y-listbox-bg: white;
+  --compa11y-listbox-border: 1px solid #ccc;
+  --compa11y-listbox-radius: 6px;
+  --compa11y-listbox-max-height: 300px;
+}
+
+[data-compa11y-listbox-option] {
+  --compa11y-option-hover-bg: #f5f5f5;
+  --compa11y-option-focused-bg: #e6f0ff;
+  --compa11y-option-selected-bg: #e6f0ff;
+  --compa11y-option-selected-color: #10b981;
+  --compa11y-option-check-color: #10b981;
+  --compa11y-option-disabled-color: #999;
+  --compa11y-focus-color: #10b981;
+}
+```
+
 ### Input
 
 ```tsx
@@ -611,6 +807,23 @@ All components are unstyled. Use `data-*` attributes for state-based styling:
 /* Combobox */
 [data-compa11y-combobox-option][data-highlighted='true'] {
   background: #f0f0f0;
+}
+
+/* Listbox */
+[data-compa11y-listbox] {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+[data-compa11y-listbox-option][data-focused='true'] {
+  background: #e6f0ff;
+}
+
+[data-compa11y-listbox-option][data-selected='true'] {
+  background: #e6f0ff;
+  font-weight: 600;
 }
 
 /* Select */

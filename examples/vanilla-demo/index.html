@@ -71,7 +71,12 @@
     a11y-select:not(:defined),
     a11y-input:not(:defined),
     a11y-textarea:not(:defined),
-    a11y-button:not(:defined) {
+    a11y-button:not(:defined),
+    a11y-radio-group:not(:defined),
+    a11y-radio:not(:defined),
+    a11y-listbox:not(:defined),
+    a11y-option:not(:defined),
+    a11y-optgroup:not(:defined) {
       display: none;
     }
 
@@ -180,6 +185,34 @@
       --compa11y-button-danger-bg: #ef4444;
       --compa11y-button-danger-color: white;
       --compa11y-button-disabled-opacity: 0.5;
+      --compa11y-focus-color: #0066cc;
+    }
+
+    /* RadioGroup theming */
+    a11y-radio-group {
+      --compa11y-radio-gap: 0.75rem;
+    }
+
+    a11y-radio {
+      --compa11y-radio-size: 1.25rem;
+      --compa11y-radio-border: 2px solid #666;
+      --compa11y-radio-bg: white;
+      --compa11y-radio-checked-bg: #0066cc;
+      --compa11y-radio-checked-border: #0066cc;
+      --compa11y-radio-dot-size: 0.5rem;
+      --compa11y-radio-dot-color: white;
+      --compa11y-focus-color: #0066cc;
+    }
+
+    /* Listbox theming */
+    a11y-listbox {
+      --compa11y-listbox-width: 250px;
+      --compa11y-listbox-border: 1px solid #e0e0e0;
+      --compa11y-listbox-radius: 4px;
+      --compa11y-listbox-option-hover-bg: #f5f5f5;
+      --compa11y-listbox-option-selected-bg: #e6f0ff;
+      --compa11y-listbox-option-selected-hover-bg: #cce0ff;
+      --compa11y-listbox-check-color: #0066cc;
       --compa11y-focus-color: #0066cc;
     }
 
@@ -676,6 +709,124 @@
   </section>
 
   <section>
+    <h2>RadioGroup</h2>
+    <p style="margin-bottom: 1rem;">Accessible radio group for single-selection with keyboard navigation.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- Basic vertical radio group -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Favorite Color (Vertical)</h3>
+        <a11y-radio-group id="color-group" aria-label="Favorite color" value="red">
+          <a11y-radio value="red" label="Red"></a11y-radio>
+          <a11y-radio value="green" label="Green"></a11y-radio>
+          <a11y-radio value="blue" label="Blue"></a11y-radio>
+          <a11y-radio value="purple" label="Purple"></a11y-radio>
+        </a11y-radio-group>
+      </div>
+
+      <!-- Horizontal orientation -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Size (Horizontal)</h3>
+        <a11y-radio-group id="size-group" aria-label="Size" orientation="horizontal" value="md">
+          <a11y-radio value="sm" label="Small"></a11y-radio>
+          <a11y-radio value="md" label="Medium"></a11y-radio>
+          <a11y-radio value="lg" label="Large"></a11y-radio>
+        </a11y-radio-group>
+      </div>
+
+      <!-- Individual disabled radio -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Plan (with disabled option)</h3>
+        <a11y-radio-group id="plan-group" aria-label="Select plan" value="pro">
+          <a11y-radio value="free" label="Free"></a11y-radio>
+          <a11y-radio value="pro" label="Pro"></a11y-radio>
+          <a11y-radio value="enterprise" label="Enterprise (contact sales)" disabled></a11y-radio>
+        </a11y-radio-group>
+      </div>
+
+      <!-- Fully disabled group -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Disabled Group</h3>
+        <a11y-radio-group aria-label="Disabled options" value="option1" disabled>
+          <a11y-radio value="option1" label="Option 1"></a11y-radio>
+          <a11y-radio value="option2" label="Option 2"></a11y-radio>
+          <a11y-radio value="option3" label="Option 3"></a11y-radio>
+        </a11y-radio-group>
+      </div>
+    </div>
+
+    <div id="radio-status"
+      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+      <strong>Selected:</strong> <span id="radio-last-change">Color: red | Size: md | Plan: pro</span>
+    </div>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> moves between radios and selects</li>
+        <li><kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last radio</li>
+        <li><kbd>Tab</kbd> moves to the selected radio, then out of the group</li>
+        <li>Disabled radios are skipped during arrow key navigation</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Listbox</h2>
+    <p style="margin-bottom: 1rem;">Accessible listbox for single and multi-selection from a visible list.</p>
+
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+      <!-- Single select -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Single Select</h3>
+        <a11y-listbox id="fruit-listbox" aria-label="Favorite fruit" value="apple">
+          <a11y-option value="apple">Apple</a11y-option>
+          <a11y-option value="banana" disabled>Banana (unavailable)</a11y-option>
+          <a11y-optgroup label="Citrus">
+            <a11y-option value="orange">Orange</a11y-option>
+            <a11y-option value="lemon">Lemon</a11y-option>
+            <a11y-option value="grapefruit">Grapefruit</a11y-option>
+          </a11y-optgroup>
+          <a11y-optgroup label="Berries">
+            <a11y-option value="strawberry">Strawberry</a11y-option>
+            <a11y-option value="blueberry">Blueberry</a11y-option>
+          </a11y-optgroup>
+        </a11y-listbox>
+      </div>
+
+      <!-- Multi select -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Multi Select</h3>
+        <a11y-listbox id="toppings-listbox" multiple aria-label="Pizza toppings" value="cheese,pepperoni">
+          <a11y-option value="cheese">Cheese</a11y-option>
+          <a11y-option value="pepperoni">Pepperoni</a11y-option>
+          <a11y-option value="mushrooms">Mushrooms</a11y-option>
+          <a11y-option value="onions">Onions</a11y-option>
+          <a11y-option value="olives">Olives</a11y-option>
+          <a11y-option value="anchovies" disabled>Anchovies (out of stock)</a11y-option>
+        </a11y-listbox>
+      </div>
+    </div>
+
+    <div id="listbox-status" style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+      <strong>Selected:</strong> <span id="listbox-last-change">Fruit: apple | Toppings: cheese, pepperoni</span>
+    </div>
+
+    <div class="keyboard-hints">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>↑</kbd> <kbd>↓</kbd> moves focus between options</li>
+        <li><kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last option</li>
+        <li><strong>Single-select:</strong> Arrow keys select immediately</li>
+        <li><strong>Multi-select:</strong> <kbd>Space</kbd> toggles selection</li>
+        <li><strong>Multi-select:</strong> <kbd>Shift+↑/↓</kbd> extends selection</li>
+        <li><strong>Multi-select:</strong> <kbd>Ctrl+A</kbd> select/deselect all</li>
+        <li>Type characters to jump to matching options</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
     <h2>Checkbox</h2>
     <p style="margin-bottom: 1rem;">An accessible checkbox with support for checked, unchecked, and indeterminate
       states.</p>
@@ -894,6 +1045,64 @@
           switchStatus.textContent = `${label} turned ${state}`;
         }
       });
+    });
+
+    // RadioGroup event listeners
+    const radioStatus = document.getElementById('radio-last-change');
+    const colorGroup = document.getElementById('color-group');
+    const sizeGroup = document.getElementById('size-group');
+    const planGroup = document.getElementById('plan-group');
+
+    let radioSelections = { color: 'red', size: 'md', plan: 'pro' };
+
+    const updateRadioStatus = () => {
+      if (radioStatus) {
+        radioStatus.textContent = `Color: ${radioSelections.color} | Size: ${radioSelections.size} | Plan: ${radioSelections.plan}`;
+      }
+    };
+
+    colorGroup?.addEventListener('change', (e) => {
+      radioSelections.color = e.detail.value;
+      updateRadioStatus();
+      console.log('Color changed:', e.detail.value);
+    });
+
+    sizeGroup?.addEventListener('change', (e) => {
+      radioSelections.size = e.detail.value;
+      updateRadioStatus();
+      console.log('Size changed:', e.detail.value);
+    });
+
+    planGroup?.addEventListener('change', (e) => {
+      radioSelections.plan = e.detail.value;
+      updateRadioStatus();
+      console.log('Plan changed:', e.detail.value);
+    });
+
+    // Listbox event listeners
+    const fruitListbox = document.getElementById('fruit-listbox');
+    const toppingsListbox = document.getElementById('toppings-listbox');
+    const listboxStatus = document.getElementById('listbox-last-change');
+
+    let listboxSelections = { fruit: 'apple', toppings: ['cheese', 'pepperoni'] };
+
+    const updateListboxStatus = () => {
+      if (listboxStatus) {
+        const toppingsStr = listboxSelections.toppings.join(', ');
+        listboxStatus.textContent = `Fruit: ${listboxSelections.fruit} | Toppings: ${toppingsStr}`;
+      }
+    };
+
+    fruitListbox?.addEventListener('change', (e) => {
+      listboxSelections.fruit = e.detail.value;
+      updateListboxStatus();
+      console.log('Fruit listbox changed:', e.detail.value);
+    });
+
+    toppingsListbox?.addEventListener('change', (e) => {
+      listboxSelections.toppings = e.detail.value;
+      updateListboxStatus();
+      console.log('Toppings listbox changed:', e.detail.value);
     });
 
     // Checkbox event listeners
