@@ -187,7 +187,7 @@ export class A11yButton extends Compa11yElement {
 
       case 'type':
         if (this._buttonEl) {
-          this._buttonEl.type = newValue || 'button';
+          this._buttonEl.type = (newValue || 'button') as 'button' | 'reset' | 'submit';
         }
         break;
 

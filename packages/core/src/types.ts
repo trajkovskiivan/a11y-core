@@ -45,7 +45,6 @@ export type AriaRole =
   | 'presentation'
   | 'progressbar'
   | 'radio'
-  | 'radiogroup'
   | 'region'
   | 'row'
   | 'rowgroup'

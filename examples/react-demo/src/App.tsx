@@ -13,8 +13,8 @@ import {
   Input,
   Textarea,
   Button,
-  RadioGroup,
   Listbox,
+  RadioGroup,
 } from '@compa11y/react';
 
 const countries = [
@@ -105,7 +105,7 @@ export function App() {
         </section>
 
         <section>
-          <h2>RadioGroup</h2>
+          <h2>Radio Group</h2>
           <RadioGroupDemo />
         </section>
 
@@ -629,7 +629,11 @@ function CheckboxDemo() {
             }}
           >
             <Checkbox size="sm" defaultChecked label="Small checkbox" />
-            <Checkbox size="md" defaultChecked label="Medium checkbox (default)" />
+            <Checkbox
+              size="md"
+              defaultChecked
+              label="Medium checkbox (default)"
+            />
             <Checkbox size="lg" defaultChecked label="Large checkbox" />
           </div>
         </div>
@@ -1049,114 +1053,142 @@ function ButtonDemo() {
 }
 
 function RadioGroupDemo() {
-  const [color, setColor] = useState('red');
-  const [size, setSize] = useState('md');
-  const [plan, setPlan] = useState('pro');
+  const [delivery, setDelivery] = useState('standard');
+  const [size, setSize] = useState<string | undefined>(undefined);
+  const [payment, setPayment] = useState<string | undefined>(undefined);
+  const [paymentError, setPaymentError] = useState<string | undefined>(
+    undefined
+  );
+
+  const handlePaymentSubmit = () => {
+    if (!payment) {
+      setPaymentError('Please select a payment method');
+    } else {
+      setPaymentError(undefined);
+    }
+  };
 
   return (
     <div>
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          gap: '1.5rem',
+          gap: '2rem',
+          flexWrap: 'wrap',
         }}
       >
-        {/* Basic vertical radio group */}
-        <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-            Favorite Color (Vertical)
-          </h3>
+        {/* Controlled with defaultValue */}
+        <div style={{ flex: '1 1 250px' }}>
           <RadioGroup
-            value={color}
-            onValueChange={setColor}
-            aria-label="Favorite color"
+            legend="Delivery speed"
+            value={delivery}
+            onValueChange={setDelivery}
           >
-            <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
-            <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
-            <RadioGroup.Radio value="blue">Blue</RadioGroup.Radio>
-            <RadioGroup.Radio value="purple">Purple</RadioGroup.Radio>
-          </RadioGroup>
-        </div>
-
-        {/* Horizontal orientation */}
-        <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-            Size (Horizontal)
-          </h3>
-          <RadioGroup
-            value={size}
-            onValueChange={setSize}
-            orientation="horizontal"
-            aria-label="Size"
-          >
-            <RadioGroup.Radio value="sm">Small</RadioGroup.Radio>
-            <RadioGroup.Radio value="md">Medium</RadioGroup.Radio>
-            <RadioGroup.Radio value="lg">Large</RadioGroup.Radio>
-          </RadioGroup>
-        </div>
-
-        {/* Individual disabled radio */}
-        <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-            Plan (with disabled option)
-          </h3>
-          <RadioGroup
-            value={plan}
-            onValueChange={setPlan}
-            aria-label="Select plan"
-          >
-            <RadioGroup.Radio value="free">Free</RadioGroup.Radio>
-            <RadioGroup.Radio value="pro">Pro</RadioGroup.Radio>
-            <RadioGroup.Radio value="enterprise" disabled>
-              Enterprise (contact sales)
+            <RadioGroup.Radio value="standard" hint="5-7 business days">
+              Standard
+            </RadioGroup.Radio>
+            <RadioGroup.Radio value="express" hint="2-3 business days">
+              Express
+            </RadioGroup.Radio>
+            <RadioGroup.Radio value="overnight" hint="Next business day">
+              Overnight
             </RadioGroup.Radio>
           </RadioGroup>
+          <p
+            style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}
+          >
+            Selected: {delivery}
+          </p>
         </div>
 
-        {/* Fully disabled group */}
-        <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-            Disabled Group
-          </h3>
+        {/* Horizontal with no initial selection */}
+        <div style={{ flex: '1 1 250px' }}>
           <RadioGroup
-            defaultValue="option1"
-            disabled
-            aria-label="Disabled options"
+            legend="T-Shirt Size"
+            orientation="horizontal"
+            value={size}
+            onValueChange={setSize}
           >
-            <RadioGroup.Radio value="option1">Option 1</RadioGroup.Radio>
-            <RadioGroup.Radio value="option2">Option 2</RadioGroup.Radio>
-            <RadioGroup.Radio value="option3">Option 3</RadioGroup.Radio>
+            <RadioGroup.Radio value="xs">XS</RadioGroup.Radio>
+            <RadioGroup.Radio value="sm">S</RadioGroup.Radio>
+            <RadioGroup.Radio value="md">M</RadioGroup.Radio>
+            <RadioGroup.Radio value="lg">L</RadioGroup.Radio>
+            <RadioGroup.Radio value="xl">XL</RadioGroup.Radio>
           </RadioGroup>
+          <p
+            style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}
+          >
+            Selected: {size || 'None'}
+          </p>
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          background: '#f8f8f8',
-          borderRadius: '4px',
-          fontSize: '0.875rem',
-        }}
-      >
-        <strong>Selected:</strong> Color: {color} | Size: {size} | Plan: {plan}
+      <div style={{ marginTop: '1.5rem' }}>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          With Disabled Options
+        </h3>
+        <RadioGroup
+          legend="Shipping method"
+          defaultValue="ground"
+          aria-label="Shipping method"
+        >
+          <RadioGroup.Radio value="ground">Ground</RadioGroup.Radio>
+          <RadioGroup.Radio value="air" disabled>
+            Air (unavailable)
+          </RadioGroup.Radio>
+          <RadioGroup.Radio value="sea">Sea</RadioGroup.Radio>
+        </RadioGroup>
+      </div>
+
+      <div style={{ marginTop: '1.5rem' }}>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Required with Validation
+        </h3>
+        <RadioGroup
+          legend="Payment method"
+          required
+          value={payment}
+          onValueChange={(v) => {
+            setPayment(v);
+            setPaymentError(undefined);
+          }}
+          error={paymentError}
+        >
+          <RadioGroup.Radio value="card">Credit Card</RadioGroup.Radio>
+          <RadioGroup.Radio value="paypal">PayPal</RadioGroup.Radio>
+          <RadioGroup.Radio value="bank">Bank Transfer</RadioGroup.Radio>
+        </RadioGroup>
+        <button
+          onClick={handlePaymentSubmit}
+          style={{
+            marginTop: '0.5rem',
+            padding: '0.25rem 0.75rem',
+            fontSize: '0.875rem',
+          }}
+        >
+          Submit
+        </button>
       </div>
 
       <div className="keyboard-hints">
         <h3>Keyboard Navigation</h3>
         <ul>
           <li>
-            <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> moves between
-            radios and selects
+            <kbd>Tab</kbd> moves into/out of the group (lands on checked or
+            first radio)
+          </li>
+          <li>
+            <kbd>↓</kbd> <kbd>→</kbd> moves to next radio and selects it
+          </li>
+          <li>
+            <kbd>↑</kbd> <kbd>←</kbd> moves to previous radio and selects it
           </li>
           <li>
             <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last radio
           </li>
           <li>
-            <kbd>Tab</kbd> moves to the selected radio, then out of the group
+            <kbd>Space</kbd> selects the focused radio
           </li>
-          <li>Disabled radios are skipped during arrow key navigation</li>
         </ul>
       </div>
     </div>

@@ -20,9 +20,9 @@ import { A11ySelect } from './components/select';
 import { A11yInput } from './components/input';
 import { A11yTextarea } from './components/textarea';
 import { A11yButton } from './components/button';
-import { A11yRadioGroup, A11yRadio } from './components/radio-group';
 import { A11yListbox, A11yOption, A11yOptgroup } from './components/listbox';
 import { A11yCheckbox, A11yCheckboxGroup } from './components/checkbox';
+import { A11yRadioGroup, A11yRadio } from './components/radio-group';
 
 // Re-export components
 export {
@@ -35,13 +35,13 @@ export {
   A11yInput,
   A11yTextarea,
   A11yButton,
-  A11yRadioGroup,
-  A11yRadio,
   A11yListbox,
   A11yOption,
   A11yOptgroup,
   A11yCheckbox,
   A11yCheckboxGroup,
+  A11yRadioGroup,
+  A11yRadio,
 };
 
 // Core utilities for vanilla JS usage
@@ -123,13 +123,13 @@ if (typeof window !== 'undefined') {
     A11yInput,
     A11yTextarea,
     A11yButton,
-    A11yRadioGroup,
-    A11yRadio,
     A11yListbox,
     A11yOption,
     A11yOptgroup,
     A11yCheckbox,
     A11yCheckboxGroup,
+    A11yRadioGroup,
+    A11yRadio,
     // Announcer utilities
     initAnnouncer,
     announce,

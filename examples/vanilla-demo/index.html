@@ -71,8 +71,6 @@
     a11y-input:not(:defined),
     a11y-textarea:not(:defined),
     a11y-button:not(:defined),
-    a11y-radio-group:not(:defined),
-    a11y-radio:not(:defined),
     a11y-listbox:not(:defined),
     a11y-option:not(:defined),
     a11y-optgroup:not(:defined),
@@ -189,21 +187,7 @@
       --compa11y-focus-color: #0066cc;
     }
 
-    /* RadioGroup theming */
-    a11y-radio-group {
-      --compa11y-radio-gap: 0.75rem;
-    }
 
-    a11y-radio {
-      --compa11y-radio-size: 1.25rem;
-      --compa11y-radio-border: 2px solid #666;
-      --compa11y-radio-bg: white;
-      --compa11y-radio-checked-bg: #0066cc;
-      --compa11y-radio-checked-border: #0066cc;
-      --compa11y-radio-dot-size: 0.5rem;
-      --compa11y-radio-dot-color: white;
-      --compa11y-focus-color: #0066cc;
-    }
 
     /* Listbox theming */
     a11y-listbox {
@@ -682,69 +666,6 @@
   </section>
 
   <section>
-    <h2>RadioGroup</h2>
-    <p style="margin-bottom: 1rem;">Accessible radio group for single-selection with keyboard navigation.</p>
-
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-      <!-- Basic vertical radio group -->
-      <div>
-        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Favorite Color (Vertical)</h3>
-        <a11y-radio-group id="color-group" aria-label="Favorite color" value="red">
-          <a11y-radio value="red" label="Red"></a11y-radio>
-          <a11y-radio value="green" label="Green"></a11y-radio>
-          <a11y-radio value="blue" label="Blue"></a11y-radio>
-          <a11y-radio value="purple" label="Purple"></a11y-radio>
-        </a11y-radio-group>
-      </div>
-
-      <!-- Horizontal orientation -->
-      <div>
-        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Size (Horizontal)</h3>
-        <a11y-radio-group id="size-group" aria-label="Size" orientation="horizontal" value="md">
-          <a11y-radio value="sm" label="Small"></a11y-radio>
-          <a11y-radio value="md" label="Medium"></a11y-radio>
-          <a11y-radio value="lg" label="Large"></a11y-radio>
-        </a11y-radio-group>
-      </div>
-
-      <!-- Individual disabled radio -->
-      <div>
-        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Plan (with disabled option)</h3>
-        <a11y-radio-group id="plan-group" aria-label="Select plan" value="pro">
-          <a11y-radio value="free" label="Free"></a11y-radio>
-          <a11y-radio value="pro" label="Pro"></a11y-radio>
-          <a11y-radio value="enterprise" label="Enterprise (contact sales)" disabled></a11y-radio>
-        </a11y-radio-group>
-      </div>
-
-      <!-- Fully disabled group -->
-      <div>
-        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Disabled Group</h3>
-        <a11y-radio-group aria-label="Disabled options" value="option1" disabled>
-          <a11y-radio value="option1" label="Option 1"></a11y-radio>
-          <a11y-radio value="option2" label="Option 2"></a11y-radio>
-          <a11y-radio value="option3" label="Option 3"></a11y-radio>
-        </a11y-radio-group>
-      </div>
-    </div>
-
-    <div id="radio-status"
-      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
-      <strong>Selected:</strong> <span id="radio-last-change">Color: red | Size: md | Plan: pro</span>
-    </div>
-
-    <div class="keyboard-hints">
-      <h3>Keyboard Navigation</h3>
-      <ul>
-        <li><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> moves between radios and selects</li>
-        <li><kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last radio</li>
-        <li><kbd>Tab</kbd> moves to the selected radio, then out of the group</li>
-        <li>Disabled radios are skipped during arrow key navigation</li>
-      </ul>
-    </div>
-  </section>
-
-  <section>
     <h2>Listbox</h2>
     <p style="margin-bottom: 1rem;">Accessible listbox for single and multi-selection from a visible list.</p>
 
@@ -866,7 +787,8 @@
       <!-- With error -->
       <div>
         <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">With Error</h3>
-        <a11y-checkbox label="I agree to the privacy policy" required error="You must agree to continue"></a11y-checkbox>
+        <a11y-checkbox label="I agree to the privacy policy" required
+          error="You must agree to continue"></a11y-checkbox>
       </div>
 
       <!-- Disabled -->
@@ -892,6 +814,74 @@
         <li>Indeterminate state is announced as "mixed" to screen readers</li>
         <li>Groups use <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> for screen reader grouping</li>
         <li>Hint and error text connected via <code>aria-describedby</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Radio Group</h2>
+
+    <h3>Basic Radio Group</h3>
+    <div style="margin-bottom: 1.5rem;">
+      <a11y-radio-group legend="Delivery speed" value="standard" id="radio-demo-basic">
+        <a11y-radio value="standard" label="Standard" hint="5-7 business days"></a11y-radio>
+        <a11y-radio value="express" label="Express" hint="2-3 business days"></a11y-radio>
+        <a11y-radio value="overnight" label="Overnight" hint="Next business day"></a11y-radio>
+      </a11y-radio-group>
+      <p style="margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
+        Selected: <span id="radio-basic-value">standard</span>
+      </p>
+    </div>
+
+    <h3>Horizontal Orientation</h3>
+    <div style="margin-bottom: 1.5rem;">
+      <a11y-radio-group legend="Size" orientation="horizontal" id="radio-demo-horizontal">
+        <a11y-radio value="sm" label="Small"></a11y-radio>
+        <a11y-radio value="md" label="Medium"></a11y-radio>
+        <a11y-radio value="lg" label="Large"></a11y-radio>
+      </a11y-radio-group>
+    </div>
+
+    <h3>With Disabled Options</h3>
+    <div style="margin-bottom: 1.5rem;">
+      <a11y-radio-group legend="Shipping method" value="ground" id="radio-demo-disabled">
+        <a11y-radio value="ground" label="Ground"></a11y-radio>
+        <a11y-radio value="air" label="Air" disabled></a11y-radio>
+        <a11y-radio value="sea" label="Sea"></a11y-radio>
+      </a11y-radio-group>
+    </div>
+
+    <h3>Required with Error</h3>
+    <div style="margin-bottom: 1.5rem;">
+      <a11y-radio-group legend="Payment method" required error="Please select a payment method" id="radio-demo-error">
+        <a11y-radio value="card" label="Credit Card"></a11y-radio>
+        <a11y-radio value="paypal" label="PayPal"></a11y-radio>
+        <a11y-radio value="bank" label="Bank Transfer"></a11y-radio>
+      </a11y-radio-group>
+    </div>
+
+    <h3>No Selection (None Selected)</h3>
+    <div style="margin-bottom: 1.5rem;">
+      <a11y-radio-group legend="Favorite color" id="radio-demo-none">
+        <a11y-radio value="red" label="Red"></a11y-radio>
+        <a11y-radio value="green" label="Green"></a11y-radio>
+        <a11y-radio value="blue" label="Blue"></a11y-radio>
+      </a11y-radio-group>
+      <p style="margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
+        Selected: <span id="radio-none-value">none</span>
+      </p>
+    </div>
+
+    <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 4px;">
+      <h3>Keyboard Navigation</h3>
+      <ul>
+        <li><kbd>Tab</kbd> moves into/out of the group (lands on checked or first radio)</li>
+        <li><kbd>Arrow Down/Right</kbd> moves to next radio and selects it</li>
+        <li><kbd>Arrow Up/Left</kbd> moves to previous radio and selects it</li>
+        <li><kbd>Home</kbd> moves to first radio</li>
+        <li><kbd>End</kbd> moves to last radio</li>
+        <li><kbd>Space</kbd> selects the focused radio</li>
+        <li>Groups use <code>role="radiogroup"</code> with <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code></li>
       </ul>
     </div>
   </section>
@@ -1079,37 +1069,6 @@
       });
     });
 
-    // RadioGroup event listeners
-    const radioStatus = document.getElementById('radio-last-change');
-    const colorGroup = document.getElementById('color-group');
-    const sizeGroup = document.getElementById('size-group');
-    const planGroup = document.getElementById('plan-group');
-
-    let radioSelections = { color: 'red', size: 'md', plan: 'pro' };
-
-    const updateRadioStatus = () => {
-      if (radioStatus) {
-        radioStatus.textContent = `Color: ${radioSelections.color} | Size: ${radioSelections.size} | Plan: ${radioSelections.plan}`;
-      }
-    };
-
-    colorGroup?.addEventListener('change', (e) => {
-      radioSelections.color = e.detail.value;
-      updateRadioStatus();
-      console.log('Color changed:', e.detail.value);
-    });
-
-    sizeGroup?.addEventListener('change', (e) => {
-      radioSelections.size = e.detail.value;
-      updateRadioStatus();
-      console.log('Size changed:', e.detail.value);
-    });
-
-    planGroup?.addEventListener('change', (e) => {
-      radioSelections.plan = e.detail.value;
-      updateRadioStatus();
-      console.log('Plan changed:', e.detail.value);
-    });
 
     // Listbox event listeners
     const fruitListbox = document.getElementById('fruit-listbox');
@@ -1206,6 +1165,34 @@
       if (checkboxStatus) {
         checkboxStatus.textContent = `Sizes: ${e.detail.value.join(', ') || 'None'}`;
       }
+    });
+
+    // Radio Group event listeners
+    const radioBasic = document.getElementById('radio-demo-basic');
+    const radioBasicValue = document.getElementById('radio-basic-value');
+
+    radioBasic?.addEventListener('change', (e) => {
+      console.log('Radio changed:', e.detail.value);
+      if (radioBasicValue) {
+        radioBasicValue.textContent = e.detail.value;
+      }
+    });
+
+    const radioNone = document.getElementById('radio-demo-none');
+    const radioNoneValue = document.getElementById('radio-none-value');
+
+    radioNone?.addEventListener('change', (e) => {
+      console.log('Radio (none) changed:', e.detail.value);
+      if (radioNoneValue) {
+        radioNoneValue.textContent = e.detail.value;
+      }
+    });
+
+    // Clear error on selection for the error demo
+    const radioError = document.getElementById('radio-demo-error');
+    radioError?.addEventListener('change', (e) => {
+      console.log('Radio (error) changed:', e.detail.value);
+      radioError.removeAttribute('error');
     });
 
   </script>

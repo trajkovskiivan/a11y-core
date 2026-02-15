@@ -3,15 +3,73 @@
  *
  * Accessible radio group custom elements with full keyboard support,
  * roving tabindex, and selection-follows-focus behavior.
+ * Follows WAI-ARIA Radio Group pattern.
  *
  * @example
  * ```html
- * <a11y-radio-group aria-label="Favorite color" value="red">
+ * <!-- Basic radio group with legend -->
+ * <a11y-radio-group legend="Favorite color" value="red">
  *   <a11y-radio value="red" label="Red"></a11y-radio>
  *   <a11y-radio value="green" label="Green"></a11y-radio>
  *   <a11y-radio value="blue" label="Blue"></a11y-radio>
  * </a11y-radio-group>
+ *
+ * <!-- With aria-label instead of legend -->
+ * <a11y-radio-group aria-label="Favorite color" value="red">
+ *   <a11y-radio value="red" label="Red"></a11y-radio>
+ *   <a11y-radio value="green" label="Green"></a11y-radio>
+ * </a11y-radio-group>
+ *
+ * <!-- Horizontal orientation -->
+ * <a11y-radio-group legend="Size" orientation="horizontal">
+ *   <a11y-radio value="sm" label="Small"></a11y-radio>
+ *   <a11y-radio value="md" label="Medium"></a11y-radio>
+ *   <a11y-radio value="lg" label="Large"></a11y-radio>
+ * </a11y-radio-group>
+ *
+ * <!-- Required with error -->
+ * <a11y-radio-group legend="Payment method" required error="Please select a payment method">
+ *   <a11y-radio value="card" label="Credit Card"></a11y-radio>
+ *   <a11y-radio value="paypal" label="PayPal"></a11y-radio>
+ * </a11y-radio-group>
+ *
+ * <!-- With disabled options -->
+ * <a11y-radio-group legend="Delivery speed" value="standard">
+ *   <a11y-radio value="standard" label="Standard"></a11y-radio>
+ *   <a11y-radio value="express" label="Express" disabled></a11y-radio>
+ *   <a11y-radio value="overnight" label="Overnight"></a11y-radio>
+ * </a11y-radio-group>
  * ```
+ *
+ * Keyboard support:
+ * - Tab: Move into/out of the group (lands on checked radio, or first enabled if none checked)
+ * - Arrow Down/Right: Move to next radio and select it
+ * - Arrow Up/Left: Move to previous radio and select it
+ * - Home: Move to first radio and select it
+ * - End: Move to last radio and select it
+ * - Space: Select the focused radio
+ *
+ * @fires change - Emitted when selected value changes, detail: { value: string }
+ * @fires a11y-radiogroup-change - Namespaced change event, detail: { value: string }
+ *
+ * @attr {string} value - Currently selected radio value
+ * @attr {boolean} disabled - Whether the entire group is disabled
+ * @attr {boolean} discoverable - Whether disabled radios remain in tab order (default: true)
+ * @attr {string} orientation - Layout: 'horizontal' | 'vertical' (default: 'vertical')
+ * @attr {boolean} required - Whether selection is required
+ * @attr {string} name - Form field name
+ * @attr {string} legend - Visible group label text (renders as fieldset/legend)
+ * @attr {string} hint - Helper/description text
+ * @attr {string} error - Error message text
+ *
+ * @cssprop --compa11y-radio-group-gap - Gap between radio items
+ * @cssprop --compa11y-radio-group-legend-gap - Gap below legend
+ * @cssprop --compa11y-radio-group-legend-weight - Legend font weight
+ * @cssprop --compa11y-radio-group-legend-color - Legend text color
+ * @cssprop --compa11y-radio-group-legend-size - Legend font size
+ * @cssprop --compa11y-radio-group-hint-color - Hint text color
+ * @cssprop --compa11y-radio-group-error-color - Error text color
+ * @cssprop --compa11y-radio-group-required-color - Required indicator color
  */
 
 import { Compa11yElement, defineElement } from '../utils/base-element';
@@ -38,10 +96,15 @@ export class A11yRadioGroup extends Compa11yElement {
       'orientation',
       'required',
       'name',
+      'legend',
+      'hint',
+      'error',
       'aria-label',
       'aria-labelledby',
     ];
   }
+
+  // ===== Getters/Setters =====
 
   get value(): string {
     return this._value;
@@ -88,6 +151,20 @@ export class A11yRadioGroup extends Compa11yElement {
 
   set required(v: boolean) {
     this._required = Boolean(v);
+    if (this._required) {
+      this.setAttribute('aria-required', 'true');
+    } else {
+      this.removeAttribute('aria-required');
+    }
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  set name(v: string) {
+    this._name = v;
+    this.setAttribute('name', v);
   }
 
   get orientation(): 'horizontal' | 'vertical' {
@@ -100,31 +177,29 @@ export class A11yRadioGroup extends Compa11yElement {
     this.setAttribute('aria-orientation', v);
   }
 
+  // ===== Lifecycle =====
+
   protected setupAccessibility(): void {
     this.setAttribute('role', 'radiogroup');
     this.setAttribute('aria-orientation', this._orientation);
 
-    if (this._name) {
-      // name is tracked internally
-    }
-
     const hasLabel =
       this.hasAttribute('aria-label') ||
-      this.hasAttribute('aria-labelledby');
+      this.hasAttribute('aria-labelledby') ||
+      this.hasAttribute('legend');
     if (!hasLabel && process.env.NODE_ENV !== 'production') {
       console.warn(
         '[Compa11y RadioGroup]: RadioGroup has no accessible label. ' +
-          'Use aria-label or aria-labelledby.'
+          'Use legend, aria-label, or aria-labelledby.'
       );
     }
 
-    // Initialize value from attribute
+    // Initialize from attributes
     const initialValue = this.getAttribute('value');
     if (initialValue) {
       this._value = initialValue;
     }
 
-    // Initialize other attributes
     this._disabled = this.hasAttribute('disabled');
     if (this._disabled) {
       this.setAttribute('aria-disabled', 'true');
@@ -136,11 +211,20 @@ export class A11yRadioGroup extends Compa11yElement {
     }
 
     this._required = this.hasAttribute('required');
+    if (this._required) {
+      this.setAttribute('aria-required', 'true');
+    }
+
     this._name = this.getAttribute('name') || this._id;
 
     const discoverableAttr = this.getAttribute('discoverable');
     if (discoverableAttr === 'false' || discoverableAttr === '0') {
       this._discoverable = false;
+    }
+
+    // Set aria-invalid if error is present
+    if (this.hasAttribute('error') && this.getAttribute('error')) {
+      this.setAttribute('aria-invalid', 'true');
     }
   }
 
@@ -150,19 +234,49 @@ export class A11yRadioGroup extends Compa11yElement {
     }
 
     const shadow = this.shadowRoot!;
+    const legend = this.getAttribute('legend') || '';
+    const hint = this.getAttribute('hint') || '';
+    const error = this.getAttribute('error') || '';
+    const hintId = hint ? `${this._id}-hint` : '';
+    const errorId = error ? `${this._id}-error` : '';
+
+    // Build aria-describedby from hint and error
+    const describedBy = [hintId, errorId].filter(Boolean).join(' ');
+    if (describedBy) {
+      this.setAttribute('aria-describedby', describedBy);
+    } else {
+      this.removeAttribute('aria-describedby');
+    }
+
     shadow.innerHTML = `
       <style>${RADIO_GROUP_STYLES}</style>
-      <div class="radiogroup" part="group">
-        <slot></slot>
-      </div>
+      <fieldset part="fieldset">
+        ${
+          legend
+            ? `<legend part="legend">${legend}${
+                this._required
+                  ? '<span class="radio-group-required" aria-hidden="true"> *</span>'
+                  : ''
+              }</legend>`
+            : ''
+        }
+        <div class="radio-group-items" part="items">
+          <slot></slot>
+        </div>
+        ${hint ? `<div class="radio-group-hint" id="${hintId}" part="hint">${hint}</div>` : ''}
+        ${error ? `<div class="radio-group-error" id="${errorId}" part="error" role="alert">${error}</div>` : ''}
+      </fieldset>
     `;
   }
 
   protected setupEventListeners(): void {
     this.addEventListener('keydown', this.handleKeyDown);
-    this.addEventListener('radio-select', this.handleRadioSelect as EventListener);
+    this.addEventListener(
+      'radio-select',
+      this.handleRadioSelect as EventListener
+    );
 
-    // Watch for slotchange to sync initial state
+    // Sync initial state when slotted children change
     const slot = this.shadowRoot?.querySelector('slot');
     if (slot) {
       slot.addEventListener('slotchange', () => {
@@ -173,8 +287,13 @@ export class A11yRadioGroup extends Compa11yElement {
 
   protected cleanupEventListeners(): void {
     this.removeEventListener('keydown', this.handleKeyDown);
-    this.removeEventListener('radio-select', this.handleRadioSelect as EventListener);
+    this.removeEventListener(
+      'radio-select',
+      this.handleRadioSelect as EventListener
+    );
   }
+
+  // ===== Radio Management =====
 
   private getRadios(): A11yRadio[] {
     return Array.from(this.querySelectorAll('a11y-radio')) as A11yRadio[];
@@ -194,11 +313,10 @@ export class A11yRadioGroup extends Compa11yElement {
       const isChecked = radio.value === this._value;
       radio.checked = isChecked;
 
-      // Roving tabindex
+      // Roving tabindex: only checked radio (or first enabled if none checked) gets tabindex 0
       if (isChecked) {
         radio.setAttribute('tabindex', '0');
       } else if (!this._value && enabledRadios[0] === radio) {
-        // If no value selected, first enabled radio gets tabindex 0
         radio.setAttribute('tabindex', '0');
       } else {
         radio.setAttribute('tabindex', '-1');
@@ -213,9 +331,16 @@ export class A11yRadioGroup extends Compa11yElement {
     this.setAttribute('value', value);
     this.syncRadioStates();
 
+    // Clear error state on selection
+    if (this.hasAttribute('aria-invalid')) {
+      this.removeAttribute('aria-invalid');
+    }
+
     this.emit('change', { value });
     this.emit('a11y-radiogroup-change', { value });
   }
+
+  // ===== Event Handlers =====
 
   private handleRadioSelect = (event: CustomEvent): void => {
     if (this._disabled) return;
@@ -260,6 +385,22 @@ export class A11yRadioGroup extends Compa11yElement {
       case 'End':
         nextIndex = enabledRadios.length - 1;
         break;
+      case ' ':
+        // Space selects the currently focused radio
+        event.preventDefault();
+        event.stopPropagation();
+        {
+          const focusedRadio = enabledRadios.find(
+            (r) => r === document.activeElement || r.contains(document.activeElement)
+          );
+          if (focusedRadio && focusedRadio.value !== this._value) {
+            this.selectRadio(focusedRadio.value);
+            const label =
+              focusedRadio.getAttribute('label') || focusedRadio.value;
+            announcePolite(`${label} selected`);
+          }
+        }
+        return;
       default:
         return;
     }
@@ -270,6 +411,7 @@ export class A11yRadioGroup extends Compa11yElement {
 
       const nextRadio = enabledRadios[nextIndex];
       if (nextRadio) {
+        // Selection follows focus
         this.selectRadio(nextRadio.value);
         nextRadio.focus();
 
@@ -278,6 +420,8 @@ export class A11yRadioGroup extends Compa11yElement {
       }
     }
   };
+
+  // ===== Attribute Changes =====
 
   attributeChangedCallback(
     name: string,
@@ -321,15 +465,34 @@ export class A11yRadioGroup extends Compa11yElement {
 
       case 'required':
         this._required = newValue !== null;
+        if (this._required) {
+          this.setAttribute('aria-required', 'true');
+        } else {
+          this.removeAttribute('aria-required');
+        }
         break;
 
       case 'name':
         this._name = newValue || '';
         break;
 
+      case 'error':
+        if (newValue) {
+          this.setAttribute('aria-invalid', 'true');
+        } else {
+          this.removeAttribute('aria-invalid');
+        }
+        this.render();
+        break;
+
+      case 'legend':
+      case 'hint':
+        this.render();
+        break;
+
       case 'aria-label':
       case 'aria-labelledby':
-        // These are handled natively
+        // Handled natively
         break;
     }
   }
@@ -339,6 +502,35 @@ export class A11yRadioGroup extends Compa11yElement {
 // A11yRadio
 // ============================================================================
 
+/**
+ * Individual radio option for use within a11y-radio-group.
+ *
+ * @example
+ * ```html
+ * <a11y-radio value="option1" label="Option 1"></a11y-radio>
+ * <a11y-radio value="option2" label="Option 2" hint="Additional info"></a11y-radio>
+ * <a11y-radio value="option3" label="Option 3" disabled></a11y-radio>
+ * ```
+ *
+ * @attr {string} value - Radio value
+ * @attr {string} label - Visible label text
+ * @attr {string} hint - Helper/description text
+ * @attr {boolean} checked - Whether this radio is checked
+ * @attr {boolean} disabled - Whether this radio is disabled
+ * @attr {boolean} discoverable - Whether disabled radio remains in tab order
+ *
+ * @cssprop --compa11y-radio-size - Radio circle size
+ * @cssprop --compa11y-radio-bg - Background when unchecked
+ * @cssprop --compa11y-radio-border - Border when unchecked
+ * @cssprop --compa11y-radio-checked-bg - Background when checked
+ * @cssprop --compa11y-radio-checked-border - Border when checked
+ * @cssprop --compa11y-radio-dot-size - Inner dot size
+ * @cssprop --compa11y-radio-dot-color - Inner dot color
+ * @cssprop --compa11y-radio-hover-border - Border on hover
+ * @cssprop --compa11y-radio-label-color - Label text color
+ * @cssprop --compa11y-radio-hint-color - Hint text color
+ * @cssprop --compa11y-focus-color - Focus outline color
+ */
 export class A11yRadio extends Compa11yElement {
   private _value = '';
   private _checked = false;
@@ -346,8 +538,10 @@ export class A11yRadio extends Compa11yElement {
   private _discoverable = true;
 
   static get observedAttributes() {
-    return ['value', 'label', 'disabled', 'discoverable', 'checked'];
+    return ['value', 'label', 'hint', 'disabled', 'discoverable', 'checked'];
   }
+
+  // ===== Getters/Setters =====
 
   get value(): string {
     return this._value;
@@ -372,7 +566,7 @@ export class A11yRadio extends Compa11yElement {
         this.removeAttribute('checked');
       }
       this.setAttribute('aria-checked', String(newValue));
-      this.render();
+      this.updateVisual();
     }
   }
 
@@ -391,7 +585,6 @@ export class A11yRadio extends Compa11yElement {
         this.removeAttribute('disabled');
         this.removeAttribute('aria-disabled');
       }
-      this.render();
     }
   }
 
@@ -417,14 +610,20 @@ export class A11yRadio extends Compa11yElement {
     }
   }
 
+  // ===== Lifecycle =====
+
   protected setupAccessibility(): void {
     this.setAttribute('role', 'radio');
-    this.setAttribute('aria-checked', String(this._checked));
+    this.setAttribute('aria-checked', 'false');
 
     // Initialize from attributes
     this._value = this.getAttribute('value') || '';
     this._checked = this.hasAttribute('checked');
     this._disabled = this.hasAttribute('disabled');
+
+    if (this._checked) {
+      this.setAttribute('aria-checked', 'true');
+    }
 
     if (this._disabled) {
       this.setAttribute('aria-disabled', 'true');
@@ -448,14 +647,43 @@ export class A11yRadio extends Compa11yElement {
 
     const shadow = this.shadowRoot!;
     const label = this.getAttribute('label') || '';
+    const hint = this.getAttribute('hint') || '';
+    const labelId = label ? `${this._id}-label` : '';
+    const hintId = hint ? `${this._id}-hint` : '';
+
+    // Set aria-labelledby if label present
+    if (labelId) {
+      this.setAttribute('aria-labelledby', labelId);
+    }
+
+    // Set aria-describedby if hint present
+    if (hintId) {
+      this.setAttribute('aria-describedby', hintId);
+    }
 
     shadow.innerHTML = `
       <style>${RADIO_STYLES}</style>
       <div class="radio-wrapper" part="wrapper">
-        <div class="radio-circle" part="circle">
-          <div class="radio-dot" part="dot" aria-hidden="true"></div>
+        <div class="radio-control" part="control">
+          <input
+            type="radio"
+            class="radio-input"
+            tabindex="-1"
+            aria-hidden="true"
+            ${this._disabled ? 'disabled' : ''}
+          />
+          <div class="radio-circle" part="circle">
+            <div class="radio-dot" part="dot" aria-hidden="true"></div>
+          </div>
         </div>
-        ${label ? `<span class="radio-label" part="label">${label}</span>` : ''}
+        ${
+          label || hint
+            ? `<div class="radio-content">
+                ${label ? `<span class="radio-label" id="${labelId}" part="label">${label}</span>` : ''}
+                ${hint ? `<span class="radio-hint" id="${hintId}" part="hint">${hint}</span>` : ''}
+              </div>`
+            : ''
+        }
         <slot></slot>
       </div>
     `;
@@ -471,13 +699,14 @@ export class A11yRadio extends Compa11yElement {
     this.removeEventListener('keydown', this.handleKeyDown);
   }
 
+  // ===== Event Handlers =====
+
   private handleClick = (event: Event): void => {
     if (this._disabled) {
       event.preventDefault();
       return;
     }
 
-    // Dispatch radio-select event for parent to handle
     this.dispatchEvent(
       new CustomEvent('radio-select', {
         detail: { value: this._value },
@@ -493,7 +722,9 @@ export class A11yRadio extends Compa11yElement {
   private handleKeyDown = (event: KeyboardEvent): void => {
     if (this._disabled) return;
 
-    if (event.key === ' ' || event.key === 'Enter') {
+    // Space is handled by the parent group for selection
+    // Enter also selects for convenience
+    if (event.key === 'Enter') {
       event.preventDefault();
 
       this.dispatchEvent(
@@ -508,6 +739,35 @@ export class A11yRadio extends Compa11yElement {
       announcePolite(`${label} selected`);
     }
   };
+
+  // ===== Visual Update =====
+
+  private updateVisual(): void {
+    if (!this.shadowRoot) return;
+
+    const dot = this.shadowRoot.querySelector('.radio-dot') as HTMLElement;
+    if (dot) {
+      dot.style.opacity = this._checked ? '1' : '0';
+      dot.style.transform = this._checked ? 'scale(1)' : 'scale(0)';
+    }
+
+    const circle = this.shadowRoot.querySelector(
+      '.radio-circle'
+    ) as HTMLElement;
+    if (circle) {
+      if (this._checked) {
+        circle.style.background =
+          'var(--compa11y-radio-checked-bg, #0066cc)';
+        circle.style.borderColor =
+          'var(--compa11y-radio-checked-border, #0066cc)';
+      } else {
+        circle.style.background = 'var(--compa11y-radio-bg, white)';
+        circle.style.borderColor = '';
+      }
+    }
+  }
+
+  // ===== Attribute Changes =====
 
   attributeChangedCallback(
     name: string,
@@ -524,7 +784,7 @@ export class A11yRadio extends Compa11yElement {
       case 'checked':
         this._checked = newValue !== null;
         this.setAttribute('aria-checked', String(this._checked));
-        this.render();
+        this.updateVisual();
         break;
 
       case 'disabled':
@@ -534,7 +794,6 @@ export class A11yRadio extends Compa11yElement {
         } else {
           this.removeAttribute('aria-disabled');
         }
-        this.render();
         break;
 
       case 'discoverable':
@@ -548,6 +807,7 @@ export class A11yRadio extends Compa11yElement {
         break;
 
       case 'label':
+      case 'hint':
         this.render();
         break;
     }

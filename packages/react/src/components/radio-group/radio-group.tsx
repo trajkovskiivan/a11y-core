@@ -19,6 +19,19 @@
  *   <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
  *   <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
  * </RadioGroup>
+ *
+ * // With legend (fieldset semantics)
+ * <RadioGroup legend="Delivery speed" required>
+ *   <RadioGroup.Radio value="standard">Standard</RadioGroup.Radio>
+ *   <RadioGroup.Radio value="express">Express</RadioGroup.Radio>
+ *   <RadioGroup.Radio value="overnight">Overnight</RadioGroup.Radio>
+ * </RadioGroup>
+ *
+ * // With error validation
+ * <RadioGroup legend="Payment method" required error="Please select a payment method">
+ *   <RadioGroup.Radio value="card">Credit Card</RadioGroup.Radio>
+ *   <RadioGroup.Radio value="paypal">PayPal</RadioGroup.Radio>
+ * </RadioGroup>
  * ```
  */
 
@@ -44,16 +57,27 @@ const warnings = createComponentWarnings('RadioGroup');
 // ============================================================================
 
 export interface RadioGroupContextValue {
+  /** Group name for native radio inputs */
   name: string;
+  /** Currently selected value */
   value: string | null;
+  /** Whether all radios are disabled */
   disabled: boolean;
+  /** Whether disabled radios remain discoverable in tab order */
   discoverable: boolean;
+  /** Whether selection is required */
   required: boolean;
+  /** Whether to remove default styles */
   unstyled: boolean;
+  /** Layout orientation */
   orientation: 'horizontal' | 'vertical';
+  /** Called when selected value changes */
   onValueChange: (value: string) => void;
+  /** Register a radio option with the group */
   registerRadio: (value: string, disabled: boolean) => void;
+  /** Unregister a radio option from the group */
   unregisterRadio: (value: string) => void;
+  /** Update a radio's disabled state */
   updateRadioDisabled: (value: string, disabled: boolean) => void;
 }
 
@@ -74,13 +98,19 @@ export interface RadioGroupProps {
   orientation?: 'horizontal' | 'vertical';
   /** Group name for native radio inputs */
   name?: string;
+  /** Group label displayed as fieldset legend */
+  legend?: React.ReactNode;
+  /** Helper/description text */
+  hint?: React.ReactNode;
+  /** Error message */
+  error?: React.ReactNode;
   /** Remove default styles */
   unstyled?: boolean;
   /** Custom class name */
   className?: string;
   /** Children (Radio components) */
   children: React.ReactNode;
-  /** Accessible label */
+  /** Accessible label (if no visible legend) */
   'aria-label'?: string;
   /** Reference to external label element */
   'aria-labelledby'?: string;
@@ -94,7 +124,9 @@ export interface RadioProps {
   /** Whether disabled radio remains discoverable */
   discoverable?: boolean;
   /** Label text (alternative to children) */
-  label?: string;
+  label?: React.ReactNode;
+  /** Helper/description text */
+  hint?: React.ReactNode;
   /** Remove default styles */
   unstyled?: boolean;
   /** Custom class name */
@@ -111,6 +143,10 @@ export interface RadioProps {
 
 const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
+/**
+ * Access the RadioGroup context.
+ * Throws if used outside a RadioGroup.
+ */
 export function useRadioGroupContext(): RadioGroupContextValue {
   const context = useContext(RadioGroupContext);
   if (!context) {
@@ -125,6 +161,21 @@ export function useRadioGroupContext(): RadioGroupContextValue {
 // RadioGroup
 // ============================================================================
 
+/**
+ * RadioGroup - Groups related radio buttons with proper ARIA semantics.
+ *
+ * Uses `role="radiogroup"` with optional `<fieldset>/<legend>` for proper
+ * screen reader group labeling. Implements roving tabindex and
+ * selection-follows-focus keyboard behavior.
+ *
+ * Keyboard support:
+ * - Tab: Move into/out of the group
+ * - Arrow Down/Right: Move to next radio and select it
+ * - Arrow Up/Left: Move to previous radio and select it
+ * - Home: Move to first radio and select it
+ * - End: Move to last radio and select it
+ * - Space: Select the focused radio
+ */
 export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   function RadioGroup(
     {
@@ -136,6 +187,9 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       required = false,
       orientation = 'vertical',
       name: providedName,
+      legend,
+      hint,
+      error,
       unstyled = false,
       className = '',
       children,
@@ -146,6 +200,8 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   ) {
     const generatedName = useId('radiogroup');
     const name = providedName || generatedName;
+    const hintId = useId('radiogroup-hint');
+    const errorId = useId('radiogroup-error');
 
     const [uncontrolledValue, setUncontrolledValue] = useState<string | null>(
       defaultValue ?? null
@@ -158,13 +214,13 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
     // Warn if no accessible label
     useEffect(() => {
-      if (!ariaLabel && !ariaLabelledBy) {
+      if (!legend && !ariaLabel && !ariaLabelledBy) {
         warnings.warning(
-          'RadioGroup has no accessible label. Screen readers need this.',
-          'Add aria-label="..." or aria-labelledby="..."'
+          'RadioGroup has no accessible label. Screen readers need this to identify the group.',
+          'Add legend="...", aria-label="...", or aria-labelledby="..."'
         );
       }
-    }, [ariaLabel, ariaLabelledBy]);
+    }, [legend, ariaLabel, ariaLabelledBy]);
 
     const handleValueChange = useCallback(
       (newValue: string) => {
@@ -196,7 +252,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       []
     );
 
-    // Get ordered list of enabled radio values (based on DOM order)
+    // Get ordered list of enabled radio values
     const getEnabledRadioValues = useCallback((): string[] => {
       const values: string[] = [];
       radiosRef.current.forEach((isDisabled, radioValue) => {
@@ -207,7 +263,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       return values;
     }, [disabled]);
 
-    // Use an internal ref if no ref is provided
+    // Internal ref for DOM queries
     const internalRef = useRef<HTMLDivElement>(null);
     const groupRef = ref || internalRef;
 
@@ -245,10 +301,10 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         if (nextValue !== undefined) {
           handleValueChange(nextValue);
 
-          // Focus the radio input using the internal ref
+          // Focus the radio input
           const groupEl =
             typeof groupRef === 'object' && groupRef
-              ? (groupRef as React.RefObject<HTMLDivElement>).current
+              ? (groupRef as React.RefObject<HTMLDivElement | null>).current
               : null;
           if (groupEl) {
             const input = groupEl.querySelector<HTMLInputElement>(
@@ -287,21 +343,16 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       updateRadioDisabled,
     };
 
-    return (
-      <RadioGroupContext.Provider value={contextValue}>
+    // Build aria-describedby
+    const describedByParts: string[] = [];
+    if (hint) describedByParts.push(hintId);
+    if (error) describedByParts.push(errorId);
+    const ariaDescribedBy =
+      describedByParts.length > 0 ? describedByParts.join(' ') : undefined;
+
+    const groupContent = (
+      <>
         <div
-          ref={groupRef as React.Ref<HTMLDivElement>}
-          role="radiogroup"
-          aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
-          aria-orientation={orientation}
-          aria-required={required || undefined}
-          aria-disabled={disabled || undefined}
-          className={`compa11y-radiogroup ${className}`.trim()}
-          data-compa11y-radiogroup=""
-          data-orientation={orientation}
-          data-disabled={disabled ? 'true' : undefined}
-          onKeyDown={keyboardProps.onKeyDown}
           style={
             unstyled
               ? {
@@ -319,6 +370,131 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         >
           {children}
         </div>
+        {hint && (
+          <div
+            id={hintId}
+            style={
+              unstyled
+                ? {}
+                : {
+                    color: 'var(--compa11y-radio-group-hint-color, #666)',
+                    fontSize: '0.8125rem',
+                    marginTop: '0.25rem',
+                  }
+            }
+          >
+            {hint}
+          </div>
+        )}
+        {error && (
+          <div
+            id={errorId}
+            role="alert"
+            style={
+              unstyled
+                ? {}
+                : {
+                    color: 'var(--compa11y-radio-group-error-color, #ef4444)',
+                    fontSize: '0.8125rem',
+                    marginTop: '0.25rem',
+                  }
+            }
+          >
+            {error}
+          </div>
+        )}
+      </>
+    );
+
+    // If legend is provided, wrap in fieldset/legend for proper semantics
+    if (legend) {
+      return (
+        <RadioGroupContext.Provider value={contextValue}>
+          <fieldset
+            ref={groupRef as React.Ref<HTMLFieldSetElement>}
+            role="radiogroup"
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-orientation={orientation}
+            aria-required={required || undefined}
+            aria-disabled={disabled || undefined}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={ariaDescribedBy}
+            className={`compa11y-radiogroup ${className}`.trim()}
+            data-compa11y-radiogroup=""
+            data-orientation={orientation}
+            data-disabled={disabled ? 'true' : undefined}
+            data-error={error ? 'true' : undefined}
+            onKeyDown={keyboardProps.onKeyDown}
+            style={
+              unstyled
+                ? { border: 'none', margin: 0, padding: 0, minWidth: 0 }
+                : {
+                    border: 'none',
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0,
+                  }
+            }
+          >
+            <legend
+              style={
+                unstyled
+                  ? {}
+                  : {
+                      padding: 0,
+                      marginBottom:
+                        'var(--compa11y-radio-group-legend-gap, 0.5rem)',
+                      fontWeight: 'var(--compa11y-radio-group-legend-weight, 600)' as any,
+                      color: 'var(--compa11y-radio-group-legend-color, inherit)',
+                      fontSize:
+                        'var(--compa11y-radio-group-legend-size, 1rem)',
+                    }
+              }
+            >
+              {legend}
+              {required && !unstyled && (
+                <span
+                  aria-hidden="true"
+                  style={{
+                    color:
+                      'var(--compa11y-radio-group-required-color, #ef4444)',
+                    marginLeft: '0.125rem',
+                  }}
+                >
+                  {' '}
+                  *
+                </span>
+              )}
+            </legend>
+            {groupContent}
+          </fieldset>
+        </RadioGroupContext.Provider>
+      );
+    }
+
+    // No legend: use div with role="radiogroup"
+    return (
+      <RadioGroupContext.Provider value={contextValue}>
+        <div
+          ref={groupRef as React.Ref<HTMLDivElement>}
+          role="radiogroup"
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-orientation={orientation}
+          aria-required={required || undefined}
+          aria-disabled={disabled || undefined}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={ariaDescribedBy}
+          className={`compa11y-radiogroup ${className}`.trim()}
+          data-compa11y-radiogroup=""
+          data-orientation={orientation}
+          data-disabled={disabled ? 'true' : undefined}
+          data-error={error ? 'true' : undefined}
+          onKeyDown={keyboardProps.onKeyDown}
+        >
+          {groupContent}
+        </div>
       </RadioGroupContext.Provider>
     );
   }
@@ -330,6 +506,19 @@ RadioGroup.displayName = 'RadioGroup';
 // Radio
 // ============================================================================
 
+/**
+ * Radio - Individual radio option for use within a RadioGroup.
+ *
+ * Uses a native `<input type="radio">` (visually hidden) for full
+ * accessibility, with a custom visual indicator overlay.
+ *
+ * @example
+ * ```tsx
+ * <RadioGroup.Radio value="option1">Option 1</RadioGroup.Radio>
+ * <RadioGroup.Radio value="option2" label="Option 2" />
+ * <RadioGroup.Radio value="option3" disabled>Option 3 (unavailable)</RadioGroup.Radio>
+ * ```
+ */
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   function Radio(
     {
@@ -337,6 +526,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       disabled: localDisabled = false,
       discoverable: localDiscoverable,
       label,
+      hint,
       unstyled: localUnstyled,
       className = '',
       children,
@@ -346,6 +536,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   ) {
     const context = useRadioGroupContext();
     const generatedId = useId('radio');
+    const hintId = useId('radio-hint');
 
     const disabled = context.disabled || localDisabled;
     const discoverable = localDiscoverable ?? context.discoverable;
@@ -392,7 +583,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         context.onValueChange(value);
 
         const labelText =
-          label || (typeof children === 'string' ? children : 'Radio');
+          label ||
+          (typeof children === 'string' ? children : null) ||
+          value;
         announce(`${labelText} selected`, { politeness: 'polite' });
       },
       [disabled, context, value, label, children, announce]
@@ -412,8 +605,6 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         focusProps.onFocus();
 
         // Selection follows focus: when focused via keyboard nav, select this radio
-        // The parent handles arrow key navigation, which calls onValueChange + focus
-        // But clicking to focus should also select
         if (!checked && !disabled) {
           context.onValueChange(value);
         }
@@ -428,11 +619,11 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     const hasLabel = Boolean(children || label);
     const labelContent = children || label;
     const labelId = `${generatedId}-label`;
+    const hasHint = Boolean(hint);
 
     // Roving tabindex: only the checked radio (or first enabled if none checked) gets tabindex 0
     const isFirstEnabled = (() => {
       if (context.value !== null) return false;
-      // Check if this is the first enabled radio
       const entries = Array.from(
         (
           inputRef.current?.closest('[role="radiogroup"]') as HTMLElement
@@ -456,6 +647,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 
     const useNativeDisabled = disabled && !discoverable;
 
+    // Build aria-describedby
+    const ariaDescribedBy = hasHint ? hintId : undefined;
+
     return (
       <label
         htmlFor={generatedId}
@@ -468,16 +662,17 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           unstyled
             ? {
                 display: 'inline-flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 gap: '0.5rem',
               }
             : {
                 display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
+                alignItems: 'flex-start',
+                gap: 'var(--compa11y-radio-gap, 0.5rem)',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 userSelect: 'none',
+                opacity: disabled ? 0.5 : 1,
               }
         }
       >
@@ -487,6 +682,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
+            flexShrink: 0,
           }}
         >
           {/* Native radio input - visually hidden but accessible */}
@@ -506,6 +702,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             aria-disabled={disabled ? 'true' : undefined}
             aria-label={!hasLabel ? ariaLabel : undefined}
             aria-labelledby={hasLabel ? labelId : undefined}
+            aria-describedby={ariaDescribedBy}
             required={context.required}
             className="compa11y-radio-input"
             style={{
@@ -524,6 +721,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
               style={{
                 width: 'var(--compa11y-radio-size, 1.25rem)',
                 height: 'var(--compa11y-radio-size, 1.25rem)',
+                minWidth: '24px',
+                minHeight: '24px',
                 border: checked
                   ? 'var(--compa11y-radio-checked-border, 2px solid #0066cc)'
                   : 'var(--compa11y-radio-border, 2px solid #666)',
@@ -537,7 +736,6 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
                 flexShrink: 0,
                 transition: 'all 0.15s ease',
                 pointerEvents: 'none',
-                opacity: disabled ? 0.5 : 1,
                 ...(isFocusVisible
                   ? {
                       outline:
@@ -554,8 +752,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
                   width: 'var(--compa11y-radio-dot-size, 0.5rem)',
                   height: 'var(--compa11y-radio-dot-size, 0.5rem)',
                   borderRadius: '50%',
-                  background:
-                    'var(--compa11y-radio-dot-color, white)',
+                  background: 'var(--compa11y-radio-dot-color, white)',
                   opacity: checked ? 1 : 0,
                   transform: checked ? 'scale(1)' : 'scale(0)',
                   transition: 'all 0.15s ease',
@@ -564,23 +761,52 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             </div>
           )}
         </div>
-        {hasLabel && (
-          <span
-            id={labelId}
-            className="compa11y-radio-label"
+        {(hasLabel || hasHint) && (
+          <div
             style={
               unstyled
                 ? {}
                 : {
-                    color: disabled
-                      ? 'var(--compa11y-radio-disabled-color, #999)'
-                      : 'var(--compa11y-radio-label-color, inherit)',
-                    fontSize: 'var(--compa11y-radio-label-size, 1rem)',
+                    display: 'flex',
+                    flexDirection: 'column' as const,
+                    gap: '0.125rem',
+                    paddingTop: '0.125rem',
                   }
             }
           >
-            {labelContent}
-          </span>
+            {hasLabel && (
+              <span
+                id={labelId}
+                className="compa11y-radio-label"
+                style={
+                  unstyled
+                    ? {}
+                    : {
+                        color: 'var(--compa11y-radio-label-color, inherit)',
+                        fontSize: 'var(--compa11y-radio-label-size, 1rem)',
+                      }
+                }
+              >
+                {labelContent}
+              </span>
+            )}
+            {hasHint && (
+              <span
+                id={hintId}
+                className="compa11y-radio-hint"
+                style={
+                  unstyled
+                    ? {}
+                    : {
+                        color: 'var(--compa11y-radio-hint-color, #666)',
+                        fontSize: 'var(--compa11y-radio-hint-size, 0.8125rem)',
+                      }
+                }
+              >
+                {hint}
+              </span>
+            )}
+          </div>
         )}
       </label>
     );

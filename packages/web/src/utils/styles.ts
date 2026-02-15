@@ -1004,109 +1004,6 @@ export const OPTGROUP_STYLES = `
 `;
 
 /**
- * RadioGroup-specific styles
- */
-export const RADIO_GROUP_STYLES = `
-  ${BASE_STYLES}
-
-  :host {
-    display: block;
-  }
-
-  .radiogroup {
-    display: flex;
-    flex-direction: column;
-    gap: var(--compa11y-radio-gap, 0.75rem);
-  }
-
-  :host([orientation="horizontal"]) .radiogroup {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  :host([disabled]) {
-    opacity: var(--compa11y-radio-disabled-opacity, 0.5);
-  }
-`;
-
-/**
- * Radio-specific styles
- */
-export const RADIO_STYLES = `
-  ${BASE_STYLES}
-
-  :host {
-    display: inline-block;
-  }
-
-  .radio-wrapper {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  :host([disabled]) .radio-wrapper {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .radio-circle {
-    width: var(--compa11y-radio-size, 1.25rem);
-    height: var(--compa11y-radio-size, 1.25rem);
-    border: var(--compa11y-radio-border, 2px solid #666);
-    border-radius: 50%;
-    background: var(--compa11y-radio-bg, white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s ease;
-  }
-
-  :host([checked]) .radio-circle {
-    background: var(--compa11y-radio-checked-bg, #0066cc);
-    border-color: var(--compa11y-radio-checked-border, #0066cc);
-  }
-
-  .radio-dot {
-    width: var(--compa11y-radio-dot-size, 0.5rem);
-    height: var(--compa11y-radio-dot-size, 0.5rem);
-    border-radius: 50%;
-    background: var(--compa11y-radio-dot-color, white);
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.15s ease;
-  }
-
-  :host([checked]) .radio-dot {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .radio-label {
-    color: var(--compa11y-radio-label-color, inherit);
-    font-size: var(--compa11y-radio-label-size, 1rem);
-  }
-
-  :host([disabled]) .radio-label {
-    color: var(--compa11y-radio-disabled-color, #999);
-  }
-
-  /* Focus styles */
-  :host(:focus-visible) .radio-circle {
-    outline: 2px solid var(--compa11y-focus-color, #0066cc);
-    outline-offset: 2px;
-  }
-
-  /* Hover state */
-  .radio-wrapper:hover:not([disabled]) .radio-circle {
-    border-color: var(--compa11y-radio-hover-border, #0066cc);
-  }
-`;
-
-/**
  * Checkbox-specific styles
  */
 export const CHECKBOX_STYLES = `
@@ -1318,5 +1215,188 @@ export const CHECKBOX_GROUP_STYLES = `
 
   :host([disabled]) {
     opacity: 0.5;
+  }
+`;
+
+/**
+ * RadioGroup-specific styles
+ */
+export const RADIO_GROUP_STYLES = `
+  ${BASE_STYLES}
+
+  :host {
+    display: block;
+  }
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: var(--compa11y-radio-group-legend-gap, 0.5rem);
+    font-weight: var(--compa11y-radio-group-legend-weight, 600);
+    color: var(--compa11y-radio-group-legend-color, inherit);
+    font-size: var(--compa11y-radio-group-legend-size, 1rem);
+  }
+
+  .radio-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--compa11y-radio-group-gap, 0.75rem);
+  }
+
+  :host([orientation="horizontal"]) .radio-group-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .radio-group-hint {
+    color: var(--compa11y-radio-group-hint-color, #666);
+    font-size: var(--compa11y-radio-group-hint-size, 0.8125rem);
+    margin-top: 0.25rem;
+  }
+
+  .radio-group-error {
+    color: var(--compa11y-radio-group-error-color, #ef4444);
+    font-size: var(--compa11y-radio-group-error-size, 0.8125rem);
+    margin-top: 0.25rem;
+  }
+
+  .radio-group-required {
+    color: var(--compa11y-radio-group-required-color, #ef4444);
+    margin-left: 0.125rem;
+  }
+
+  :host([disabled]) {
+    opacity: 0.5;
+  }
+`;
+
+/**
+ * Radio-specific styles
+ */
+export const RADIO_STYLES = `
+  ${BASE_STYLES}
+
+  :host {
+    display: inline-block;
+  }
+
+  .radio-wrapper {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--compa11y-radio-gap, 0.5rem);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  :host([disabled]) .radio-wrapper {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .radio-control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .radio-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: inherit;
+    z-index: 1;
+  }
+
+  .radio-circle {
+    width: var(--compa11y-radio-size, 1.25rem);
+    height: var(--compa11y-radio-size, 1.25rem);
+    min-width: 24px;
+    min-height: 24px;
+    border: var(--compa11y-radio-border, 2px solid #666);
+    border-radius: 50%;
+    background: var(--compa11y-radio-bg, white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    pointer-events: none;
+  }
+
+  :host([checked]) .radio-circle {
+    background: var(--compa11y-radio-checked-bg, #0066cc);
+    border-color: var(--compa11y-radio-checked-border, #0066cc);
+  }
+
+  /* Focus visible on circle when input is focused */
+  .radio-input:focus-visible + .radio-circle {
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
+    outline-offset: 2px;
+  }
+
+  /* Hover */
+  .radio-wrapper:hover:not([disabled]) .radio-circle {
+    border-color: var(--compa11y-radio-hover-border, #0066cc);
+  }
+
+  /* Inner dot */
+  .radio-dot {
+    width: var(--compa11y-radio-dot-size, 0.5rem);
+    height: var(--compa11y-radio-dot-size, 0.5rem);
+    border-radius: 50%;
+    background: var(--compa11y-radio-dot-color, white);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.15s ease;
+  }
+
+  :host([checked]) .radio-dot {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Label and text */
+  .radio-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding-top: 0.125rem;
+  }
+
+  .radio-label {
+    color: var(--compa11y-radio-label-color, inherit);
+    font-size: var(--compa11y-radio-label-size, 1rem);
+    cursor: inherit;
+  }
+
+  .radio-hint {
+    color: var(--compa11y-radio-hint-color, #666);
+    font-size: var(--compa11y-radio-hint-size, 0.8125rem);
+  }
+
+  /* Forced colors / high contrast mode */
+  @media (forced-colors: active) {
+    .radio-circle {
+      border: 2px solid ButtonText;
+    }
+
+    :host([checked]) .radio-circle {
+      background: Highlight;
+      border-color: Highlight;
+    }
+
+    .radio-dot {
+      background: HighlightText;
+    }
   }
 `;
