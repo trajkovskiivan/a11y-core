@@ -75,11 +75,7 @@ function SettingsTabs() {
 ### Toast
 
 ```tsx
-import {
-  ToastProvider,
-  ToastViewport,
-  useToastHelpers,
-} from '@compa11y/react';
+import { ToastProvider, ToastViewport, useToastHelpers } from '@compa11y/react';
 
 function App() {
   return (
@@ -157,28 +153,28 @@ function FruitPicker() {
 
 **Keyboard Navigation:**
 
-| Key | Action |
-| --- | --- |
+| Key               | Action                                    |
+| ----------------- | ----------------------------------------- |
 | `Enter` / `Space` | Open listbox or select highlighted option |
-| `ArrowDown` | Open listbox / move highlight down |
-| `ArrowUp` | Open listbox / move highlight up |
-| `Home` / `End` | Jump to first / last option |
-| `Escape` | Close listbox |
-| `Tab` | Close listbox and move focus |
-| Type characters | Jump to matching option (type-ahead) |
+| `ArrowDown`       | Open listbox / move highlight down        |
+| `ArrowUp`         | Open listbox / move highlight up          |
+| `Home` / `End`    | Jump to first / last option               |
+| `Escape`          | Close listbox                             |
+| `Tab`             | Close listbox and move focus              |
+| Type characters   | Jump to matching option (type-ahead)      |
 
 **Props:**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `options` | `SelectOption[]` | — | List of options |
-| `value` | `string \| null` | — | Controlled selected value |
-| `defaultValue` | `string` | — | Default value (uncontrolled) |
-| `onValueChange` | `(value: string \| null) => void` | — | Change handler |
-| `placeholder` | `string` | `'Select an option...'` | Trigger placeholder text |
-| `disabled` | `boolean` | `false` | Disable the select |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-labelledby` | `string` | — | ID of labelling element |
+| Prop              | Type                              | Default                 | Description                  |
+| ----------------- | --------------------------------- | ----------------------- | ---------------------------- |
+| `options`         | `SelectOption[]`                  | —                       | List of options              |
+| `value`           | `string \| null`                  | —                       | Controlled selected value    |
+| `defaultValue`    | `string`                          | —                       | Default value (uncontrolled) |
+| `onValueChange`   | `(value: string \| null) => void` | —                       | Change handler               |
+| `placeholder`     | `string`                          | `'Select an option...'` | Trigger placeholder text     |
+| `disabled`        | `boolean`                         | `false`                 | Disable the select           |
+| `aria-label`      | `string`                          | —                       | Accessible label             |
+| `aria-labelledby` | `string`                          | —                       | ID of labelling element      |
 
 ### Switch
 
@@ -209,66 +205,6 @@ function NotificationSettings() {
 }
 ```
 
-### Checkbox
-
-```tsx
-import { Checkbox } from '@compa11y/react';
-
-function TermsAcceptance() {
-  const [accepted, setAccepted] = useState(false);
-
-  return (
-    <Checkbox checked={accepted} onCheckedChange={setAccepted}>
-      I accept the terms and conditions
-    </Checkbox>
-  );
-}
-
-// Indeterminate state (for "select all" pattern)
-function SelectAllCheckbox({ items, selectedIds, onSelectedChange }) {
-  const allSelected = selectedIds.length === items.length;
-  const someSelected = selectedIds.length > 0 && !allSelected;
-
-  return (
-    <Checkbox
-      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
-      onCheckedChange={(checked) => {
-        onSelectedChange(checked ? items.map((item) => item.id) : []);
-      }}
-    >
-      Select all
-    </Checkbox>
-  );
-}
-```
-
-**Customization:**
-
-```css
-.my-checkbox {
-  --compa11y-checkbox-size: 1.5rem;
-  --compa11y-checkbox-checked-bg: #10b981;
-  --compa11y-checkbox-checked-border: #10b981;
-  --compa11y-checkbox-check-color: white;
-  --compa11y-checkbox-radius: 8px;
-  --compa11y-checkbox-label-size: 1.125rem;
-  --compa11y-focus-color: #10b981;
-}
-```
-
-**Available CSS variables:**
-- `--compa11y-checkbox-size` - Size of the checkbox box (default: `1.25rem`)
-- `--compa11y-checkbox-radius` - Border radius (default: `4px`)
-- `--compa11y-checkbox-bg` - Background color unchecked (default: `white`)
-- `--compa11y-checkbox-border` - Border style unchecked (default: `2px solid #666`)
-- `--compa11y-checkbox-checked-bg` - Background color checked (default: `#0066cc`)
-- `--compa11y-checkbox-checked-border` - Border color checked (default: `#0066cc`)
-- `--compa11y-checkbox-check-color` - Checkmark/icon color (default: `white`)
-- `--compa11y-checkbox-label-color` - Label text color (default: `inherit`)
-- `--compa11y-checkbox-label-size` - Label font size (default: `1rem`)
-- `--compa11y-checkbox-disabled-color` - Disabled label color (default: `#999`)
-- `--compa11y-focus-color` - Focus outline color (default: `#0066cc`)
-
 ### RadioGroup
 
 ```tsx
@@ -278,7 +214,11 @@ function FavoriteColor() {
   const [color, setColor] = useState('red');
 
   return (
-    <RadioGroup value={color} onValueChange={setColor} aria-label="Favorite color">
+    <RadioGroup
+      value={color}
+      onValueChange={setColor}
+      aria-label="Favorite color"
+    >
       <RadioGroup.Radio value="red">Red</RadioGroup.Radio>
       <RadioGroup.Radio value="green">Green</RadioGroup.Radio>
       <RadioGroup.Radio value="blue">Blue</RadioGroup.Radio>
@@ -308,35 +248,37 @@ function SizePicker() {
 <RadioGroup value={plan} onValueChange={setPlan} aria-label="Plan">
   <RadioGroup.Radio value="free">Free</RadioGroup.Radio>
   <RadioGroup.Radio value="pro">Pro</RadioGroup.Radio>
-  <RadioGroup.Radio value="enterprise" disabled>Enterprise</RadioGroup.Radio>
-</RadioGroup>
+  <RadioGroup.Radio value="enterprise" disabled>
+    Enterprise
+  </RadioGroup.Radio>
+</RadioGroup>;
 ```
 
 **Props (RadioGroup):**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | — | Controlled selected value |
-| `defaultValue` | `string` | — | Default value (uncontrolled) |
-| `onValueChange` | `(value: string) => void` | — | Change handler |
-| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` | Layout orientation |
-| `disabled` | `boolean` | `false` | Disable all radios |
-| `discoverable` | `boolean` | `true` | Keep disabled radios in tab order |
-| `required` | `boolean` | `false` | Required selection |
-| `name` | `string` | — | Radio group name |
-| `unstyled` | `boolean` | `false` | Remove default styles |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-labelledby` | `string` | — | ID of labelling element |
+| Prop              | Type                         | Default      | Description                       |
+| ----------------- | ---------------------------- | ------------ | --------------------------------- |
+| `value`           | `string`                     | —            | Controlled selected value         |
+| `defaultValue`    | `string`                     | —            | Default value (uncontrolled)      |
+| `onValueChange`   | `(value: string) => void`    | —            | Change handler                    |
+| `orientation`     | `'horizontal' \| 'vertical'` | `'vertical'` | Layout orientation                |
+| `disabled`        | `boolean`                    | `false`      | Disable all radios                |
+| `discoverable`    | `boolean`                    | `true`       | Keep disabled radios in tab order |
+| `required`        | `boolean`                    | `false`      | Required selection                |
+| `name`            | `string`                     | —            | Radio group name                  |
+| `unstyled`        | `boolean`                    | `false`      | Remove default styles             |
+| `aria-label`      | `string`                     | —            | Accessible label                  |
+| `aria-labelledby` | `string`                     | —            | ID of labelling element           |
 
 **Props (RadioGroup.Radio):**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | — | Value for this option (required) |
-| `disabled` | `boolean` | `false` | Disable this radio |
-| `label` | `string` | — | Label text (alternative to children) |
-| `unstyled` | `boolean` | — | Remove default styles (inherits from group) |
-| `aria-label` | `string` | — | Accessible label |
+| Prop         | Type      | Default | Description                                 |
+| ------------ | --------- | ------- | ------------------------------------------- |
+| `value`      | `string`  | —       | Value for this option (required)            |
+| `disabled`   | `boolean` | `false` | Disable this radio                          |
+| `label`      | `string`  | —       | Label text (alternative to children)        |
+| `unstyled`   | `boolean` | —       | Remove default styles (inherits from group) |
+| `aria-label` | `string`  | —       | Accessible label                            |
 
 **Customization:**
 
@@ -374,7 +316,9 @@ function FruitPicker() {
         <Listbox.Option value="grapefruit">Grapefruit</Listbox.Option>
       </Listbox.Group>
       <Listbox.Option value="apple">Apple</Listbox.Option>
-      <Listbox.Option value="banana" disabled>Banana (sold out)</Listbox.Option>
+      <Listbox.Option value="banana" disabled>
+        Banana (sold out)
+      </Listbox.Option>
     </Listbox>
   );
 }
@@ -401,48 +345,48 @@ function ToppingsPicker() {
 
 **Props (Listbox):**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string \| string[]` | — | Controlled value (string for single, array for multi) |
-| `defaultValue` | `string \| string[]` | — | Default value (uncontrolled) |
-| `onValueChange` | `(value: string \| string[]) => void` | — | Change handler |
-| `multiple` | `boolean` | `false` | Enable multi-select mode |
-| `disabled` | `boolean` | `false` | Disable all options |
-| `discoverable` | `boolean` | `true` | Keep disabled listbox in tab order |
-| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` | Layout orientation |
-| `unstyled` | `boolean` | `false` | Remove default styles |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-labelledby` | `string` | — | ID of labelling element |
+| Prop              | Type                                  | Default      | Description                                           |
+| ----------------- | ------------------------------------- | ------------ | ----------------------------------------------------- |
+| `value`           | `string \| string[]`                  | —            | Controlled value (string for single, array for multi) |
+| `defaultValue`    | `string \| string[]`                  | —            | Default value (uncontrolled)                          |
+| `onValueChange`   | `(value: string \| string[]) => void` | —            | Change handler                                        |
+| `multiple`        | `boolean`                             | `false`      | Enable multi-select mode                              |
+| `disabled`        | `boolean`                             | `false`      | Disable all options                                   |
+| `discoverable`    | `boolean`                             | `true`       | Keep disabled listbox in tab order                    |
+| `orientation`     | `'horizontal' \| 'vertical'`          | `'vertical'` | Layout orientation                                    |
+| `unstyled`        | `boolean`                             | `false`      | Remove default styles                                 |
+| `aria-label`      | `string`                              | —            | Accessible label                                      |
+| `aria-labelledby` | `string`                              | —            | ID of labelling element                               |
 
 **Props (Listbox.Option):**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | — | Value for this option (required) |
-| `disabled` | `boolean` | `false` | Disable this option |
-| `discoverable` | `boolean` | `true` | Keep disabled option discoverable |
-| `unstyled` | `boolean` | — | Remove default styles (inherits from root) |
-| `aria-label` | `string` | — | Accessible label override |
+| Prop           | Type      | Default | Description                                |
+| -------------- | --------- | ------- | ------------------------------------------ |
+| `value`        | `string`  | —       | Value for this option (required)           |
+| `disabled`     | `boolean` | `false` | Disable this option                        |
+| `discoverable` | `boolean` | `true`  | Keep disabled option discoverable          |
+| `unstyled`     | `boolean` | —       | Remove default styles (inherits from root) |
+| `aria-label`   | `string`  | —       | Accessible label override                  |
 
 **Props (Listbox.Group):**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | — | Group label (required, visible) |
-| `disabled` | `boolean` | `false` | Disable all options in group |
-| `unstyled` | `boolean` | — | Remove default styles (inherits from root) |
+| Prop       | Type      | Default | Description                                |
+| ---------- | --------- | ------- | ------------------------------------------ |
+| `label`    | `string`  | —       | Group label (required, visible)            |
+| `disabled` | `boolean` | `false` | Disable all options in group               |
+| `unstyled` | `boolean` | —       | Remove default styles (inherits from root) |
 
 **Keyboard Navigation:**
 
-| Key | Single Select | Multi Select |
-| --- | --- | --- |
-| `ArrowDown` / `ArrowUp` | Move focus and select | Move focus only |
-| `Home` / `End` | First/last option and select | Move focus only |
-| `Space` | — | Toggle focused option |
-| `Shift+Arrow` | — | Move focus and toggle |
-| `Ctrl+Shift+Home/End` | — | Select range to first/last |
-| `Ctrl+A` | — | Toggle select all |
-| Type characters | Jump to match and select | Jump to match |
+| Key                     | Single Select                | Multi Select               |
+| ----------------------- | ---------------------------- | -------------------------- |
+| `ArrowDown` / `ArrowUp` | Move focus and select        | Move focus only            |
+| `Home` / `End`          | First/last option and select | Move focus only            |
+| `Space`                 | —                            | Toggle focused option      |
+| `Shift+Arrow`           | —                            | Move focus and toggle      |
+| `Ctrl+Shift+Home/End`   | —                            | Select range to first/last |
+| `Ctrl+A`                | —                            | Toggle select all          |
+| Type characters         | Jump to match and select     | Jump to match              |
 
 **Customization:**
 
@@ -510,22 +454,22 @@ function CustomInput() {
 
 **Props:**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `label` | `ReactNode` | — | Visible label text |
-| `hint` | `ReactNode` | — | Hint/description text |
-| `error` | `ReactNode` | — | Error message (enables `aria-invalid`) |
-| `value` | `string` | — | Controlled value |
-| `defaultValue` | `string` | `''` | Default value (uncontrolled) |
-| `onValueChange` | `(value: string) => void` | — | Change handler |
-| `type` | `string` | `'text'` | Input type (text, email, password, number, tel, url, search) |
-| `placeholder` | `string` | — | Placeholder text |
-| `required` | `boolean` | `false` | Required field |
-| `disabled` | `boolean` | `false` | Disable the input |
-| `readOnly` | `boolean` | `false` | Read-only input |
-| `unstyled` | `boolean` | `false` | Remove default styles |
-| `aria-label` | `string` | — | Accessible label (when no visible label) |
-| `aria-labelledby` | `string` | — | ID of labelling element |
+| Prop              | Type                      | Default  | Description                                                  |
+| ----------------- | ------------------------- | -------- | ------------------------------------------------------------ |
+| `label`           | `ReactNode`               | —        | Visible label text                                           |
+| `hint`            | `ReactNode`               | —        | Hint/description text                                        |
+| `error`           | `ReactNode`               | —        | Error message (enables `aria-invalid`)                       |
+| `value`           | `string`                  | —        | Controlled value                                             |
+| `defaultValue`    | `string`                  | `''`     | Default value (uncontrolled)                                 |
+| `onValueChange`   | `(value: string) => void` | —        | Change handler                                               |
+| `type`            | `string`                  | `'text'` | Input type (text, email, password, number, tel, url, search) |
+| `placeholder`     | `string`                  | —        | Placeholder text                                             |
+| `required`        | `boolean`                 | `false`  | Required field                                               |
+| `disabled`        | `boolean`                 | `false`  | Disable the input                                            |
+| `readOnly`        | `boolean`                 | `false`  | Read-only input                                              |
+| `unstyled`        | `boolean`                 | `false`  | Remove default styles                                        |
+| `aria-label`      | `string`                  | —        | Accessible label (when no visible label)                     |
+| `aria-labelledby` | `string`                  | —        | ID of labelling element                                      |
 
 **Customization:**
 
@@ -550,9 +494,15 @@ import { Button } from '@compa11y/react';
 function Actions() {
   return (
     <div style={{ display: 'flex', gap: '0.5rem' }}>
-      <Button variant="primary" onClick={handleSave}>Save</Button>
-      <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-      <Button variant="danger" onClick={handleDelete}>Delete</Button>
+      <Button variant="primary" onClick={handleSave}>
+        Save
+      </Button>
+      <Button variant="outline" onClick={handleCancel}>
+        Cancel
+      </Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete
+      </Button>
     </div>
   );
 }
@@ -577,21 +527,21 @@ function SaveButton() {
 // Disabled but discoverable (stays in tab order)
 <Button variant="primary" disabled discoverable>
   Unavailable
-</Button>
+</Button>;
 ```
 
 **Props:**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `variant` | `'primary' \| 'secondary' \| 'danger' \| 'outline' \| 'ghost'` | `'secondary'` | Visual variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size |
-| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | HTML button type |
-| `disabled` | `boolean` | `false` | Disable the button |
-| `discoverable` | `boolean` | `false` | Keep disabled button in tab order with `aria-disabled` |
-| `loading` | `boolean` | `false` | Loading state (shows spinner, sets `aria-busy`) |
-| `unstyled` | `boolean` | `false` | Remove default styles |
-| `aria-label` | `string` | — | Accessible label |
+| Prop           | Type                                                           | Default       | Description                                            |
+| -------------- | -------------------------------------------------------------- | ------------- | ------------------------------------------------------ |
+| `variant`      | `'primary' \| 'secondary' \| 'danger' \| 'outline' \| 'ghost'` | `'secondary'` | Visual variant                                         |
+| `size`         | `'sm' \| 'md' \| 'lg'`                                         | `'md'`        | Button size                                            |
+| `type`         | `'button' \| 'submit' \| 'reset'`                              | `'button'`    | HTML button type                                       |
+| `disabled`     | `boolean`                                                      | `false`       | Disable the button                                     |
+| `discoverable` | `boolean`                                                      | `false`       | Keep disabled button in tab order with `aria-disabled` |
+| `loading`      | `boolean`                                                      | `false`       | Loading state (shows spinner, sets `aria-busy`)        |
+| `unstyled`     | `boolean`                                                      | `false`       | Remove default styles                                  |
+| `aria-label`   | `string`                                                       | —             | Accessible label                                       |
 
 **Customization:**
 
@@ -619,7 +569,8 @@ function FeedbackForm() {
 
   const validate = () => {
     if (!desc.trim()) setDescError('Description is required');
-    else if (desc.trim().length < 10) setDescError('Must be at least 10 characters');
+    else if (desc.trim().length < 10)
+      setDescError('Must be at least 10 characters');
     else setDescError('');
   };
 
@@ -655,23 +606,23 @@ function CustomTextarea() {
 
 **Props:**
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `label` | `ReactNode` | — | Visible label text |
-| `hint` | `ReactNode` | — | Hint/description text |
-| `error` | `ReactNode` | — | Error message (enables `aria-invalid`) |
-| `value` | `string` | — | Controlled value |
-| `defaultValue` | `string` | `''` | Default value (uncontrolled) |
-| `onValueChange` | `(value: string) => void` | — | Change handler |
-| `rows` | `number` | `3` | Number of visible text rows |
-| `resize` | `string` | `'vertical'` | Resize behavior (none, both, horizontal, vertical) |
-| `placeholder` | `string` | — | Placeholder text |
-| `required` | `boolean` | `false` | Required field |
-| `disabled` | `boolean` | `false` | Disable the textarea |
-| `readOnly` | `boolean` | `false` | Read-only textarea |
-| `unstyled` | `boolean` | `false` | Remove default styles |
-| `aria-label` | `string` | — | Accessible label (when no visible label) |
-| `aria-labelledby` | `string` | — | ID of labelling element |
+| Prop              | Type                      | Default      | Description                                        |
+| ----------------- | ------------------------- | ------------ | -------------------------------------------------- |
+| `label`           | `ReactNode`               | —            | Visible label text                                 |
+| `hint`            | `ReactNode`               | —            | Hint/description text                              |
+| `error`           | `ReactNode`               | —            | Error message (enables `aria-invalid`)             |
+| `value`           | `string`                  | —            | Controlled value                                   |
+| `defaultValue`    | `string`                  | `''`         | Default value (uncontrolled)                       |
+| `onValueChange`   | `(value: string) => void` | —            | Change handler                                     |
+| `rows`            | `number`                  | `3`          | Number of visible text rows                        |
+| `resize`          | `string`                  | `'vertical'` | Resize behavior (none, both, horizontal, vertical) |
+| `placeholder`     | `string`                  | —            | Placeholder text                                   |
+| `required`        | `boolean`                 | `false`      | Required field                                     |
+| `disabled`        | `boolean`                 | `false`      | Disable the textarea                               |
+| `readOnly`        | `boolean`                 | `false`      | Read-only textarea                                 |
+| `unstyled`        | `boolean`                 | `false`      | Remove default styles                              |
+| `aria-label`      | `string`                  | —            | Accessible label (when no visible label)           |
+| `aria-labelledby` | `string`                  | —            | ID of labelling element                            |
 
 **Customization:**
 

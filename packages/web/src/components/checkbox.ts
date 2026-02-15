@@ -1,417 +1,708 @@
 /**
- * A11y Checkbox Web Component
+ * compa11y Checkbox Web Components
  *
- * An accessible checkbox custom element with full keyboard support
- * and ARIA attributes.
+ * Accessible checkbox and checkbox group components following WAI-ARIA patterns.
  *
  * @example
  * ```html
- * <a11y-checkbox label="Accept terms"></a11y-checkbox>
- * <a11y-checkbox checked>Enable notifications</a11y-checkbox>
- * <a11y-checkbox indeterminate>Select all</a11y-checkbox>
+ * <!-- Basic checkbox -->
+ * <a11y-checkbox label="Subscribe to updates"></a11y-checkbox>
+ *
+ * <!-- With helper text -->
+ * <a11y-checkbox label="Subscribe" hint="We'll email you weekly."></a11y-checkbox>
+ *
+ * <!-- Checked by default -->
+ * <a11y-checkbox checked label="Accept terms"></a11y-checkbox>
+ *
+ * <!-- Indeterminate / mixed state -->
+ * <a11y-checkbox indeterminate label="Select all"></a11y-checkbox>
+ *
+ * <!-- Disabled -->
+ * <a11y-checkbox disabled label="Unavailable option"></a11y-checkbox>
+ *
+ * <!-- Checkbox group -->
+ * <a11y-checkbox-group legend="Select toppings">
+ *   <a11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
+ *   <a11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
+ *   <a11y-checkbox value="olives" label="Olives"></a11y-checkbox>
+ * </a11y-checkbox-group>
  * ```
+ *
+ * @fires change - Emitted when checkbox state changes, detail: { checked: boolean, value: string }
+ *
+ * @attr {boolean} checked - Whether the checkbox is checked
+ * @attr {boolean} indeterminate - Whether the checkbox is in indeterminate/mixed state
+ * @attr {boolean} disabled - Whether the checkbox is disabled
+ * @attr {string} label - Visible label text
+ * @attr {string} hint - Helper/description text
+ * @attr {string} error - Error message text
+ * @attr {string} value - Value for use in checkbox groups
+ * @attr {string} name - Form field name
+ * @attr {boolean} required - Whether the checkbox is required
+ * @attr {string} size - Size variant: 'sm' | 'md' | 'lg' (default: 'md')
+ *
+ * @cssprop --compa11y-checkbox-size - Checkbox indicator size
+ * @cssprop --compa11y-checkbox-bg - Background color when unchecked
+ * @cssprop --compa11y-checkbox-border - Border style when unchecked
+ * @cssprop --compa11y-checkbox-checked-bg - Background color when checked
+ * @cssprop --compa11y-checkbox-checked-border - Border color when checked
+ * @cssprop --compa11y-checkbox-check-color - Check mark color
+ * @cssprop --compa11y-checkbox-label-color - Label text color
+ * @cssprop --compa11y-checkbox-hint-color - Hint text color
+ * @cssprop --compa11y-checkbox-error-color - Error text color
+ * @cssprop --compa11y-focus-color - Focus outline color
  */
 
-import { Compa11yElement, defineElement } from '../utils/base-element';
-import { BASE_STYLES, FOCUS_VISIBLE_STYLES } from '../utils/styles';
 import { announcePolite } from '@compa11y/core';
+import { Compa11yElement, defineElement } from '../utils/base-element';
+import { CHECKBOX_STYLES, CHECKBOX_GROUP_STYLES } from '../utils/styles';
 
-const CHECKBOX_STYLES = `
-  ${BASE_STYLES}
-  ${FOCUS_VISIBLE_STYLES}
+// SVG for checkmark
+const CHECK_SVG = `<svg class="checkbox-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+  <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
 
-  :host {
-    display: inline-block;
-    position: relative;
-  }
-
-  .checkbox-wrapper {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  :host([disabled]) .checkbox-wrapper {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .checkbox-box {
-    width: var(--compa11y-checkbox-size, 1.25rem);
-    height: var(--compa11y-checkbox-size, 1.25rem);
-    border: var(--compa11y-checkbox-border, 2px solid #666);
-    border-radius: var(--compa11y-checkbox-radius, 4px);
-    background: var(--compa11y-checkbox-bg, white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s ease;
-  }
-
-  :host([checked]) .checkbox-box,
-  :host([indeterminate]) .checkbox-box {
-    background: var(--compa11y-checkbox-checked-bg, #0066cc);
-    border-color: var(--compa11y-checkbox-checked-border, #0066cc);
-  }
-
-  .checkbox-box svg {
-    width: 100%;
-    height: 100%;
-    stroke: var(--compa11y-checkbox-check-color, white);
-    stroke-width: 3;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.15s ease;
-  }
-
-  :host([checked]) .checkbox-box svg,
-  :host([indeterminate]) .checkbox-box svg {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .checkbox-label {
-    color: var(--compa11y-checkbox-label-color, inherit);
-    font-size: var(--compa11y-checkbox-label-size, 1rem);
-  }
-
-  :host([disabled]) .checkbox-label {
-    color: var(--compa11y-checkbox-disabled-color, #999);
-  }
-
-  /* Focus styles */
-  .checkbox-wrapper:focus-within .checkbox-box {
-    outline: 2px solid var(--compa11y-focus-color, #0066cc);
-    outline-offset: 2px;
-  }
-
-  /* Focus-visible only for keyboard */
-  .checkbox-wrapper:focus-within:not([data-compa11y-focus-visible="true"]) .checkbox-box {
-    outline: none;
-  }
-
-  /* Hover state */
-  .checkbox-wrapper:hover:not([disabled]) .checkbox-box {
-    border-color: var(--compa11y-checkbox-hover-border, #0066cc);
-  }
-`;
+// SVG for indeterminate dash
+const DASH_SVG = `<svg class="checkbox-dash" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+  <path d="M3 6H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
 
 export class A11yCheckbox extends Compa11yElement {
   private _checked = false;
   private _indeterminate = false;
-  private _disabled = false;
-  private _discoverable = true;
-  private _value = '';
-  private _name = '';
+  private _input: HTMLInputElement | null = null;
 
   static get observedAttributes() {
     return [
       'checked',
       'indeterminate',
       'disabled',
-      'discoverable',
       'label',
+      'hint',
+      'error',
       'value',
       'name',
+      'required',
+      'size',
+      'aria-label',
+      'aria-describedby',
     ];
   }
 
+  /**
+   * Get/set the checked state
+   */
   get checked(): boolean {
     return this._checked;
   }
 
   set checked(value: boolean) {
-    const newValue = Boolean(value);
-    if (this._checked !== newValue) {
-      this._checked = newValue;
-      if (newValue) {
-        this.setAttribute('checked', '');
-        this._indeterminate = false;
-        this.removeAttribute('indeterminate');
-      } else {
-        this.removeAttribute('checked');
-      }
-      this.updateAriaChecked();
-      this.render();
+    const oldValue = this._checked;
+    this._checked = value;
+    this.toggleAttribute('checked', value);
+
+    if (value !== oldValue) {
+      this.updateVisualState();
+      this.emit('change', { checked: value, value: this.value });
     }
   }
 
+  /**
+   * Get/set the indeterminate state
+   */
   get indeterminate(): boolean {
     return this._indeterminate;
   }
 
   set indeterminate(value: boolean) {
-    const newValue = Boolean(value);
-    if (this._indeterminate !== newValue) {
-      this._indeterminate = newValue;
-      if (newValue) {
-        this.setAttribute('indeterminate', '');
-        this._checked = false;
-        this.removeAttribute('checked');
-      } else {
-        this.removeAttribute('indeterminate');
-      }
-      this.updateAriaChecked();
-      this.render();
+    const oldValue = this._indeterminate;
+    this._indeterminate = value;
+    this.toggleAttribute('indeterminate', value);
+
+    if (value !== oldValue) {
+      this.updateVisualState();
     }
   }
 
+  /**
+   * Get/set the disabled state
+   */
   get disabled(): boolean {
-    return this._disabled;
+    return this.hasAttribute('disabled');
   }
 
   set disabled(value: boolean) {
-    const newValue = Boolean(value);
-    if (this._disabled !== newValue) {
-      this._disabled = newValue;
-      if (newValue) {
-        this.setAttribute('disabled', '');
-        this.setAttribute('aria-disabled', 'true');
-      } else {
-        this.removeAttribute('disabled');
-        this.removeAttribute('aria-disabled');
-      }
-      this.updateTabindex();
-      this.render();
-    }
+    this.toggleAttribute('disabled', value);
+    this.updateDisabledState();
   }
 
-  get discoverable(): boolean {
-    return this._discoverable;
-  }
-
-  set discoverable(value: boolean | string) {
-    // Handle string values like "false" and "0" as false
-    let newValue: boolean;
-    if (typeof value === 'string') {
-      newValue = value !== 'false' && value !== '0';
-    } else {
-      newValue = Boolean(value);
-    }
-
-    if (this._discoverable !== newValue) {
-      this._discoverable = newValue;
-      if (newValue) {
-        this.setAttribute('discoverable', '');
-      } else {
-        this.removeAttribute('discoverable');
-      }
-      this.updateTabindex();
-    }
-  }
-
+  /**
+   * Get/set the value
+   */
   get value(): string {
-    return this._value;
+    return this.getAttribute('value') || '';
   }
 
   set value(v: string) {
-    this._value = v;
-    this.setAttribute('value', v);
+    if (v) {
+      this.setAttribute('value', v);
+    } else {
+      this.removeAttribute('value');
+    }
   }
 
-  get name(): string {
-    return this._name;
+  /**
+   * Get/set the visible label
+   */
+  get label(): string {
+    return this.getAttribute('label') || '';
   }
 
-  set name(v: string) {
-    this._name = v;
-    this.setAttribute('name', v);
+  set label(value: string) {
+    if (value) {
+      this.setAttribute('label', value);
+    } else {
+      this.removeAttribute('label');
+    }
+  }
+
+  /**
+   * Get/set the hint text
+   */
+  get hint(): string {
+    return this.getAttribute('hint') || '';
+  }
+
+  set hint(value: string) {
+    if (value) {
+      this.setAttribute('hint', value);
+    } else {
+      this.removeAttribute('hint');
+    }
+  }
+
+  /**
+   * Get/set the error message
+   */
+  get error(): string {
+    return this.getAttribute('error') || '';
+  }
+
+  set error(value: string) {
+    if (value) {
+      this.setAttribute('error', value);
+    } else {
+      this.removeAttribute('error');
+    }
+  }
+
+  /**
+   * Get/set the size variant
+   */
+  get size(): 'sm' | 'md' | 'lg' {
+    const size = this.getAttribute('size');
+    if (size === 'sm' || size === 'lg') return size;
+    return 'md';
+  }
+
+  set size(value: 'sm' | 'md' | 'lg') {
+    this.setAttribute('size', value);
+  }
+
+  /**
+   * Get/set required state
+   */
+  get required(): boolean {
+    return this.hasAttribute('required');
+  }
+
+  set required(value: boolean) {
+    this.toggleAttribute('required', value);
   }
 
   protected setupAccessibility(): void {
-    this.setAttribute('role', 'checkbox');
+    // Initialize state from attributes
+    this._checked = this.hasAttribute('checked');
+    this._indeterminate = this.hasAttribute('indeterminate');
 
-    this.updateTabindex();
-    this.updateAriaChecked();
-
-    const hasLabel =
-      this.hasAttribute('label') ||
-      this.hasAttribute('aria-label') ||
-      this.hasAttribute('aria-labelledby');
-    if (!hasLabel && process.env.NODE_ENV !== 'production') {
-      console.warn(
-        '[Compa11y Checkbox]: Checkbox has no accessible label. ' +
-          'Use label attribute or aria-label.'
-      );
-    }
-  }
-
-  private updateAriaChecked(): void {
-    if (this._indeterminate) {
-      this.setAttribute('aria-checked', 'mixed');
-    } else {
-      this.setAttribute('aria-checked', this._checked ? 'true' : 'false');
-    }
-  }
-
-  private updateTabindex(): void {
-    // If disabled and not discoverable, remove from tab order
-    // Otherwise, keep in tab order
-    if (this._disabled && !this._discoverable) {
-      this.setAttribute('tabindex', '-1');
-    } else {
-      this.setAttribute('tabindex', '0');
+    // Warn if no accessible label
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      if (!this.label && !this.getAttribute('aria-label')) {
+        console.warn(
+          '[compa11y/Checkbox] Checkbox has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
+            '💡 Suggestion: <a11y-checkbox label="Accept terms"></a11y-checkbox>'
+        );
+      }
     }
   }
 
   protected render(): void {
-    if (!this.shadowRoot) {
-      this.attachShadow({ mode: 'open' });
-    }
+    const shadow = this.attachShadow({ mode: 'open' });
+    const inputId = `${this._id}-input`;
+    const labelId = `${this._id}-label`;
+    const hintId = `${this._id}-hint`;
+    const errorId = `${this._id}-error`;
+    const hasLabel = Boolean(this.label);
+    const hasHint = Boolean(this.hint);
+    const hasError = Boolean(this.error);
+    const ariaLabel = this.getAttribute('aria-label');
+    const name = this.getAttribute('name') || '';
+    const externalDescribedBy = this.getAttribute('aria-describedby') || '';
 
-    const shadow = this.shadowRoot!;
-    const label = this.getAttribute('label') || '';
+    // Build aria-describedby
+    const describedByParts: string[] = [];
+    if (externalDescribedBy) describedByParts.push(externalDescribedBy);
+    if (hasHint) describedByParts.push(hintId);
+    if (hasError) describedByParts.push(errorId);
+    const describedBy = describedByParts.length
+      ? `aria-describedby="${describedByParts.join(' ')}"`
+      : '';
 
-    let icon = '';
-    if (this._indeterminate) {
-      icon = '<line x1="4" y1="12" x2="20" y2="12" />';
-    } else if (this._checked) {
-      icon = '<polyline points="20 6 9 17 4 12" />';
-    }
+    // Build aria-label for non-visible-label case
+    const ariaLabelAttr =
+      !hasLabel && ariaLabel ? `aria-label="${ariaLabel}"` : '';
 
     shadow.innerHTML = `
       <style>${CHECKBOX_STYLES}</style>
-      <div class="checkbox-wrapper" part="wrapper">
-        <div class="checkbox-box" part="box">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-            ${icon}
-          </svg>
+      <div class="checkbox-wrapper size-${this.size}" part="wrapper">
+        <div class="checkbox-control">
+          <input
+            type="checkbox"
+            class="checkbox-input"
+            id="${inputId}"
+            ${name ? `name="${name}"` : ''}
+            ${this.value ? `value="${this.value}"` : ''}
+            ${this._checked ? 'checked' : ''}
+            ${this.disabled ? 'disabled' : ''}
+            ${this.required ? 'required aria-required="true"' : ''}
+            ${describedBy}
+            ${ariaLabelAttr}
+            ${hasError ? 'aria-invalid="true"' : ''}
+            part="input"
+          />
+          <div class="checkbox-indicator" part="indicator" aria-hidden="true">
+            ${CHECK_SVG}
+            ${DASH_SVG}
+          </div>
         </div>
-        ${label ? `<span class="checkbox-label" part="label">${label}</span>` : ''}
-        <slot></slot>
+        ${
+          hasLabel || hasHint || hasError
+            ? `<div class="checkbox-content">
+            ${hasLabel ? `<label for="${inputId}" id="${labelId}" class="checkbox-label" part="label">${this.label}${this.required ? '<span class="checkbox-required" aria-hidden="true">*</span>' : ''}</label>` : ''}
+            ${hasHint ? `<div id="${hintId}" class="checkbox-hint" part="hint">${this.hint}</div>` : ''}
+            ${hasError ? `<div id="${errorId}" class="checkbox-error" role="alert" part="error">${this.error}</div>` : ''}
+          </div>`
+            : ''
+        }
       </div>
     `;
+
+    // Cache reference
+    this._input = shadow.querySelector('input');
+
+    // Set indeterminate imperatively (no HTML attribute for this)
+    if (this._input && this._indeterminate) {
+      this._input.indeterminate = true;
+    }
   }
 
   protected setupEventListeners(): void {
-    this.addEventListener('click', this.handleClick);
-    this.addEventListener('keydown', this.handleKeyDown);
+    this._input?.addEventListener('change', this.handleChange);
   }
 
   protected cleanupEventListeners(): void {
-    this.removeEventListener('click', this.handleClick);
-    this.removeEventListener('keydown', this.handleKeyDown);
+    this._input?.removeEventListener('change', this.handleChange);
   }
 
-  private handleClick = (event: Event): void => {
-    if (this._disabled) {
-      event.preventDefault();
-      return;
+  protected onAttributeChange(
+    name: string,
+    _oldValue: string | null,
+    newValue: string | null
+  ): void {
+    switch (name) {
+      case 'checked':
+        this._checked = newValue !== null;
+        this.updateVisualState();
+        break;
+      case 'indeterminate':
+        this._indeterminate = newValue !== null;
+        this.updateVisualState();
+        break;
+      case 'disabled':
+        this.updateDisabledState();
+        break;
+      case 'label':
+      case 'hint':
+      case 'error':
+      case 'aria-label':
+      case 'aria-describedby':
+      case 'required':
+      case 'name':
+        // Re-render for structural changes
+        if (this.shadowRoot) {
+          this.cleanupEventListeners();
+          this.shadowRoot.innerHTML = '';
+          this.render();
+          this.setupEventListeners();
+        }
+        break;
+      case 'size':
+        this.updateSizeClass();
+        break;
+    }
+  }
+
+  /**
+   * Handle change event from native input
+   */
+  private handleChange = (): void => {
+    if (!this._input) return;
+
+    this._checked = this._input.checked;
+    this.toggleAttribute('checked', this._checked);
+
+    // Clear indeterminate on user interaction
+    if (this._indeterminate) {
+      this._indeterminate = false;
+      this.removeAttribute('indeterminate');
+      this._input.indeterminate = false;
     }
 
-    this.toggle();
+    this.updateVisualState();
+    this.emit('change', { checked: this._checked, value: this.value });
+
+    // Announce state change
+    const labelText =
+      this.label || this.getAttribute('aria-label') || 'Checkbox';
+    announcePolite(`${labelText} ${this._checked ? 'checked' : 'unchecked'}`);
   };
 
-  private handleKeyDown = (event: KeyboardEvent): void => {
-    if (this._disabled) {
-      return;
+  /**
+   * Update visual state of indicator
+   */
+  private updateVisualState(): void {
+    if (this._input) {
+      this._input.checked = this._checked;
+      this._input.indeterminate = this._indeterminate;
     }
+  }
 
-    if (event.key === ' ' || event.key === 'Spacebar') {
-      event.preventDefault();
-      this.toggle();
+  /**
+   * Update disabled state
+   */
+  private updateDisabledState(): void {
+    if (this._input) {
+      if (this.disabled) {
+        this._input.setAttribute('disabled', '');
+      } else {
+        this._input.removeAttribute('disabled');
+      }
     }
+  }
 
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.toggle();
+  /**
+   * Update size class
+   */
+  private updateSizeClass(): void {
+    const wrapper = this.shadowRoot?.querySelector('.checkbox-wrapper');
+    if (wrapper) {
+      wrapper.classList.remove('size-sm', 'size-md', 'size-lg');
+      wrapper.classList.add(`size-${this.size}`);
     }
-  };
+  }
 
-  private toggle(): void {
-    if (this._disabled) {
-      return;
-    }
+  /**
+   * Toggle the checkbox programmatically
+   */
+  public toggle(): void {
+    if (this.disabled) return;
 
     if (this._indeterminate) {
       this.indeterminate = false;
       this.checked = true;
     } else {
-      this.checked = !this._checked;
+      this.checked = !this.checked;
     }
 
-    this.emit('change', {
-      checked: this._checked,
-      indeterminate: this._indeterminate,
-      value: this._value,
-      name: this._name,
-    });
-
-    const label = this.getAttribute('label') || 'Checkbox';
-    const state = this._checked ? 'checked' : 'unchecked';
-    announcePolite(`${label} ${state}`);
+    const labelText =
+      this.label || this.getAttribute('aria-label') || 'Checkbox';
+    announcePolite(`${labelText} ${this.checked ? 'checked' : 'unchecked'}`);
   }
 
-  attributeChangedCallback(
+  /**
+   * Set checked state programmatically
+   */
+  public setChecked(checked: boolean): void {
+    this.checked = checked;
+  }
+}
+
+/**
+ * compa11y Checkbox Group Web Component
+ *
+ * Groups related checkboxes with a fieldset/legend for accessibility.
+ *
+ * @example
+ * ```html
+ * <a11y-checkbox-group legend="Select toppings" error="Pick at least 2">
+ *   <a11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
+ *   <a11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
+ *   <a11y-checkbox value="olives" label="Olives"></a11y-checkbox>
+ * </a11y-checkbox-group>
+ * ```
+ *
+ * @fires change - Emitted when any checkbox in the group changes, detail: { value: string[] }
+ *
+ * @attr {string} legend - Group label displayed as fieldset legend
+ * @attr {string} error - Group-level error message
+ * @attr {boolean} disabled - Disable all checkboxes in the group
+ * @attr {string} orientation - Layout: 'vertical' | 'horizontal' (default: 'vertical')
+ *
+ * @cssprop --compa11y-checkbox-group-gap - Gap between checkboxes
+ * @cssprop --compa11y-checkbox-group-legend-weight - Legend font weight
+ * @cssprop --compa11y-checkbox-group-legend-color - Legend text color
+ * @cssprop --compa11y-checkbox-group-error-color - Error text color
+ */
+export class A11yCheckboxGroup extends Compa11yElement {
+  private _value: string[] = [];
+
+  static get observedAttributes() {
+    return [
+      'disabled',
+      'legend',
+      'error',
+      'orientation',
+      'aria-label',
+      'aria-labelledby',
+    ];
+  }
+
+  /**
+   * Get/set the selected values as an array
+   */
+  get value(): string[] {
+    return [...this._value];
+  }
+
+  set value(val: string[]) {
+    this._value = [...val];
+    this.syncCheckboxStates();
+  }
+
+  /**
+   * Get/set the disabled state
+   */
+  get disabled(): boolean {
+    return this.hasAttribute('disabled');
+  }
+
+  set disabled(value: boolean) {
+    this.toggleAttribute('disabled', value);
+    this.syncDisabledState();
+  }
+
+  /**
+   * Get/set the legend text
+   */
+  get legend(): string {
+    return this.getAttribute('legend') || '';
+  }
+
+  set legend(value: string) {
+    if (value) {
+      this.setAttribute('legend', value);
+    } else {
+      this.removeAttribute('legend');
+    }
+  }
+
+  /**
+   * Get/set the error message
+   */
+  get error(): string {
+    return this.getAttribute('error') || '';
+  }
+
+  set error(value: string) {
+    if (value) {
+      this.setAttribute('error', value);
+    } else {
+      this.removeAttribute('error');
+    }
+  }
+
+  /**
+   * Get/set the orientation
+   */
+  get orientation(): 'vertical' | 'horizontal' {
+    return this.getAttribute('orientation') === 'horizontal'
+      ? 'horizontal'
+      : 'vertical';
+  }
+
+  set orientation(value: 'vertical' | 'horizontal') {
+    this.setAttribute('orientation', value);
+  }
+
+  protected setupAccessibility(): void {
+    // Warn if no group label
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      if (
+        !this.legend &&
+        !this.getAttribute('aria-label') &&
+        !this.getAttribute('aria-labelledby')
+      ) {
+        console.warn(
+          '[compa11y/CheckboxGroup] CheckboxGroup has no accessible label. Add legend="..." or aria-label="..." attribute.\n' +
+            '💡 Suggestion: <a11y-checkbox-group legend="Select options"></a11y-checkbox-group>'
+        );
+      }
+    }
+
+    // Initialize value from checked children
+    this.initValueFromChildren();
+  }
+
+  protected render(): void {
+    const shadow = this.attachShadow({ mode: 'open' });
+    const errorId = `${this._id}-error`;
+    const hasLegend = Boolean(this.legend);
+    const hasError = Boolean(this.error);
+    const ariaLabel = this.getAttribute('aria-label');
+    const ariaLabelledby = this.getAttribute('aria-labelledby');
+
+    shadow.innerHTML = `
+      <style>${CHECKBOX_GROUP_STYLES}</style>
+      <fieldset
+        part="fieldset"
+        ${ariaLabel ? `aria-label="${ariaLabel}"` : ''}
+        ${ariaLabelledby ? `aria-labelledby="${ariaLabelledby}"` : ''}
+        ${hasError ? `aria-describedby="${errorId}"` : ''}
+        ${this.disabled ? 'disabled' : ''}
+      >
+        ${hasLegend ? `<legend part="legend">${this.legend}</legend>` : ''}
+        <div class="checkbox-group-items" part="items">
+          <slot></slot>
+        </div>
+        ${hasError ? `<div id="${errorId}" class="checkbox-group-error" role="alert" part="error">${this.error}</div>` : ''}
+      </fieldset>
+    `;
+  }
+
+  protected setupEventListeners(): void {
+    this.addEventListener('change', this.handleChildChange);
+  }
+
+  protected cleanupEventListeners(): void {
+    this.removeEventListener('change', this.handleChildChange);
+  }
+
+  protected onAttributeChange(
     name: string,
-    oldValue: string | null,
-    newValue: string | null
+    _oldValue: string | null,
+    _newValue: string | null
   ): void {
-    if (oldValue === newValue) return;
-
     switch (name) {
-      case 'checked':
-        this._checked = newValue !== null;
-        if (this._checked) {
-          this._indeterminate = false;
-        }
-        this.updateAriaChecked();
-        this.render();
-        break;
-
-      case 'indeterminate':
-        this._indeterminate = newValue !== null;
-        if (this._indeterminate) {
-          this._checked = false;
-        }
-        this.updateAriaChecked();
-        this.render();
-        break;
-
       case 'disabled':
-        this._disabled = newValue !== null;
-        if (this._disabled) {
-          this.setAttribute('aria-disabled', 'true');
-        } else {
-          this.removeAttribute('aria-disabled');
+        this.syncDisabledState();
+        break;
+      case 'legend':
+      case 'error':
+      case 'aria-label':
+      case 'aria-labelledby':
+        // Re-render for structural changes
+        if (this.shadowRoot) {
+          this.cleanupEventListeners();
+          this.shadowRoot.innerHTML = '';
+          this.render();
+          this.setupEventListeners();
         }
-        this.updateTabindex();
-        this.render();
         break;
+    }
+  }
 
-      case 'discoverable':
-        // If attribute is removed, default to true
-        // If attribute value is explicitly "false", set to false
-        // Otherwise, set to true
-        if (newValue === null) {
-          this._discoverable = true;
-        } else if (newValue === 'false' || newValue === '0') {
-          this._discoverable = false;
-        } else {
-          this._discoverable = true;
+  /**
+   * Handle change events from child checkboxes
+   */
+  private handleChildChange = (event: Event): void => {
+    const target = event.target;
+    if (!(target instanceof A11yCheckbox)) return;
+
+    // Don't re-emit our own events
+    if (target === (this as unknown)) return;
+
+    const checkboxValue = target.value;
+    if (!checkboxValue) return;
+
+    if (target.checked) {
+      if (!this._value.includes(checkboxValue)) {
+        this._value = [...this._value, checkboxValue];
+      }
+    } else {
+      this._value = this._value.filter((v) => v !== checkboxValue);
+    }
+
+    this.emit('change', { value: this._value });
+  };
+
+  /**
+   * Initialize value array from currently checked children
+   */
+  private initValueFromChildren(): void {
+    // Use requestAnimationFrame to wait for children to be upgraded
+    requestAnimationFrame(() => {
+      const checkboxes = this.querySelectorAll('a11y-checkbox');
+      const values: string[] = [];
+      checkboxes.forEach((checkbox) => {
+        if (
+          checkbox.hasAttribute('checked') &&
+          checkbox.getAttribute('value')
+        ) {
+          values.push(checkbox.getAttribute('value')!);
         }
-        this.updateTabindex();
-        break;
+      });
+      this._value = values;
+    });
+  }
 
-      case 'label':
-        this.render();
-        break;
+  /**
+   * Sync checkbox checked states from value array
+   */
+  private syncCheckboxStates(): void {
+    const checkboxes = this.querySelectorAll(
+      'a11y-checkbox'
+    ) as NodeListOf<A11yCheckbox>;
+    checkboxes.forEach((checkbox) => {
+      const val = checkbox.value;
+      if (val) {
+        checkbox.checked = this._value.includes(val);
+      }
+    });
+  }
 
-      case 'value':
-        this._value = newValue || '';
-        break;
-
-      case 'name':
-        this._name = newValue || '';
-        break;
+  /**
+   * Sync disabled state to children
+   */
+  private syncDisabledState(): void {
+    const fieldset = this.shadowRoot?.querySelector('fieldset');
+    if (fieldset) {
+      if (this.disabled) {
+        fieldset.setAttribute('disabled', '');
+      } else {
+        fieldset.removeAttribute('disabled');
+      }
     }
   }
 }
 
+// Register custom elements
 defineElement('a11y-checkbox', A11yCheckbox);
+defineElement('a11y-checkbox-group', A11yCheckboxGroup);
+
+export default A11yCheckbox;

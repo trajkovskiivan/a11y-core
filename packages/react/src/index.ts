@@ -148,16 +148,26 @@ export {
 } from './components/select';
 
 // ============================================================================
+// Checkbox
+// ============================================================================
+
+export {
+  CheckboxCompound as Checkbox,
+  Checkbox as CheckboxBase,
+  CheckboxGroup,
+  CheckboxIndicator,
+  useCheckboxGroupContext,
+  type CheckboxProps,
+  type CheckboxGroupProps,
+  type CheckboxIndicatorProps,
+  type CheckboxGroupContextValue,
+} from './components/checkbox';
+
+// ============================================================================
 // Switch
 // ============================================================================
 
 export { Switch, type SwitchProps } from './components/switch';
-
-// ============================================================================
-// Checkbox
-// ============================================================================
-
-export { Checkbox, type CheckboxProps } from './components/checkbox';
 
 // ============================================================================
 // RadioGroup

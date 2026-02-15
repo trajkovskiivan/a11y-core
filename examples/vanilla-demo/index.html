@@ -67,7 +67,6 @@
     a11y-tabs:not(:defined),
     a11y-combobox:not(:defined),
     a11y-switch:not(:defined),
-    a11y-checkbox:not(:defined),
     a11y-select:not(:defined),
     a11y-input:not(:defined),
     a11y-textarea:not(:defined),
@@ -76,7 +75,9 @@
     a11y-radio:not(:defined),
     a11y-listbox:not(:defined),
     a11y-option:not(:defined),
-    a11y-optgroup:not(:defined) {
+    a11y-optgroup:not(:defined),
+    a11y-checkbox:not(:defined),
+    a11y-checkbox-group:not(:defined) {
       display: none;
     }
 
@@ -216,16 +217,23 @@
       --compa11y-focus-color: #0066cc;
     }
 
+
     /* Checkbox theming */
     a11y-checkbox {
-      --compa11y-checkbox-size: 1.25rem;
       --compa11y-checkbox-border: 2px solid #666;
-      --compa11y-checkbox-radius: 4px;
       --compa11y-checkbox-bg: white;
       --compa11y-checkbox-checked-bg: #0066cc;
       --compa11y-checkbox-checked-border: #0066cc;
       --compa11y-checkbox-check-color: white;
+      --compa11y-checkbox-hint-color: #666;
+      --compa11y-checkbox-error-color: #ef4444;
       --compa11y-focus-color: #0066cc;
+    }
+
+    a11y-checkbox-group {
+      --compa11y-checkbox-group-gap: 0.75rem;
+      --compa11y-checkbox-group-legend-weight: 600;
+      --compa11y-checkbox-group-error-color: #ef4444;
     }
 
     /* ==========================================================================
@@ -474,33 +482,15 @@
     <p style="margin-bottom: 1rem;">Accessible text input with label, hint, and error support.</p>
 
     <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
-      <a11y-input
-        label="Full Name"
-        hint="Enter your first and last name"
-        required
-        placeholder="John Doe"
-        type="text"
-      ></a11y-input>
+      <a11y-input label="Full Name" hint="Enter your first and last name" required placeholder="John Doe"
+        type="text"></a11y-input>
 
-      <a11y-input
-        label="Email Address"
-        hint="We will never share your email"
-        required
-        placeholder="john@example.com"
-        type="email"
-      ></a11y-input>
+      <a11y-input label="Email Address" hint="We will never share your email" required placeholder="john@example.com"
+        type="email"></a11y-input>
 
-      <a11y-input
-        label="User ID"
-        value="USR-12345"
-        readonly
-      ></a11y-input>
+      <a11y-input label="User ID" value="USR-12345" readonly></a11y-input>
 
-      <a11y-input
-        label="Organization"
-        value="Compa11y Inc."
-        disabled
-      ></a11y-input>
+      <a11y-input label="Organization" value="Compa11y Inc." disabled></a11y-input>
     </div>
 
     <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
@@ -529,35 +519,17 @@
     <p style="margin-bottom: 1rem;">Accessible multiline text input with label, hint, and error support.</p>
 
     <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
-      <a11y-textarea
-        label="Description"
-        hint="Provide at least 10 characters"
-        required
-        rows="4"
-        placeholder="Enter a description..."
-      ></a11y-textarea>
+      <a11y-textarea label="Description" hint="Provide at least 10 characters" required rows="4"
+        placeholder="Enter a description..."></a11y-textarea>
 
-      <a11y-textarea
-        label="Terms of Service"
+      <a11y-textarea label="Terms of Service"
         value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        readonly
-        rows="3"
-      ></a11y-textarea>
+        readonly rows="3"></a11y-textarea>
 
-      <a11y-textarea
-        label="Admin Notes"
-        value="This field is disabled."
-        disabled
-        rows="2"
-      ></a11y-textarea>
+      <a11y-textarea label="Admin Notes" value="This field is disabled." disabled rows="2"></a11y-textarea>
 
-      <a11y-textarea
-        label="Feedback"
-        hint="Resize is disabled on this textarea"
-        placeholder="Share your feedback..."
-        resize="none"
-        rows="3"
-      ></a11y-textarea>
+      <a11y-textarea label="Feedback" hint="Resize is disabled on this textarea" placeholder="Share your feedback..."
+        resize="none" rows="3"></a11y-textarea>
     </div>
 
     <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
@@ -651,7 +623,8 @@
 
   <section>
     <h2>Button</h2>
-    <p style="margin-bottom: 1rem;">Accessible buttons with variants, sizes, loading, and discoverable disabled states.</p>
+    <p style="margin-bottom: 1rem;">Accessible buttons with variants, sizes, loading, and discoverable disabled states.
+    </p>
 
     <div style="display: flex; flex-direction: column; gap: 1rem;">
       <!-- Variants -->
@@ -808,7 +781,8 @@
       </div>
     </div>
 
-    <div id="listbox-status" style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
+    <div id="listbox-status"
+      style="margin-top: 1rem; padding: 0.75rem; background: #f8f8f8; border-radius: 4px; font-size: 0.875rem;">
       <strong>Selected:</strong> <span id="listbox-last-change">Fruit: apple | Toppings: cheese, pepperoni</span>
     </div>
 
@@ -826,26 +800,83 @@
     </div>
   </section>
 
+
+
   <section>
     <h2>Checkbox</h2>
-    <p style="margin-bottom: 1rem;">An accessible checkbox with support for checked, unchecked, and indeterminate
-      states.</p>
+    <p style="margin-bottom: 1rem;">Accessible checkboxes with label, hint, error, indeterminate, and group support.</p>
 
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      <!-- Basic checkbox -->
-      <a11y-checkbox id="terms-checkbox" label="I accept the terms and conditions"></a11y-checkbox>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- Single checkbox -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Single Checkbox</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <a11y-checkbox id="terms-checkbox" label="Accept terms and conditions" required></a11y-checkbox>
+          <a11y-checkbox label="Subscribe to updates" hint="We'll email you weekly." checked></a11y-checkbox>
+        </div>
+      </div>
 
-      <!-- Checked by default -->
-      <a11y-checkbox id="notifications-checkbox" checked label="Enable email notifications"></a11y-checkbox>
+      <!-- Indeterminate / Select All -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Select All (Indeterminate)</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <a11y-checkbox id="select-all-checkbox" label="Select all items" indeterminate></a11y-checkbox>
+          <div style="margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            <a11y-checkbox class="child-checkbox" value="item1" label="Item 1" checked></a11y-checkbox>
+            <a11y-checkbox class="child-checkbox" value="item2" label="Item 2"></a11y-checkbox>
+            <a11y-checkbox class="child-checkbox" value="item3" label="Item 3" checked></a11y-checkbox>
+          </div>
+        </div>
+      </div>
 
-      <!-- Disabled state -->
-      <a11y-checkbox disabled checked label="Disabled checkbox (cannot change)"></a11y-checkbox>
+      <!-- Checkbox Group -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Checkbox Group (Vertical)</h3>
+        <a11y-checkbox-group id="toppings-group" legend="Select toppings">
+          <a11y-checkbox value="cheese" label="Cheese" checked></a11y-checkbox>
+          <a11y-checkbox value="pepperoni" label="Pepperoni"></a11y-checkbox>
+          <a11y-checkbox value="mushrooms" label="Mushrooms" checked></a11y-checkbox>
+          <a11y-checkbox value="olives" label="Olives"></a11y-checkbox>
+          <a11y-checkbox value="anchovies" label="Anchovies" disabled></a11y-checkbox>
+        </a11y-checkbox-group>
+      </div>
 
-      <!-- Disabled state but discoverable via keyboard -->
-      <a11y-checkbox disabled discoverable label="Disabled checkbox (but discoverable via keyboard)"></a11y-checkbox>
+      <!-- Horizontal Group -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Checkbox Group (Horizontal)</h3>
+        <a11y-checkbox-group id="sizes-group" legend="Available sizes" orientation="horizontal">
+          <a11y-checkbox value="xs" label="XS"></a11y-checkbox>
+          <a11y-checkbox value="sm" label="S"></a11y-checkbox>
+          <a11y-checkbox value="md" label="M" checked></a11y-checkbox>
+          <a11y-checkbox value="lg" label="L" checked></a11y-checkbox>
+          <a11y-checkbox value="xl" label="XL"></a11y-checkbox>
+        </a11y-checkbox-group>
+      </div>
 
-      <!-- Without label attribute (uses slot) -->
-      <a11y-checkbox id="newsletter-checkbox">Subscribe to newsletter</a11y-checkbox>
+      <!-- Sizes -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Sizes</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <a11y-checkbox size="sm" label="Small checkbox"></a11y-checkbox>
+          <a11y-checkbox size="md" label="Medium checkbox (default)"></a11y-checkbox>
+          <a11y-checkbox size="lg" label="Large checkbox"></a11y-checkbox>
+        </div>
+      </div>
+
+      <!-- With error -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">With Error</h3>
+        <a11y-checkbox label="I agree to the privacy policy" required error="You must agree to continue"></a11y-checkbox>
+      </div>
+
+      <!-- Disabled -->
+      <div>
+        <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Disabled</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <a11y-checkbox label="Disabled unchecked" disabled></a11y-checkbox>
+          <a11y-checkbox label="Disabled checked" disabled checked></a11y-checkbox>
+        </div>
+      </div>
     </div>
 
     <div id="checkbox-status"
@@ -857,9 +888,10 @@
       <h3>Keyboard Navigation</h3>
       <ul>
         <li><kbd>Space</kbd> toggles the checkbox</li>
-        <li><kbd>Enter</kbd> also toggles the checkbox (web component)</li>
-        <li>Checkbox state is announced to screen readers</li>
-        <li>Indeterminate state represents partial selection (mixed state)</li>
+        <li><kbd>Tab</kbd> moves between checkboxes</li>
+        <li>Indeterminate state is announced as "mixed" to screen readers</li>
+        <li>Groups use <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> for screen reader grouping</li>
+        <li>Hint and error text connected via <code>aria-describedby</code></li>
       </ul>
     </div>
   </section>
@@ -1106,17 +1138,14 @@
     });
 
     // Checkbox event listeners
-    const checkboxes = document.querySelectorAll('a11y-checkbox');
     const checkboxStatus = document.getElementById('checkbox-last-change');
 
-    checkboxes.forEach(cb => {
+    // Single checkboxes
+    const allCheckboxes = document.querySelectorAll('a11y-checkbox');
+    allCheckboxes.forEach(cb => {
       cb.addEventListener('change', (e) => {
-        const label = cb.getAttribute('label') || cb.textContent || 'Checkbox';
-        const state = e.detail.indeterminate
-          ? 'indeterminate'
-          : e.detail.checked
-            ? 'checked'
-            : 'unchecked';
+        const label = cb.getAttribute('label') || 'Checkbox';
+        const state = e.detail.checked ? 'checked' : 'unchecked';
         console.log(`Checkbox changed: ${label} = ${state}`, e.detail);
 
         if (checkboxStatus) {
@@ -1124,6 +1153,61 @@
         }
       });
     });
+
+    // Select All pattern
+    const selectAllCheckbox = document.getElementById('select-all-checkbox');
+    const childCheckboxes = document.querySelectorAll('.child-checkbox');
+
+    const updateSelectAllState = () => {
+      const total = childCheckboxes.length;
+      let checkedCount = 0;
+      childCheckboxes.forEach(cb => {
+        if (cb.checked) checkedCount++;
+      });
+
+      if (checkedCount === 0) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+      } else if (checkedCount === total) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false;
+      } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true;
+      }
+    };
+
+    selectAllCheckbox?.addEventListener('change', (e) => {
+      const isChecked = e.detail.checked;
+      childCheckboxes.forEach(cb => {
+        cb.checked = isChecked;
+      });
+    });
+
+    childCheckboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        updateSelectAllState();
+      });
+    });
+
+    // Checkbox group event listeners
+    const toppingsCheckboxGroup = document.getElementById('toppings-group');
+    const sizesCheckboxGroup = document.getElementById('sizes-group');
+
+    toppingsCheckboxGroup?.addEventListener('change', (e) => {
+      console.log('Toppings group changed:', e.detail.value);
+      if (checkboxStatus) {
+        checkboxStatus.textContent = `Toppings: ${e.detail.value.join(', ') || 'None'}`;
+      }
+    });
+
+    sizesCheckboxGroup?.addEventListener('change', (e) => {
+      console.log('Sizes group changed:', e.detail.value);
+      if (checkboxStatus) {
+        checkboxStatus.textContent = `Sizes: ${e.detail.value.join(', ') || 'None'}`;
+      }
+    });
+
   </script>
 
   <script>

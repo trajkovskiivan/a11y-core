@@ -16,16 +16,33 @@ import { A11yMenu } from './components/menu';
 import { A11yTabs } from './components/tabs';
 import { A11yCombobox } from './components/combobox';
 import { A11ySwitch } from './components/switch';
-import { A11yCheckbox } from './components/checkbox';
 import { A11ySelect } from './components/select';
 import { A11yInput } from './components/input';
 import { A11yTextarea } from './components/textarea';
 import { A11yButton } from './components/button';
 import { A11yRadioGroup, A11yRadio } from './components/radio-group';
 import { A11yListbox, A11yOption, A11yOptgroup } from './components/listbox';
+import { A11yCheckbox, A11yCheckboxGroup } from './components/checkbox';
 
 // Re-export components
-export { A11yDialog, A11yMenu, A11yTabs, A11yCombobox, A11ySwitch, A11yCheckbox, A11ySelect, A11yInput, A11yTextarea, A11yButton, A11yRadioGroup, A11yRadio, A11yListbox, A11yOption, A11yOptgroup };
+export {
+  A11yDialog,
+  A11yMenu,
+  A11yTabs,
+  A11yCombobox,
+  A11ySwitch,
+  A11ySelect,
+  A11yInput,
+  A11yTextarea,
+  A11yButton,
+  A11yRadioGroup,
+  A11yRadio,
+  A11yListbox,
+  A11yOption,
+  A11yOptgroup,
+  A11yCheckbox,
+  A11yCheckboxGroup,
+};
 
 // Core utilities for vanilla JS usage
 import {
@@ -102,7 +119,6 @@ if (typeof window !== 'undefined') {
     A11yTabs,
     A11yCombobox,
     A11ySwitch,
-    A11yCheckbox,
     A11ySelect,
     A11yInput,
     A11yTextarea,
@@ -112,6 +128,8 @@ if (typeof window !== 'undefined') {
     A11yListbox,
     A11yOption,
     A11yOptgroup,
+    A11yCheckbox,
+    A11yCheckboxGroup,
     // Announcer utilities
     initAnnouncer,
     announce,

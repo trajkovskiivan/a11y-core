@@ -28,7 +28,6 @@ compa11y is currently in **alpha (v0.1.0)**.
 We are actively adding more components. Current components are:
 
 - Button
-- Checkbox
 - Combobox
 - Dialog
 - Input
@@ -298,59 +297,6 @@ function Settings() {
   --compa11y-switch-thumb-bg: white;
   --compa11y-switch-width: 3rem;
   --compa11y-switch-height: 1.75rem;
-}
-```
-
-### Checkbox
-
-Accessible checkbox with support for indeterminate state (for "select all" patterns).
-
-```tsx
-import { Checkbox } from '@compa11y/react';
-
-function TermsAcceptance() {
-  const [accepted, setAccepted] = useState(false);
-
-  return (
-    <Checkbox checked={accepted} onCheckedChange={setAccepted}>
-      I accept the terms and conditions
-    </Checkbox>
-  );
-}
-
-// Indeterminate state
-function SelectAll({ items, selectedIds, onSelectedChange }) {
-  const allSelected = selectedIds.length === items.length;
-  const someSelected = selectedIds.length > 0 && !allSelected;
-
-  return (
-    <Checkbox
-      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
-      onCheckedChange={(checked) => {
-        onSelectedChange(checked ? items.map((item) => item.id) : []);
-      }}
-    >
-      Select all
-    </Checkbox>
-  );
-}
-```
-
-**Keyboard Navigation:**
-| Key | Action |
-|-----|--------|
-| `Space` / `Enter` | Toggle checkbox |
-
-**Customization:**
-
-```css
-.my-checkbox {
-  --compa11y-checkbox-size: 1.5rem;
-  --compa11y-checkbox-checked-bg: #10b981;
-  --compa11y-checkbox-checked-border: #10b981;
-  --compa11y-checkbox-check-color: white;
-  --compa11y-checkbox-radius: 8px;
-  --compa11y-checkbox-label-size: 1.125rem;
 }
 ```
 

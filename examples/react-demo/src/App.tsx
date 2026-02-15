@@ -80,6 +80,11 @@ export function App() {
         </section>
 
         <section>
+          <h2>Checkbox</h2>
+          <CheckboxDemo />
+        </section>
+
+        <section>
           <h2>Switch</h2>
           <SwitchDemo />
         </section>
@@ -107,11 +112,6 @@ export function App() {
         <section>
           <h2>Listbox</h2>
           <ListboxDemo />
-        </section>
-
-        <section>
-          <h2>Checkbox</h2>
-          <CheckboxDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -459,6 +459,249 @@ function SwitchDemo() {
   );
 }
 
+function CheckboxDemo() {
+  const [agreed, setAgreed] = useState(false);
+  const [subscribed, setSubscribed] = useState(true);
+  const [toppings, setToppings] = useState<string[]>(['cheese', 'mushrooms']);
+  const [sizes, setSizes] = useState<string[]>(['md', 'lg']);
+  const [lastChange, setLastChange] = useState('None');
+
+  // Select all pattern
+  const allItems = ['item1', 'item2', 'item3'];
+  const [selectedItems, setSelectedItems] = useState<string[]>([
+    'item1',
+    'item3',
+  ]);
+  const allChecked = selectedItems.length === allItems.length;
+  const someChecked = selectedItems.length > 0 && !allChecked;
+
+  const handleSelectAll = (checked: boolean) => {
+    setSelectedItems(checked ? [...allItems] : []);
+    setLastChange(`Select all: ${checked ? 'all checked' : 'all unchecked'}`);
+  };
+
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.5rem',
+        }}
+      >
+        {/* Single checkboxes */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Single Checkbox
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+            }}
+          >
+            <Checkbox
+              label="Accept terms and conditions"
+              checked={agreed}
+              onCheckedChange={(checked) => {
+                setAgreed(checked);
+                setLastChange(
+                  `Accept terms: ${checked ? 'checked' : 'unchecked'}`
+                );
+              }}
+              required
+            />
+            <Checkbox
+              label="Subscribe to updates"
+              hint="We'll email you weekly."
+              checked={subscribed}
+              onCheckedChange={(checked) => {
+                setSubscribed(checked);
+                setLastChange(
+                  `Subscribe: ${checked ? 'checked' : 'unchecked'}`
+                );
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Select All / Indeterminate */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Select All (Indeterminate)
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+            }}
+          >
+            <Checkbox
+              label="Select all items"
+              checked={allChecked}
+              indeterminate={someChecked}
+              onCheckedChange={handleSelectAll}
+            />
+            <div
+              style={{
+                marginLeft: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+              }}
+            >
+              {allItems.map((item) => (
+                <Checkbox
+                  key={item}
+                  label={`Item ${item.replace('item', '')}`}
+                  value={item}
+                  checked={selectedItems.includes(item)}
+                  onCheckedChange={(checked) => {
+                    const next = checked
+                      ? [...selectedItems, item]
+                      : selectedItems.filter((v) => v !== item);
+                    setSelectedItems(next);
+                    setLastChange(
+                      `${item}: ${checked ? 'checked' : 'unchecked'}`
+                    );
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Checkbox Group */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Checkbox Group (Vertical)
+          </h3>
+          <Checkbox.Group
+            legend="Select toppings"
+            value={toppings}
+            onValueChange={(v) => {
+              setToppings(v);
+              setLastChange(`Toppings: ${v.join(', ') || 'None'}`);
+            }}
+          >
+            <Checkbox value="cheese" label="Cheese" />
+            <Checkbox value="pepperoni" label="Pepperoni" />
+            <Checkbox value="mushrooms" label="Mushrooms" />
+            <Checkbox value="olives" label="Olives" />
+            <Checkbox value="anchovies" label="Anchovies" disabled />
+          </Checkbox.Group>
+        </div>
+
+        {/* Horizontal Group */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Checkbox Group (Horizontal)
+          </h3>
+          <Checkbox.Group
+            legend="Available sizes"
+            orientation="horizontal"
+            value={sizes}
+            onValueChange={(v) => {
+              setSizes(v);
+              setLastChange(`Sizes: ${v.join(', ') || 'None'}`);
+            }}
+          >
+            <Checkbox value="xs" label="XS" />
+            <Checkbox value="sm" label="S" />
+            <Checkbox value="md" label="M" />
+            <Checkbox value="lg" label="L" />
+            <Checkbox value="xl" label="XL" />
+          </Checkbox.Group>
+        </div>
+
+        {/* Sizes */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Sizes
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+            }}
+          >
+            <Checkbox size="sm" defaultChecked label="Small checkbox" />
+            <Checkbox size="md" defaultChecked label="Medium checkbox (default)" />
+            <Checkbox size="lg" defaultChecked label="Large checkbox" />
+          </div>
+        </div>
+
+        {/* With error */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            With Error
+          </h3>
+          <Checkbox
+            label="I agree to the privacy policy"
+            required
+            error="You must agree to continue"
+          />
+        </div>
+
+        {/* Disabled */}
+        <div>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Disabled
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+            }}
+          >
+            <Checkbox label="Disabled unchecked" disabled />
+            <Checkbox label="Disabled checked" disabled defaultChecked />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          background: '#f8f8f8',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Last change:</strong> <span>{lastChange}</span>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>Space</kbd> toggles the checkbox
+          </li>
+          <li>
+            <kbd>Tab</kbd> moves between checkboxes
+          </li>
+          <li>
+            Indeterminate state is announced as &quot;mixed&quot; to screen
+            readers
+          </li>
+          <li>
+            Groups use <code>&lt;fieldset&gt;</code> +{' '}
+            <code>&lt;legend&gt;</code> for screen reader grouping
+          </li>
+          <li>
+            Hint and error text connected via <code>aria-describedby</code>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function InputDemo() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -540,8 +783,8 @@ function InputDemo() {
         <h3>Accessibility Features</h3>
         <ul>
           <li>
-            Labels are programmatically associated via{' '}
-            <code>for</code>/<code>id</code>
+            Labels are programmatically associated via <code>for</code>/
+            <code>id</code>
           </li>
           <li>
             Hints and errors linked via <code>aria-describedby</code>
@@ -631,7 +874,9 @@ function TextareaDemo() {
         <Textarea value={description} onValueChange={setDescription}>
           <Textarea.Label>Description (Compound)</Textarea.Label>
           <Textarea.Field rows={3} placeholder="Custom layout..." />
-          <Textarea.Hint>Using compound components for custom layout</Textarea.Hint>
+          <Textarea.Hint>
+            Using compound components for custom layout
+          </Textarea.Hint>
           {descError && <Textarea.Error>{descError}</Textarea.Error>}
         </Textarea>
       </div>
@@ -640,8 +885,8 @@ function TextareaDemo() {
         <h3>Accessibility Features</h3>
         <ul>
           <li>
-            Labels are programmatically associated via{' '}
-            <code>for</code>/<code>id</code>
+            Labels are programmatically associated via <code>for</code>/
+            <code>id</code>
           </li>
           <li>
             Hints and errors linked via <code>aria-describedby</code>
@@ -686,12 +931,17 @@ function ButtonDemo() {
       >
         {/* Variants */}
         <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Variants</h3>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Variants
+          </h3>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             <Button variant="primary" onClick={() => setLastClick('Primary')}>
               Primary
             </Button>
-            <Button variant="secondary" onClick={() => setLastClick('Secondary')}>
+            <Button
+              variant="secondary"
+              onClick={() => setLastClick('Secondary')}
+            >
               Secondary
             </Button>
             <Button variant="danger" onClick={() => setLastClick('Danger')}>
@@ -708,15 +958,29 @@ function ButtonDemo() {
 
         {/* Sizes */}
         <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Sizes</h3>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Sizes
+          </h3>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <Button variant="primary" size="sm" onClick={() => setLastClick('Small')}>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setLastClick('Small')}
+            >
               Small
             </Button>
-            <Button variant="primary" size="md" onClick={() => setLastClick('Medium')}>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => setLastClick('Medium')}
+            >
               Medium
             </Button>
-            <Button variant="primary" size="lg" onClick={() => setLastClick('Large')}>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setLastClick('Large')}
+            >
               Large
             </Button>
           </div>
@@ -724,15 +988,23 @@ function ButtonDemo() {
 
         {/* Loading state */}
         <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Loading</h3>
-          <Button variant="primary" loading={isLoading} onClick={handleLoadingClick}>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Loading
+          </h3>
+          <Button
+            variant="primary"
+            loading={isLoading}
+            onClick={handleLoadingClick}
+          >
             {isLoading ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
 
         {/* Disabled states */}
         <div>
-          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Disabled</h3>
+          <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            Disabled
+          </h3>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             <Button variant="primary" disabled>
               Disabled (removed from tab order)
@@ -929,7 +1201,9 @@ function ListboxDemo() {
             <Listbox.Option value="apple">Apple</Listbox.Option>
             <Listbox.Option value="banana">Banana</Listbox.Option>
           </Listbox>
-          <p style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}>
+          <p
+            style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}
+          >
             Selected: {fruit || 'None'}
           </p>
         </div>
@@ -955,7 +1229,9 @@ function ListboxDemo() {
               Pineapple (unavailable)
             </Listbox.Option>
           </Listbox>
-          <p style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}>
+          <p
+            style={{ marginTop: '0.5rem', color: '#666', fontSize: '0.875rem' }}
+          >
             Selected: {toppings.length > 0 ? toppings.join(', ') : 'None'}
           </p>
         </div>
@@ -971,8 +1247,8 @@ function ListboxDemo() {
             Single-select: arrow keys move focus <strong>and</strong> select
           </li>
           <li>
-            Multi-select: <kbd>Space</kbd> toggles selection,{' '}
-            <kbd>Shift+↑</kbd> <kbd>Shift+↓</kbd> extends selection
+            Multi-select: <kbd>Space</kbd> toggles selection, <kbd>Shift+↑</kbd>{' '}
+            <kbd>Shift+↓</kbd> extends selection
           </li>
           <li>
             <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last option
@@ -981,96 +1257,6 @@ function ListboxDemo() {
             Multi-select: <kbd>Ctrl+A</kbd> toggles select all
           </li>
           <li>Type characters to jump to matching options</li>
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-function CheckboxDemo() {
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [notifications, setNotifications] = useState(true);
-  const [lastChange, setLastChange] = useState<string>('None');
-
-  const handleChange = (label: string, checked: boolean | 'indeterminate') => {
-    const state =
-      checked === 'indeterminate'
-        ? 'indeterminate'
-        : checked
-          ? 'checked'
-          : 'unchecked';
-    setLastChange(`${label}: ${state}`);
-  };
-
-  return (
-    <div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {/* Basic checkbox */}
-        <Checkbox
-          checked={termsAccepted}
-          onCheckedChange={(checked) => {
-            setTermsAccepted(checked as boolean);
-            handleChange('Accept terms', checked);
-          }}
-        >
-          I accept the terms and conditions
-        </Checkbox>
-
-        {/* Checked by default */}
-        <Checkbox
-          checked={notifications}
-          onCheckedChange={(checked) => {
-            setNotifications(checked as boolean);
-            handleChange('Email notifications', checked);
-          }}
-        >
-          Enable email notifications
-        </Checkbox>
-
-        {/* Disabled state */}
-        <Checkbox disabled defaultChecked>
-          Disabled checkbox (cannot change)
-        </Checkbox>
-
-        {/* Disabled state */}
-        <Checkbox disabled discoverable>
-          Disabled checkbox (but discoverable via keyboard)
-        </Checkbox>
-
-        {/* Uncontrolled with default */}
-        <Checkbox
-          defaultChecked={false}
-          onCheckedChange={(checked) => handleChange('Newsletter', checked)}
-        >
-          Subscribe to newsletter (uncontrolled)
-        </Checkbox>
-      </div>
-
-      <div
-        style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          background: '#f8f8f8',
-          borderRadius: '4px',
-          fontSize: '0.875rem',
-        }}
-      >
-        <strong>Last change:</strong> {lastChange}
-      </div>
-
-      <div className="keyboard-hints">
-        <h3>Keyboard Navigation</h3>
-        <ul>
-          <li>
-            <kbd>Space</kbd> toggles the checkbox
-          </li>
-          <li>
-            <kbd>Enter</kbd> also toggles the checkbox
-          </li>
-          <li>Checkbox state is announced to screen readers</li>
-          <li>
-            Indeterminate state represents partial selection (mixed state)
-          </li>
         </ul>
       </div>
     </div>

@@ -174,14 +174,14 @@ tabs.addEventListener('a11y-tabs-change', (e) => {
 
 #### Attributes
 
-| Attribute      | Description                           | Default |
-| -------------- | ------------------------------------- | ------- |
-| `label`        | Label text (required for a11y)        | —       |
-| `placeholder`  | Input placeholder                     | —       |
-| `value`        | Currently selected value              | —       |
-| `disabled`     | Disable the combobox                  | `false` |
-| `clearable`    | Show clear button when value selected | `false` |
-| `empty-message`| Message when no options match         | `'No results found'` |
+| Attribute       | Description                           | Default              |
+| --------------- | ------------------------------------- | -------------------- |
+| `label`         | Label text (required for a11y)        | —                    |
+| `placeholder`   | Input placeholder                     | —                    |
+| `value`         | Currently selected value              | —                    |
+| `disabled`      | Disable the combobox                  | `false`              |
+| `clearable`     | Show clear button when value selected | `false`              |
+| `empty-message` | Message when no options match         | `'No results found'` |
 
 #### Properties
 
@@ -213,13 +213,13 @@ combobox.addEventListener('change', (e) => {
 
 #### Attributes
 
-| Attribute          | Description                     | Default               |
-| ------------------ | ------------------------------- | --------------------- |
-| `placeholder`      | Trigger placeholder text        | `'Select an option...'` |
-| `value`            | Currently selected value        | —                     |
-| `disabled`         | Disable the select              | `false`               |
-| `aria-label`       | Accessible label                | —                     |
-| `aria-labelledby`  | ID of labelling element         | —                     |
+| Attribute         | Description              | Default                 |
+| ----------------- | ------------------------ | ----------------------- |
+| `placeholder`     | Trigger placeholder text | `'Select an option...'` |
+| `value`           | Currently selected value | —                       |
+| `disabled`        | Disable the select       | `false`                 |
+| `aria-label`      | Accessible label         | —                       |
+| `aria-labelledby` | ID of labelling element  | —                       |
 
 #### Properties
 
@@ -232,7 +232,7 @@ select.value = 'apple'; // Set value programmatically
 
 ```js
 const select = document.querySelector('a11y-select');
-select.show();  // Open
+select.show(); // Open
 select.close(); // Close
 ```
 
@@ -254,15 +254,15 @@ select.addEventListener('a11y-select-close', () => {});
 
 #### Keyboard Navigation
 
-| Key | Action |
-| --- | --- |
+| Key               | Action                                    |
+| ----------------- | ----------------------------------------- |
 | `Enter` / `Space` | Open listbox or select highlighted option |
-| `ArrowDown` | Open listbox / move highlight down |
-| `ArrowUp` | Open listbox / move highlight up |
-| `Home` / `End` | Jump to first / last option |
-| `Escape` | Close listbox |
-| `Tab` | Close listbox and move focus |
-| Type characters | Jump to matching option (type-ahead) |
+| `ArrowDown`       | Open listbox / move highlight down        |
+| `ArrowUp`         | Open listbox / move highlight up          |
+| `Home` / `End`    | Jump to first / last option               |
+| `Escape`          | Close listbox                             |
+| `Tab`             | Close listbox and move focus              |
+| Type characters   | Jump to matching option (type-ahead)      |
 
 ### Switch
 
@@ -278,13 +278,13 @@ select.addEventListener('a11y-select-close', () => {});
 
 #### Attributes
 
-| Attribute  | Description            | Default |
-| ---------- | ---------------------- | ------- |
-| `label`    | Label text             | —       |
-| `checked`  | Whether switch is on   | `false` |
-| `disabled` | Disable the switch     | `false` |
-| `value`    | Value for form submission | —    |
-| `name`     | Name for form submission  | —    |
+| Attribute  | Description               | Default |
+| ---------- | ------------------------- | ------- |
+| `label`    | Label text                | —       |
+| `checked`  | Whether switch is on      | `false` |
+| `disabled` | Disable the switch        | `false` |
+| `value`    | Value for form submission | —       |
+| `name`     | Name for form submission  | —       |
 
 #### Properties
 
@@ -298,51 +298,6 @@ switchEl.checked = true; // Set checked state
 ```js
 switchEl.addEventListener('change', (e) => {
   console.log('Checked:', e.detail.checked);
-  console.log('Value:', e.detail.value);
-  console.log('Name:', e.detail.name);
-});
-```
-
-### Checkbox
-
-```html
-<a11y-checkbox label="I accept the terms"></a11y-checkbox>
-
-<!-- Checked by default -->
-<a11y-checkbox checked label="Subscribe to newsletter"></a11y-checkbox>
-
-<!-- Indeterminate state (for "select all" pattern) -->
-<a11y-checkbox indeterminate label="Select all"></a11y-checkbox>
-
-<!-- Disabled -->
-<a11y-checkbox disabled label="Disabled option"></a11y-checkbox>
-```
-
-#### Attributes
-
-| Attribute       | Description                  | Default |
-| --------------- | ---------------------------- | ------- |
-| `label`         | Label text                   | —       |
-| `checked`       | Whether checkbox is checked  | `false` |
-| `indeterminate` | Indeterminate state (mixed)  | `false` |
-| `disabled`      | Disable the checkbox         | `false` |
-| `value`         | Value for form submission    | —       |
-| `name`          | Name for form submission     | —       |
-
-#### Properties
-
-```js
-const checkbox = document.querySelector('a11y-checkbox');
-checkbox.checked = true; // Set checked
-checkbox.indeterminate = true; // Set indeterminate
-```
-
-#### Events
-
-```js
-checkbox.addEventListener('change', (e) => {
-  console.log('Checked:', e.detail.checked);
-  console.log('Indeterminate:', e.detail.indeterminate);
   console.log('Value:', e.detail.value);
   console.log('Name:', e.detail.name);
 });
@@ -374,33 +329,33 @@ checkbox.addEventListener('change', (e) => {
 
 #### RadioGroup Attributes
 
-| Attribute          | Description                     | Default      |
-| ------------------ | ------------------------------- | ------------ |
-| `value`            | Currently selected value        | —            |
-| `disabled`         | Disable all radios              | `false`      |
-| `discoverable`     | Keep disabled radios in tab order | `true`     |
-| `orientation`      | `horizontal` or `vertical`      | `vertical`   |
-| `required`         | Required selection              | `false`      |
-| `name`             | Group name                      | —            |
-| `aria-label`       | Accessible label                | —            |
-| `aria-labelledby`  | ID of labelling element         | —            |
+| Attribute         | Description                       | Default    |
+| ----------------- | --------------------------------- | ---------- |
+| `value`           | Currently selected value          | —          |
+| `disabled`        | Disable all radios                | `false`    |
+| `discoverable`    | Keep disabled radios in tab order | `true`     |
+| `orientation`     | `horizontal` or `vertical`        | `vertical` |
+| `required`        | Required selection                | `false`    |
+| `name`            | Group name                        | —          |
+| `aria-label`      | Accessible label                  | —          |
+| `aria-labelledby` | ID of labelling element           | —          |
 
 #### Radio Attributes
 
-| Attribute      | Description                     | Default |
-| -------------- | ------------------------------- | ------- |
-| `value`        | Value for this option           | —       |
-| `label`        | Label text                      | —       |
-| `disabled`     | Disable this radio              | `false` |
-| `discoverable` | Keep disabled radio in tab order | `true` |
-| `checked`      | Whether radio is selected       | `false` |
+| Attribute      | Description                      | Default |
+| -------------- | -------------------------------- | ------- |
+| `value`        | Value for this option            | —       |
+| `label`        | Label text                       | —       |
+| `disabled`     | Disable this radio               | `false` |
+| `discoverable` | Keep disabled radio in tab order | `true`  |
+| `checked`      | Whether radio is selected        | `false` |
 
 #### Properties
 
 ```js
 const group = document.querySelector('a11y-radio-group');
-group.value = 'blue';         // Set selected value
-group.disabled = true;        // Disable all radios
+group.value = 'blue'; // Set selected value
+group.disabled = true; // Disable all radios
 group.orientation = 'horizontal'; // Change layout
 ```
 
@@ -408,7 +363,7 @@ group.orientation = 'horizontal'; // Change layout
 
 ```js
 const group = document.querySelector('a11y-radio-group');
-group.selectRadio('blue');    // Select a radio by value
+group.selectRadio('blue'); // Select a radio by value
 ```
 
 #### Events
@@ -425,12 +380,12 @@ group.addEventListener('a11y-radiogroup-change', (e) => {
 
 #### Keyboard Navigation
 
-| Key | Action |
-| --- | --- |
-| `ArrowDown` / `ArrowRight` | Move to next radio and select |
-| `ArrowUp` / `ArrowLeft` | Move to previous radio and select |
-| `Home` / `End` | Jump to first / last radio |
-| `Tab` | Move to selected radio, then out of group |
+| Key                        | Action                                    |
+| -------------------------- | ----------------------------------------- |
+| `ArrowDown` / `ArrowRight` | Move to next radio and select             |
+| `ArrowUp` / `ArrowLeft`    | Move to previous radio and select         |
+| `Home` / `End`             | Jump to first / last radio                |
+| `Tab`                      | Move to selected radio, then out of group |
 
 #### CSS Custom Properties
 
@@ -486,23 +441,23 @@ a11y-radio {
 
 #### Listbox Attributes
 
-| Attribute          | Description                       | Default      |
-| ------------------ | --------------------------------- | ------------ |
-| `value`            | Selected value(s) (comma-separated for multi) | — |
-| `multiple`         | Enable multi-select mode          | `false`      |
-| `disabled`         | Disable all options               | `false`      |
-| `discoverable`     | Keep disabled listbox in tab order | `true`      |
-| `orientation`      | `horizontal` or `vertical`        | `vertical`   |
-| `aria-label`       | Accessible label                  | —            |
-| `aria-labelledby`  | ID of labelling element           | —            |
+| Attribute         | Description                                   | Default    |
+| ----------------- | --------------------------------------------- | ---------- |
+| `value`           | Selected value(s) (comma-separated for multi) | —          |
+| `multiple`        | Enable multi-select mode                      | `false`    |
+| `disabled`        | Disable all options                           | `false`    |
+| `discoverable`    | Keep disabled listbox in tab order            | `true`     |
+| `orientation`     | `horizontal` or `vertical`                    | `vertical` |
+| `aria-label`      | Accessible label                              | —          |
+| `aria-labelledby` | ID of labelling element                       | —          |
 
 #### Option Attributes
 
-| Attribute      | Description                     | Default |
-| -------------- | ------------------------------- | ------- |
-| `value`        | Value for this option           | —       |
-| `disabled`     | Disable this option             | `false` |
-| `discoverable` | Keep disabled option in tab order | `true` |
+| Attribute      | Description                       | Default |
+| -------------- | --------------------------------- | ------- |
+| `value`        | Value for this option             | —       |
+| `disabled`     | Disable this option               | `false` |
+| `discoverable` | Keep disabled option in tab order | `true`  |
 
 #### Optgroup Attributes
 
@@ -515,10 +470,10 @@ a11y-radio {
 
 ```js
 const listbox = document.querySelector('a11y-listbox');
-listbox.value = 'apple';        // Set selected value (single)
+listbox.value = 'apple'; // Set selected value (single)
 listbox.value = 'cheese,onions'; // Set selected values (multi, comma-separated)
-listbox.multiple = true;         // Toggle multi-select mode
-listbox.disabled = true;         // Disable all options
+listbox.multiple = true; // Toggle multi-select mode
+listbox.disabled = true; // Disable all options
 ```
 
 #### Events
@@ -536,15 +491,15 @@ listbox.addEventListener('a11y-listbox-change', (e) => {
 
 #### Keyboard Navigation
 
-| Key | Single Select | Multi Select |
-| --- | --- | --- |
-| `ArrowDown` / `ArrowUp` | Move focus and select | Move focus only |
-| `Home` / `End` | First/last option and select | Move focus only |
-| `Space` | — | Toggle focused option |
-| `Shift+ArrowDown/Up` | — | Move focus and toggle selection |
-| `Ctrl+Shift+Home/End` | — | Select range to first/last |
-| `Ctrl+A` / `Cmd+A` | — | Toggle select all |
-| Type characters | Jump to matching option and select | Jump to matching option |
+| Key                     | Single Select                      | Multi Select                    |
+| ----------------------- | ---------------------------------- | ------------------------------- |
+| `ArrowDown` / `ArrowUp` | Move focus and select              | Move focus only                 |
+| `Home` / `End`          | First/last option and select       | Move focus only                 |
+| `Space`                 | —                                  | Toggle focused option           |
+| `Shift+ArrowDown/Up`    | —                                  | Move focus and toggle selection |
+| `Ctrl+Shift+Home/End`   | —                                  | Select range to first/last      |
+| `Ctrl+A` / `Cmd+A`      | —                                  | Toggle select all               |
+| Type characters         | Jump to matching option and select | Jump to matching option         |
 
 #### CSS Custom Properties
 
@@ -599,38 +554,38 @@ a11y-option {
 
 #### Attributes
 
-| Attribute      | Description                     | Default  |
-| -------------- | ------------------------------- | -------- |
-| `label`        | Visible label text              | —        |
-| `hint`         | Hint/description text           | —        |
-| `error`        | Error message text              | —        |
-| `type`         | Input type                      | `'text'` |
-| `placeholder`  | Placeholder text                | —        |
-| `value`        | Current value                   | —        |
-| `disabled`     | Disable the input               | `false`  |
-| `readonly`     | Read-only input                 | `false`  |
-| `required`     | Required field                  | `false`  |
-| `name`         | Name for form submission        | —        |
-| `aria-label`   | Accessible label                | —        |
-| `aria-labelledby` | ID of labelling element      | —        |
+| Attribute         | Description              | Default  |
+| ----------------- | ------------------------ | -------- |
+| `label`           | Visible label text       | —        |
+| `hint`            | Hint/description text    | —        |
+| `error`           | Error message text       | —        |
+| `type`            | Input type               | `'text'` |
+| `placeholder`     | Placeholder text         | —        |
+| `value`           | Current value            | —        |
+| `disabled`        | Disable the input        | `false`  |
+| `readonly`        | Read-only input          | `false`  |
+| `required`        | Required field           | `false`  |
+| `name`            | Name for form submission | —        |
+| `aria-label`      | Accessible label         | —        |
+| `aria-labelledby` | ID of labelling element  | —        |
 
 #### Properties
 
 ```js
 const input = document.querySelector('a11y-input');
-input.value = 'Hello';      // Set value
-input.error = 'Required';   // Set error (shows role="alert")
-input.error = '';            // Clear error
-input.disabled = true;       // Disable
+input.value = 'Hello'; // Set value
+input.error = 'Required'; // Set error (shows role="alert")
+input.error = ''; // Clear error
+input.disabled = true; // Disable
 ```
 
 #### Methods
 
 ```js
 const input = document.querySelector('a11y-input');
-input.focus();   // Focus the input
-input.blur();    // Blur the input
-input.select();  // Select all text
+input.focus(); // Focus the input
+input.blur(); // Blur the input
+input.select(); // Select all text
 ```
 
 #### Events
@@ -660,54 +615,60 @@ input.addEventListener('a11y-input-blur', () => {});
 ></a11y-textarea>
 
 <!-- With error -->
-<a11y-textarea
-  label="Bio"
-  error="Bio is required"
-  rows="5"
-></a11y-textarea>
+<a11y-textarea label="Bio" error="Bio is required" rows="5"></a11y-textarea>
 
 <!-- Read-only -->
-<a11y-textarea label="Terms" value="Read only content..." readonly rows="3"></a11y-textarea>
+<a11y-textarea
+  label="Terms"
+  value="Read only content..."
+  readonly
+  rows="3"
+></a11y-textarea>
 
 <!-- Disabled -->
-<a11y-textarea label="Notes" value="Disabled content" disabled rows="2"></a11y-textarea>
+<a11y-textarea
+  label="Notes"
+  value="Disabled content"
+  disabled
+  rows="2"
+></a11y-textarea>
 ```
 
 #### Attributes
 
-| Attribute      | Description                     | Default      |
-| -------------- | ------------------------------- | ------------ |
-| `label`        | Visible label text              | —            |
-| `hint`         | Hint/description text           | —            |
-| `error`        | Error message text              | —            |
-| `rows`         | Number of visible rows          | `3`          |
-| `resize`       | Resize behavior                 | `'vertical'` |
-| `placeholder`  | Placeholder text                | —            |
-| `value`        | Current value                   | —            |
-| `disabled`     | Disable the textarea            | `false`      |
-| `readonly`     | Read-only textarea              | `false`      |
-| `required`     | Required field                  | `false`      |
-| `name`         | Name for form submission        | —            |
-| `aria-label`   | Accessible label                | —            |
-| `aria-labelledby` | ID of labelling element      | —            |
+| Attribute         | Description              | Default      |
+| ----------------- | ------------------------ | ------------ |
+| `label`           | Visible label text       | —            |
+| `hint`            | Hint/description text    | —            |
+| `error`           | Error message text       | —            |
+| `rows`            | Number of visible rows   | `3`          |
+| `resize`          | Resize behavior          | `'vertical'` |
+| `placeholder`     | Placeholder text         | —            |
+| `value`           | Current value            | —            |
+| `disabled`        | Disable the textarea     | `false`      |
+| `readonly`        | Read-only textarea       | `false`      |
+| `required`        | Required field           | `false`      |
+| `name`            | Name for form submission | —            |
+| `aria-label`      | Accessible label         | —            |
+| `aria-labelledby` | ID of labelling element  | —            |
 
 #### Properties
 
 ```js
 const textarea = document.querySelector('a11y-textarea');
-textarea.value = 'Hello';      // Set value
-textarea.error = 'Required';   // Set error (shows role="alert")
-textarea.error = '';            // Clear error
-textarea.disabled = true;       // Disable
+textarea.value = 'Hello'; // Set value
+textarea.error = 'Required'; // Set error (shows role="alert")
+textarea.error = ''; // Clear error
+textarea.disabled = true; // Disable
 ```
 
 #### Methods
 
 ```js
 const textarea = document.querySelector('a11y-textarea');
-textarea.focus();   // Focus the textarea
-textarea.blur();    // Blur the textarea
-textarea.select();  // Select all text
+textarea.focus(); // Focus the textarea
+textarea.blur(); // Blur the textarea
+textarea.select(); // Select all text
 ```
 
 #### Events
@@ -746,33 +707,33 @@ textarea.addEventListener('a11y-textarea-blur', () => {});
 
 #### Attributes
 
-| Attribute      | Description                                  | Default       |
-| -------------- | -------------------------------------------- | ------------- |
+| Attribute      | Description                                                 | Default       |
+| -------------- | ----------------------------------------------------------- | ------------- |
 | `variant`      | Visual variant (primary, secondary, danger, outline, ghost) | `'secondary'` |
-| `size`         | Size (sm, md, lg)                            | `'md'`        |
-| `type`         | Button type (button, submit, reset)          | `'button'`    |
-| `disabled`     | Disable the button                           | `false`       |
-| `discoverable` | Keep disabled button in tab order            | `false`       |
-| `loading`      | Loading state (shows spinner, aria-busy)     | `false`       |
-| `aria-label`   | Accessible label                             | —             |
+| `size`         | Size (sm, md, lg)                                           | `'md'`        |
+| `type`         | Button type (button, submit, reset)                         | `'button'`    |
+| `disabled`     | Disable the button                                          | `false`       |
+| `discoverable` | Keep disabled button in tab order                           | `false`       |
+| `loading`      | Loading state (shows spinner, aria-busy)                    | `false`       |
+| `aria-label`   | Accessible label                                            | —             |
 
 #### Properties
 
 ```js
 const btn = document.querySelector('a11y-button');
-btn.disabled = true;      // Disable
-btn.loading = true;       // Set loading
-btn.variant = 'danger';   // Change variant
-btn.size = 'lg';          // Change size
+btn.disabled = true; // Disable
+btn.loading = true; // Set loading
+btn.variant = 'danger'; // Change variant
+btn.size = 'lg'; // Change size
 ```
 
 #### Methods
 
 ```js
 const btn = document.querySelector('a11y-button');
-btn.focus();   // Focus the button
-btn.blur();    // Blur the button
-btn.click();   // Programmatic click
+btn.focus(); // Focus the button
+btn.blur(); // Blur the button
+btn.click(); // Programmatic click
 ```
 
 #### Events
@@ -861,21 +822,6 @@ a11y-switch {
   --compa11y-switch-width: 2.75rem;
   --compa11y-switch-height: 1.5rem;
   --compa11y-switch-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-/* Checkbox */
-a11y-checkbox {
-  --compa11y-checkbox-size: 1.25rem;
-  --compa11y-checkbox-border: 2px solid #666;
-  --compa11y-checkbox-radius: 4px;
-  --compa11y-checkbox-bg: white;
-  --compa11y-checkbox-checked-bg: #0066cc;
-  --compa11y-checkbox-checked-border: #0066cc;
-  --compa11y-checkbox-check-color: white;
-  --compa11y-checkbox-label-color: inherit;
-  --compa11y-checkbox-label-size: 1rem;
-  --compa11y-checkbox-disabled-color: #999;
-  --compa11y-checkbox-hover-border: #0066cc;
 }
 
 /* Input */
