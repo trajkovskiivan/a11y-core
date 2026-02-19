@@ -12,11 +12,10 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'compa11y',
-      formats: ['es', 'iife', 'umd'],
+      formats: ['es', 'iife'],
       fileName: (format) => {
         if (format === 'es') return 'compa11y.js';
-        if (format === 'iife') return 'compa11y.iife.js';
-        return 'compa11y.umd.cjs';
+        return 'compa11y.iife.js';
       },
     },
     rollupOptions: {
@@ -27,7 +26,7 @@ export default defineConfig({
         },
       },
     },
-    sourcemap: true,
+    sourcemap: false,
     minify: 'esbuild',
   },
 });
