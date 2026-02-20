@@ -1,6 +1,6 @@
 {
   "name": "compa11y",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": false,
   "description": "Accessible components that just work. React + Web Components.",
   "author": "Ivan Trajkovski",

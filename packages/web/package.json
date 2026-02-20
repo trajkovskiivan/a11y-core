@@ -1,6 +1,6 @@
 {
   "name": "@compa11y/web",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Accessible Web Components for any HTML page - CDN ready",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "homepage": "https://github.com/trajkovskiivan/compa11y#readme",
+  "homepage": "https://compa11y.org",
   "bugs": {
     "url": "https://github.com/trajkovskiivan/compa11y/issues"
 },

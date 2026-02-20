@@ -1,6 +1,6 @@
 {
   "name": "@compa11y/compa11y",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "The complete accessibility toolkit. React primitives and Web Components.",
   "author": "Ivan Trajkovski",
   "license": "MIT",
@@ -10,7 +10,7 @@
   "files": [
     "README.md"
   ],
-  "homepage": "https://github.com/trajkovskiivan/compa11y#readme",
+  "homepage": "https://compa11y.org",
   "bugs": {
     "url": "https://github.com/trajkovskiivan/compa11y/issues"
   },
