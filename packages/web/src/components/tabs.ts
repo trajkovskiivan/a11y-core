@@ -18,6 +18,10 @@ export class A11yTabs extends Compa11yElement {
   private _tabs: HTMLElement[] = [];
   private _panels: HTMLElement[] = [];
   private _selectedIndex = 0;
+  private _focusedIndex = 0;
+  private _tabSlotEl: Element | null = null;
+  private _panelSlotEl: Element | null = null;
+  private _defaultSlotEl: Element | null = null;
 
   static get observedAttributes() {
     return ['orientation', 'activation-mode', 'selected-index'];
@@ -72,13 +76,21 @@ export class A11yTabs extends Compa11yElement {
     this.addEventListener('keydown', this.handleKeyDown);
 
     // Watch for slot changes
-    const tabSlot = this.shadowRoot?.querySelector('slot[name="tab"]');
-    const panelSlot = this.shadowRoot?.querySelector('slot[name="panel"]');
-    const defaultSlot = this.shadowRoot?.querySelector('slot:not([name])');
+    this._tabSlotEl = this.shadowRoot?.querySelector('slot[name="tab"]') ?? null;
+    this._panelSlotEl = this.shadowRoot?.querySelector('slot[name="panel"]') ?? null;
+    this._defaultSlotEl = this.shadowRoot?.querySelector('slot:not([name])') ?? null;
 
-    tabSlot?.addEventListener('slotchange', this.updateTabsAndPanels);
-    panelSlot?.addEventListener('slotchange', this.updateTabsAndPanels);
-    defaultSlot?.addEventListener('slotchange', this.updateTabsAndPanels);
+    this._tabSlotEl?.addEventListener('slotchange', this.updateTabsAndPanels);
+    this._panelSlotEl?.addEventListener('slotchange', this.updateTabsAndPanels);
+    this._defaultSlotEl?.addEventListener('slotchange', this.updateTabsAndPanels);
+  }
+
+  protected cleanupEventListeners(): void {
+    this.removeEventListener('click', this.handleClick);
+    this.removeEventListener('keydown', this.handleKeyDown);
+    this._tabSlotEl?.removeEventListener('slotchange', this.updateTabsAndPanels);
+    this._panelSlotEl?.removeEventListener('slotchange', this.updateTabsAndPanels);
+    this._defaultSlotEl?.removeEventListener('slotchange', this.updateTabsAndPanels);
   }
 
   protected onAttributeChange(
@@ -141,6 +153,7 @@ export class A11yTabs extends Compa11yElement {
     if (target.getAttribute('role') === 'tab') {
       const index = this._tabs.indexOf(target);
       if (index !== -1 && target.getAttribute('aria-disabled') !== 'true') {
+        this._focusedIndex = index;
         this.selectTab(index);
       }
     }
@@ -154,17 +167,17 @@ export class A11yTabs extends Compa11yElement {
     const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
     const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
 
-    let newIndex = this._selectedIndex;
+    let newIndex = this._focusedIndex;
 
     switch (event.key) {
       case nextKey:
         event.preventDefault();
-        newIndex = (this._selectedIndex + 1) % this._tabs.length;
+        newIndex = (this._focusedIndex + 1) % this._tabs.length;
         break;
       case prevKey:
         event.preventDefault();
         newIndex =
-          (this._selectedIndex - 1 + this._tabs.length) % this._tabs.length;
+          (this._focusedIndex - 1 + this._tabs.length) % this._tabs.length;
         break;
       case 'Home':
         event.preventDefault();
@@ -174,14 +187,21 @@ export class A11yTabs extends Compa11yElement {
         event.preventDefault();
         newIndex = this._tabs.length - 1;
         break;
+      case 'Enter':
+      case ' ':
+        // In manual mode, Enter/Space activates the focused tab
+        event.preventDefault();
+        this.selectTab(this._focusedIndex);
+        return;
       default:
         return;
     }
 
-    // Focus the new tab
+    // Update focused index and move focus
+    this._focusedIndex = newIndex;
     this._tabs[newIndex]?.focus();
 
-    // Select if automatic activation
+    // In automatic mode, selection follows focus
     if (this.activationMode === 'automatic') {
       this.selectTab(newIndex);
     }
@@ -190,6 +210,7 @@ export class A11yTabs extends Compa11yElement {
   private selectTab(index: number): void {
     const oldIndex = this._selectedIndex;
     this._selectedIndex = index;
+    this._focusedIndex = index;
     this.updateSelection();
 
     if (oldIndex !== index) {

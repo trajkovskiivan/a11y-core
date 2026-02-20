@@ -27,3 +27,11 @@ export {
   type RovingTabindexOptions,
   type RovingTabindex,
 } from './focus-scope';
+
+export {
+  findFocusNeighbor,
+  createFocusReturn,
+  type FocusNeighborOptions,
+  type FocusReturnOptions,
+  type FocusReturn,
+} from './focus-neighbor';

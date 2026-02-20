@@ -303,7 +303,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
             openAndHighlight();
           }
         },
-        ' ': () => {
+        Space: () => {
           if (isOpen && highlightedIndex >= 0) {
             const option = options[highlightedIndex];
             if (option && !option.disabled) {

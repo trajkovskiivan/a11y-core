@@ -38,3 +38,5 @@ export {
   type UseRovingTabindexOptions,
   type RovingTabindexItem,
 } from './use-roving-tabindex';
+
+export { useFocusNeighbor, useFocusReturn } from './use-focus-neighbor';

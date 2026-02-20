@@ -8,7 +8,6 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { announce, announceAssertive } from '@compa11y/core';
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 
 export interface Toast {
@@ -71,16 +70,8 @@ export function ToastProvider({
         return updated.slice(-maxToasts);
       });
 
-      // Announce to screen readers
-      const message = toast.title
-        ? `${toast.title}. ${toast.description || ''}`
-        : toast.description || '';
-
-      if (toast.type === 'error') {
-        announceAssertive(message);
-      } else {
-        announce(message, { politeness: 'polite' });
-      }
+      // Screen reader announcement is handled by the viewport's aria-live region
+      // and role="alert" on individual toast items — no programmatic announce needed.
 
       return id;
     },
@@ -188,7 +179,6 @@ interface ToastItemProps {
 
 function ToastItem({ toast, onClose }: ToastItemProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const remainingRef = useRef(toast.duration || 5000);
   const startTimeRef = useRef(Date.now());
@@ -220,12 +210,10 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
   }, [startTimer]);
 
   const handleMouseEnter = () => {
-    setIsPaused(true);
     pauseTimer();
   };
 
   const handleMouseLeave = () => {
-    setIsPaused(false);
     startTimer();
   };
 
@@ -235,9 +223,12 @@ function ToastItem({ toast, onClose }: ToastItemProps) {
     }
   };
 
+  // Use role="alert" (assertive) for error/warning, role="status" (polite) for info/success
+  const isUrgent = toast.type === 'error' || toast.type === 'warning';
+
   return (
     <div
-      role="alert"
+      role={isUrgent ? 'alert' : 'status'}
       aria-atomic="true"
       tabIndex={0}
       onMouseEnter={handleMouseEnter}

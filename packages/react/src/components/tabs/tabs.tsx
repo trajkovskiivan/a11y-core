@@ -106,6 +106,7 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(
       setSelectedValue,
       getTabValues,
       activationMode,
+      baseId,
     } = useTabsContext();
 
     const navigateToTab = useCallback(
@@ -133,17 +134,18 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(
 
         const newValue = values[newIndex];
         if (newValue) {
-          const tabElement = document.querySelector(
-            `[data-compa11y-tab][data-value="${newValue}"]`
-          ) as HTMLElement;
-          tabElement?.focus();
+          // Use the unique tab ID (scoped to this Tabs instance via baseId)
+          const tabElement = document.getElementById(
+            `${baseId}-tab-${newValue}`
+          );
+          (tabElement as HTMLElement)?.focus();
 
           if (activationMode === 'automatic') {
             setSelectedValue(newValue);
           }
         }
       },
-      [getTabValues, selectedValue, setSelectedValue, activationMode]
+      [getTabValues, selectedValue, setSelectedValue, activationMode, baseId]
     );
 
     const keyboardProps = useKeyboard(

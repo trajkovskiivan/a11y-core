@@ -154,6 +154,8 @@ interface InputContextValue {
   value: string;
   setValue: (value: string) => void;
   hasError: boolean;
+  hasHint: boolean;
+  setHasHint: (hasHint: boolean) => void;
   disabled: boolean;
   readOnly: boolean;
   required: boolean;
@@ -287,11 +289,11 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       [ctx.focusProps, providedOnBlur]
     );
 
-    // Build aria-describedby
+    // Build aria-describedby — only include IDs for elements that exist
     const describedByParts: string[] = [];
-    // Always include hint ID — the hint element may or may not exist
-    // but we include it so the relationship is correct if it does
-    describedByParts.push(ctx.hintId);
+    if (ctx.hasHint) {
+      describedByParts.push(ctx.hintId);
+    }
     if (ctx.hasError) {
       describedByParts.push(ctx.errorId);
     }
@@ -363,6 +365,13 @@ InputField.displayName = 'InputField';
 export const InputHint = forwardRef<HTMLDivElement, InputHintProps>(
   function InputHint({ children, className }, ref) {
     const ctx = useInputContext();
+
+    // Register hint presence so InputField knows to include hintId in aria-describedby
+    useEffect(() => {
+      ctx.setHasHint(true);
+      return () => ctx.setHasHint(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <div
@@ -474,6 +483,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : uncontrolledValue;
 
+    // Track whether a hint sub-component is mounted (compound mode)
+    const [compoundHasHint, setCompoundHasHint] = useState(false);
+
     const setValue = useCallback(
       (newValue: string) => {
         if (!isControlled) {
@@ -487,67 +499,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // Focus visible
     const { isFocusVisible, focusProps } = useFocusVisible();
 
-    // Dev warnings
-    useEffect(() => {
-      if (process.env.NODE_ENV !== 'production') {
-        const isCompound = Children.count(children) > 0;
-        if (!isCompound && !label && !ariaLabel && !ariaLabelledBy) {
-          console.warn(
-            '[Compa11y Input]: Input has no accessible label. Screen readers need this to identify the input. ' +
-              'Use label prop, aria-label, or aria-labelledby.'
-          );
-        }
-      }
-    }, [children, label, ariaLabel, ariaLabelledBy]);
-
-    const hasError = Boolean(error);
-    const isCompound = Children.count(children) > 0;
-
-    const contextValue: InputContextValue = {
-      fieldId,
-      labelId,
-      hintId,
-      errorId,
-      value: currentValue,
-      setValue,
-      hasError,
-      disabled,
-      readOnly,
-      required,
-      isFocusVisible,
-      focusProps,
-      unstyled,
-    };
-
-    // Data attributes for the wrapper
-    const dataAttrs = {
-      'data-compa11y-input': '',
-      'data-error': hasError ? 'true' : 'false',
-      'data-disabled': disabled ? 'true' : 'false',
-      'data-required': required ? 'true' : 'false',
-      'data-readonly': readOnly ? 'true' : 'false',
-    };
-
-    const wrapperStyle = unstyled
-      ? {}
-      : {
-          display: 'flex',
-          flexDirection: 'column' as const,
-          gap: '0.25rem',
-        };
-
-    // ----- Compound mode -----
-    if (isCompound) {
-      return (
-        <InputContext.Provider value={contextValue}>
-          <div {...dataAttrs} className={className} style={wrapperStyle}>
-            {children}
-          </div>
-        </InputContext.Provider>
-      );
-    }
-
-    // ----- Props mode -----
+    // Props-mode refs and handlers (must be called unconditionally for Rules of Hooks)
     const inputRef = useRef<HTMLInputElement>(null);
 
     const mergedRef = useCallback(
@@ -587,6 +539,69 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       [focusProps, providedOnBlur]
     );
 
+    // Dev warnings
+    useEffect(() => {
+      if (process.env.NODE_ENV !== 'production') {
+        const isCompound = Children.count(children) > 0;
+        if (!isCompound && !label && !ariaLabel && !ariaLabelledBy) {
+          console.warn(
+            '[Compa11y Input]: Input has no accessible label. Screen readers need this to identify the input. ' +
+              'Use label prop, aria-label, or aria-labelledby.'
+          );
+        }
+      }
+    }, [children, label, ariaLabel, ariaLabelledBy]);
+
+    const hasError = Boolean(error);
+    const isCompound = Children.count(children) > 0;
+
+    const contextValue: InputContextValue = {
+      fieldId,
+      labelId,
+      hintId,
+      errorId,
+      value: currentValue,
+      setValue,
+      hasError,
+      hasHint: isCompound ? compoundHasHint : !!hint,
+      setHasHint: setCompoundHasHint,
+      disabled,
+      readOnly,
+      required,
+      isFocusVisible,
+      focusProps,
+      unstyled,
+    };
+
+    // Data attributes for the wrapper
+    const dataAttrs = {
+      'data-compa11y-input': '',
+      'data-error': hasError ? 'true' : 'false',
+      'data-disabled': disabled ? 'true' : 'false',
+      'data-required': required ? 'true' : 'false',
+      'data-readonly': readOnly ? 'true' : 'false',
+    };
+
+    const wrapperStyle = unstyled
+      ? {}
+      : {
+          display: 'flex',
+          flexDirection: 'column' as const,
+          gap: '0.25rem',
+        };
+
+    // ----- Compound mode -----
+    if (isCompound) {
+      return (
+        <InputContext.Provider value={contextValue}>
+          <div {...dataAttrs} className={className} style={wrapperStyle}>
+            {children}
+          </div>
+        </InputContext.Provider>
+      );
+    }
+
+    // ----- Props mode -----
     // Build aria-describedby
     const describedByParts: string[] = [];
     if (hint) describedByParts.push(hintId);

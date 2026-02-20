@@ -3,6 +3,7 @@ import { createComponentWarnings } from '@compa11y/core';
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
 import { useAnnouncer } from '../../hooks/use-announcer';
+import { useFocusVisible } from '../../hooks/use-focus-visible';
 
 const warnings = createComponentWarnings('Switch');
 
@@ -70,6 +71,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const id = useId('switch');
     const labelId = `${id}-label`;
     const { announce } = useAnnouncer();
+    const { isFocusVisible, focusProps } = useFocusVisible();
 
     // Support both controlled and uncontrolled modes
     const [uncontrolledChecked, setUncontrolledChecked] =
@@ -124,7 +126,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     // Keyboard handling: Space and Enter should toggle
     const keyboardProps = useKeyboard(
       {
-        ' ': () => {
+        Space: () => {
           // Space toggles the switch
           toggleSwitch();
         },
@@ -234,27 +236,28 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           onClick={handleClick}
           onKeyDown={handleKeyDown}
           className={className}
-          style={{ ...trackStructuralStyles, ...trackVisualStyles }}
+          style={{
+            ...trackStructuralStyles,
+            ...trackVisualStyles,
+            ...(!unstyled && isFocusVisible && !disabled
+              ? {
+                  outline: '2px solid #0066cc',
+                  outlineOffset: '2px',
+                }
+              : { outline: 'none' }),
+          }}
           tabIndex={disabled ? -1 : 0}
           data-compa11y-switch
           data-checked={checked}
           data-disabled={disabled || undefined}
           data-size={size}
           {...props}
-          // CSS-in-JS focus-visible styles
           onFocus={(e) => {
-            // Add focus-visible indicator
-            if (!unstyled) {
-              e.currentTarget.style.outline = '2px solid #0066cc';
-              e.currentTarget.style.outlineOffset = '2px';
-            }
+            focusProps.onFocus();
             props.onFocus?.(e);
           }}
           onBlur={(e) => {
-            // Remove focus indicator on blur
-            if (!unstyled) {
-              e.currentTarget.style.outline = 'none';
-            }
+            focusProps.onBlur();
             props.onBlur?.(e);
           }}
         >

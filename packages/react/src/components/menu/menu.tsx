@@ -212,11 +212,11 @@ export const ActionMenuContent = forwardRef<
 
   const clickHighlightedItem = () => {
     if (highlightedIndex >= 0 && menuRef.current) {
-      const items = menuRef.current.querySelectorAll('[role="menuitem"]');
+      const items = menuRef.current.querySelectorAll(
+        '[role="menuitem"]:not([aria-disabled="true"])'
+      );
       const item = items[highlightedIndex] as HTMLElement;
-      if (item && item.getAttribute('aria-disabled') !== 'true') {
-        item.click();
-      }
+      item?.click();
     }
   };
 
@@ -458,7 +458,7 @@ export const ActionMenuLabel = forwardRef<HTMLDivElement, ActionMenuLabelProps>(
     return (
       <div
         ref={ref}
-        role="presentation"
+        role="none"
         data-compa11y-action-menu-label
         {...props}
       >

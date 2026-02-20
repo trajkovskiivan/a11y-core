@@ -29,6 +29,8 @@ export {
   useFocusWithin,
   useRovingTabindex,
   useRovingTabindexMap,
+  useFocusNeighbor,
+  useFocusReturn,
   type UseFocusTrapOptions,
   type UseRovingTabindexOptions,
   type RovingTabindexItem,

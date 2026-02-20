@@ -19,6 +19,9 @@ export class A11yMenu extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _menuItems: HTMLElement[] = [];
+  private _triggerEl: Element | null = null;
+  private _triggerSlotEl: Element | null = null;
+  private _defaultSlotEl: Element | null = null;
 
   static get observedAttributes() {
     return ['open'];
@@ -74,17 +77,17 @@ export class A11yMenu extends Compa11yElement {
 
   protected setupEventListeners(): void {
     // Trigger click - attach to light DOM element
-    const trigger = this.querySelector('[slot="trigger"]');
-    trigger?.addEventListener('click', this.handleTriggerClick);
-    trigger?.addEventListener(
+    this._triggerEl = this.querySelector('[slot="trigger"]');
+    this._triggerEl?.addEventListener('click', this.handleTriggerClick);
+    this._triggerEl?.addEventListener(
       'keydown',
       this.handleTriggerKeyDown as EventListener
     );
 
     // Safari fix: Also listen on the trigger slot for clicks
     // Safari has issues with click events on slotted content not bubbling properly
-    const triggerSlot = this.shadowRoot?.querySelector('slot[name="trigger"]');
-    triggerSlot?.addEventListener('click', this.handleTriggerClick);
+    this._triggerSlotEl = this.shadowRoot?.querySelector('slot[name="trigger"]') ?? null;
+    this._triggerSlotEl?.addEventListener('click', this.handleTriggerClick);
 
     // Menu items
     this.addEventListener('click', this.handleItemClick);
@@ -95,15 +98,25 @@ export class A11yMenu extends Compa11yElement {
     document.addEventListener('mousedown', this.handleOutsideClick);
 
     // Slot change
-    const slot = this.shadowRoot?.querySelector('slot:not([name])');
-    slot?.addEventListener('slotchange', this.updateMenuItems);
+    this._defaultSlotEl = this.shadowRoot?.querySelector('slot:not([name])') ?? null;
+    this._defaultSlotEl?.addEventListener('slotchange', this.updateMenuItems);
 
     // Initialize menu items immediately (Safari may not fire slotchange)
     this.updateMenuItems();
   }
 
   protected cleanupEventListeners(): void {
+    this._triggerEl?.removeEventListener('click', this.handleTriggerClick);
+    this._triggerEl?.removeEventListener(
+      'keydown',
+      this.handleTriggerKeyDown as EventListener
+    );
+    this._triggerSlotEl?.removeEventListener('click', this.handleTriggerClick);
+    this.removeEventListener('click', this.handleItemClick);
+    this.removeEventListener('keydown', this.handleMenuKeyDown);
+    this.removeEventListener('mouseover', this.handleMouseOver);
     document.removeEventListener('mousedown', this.handleOutsideClick);
+    this._defaultSlotEl?.removeEventListener('slotchange', this.updateMenuItems);
   }
 
   protected onAttributeChange(

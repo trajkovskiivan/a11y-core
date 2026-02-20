@@ -142,6 +142,8 @@ interface TextareaContextValue {
   value: string;
   setValue: (value: string) => void;
   hasError: boolean;
+  hasHint: boolean;
+  setHasHint: (value: boolean) => void;
   disabled: boolean;
   readOnly: boolean;
   required: boolean;
@@ -284,10 +286,8 @@ export const TextareaField = forwardRef<
 
     // Build aria-describedby
     const describedByParts: string[] = [];
-    describedByParts.push(ctx.hintId);
-    if (ctx.hasError) {
-      describedByParts.push(ctx.errorId);
-    }
+    if (ctx.hasHint) describedByParts.push(ctx.hintId);
+    if (ctx.hasError) describedByParts.push(ctx.errorId);
 
     return (
       <textarea
@@ -357,6 +357,12 @@ TextareaField.displayName = 'TextareaField';
 export const TextareaHint = forwardRef<HTMLDivElement, TextareaHintProps>(
   function TextareaHint({ children, className }, ref) {
     const ctx = useTextareaContext();
+
+    useEffect(() => {
+      ctx.setHasHint(true);
+      return () => ctx.setHasHint(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <div
@@ -494,6 +500,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, [children, label, ariaLabel, ariaLabelledBy]);
 
     const hasError = Boolean(error);
+    const [compoundHasHint, setCompoundHasHint] = useState(false);
     const isCompound = Children.count(children) > 0;
 
     const contextValue: TextareaContextValue = {
@@ -504,6 +511,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       value: currentValue,
       setValue,
       hasError,
+      hasHint: isCompound ? compoundHasHint : !!hint,
+      setHasHint: setCompoundHasHint,
       disabled,
       readOnly,
       required,
@@ -531,18 +540,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           gap: '0.25rem',
         };
 
-    // ----- Compound mode -----
-    if (isCompound) {
-      return (
-        <TextareaContext.Provider value={contextValue}>
-          <div {...dataAttrs} className={className} style={wrapperStyle}>
-            {children}
-          </div>
-        </TextareaContext.Provider>
-      );
-    }
-
-    // ----- Props mode -----
+    // Hooks must be called unconditionally (Rules of Hooks)
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const mergedRef = useCallback(
@@ -583,6 +581,19 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       },
       [focusProps, providedOnBlur]
     );
+
+    // ----- Compound mode -----
+    if (isCompound) {
+      return (
+        <TextareaContext.Provider value={contextValue}>
+          <div {...dataAttrs} className={className} style={wrapperStyle}>
+            {children}
+          </div>
+        </TextareaContext.Provider>
+      );
+    }
+
+    // ----- Props mode -----
 
     // Build aria-describedby
     const describedByParts: string[] = [];

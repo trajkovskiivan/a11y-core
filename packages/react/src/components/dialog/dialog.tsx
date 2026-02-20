@@ -8,6 +8,26 @@ import { createComponentWarnings } from '@compa11y/core';
 
 const warnings = createComponentWarnings('Dialog');
 
+// Body scroll lock stacking — only restore overflow when all dialogs are closed
+let bodyLockCount = 0;
+let savedOverflow = '';
+
+function lockBodyScroll(): void {
+  if (bodyLockCount === 0) {
+    savedOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+  }
+  bodyLockCount++;
+}
+
+function unlockBodyScroll(): void {
+  bodyLockCount--;
+  if (bodyLockCount <= 0) {
+    bodyLockCount = 0;
+    document.body.style.overflow = savedOverflow;
+  }
+}
+
 export interface DialogProps {
   /** Whether the dialog is open */
   open: boolean;
@@ -58,13 +78,20 @@ export function Dialog({
   }, [onOpenChange]);
 
   // Warn if no accessible label
+  // Deferred to allow sub-components (DialogTitle) to register first
   useEffect(() => {
-    if (open && !hasTitle && !ariaLabel && !ariaLabelledBy) {
-      warnings.warning(
-        'Dialog has no accessible title. Add a DialogTitle or aria-label prop.',
-        'Use <Dialog.Title> or provide aria-label="..."'
-      );
-    }
+    if (!open) return;
+
+    const frameId = requestAnimationFrame(() => {
+      if (!hasTitle && !ariaLabel && !ariaLabelledBy) {
+        warnings.warning(
+          'Dialog has no accessible title. Add a DialogTitle or aria-label prop.',
+          'Use <Dialog.Title> or provide aria-label="..."'
+        );
+      }
+    });
+
+    return () => cancelAnimationFrame(frameId);
   }, [open, hasTitle, ariaLabel, ariaLabelledBy]);
 
   const contextValue = {
@@ -145,11 +172,8 @@ function DialogOverlay({
   }, [announce]);
 
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
+    lockBodyScroll();
+    return () => unlockBodyScroll();
   }, []);
 
   const handleOverlayClick = (event: React.MouseEvent) => {

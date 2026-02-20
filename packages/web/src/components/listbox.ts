@@ -122,13 +122,11 @@ export class A11yOptgroup extends Compa11yElement {
     }
   }
 
-  attributeChangedCallback(
+  protected onAttributeChange(
     name: string,
-    oldValue: string | null,
+    _oldValue: string | null,
     newValue: string | null
   ): void {
-    if (oldValue === newValue) return;
-
     switch (name) {
       case 'label':
         this._label = newValue || '';
@@ -269,13 +267,11 @@ export class A11yOption extends Compa11yElement {
     );
   };
 
-  attributeChangedCallback(
+  protected onAttributeChange(
     name: string,
-    oldValue: string | null,
+    _oldValue: string | null,
     newValue: string | null
   ): void {
-    if (oldValue === newValue) return;
-
     switch (name) {
       case 'value':
         this._value = newValue || '';
@@ -904,13 +900,11 @@ export class A11yListbox extends Compa11yElement {
 
   // ===== Attribute Changes =====
 
-  attributeChangedCallback(
+  protected onAttributeChange(
     name: string,
-    oldValue: string | null,
+    _oldValue: string | null,
     newValue: string | null
   ): void {
-    if (oldValue === newValue) return;
-
     switch (name) {
       case 'value':
         if (this._multiple) {

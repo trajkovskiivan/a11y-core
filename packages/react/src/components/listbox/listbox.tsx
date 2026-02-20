@@ -348,6 +348,37 @@ export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
       }
     }, [focusedValue, multiple, handleSelect]);
 
+    /** Navigate and toggle selection in one step (for Shift+Arrow) */
+    const shiftNavigate = useCallback(
+      (direction: 'next' | 'prev') => {
+        if (enabledValues.length === 0) return;
+
+        const currentIndex = focusedValue
+          ? enabledValues.indexOf(focusedValue)
+          : -1;
+
+        let nextIndex: number;
+        if (direction === 'next') {
+          nextIndex =
+            currentIndex < 0
+              ? 0
+              : Math.min(currentIndex + 1, enabledValues.length - 1);
+        } else {
+          nextIndex =
+            currentIndex < 0
+              ? enabledValues.length - 1
+              : Math.max(currentIndex - 1, 0);
+        }
+
+        const nextValue = enabledValues[nextIndex];
+        if (nextValue !== undefined) {
+          setFocusedValue(nextValue);
+          handleSelect(nextValue);
+        }
+      },
+      [enabledValues, focusedValue, handleSelect]
+    );
+
     const selectRangeToFirst = useCallback(() => {
       if (!multiple || !focusedValue) return;
       const currentIdx = enabledValues.indexOf(focusedValue);
@@ -437,17 +468,9 @@ export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
       };
 
       if (multiple) {
-        handlers[' '] = () => toggleFocusedOption();
-        handlers['Shift+ArrowDown'] = () => {
-          navigateOption('next');
-          // Toggle after navigate has set the new focused value
-          // We need to use a microtask since navigateOption sets state
-          setTimeout(() => toggleFocusedOption(), 0);
-        };
-        handlers['Shift+ArrowUp'] = () => {
-          navigateOption('prev');
-          setTimeout(() => toggleFocusedOption(), 0);
-        };
+        handlers['Space'] = () => toggleFocusedOption();
+        handlers['Shift+ArrowDown'] = () => shiftNavigate('next');
+        handlers['Shift+ArrowUp'] = () => shiftNavigate('prev');
         handlers['Ctrl+Shift+Home'] = () => selectRangeToFirst();
         handlers['Ctrl+Shift+End'] = () => selectRangeToLast();
         handlers['Ctrl+a'] = () => toggleSelectAll();
@@ -459,6 +482,7 @@ export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
       multiple,
       navigateOption,
       toggleFocusedOption,
+      shiftNavigate,
       selectRangeToFirst,
       selectRangeToLast,
       toggleSelectAll,

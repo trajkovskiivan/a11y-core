@@ -16,6 +16,26 @@ import { DIALOG_STYLES } from '../utils/styles';
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+// Body scroll lock stacking — only restore overflow when all dialogs are closed
+let bodyLockCount = 0;
+let savedOverflow = '';
+
+function lockBodyScroll(): void {
+  if (bodyLockCount === 0) {
+    savedOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+  }
+  bodyLockCount++;
+}
+
+function unlockBodyScroll(): void {
+  bodyLockCount--;
+  if (bodyLockCount <= 0) {
+    bodyLockCount = 0;
+    document.body.style.overflow = savedOverflow;
+  }
+}
+
 export class A11yDialog extends Compa11yElement {
   private _open = false;
   private _previouslyFocused: HTMLElement | null = null;
@@ -250,7 +270,7 @@ export class A11yDialog extends Compa11yElement {
     });
 
     // Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
 
     // Announce
     announce('Dialog opened', { politeness: 'polite' });
@@ -263,7 +283,7 @@ export class A11yDialog extends Compa11yElement {
     this.style.display = 'none';
 
     // Restore body scroll
-    document.body.style.overflow = '';
+    unlockBodyScroll();
 
     // Return focus
     this._previouslyFocused?.focus();

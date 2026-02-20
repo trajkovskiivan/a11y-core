@@ -23,6 +23,7 @@ import { A11yButton } from './components/button';
 import { A11yListbox, A11yOption, A11yOptgroup } from './components/listbox';
 import { A11yCheckbox, A11yCheckboxGroup } from './components/checkbox';
 import { A11yRadioGroup, A11yRadio } from './components/radio-group';
+import { A11yToast } from './components/toast';
 
 // Re-export components
 export {
@@ -42,6 +43,7 @@ export {
   A11yCheckboxGroup,
   A11yRadioGroup,
   A11yRadio,
+  A11yToast,
 };
 
 // Core utilities for vanilla JS usage
@@ -130,6 +132,7 @@ if (typeof window !== 'undefined') {
     A11yCheckboxGroup,
     A11yRadioGroup,
     A11yRadio,
+    A11yToast,
     // Announcer utilities
     initAnnouncer,
     announce,
