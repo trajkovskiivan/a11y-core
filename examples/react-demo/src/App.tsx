@@ -15,6 +15,9 @@ import {
   Button,
   Listbox,
   RadioGroup,
+  VisuallyHidden,
+  SkipLink,
+  Alert,
 } from '@compa11y/react';
 
 const countries = [
@@ -38,11 +41,41 @@ const fruits = [
   { value: 'honeydew', label: 'Honeydew' },
 ];
 
+function VisuallyHiddenDemo() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <p>Content hidden visually but accessible to screen readers. Inspect the DOM or use a screen reader to verify.</p>
+
+      <div>
+        <strong>Icon button with hidden label:</strong>{' '}
+        <Button aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          <VisuallyHidden>Close this dialog</VisuallyHidden>
+        </Button>
+      </div>
+
+      <div>
+        <strong>Focusable skip link (Tab to reveal):</strong>{' '}
+        <VisuallyHidden focusable>
+          <a href="#main-content" style={{ padding: '0.5rem 1rem', background: '#0066cc', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>Skip to main content</a>
+        </VisuallyHidden>
+      </div>
+
+      <div>
+        <strong>Hidden status text:</strong>{' '}
+        <span>3 items in cart</span>
+        <VisuallyHidden>, total price: $45.99</VisuallyHidden>
+      </div>
+    </div>
+  );
+}
+
 export function App() {
   return (
     <ToastProvider>
+      <SkipLink target="#main-content" />
       <div className="app">
-        <h1>compa11y React Demo</h1>
+        <h1 id="main-content" tabIndex={-1}>compa11y React Demo</h1>
         <h3>Powered by Ivan Trajkovski</h3>
         <p>
           All components below are fully accessible with keyboard navigation,
@@ -112,6 +145,25 @@ export function App() {
         <section>
           <h2>Listbox</h2>
           <ListboxDemo />
+        </section>
+
+        <section>
+          <h2>VisuallyHidden</h2>
+          <VisuallyHiddenDemo />
+        </section>
+
+        <section>
+          <h2>SkipLink</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <p>A skip link is placed at the very top of this page. Press <kbd>Tab</kbd> from the address bar to reveal it.</p>
+            <p><strong>How to test:</strong> Click in the browser address bar, then press <kbd>Tab</kbd>. The skip link will appear at the top-left corner.</p>
+            <p style={{ color: '#666', fontSize: '0.875rem' }}>The skip link at the top of this page uses: <code>{'<SkipLink target="#main-content" />'}</code></p>
+          </div>
+        </section>
+
+        <section>
+          <h2>Alert</h2>
+          <AlertDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -1291,6 +1343,74 @@ function ListboxDemo() {
           <li>Type characters to jump to matching options</li>
         </ul>
       </div>
+    </div>
+  );
+}
+
+function AlertDemo() {
+  const [showDismissible1, setShowDismissible1] = useState(true);
+  const [showDismissible2, setShowDismissible2] = useState(true);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <p>
+        Static feedback messages with appropriate ARIA roles. Error/warning use{' '}
+        <code>role="alert"</code> (assertive), info/success use{' '}
+        <code>role="status"</code> (polite).
+      </p>
+
+      <Alert type="info" title="Tip">
+        You can customize alert colors using CSS custom properties or the{' '}
+        <code>unstyled</code> prop.
+      </Alert>
+
+      <Alert type="success" title="Saved!">
+        Your changes have been saved successfully.
+      </Alert>
+
+      <Alert type="warning" title="Low storage">
+        You have less than 100MB of storage remaining.
+      </Alert>
+
+      <Alert type="error" title="Payment failed">
+        Your card was declined. Please try a different payment method.
+      </Alert>
+
+      {showDismissible1 && (
+        <Alert type="info" dismissible onDismiss={() => setShowDismissible1(false)}>
+          This is a dismissible info alert. Click the close button to remove it.
+        </Alert>
+      )}
+
+      {showDismissible2 && (
+        <Alert
+          type="success"
+          dismissible
+          title="Upload complete"
+          onDismiss={() => setShowDismissible2(false)}
+        >
+          Your file has been uploaded. This alert can be dismissed.
+        </Alert>
+      )}
+
+      {(!showDismissible1 || !showDismissible2) && (
+        <button
+          onClick={() => {
+            setShowDismissible1(true);
+            setShowDismissible2(true);
+          }}
+          style={{
+            alignSelf: 'flex-start',
+            padding: '0.5rem 1rem',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            background: 'white',
+            cursor: 'pointer',
+          }}
+        >
+          Reset dismissed alerts
+        </button>
+      )}
     </div>
   );
 }

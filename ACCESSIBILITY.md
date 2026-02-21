@@ -22,6 +22,9 @@
   - [ActionMenu](#actionmenu)
   - [Tabs](#tabs)
   - [Toast](#toast)
+  - [VisuallyHidden](#visuallyhidden)
+  - [SkipLink](#skiplink)
+  - [Alert](#alert)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -36,6 +39,9 @@
   - [`<a11y-menu>`](#a11y-menu)
   - [`<a11y-tabs>`](#a11y-tabs)
   - [`<a11y-toast>`](#a11y-toast)
+  - [`<a11y-visually-hidden>`](#a11y-visually-hidden)
+  - [`<a11y-skip-link>`](#a11y-skip-link)
+  - [`<a11y-alert>`](#a11y-alert)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -631,6 +637,115 @@ const id = addToast({
 
 ---
 
+### VisuallyHidden
+
+A utility component that hides content visually while keeping it accessible to screen readers.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Visually hidden styles** | Applies `position: absolute; width: 1px; height: 1px; clip: rect(0,0,0,0); overflow: hidden` |
+| **`focusable` mode** | When `focusable` is true, content becomes visible on focus (useful for skip-link-like behavior inside `VisuallyHidden`) |
+| **No ARIA needed** | The content is still in the DOM — screen readers read it naturally. No extra roles or attributes required |
+
+#### Usage
+
+```tsx
+import { VisuallyHidden } from '@compa11y/react';
+
+// Hidden label for an icon button
+<button>
+  <span aria-hidden="true">&times;</span>
+  <VisuallyHidden>Close dialog</VisuallyHidden>
+</button>
+
+// Hidden supplementary text
+<span>3 items in cart</span>
+<VisuallyHidden>, total price: $45.99</VisuallyHidden>
+
+// Focusable skip link wrapped in VisuallyHidden
+<VisuallyHidden focusable>
+  <a href="#main-content">Skip to main content</a>
+</VisuallyHidden>
+```
+
+---
+
+### SkipLink
+
+A navigation aid that lets keyboard users skip past repetitive content (e.g., navigation) and jump directly to main content.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Visually hidden until focus** | Uses visually-hidden styles, becomes visible as a fixed-position link when focused |
+| **Target focus management** | On click, finds the target element, adds `tabindex="-1"` if needed, focuses it, and scrolls into view |
+| **`target` prop** | CSS selector for the skip destination (defaults to `"#main-content"`) |
+| **`unstyled` prop** | Removes default styles for full customization |
+| **Semantic `<a>` element** | Renders as an anchor with `href` matching the target for progressive enhancement |
+| **No ARIA needed** | Native `<a>` element — screen readers announce it as a link naturally |
+
+#### Usage
+
+```tsx
+import { SkipLink } from '@compa11y/react';
+
+// Place as the very first focusable element in the page
+<SkipLink target="#main-content" />
+
+// Custom label
+<SkipLink target="#main-content">Skip navigation</SkipLink>
+
+// Multiple skip links
+<SkipLink target="#main-content">Skip to content</SkipLink>
+<SkipLink target="#search">Skip to search</SkipLink>
+```
+
+Keyboard: **Tab** to reveal, **Enter** to activate.
+
+---
+
+### Alert
+
+A static feedback element for communicating important messages with appropriate ARIA semantics.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="alert"`** | Applied for `type="error"` and `type="warning"` — assertive announcement |
+| **`role="status"`** | Applied for `type="info"` and `type="success"` — polite announcement |
+| **`aria-live`** | `"assertive"` for error/warning, `"polite"` for info/success |
+| **Dismiss button** | When `dismissible` is true, renders a close button with `aria-label="Dismiss alert"` |
+| **Visual variants** | Left border accent color per type (info: blue, success: green, warning: amber, error: red) |
+| **`unstyled` prop** | Removes default styles for full customization |
+| **`onDismiss` callback** | Called when the user dismisses the alert |
+
+#### Usage
+
+```tsx
+import { Alert } from '@compa11y/react';
+
+// Error alert (assertive)
+<Alert type="error" title="Payment failed">
+  Your card was declined. Please try a different payment method.
+</Alert>
+
+// Success alert (polite)
+<Alert type="success" title="Saved!">
+  Your changes have been saved successfully.
+</Alert>
+
+// Dismissible
+<Alert type="info" dismissible onDismiss={() => setVisible(false)}>
+  This alert can be closed.
+</Alert>
+```
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -1069,6 +1184,106 @@ Same as `<a11y-input>` but for multi-line text.
 
 **Methods:** `add(options)`, `remove(id)`, `clear()`
 **Events:** `a11y-toast-add`, `a11y-toast-remove`
+
+---
+
+### `<a11y-visually-hidden>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Visually hidden styles** | Host element uses clip/overflow hiding — content remains in DOM for screen readers |
+| **`focusable` attribute** | When present, content becomes visible when focused within (`:focus-within`) |
+| **Shadow DOM** | Uses `<slot>` for content projection |
+
+#### Usage
+
+```html
+<!-- Hidden label -->
+<button>
+  <span aria-hidden="true">&times;</span>
+  <a11y-visually-hidden>Close dialog</a11y-visually-hidden>
+</button>
+
+<!-- Focusable (appears on focus) -->
+<a11y-visually-hidden focusable>
+  <a href="#main-content">Skip to main content</a>
+</a11y-visually-hidden>
+```
+
+---
+
+### `<a11y-skip-link>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Visually hidden until focus** | Uses visually-hidden styles, appears as fixed-position link on `:focus` |
+| **Target focus management** | Finds target element, adds `tabindex="-1"` if needed, focuses it, scrolls into view |
+| **`target` attribute** | CSS selector for destination (default: `"#main-content"`) |
+| **`label` attribute** | Custom label text (default: slot content or "Skip to main content") |
+| **CSS custom properties** | `--compa11y-skip-link-bg`, `--compa11y-skip-link-color`, `--compa11y-skip-link-padding`, etc. |
+| **Forced colors support** | `@media (forced-colors: active)` with semantic borders |
+| **Dev warning** | Warns if `target` attribute is missing |
+
+#### Usage
+
+```html
+<!-- Place as first child of <body> -->
+<a11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
+
+<!-- With custom label attribute -->
+<a11y-skip-link target="#main-content" label="Skip navigation"></a11y-skip-link>
+
+<!-- Multiple skip links -->
+<a11y-skip-link target="#main-content">Skip to content</a11y-skip-link>
+<a11y-skip-link target="#search">Skip to search</a11y-skip-link>
+```
+
+Keyboard: **Tab** to reveal, **Enter** to activate.
+
+---
+
+### `<a11y-alert>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="alert"`** | Applied for `type="error"` and `type="warning"` — assertive live region |
+| **`role="status"`** | Applied for `type="info"` and `type="success"` — polite live region |
+| **`aria-live`** | `"assertive"` for error/warning, `"polite"` for info/success |
+| **Dismiss button** | When `dismissible` attribute is present, renders close button with `aria-label="Dismiss alert"` |
+| **Visual variants** | Left border accent per type, emoji icon per type |
+| **CSS custom properties** | `--compa11y-alert-bg`, `--compa11y-alert-info-color`, `--compa11y-alert-success-color`, `--compa11y-alert-warning-color`, `--compa11y-alert-error-color`, etc. |
+| **`::part()` exports** | `alert`, `icon`, `content`, `title`, `description`, `close` |
+| **Forced colors support** | `@media (forced-colors: active)` with semantic borders |
+| **Dev warning** | Warns if invalid `type` attribute is provided |
+
+#### Usage
+
+```html
+<!-- Error alert (assertive) -->
+<a11y-alert type="error" title="Payment failed">
+  Your card was declined. Please try a different payment method.
+</a11y-alert>
+
+<!-- Success alert -->
+<a11y-alert type="success" title="Saved!">
+  Your changes have been saved successfully.
+</a11y-alert>
+
+<!-- Dismissible -->
+<a11y-alert type="info" dismissible>
+  This alert can be closed by the user.
+</a11y-alert>
+```
+
+**Attributes:** `type` (info/success/warning/error), `title`, `dismissible`
+**Methods:** `dismiss()`
+**Events:** `dismiss`
 
 ---
 

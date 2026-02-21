@@ -75,7 +75,10 @@
     a11y-option:not(:defined),
     a11y-optgroup:not(:defined),
     a11y-checkbox:not(:defined),
-    a11y-checkbox-group:not(:defined) {
+    a11y-checkbox-group:not(:defined),
+    a11y-visually-hidden:not(:defined),
+    a11y-skip-link:not(:defined),
+    a11y-alert:not(:defined) {
       display: none;
     }
 
@@ -340,7 +343,10 @@
 </head>
 
 <body>
-  <h1>compa11y Vanilla JS Demo</h1>
+  <!-- Skip Link: first focusable element on the page (Tab to reveal) -->
+  <a11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
+
+  <h1 id="main-content" tabindex="-1">compa11y Vanilla JS Demo</h1>
   <p style="margin-bottom: 1.5rem;">
     These components work with just HTML and the compa11y script. No framework required.
   </p>
@@ -900,6 +906,87 @@
     <p style="margin-top: 0.5rem; color: #666; font-size: 0.875rem;">
       Enable a screen reader (VoiceOver, NVDA, JAWS) to hear the announcements.
     </p>
+  </section>
+
+  <!-- ================================================================
+       VisuallyHidden
+       ================================================================ -->
+  <section>
+    <h2>VisuallyHidden</h2>
+    <p style="margin-bottom: 1rem;">Content hidden visually but accessible to screen readers. Inspect the DOM or use a screen reader to verify.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <!-- Basic: screen-reader-only text -->
+      <div>
+        <strong>Icon button with hidden label:</strong>
+        <a11y-button aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          <a11y-visually-hidden>Close this dialog</a11y-visually-hidden>
+        </a11y-button>
+      </div>
+
+      <!-- Focusable: becomes visible on focus (skip link pattern) -->
+      <div>
+        <strong>Focusable (Tab to reveal):</strong>
+        <a11y-visually-hidden focusable>
+          <a href="#main-content" style="padding: 0.5rem 1rem; background: #0066cc; color: white; text-decoration: none; border-radius: 4px;">Skip to main content</a>
+        </a11y-visually-hidden>
+      </div>
+
+      <!-- Status text for screen readers -->
+      <div>
+        <strong>Hidden status text:</strong>
+        <span>3 items in cart</span>
+        <a11y-visually-hidden>, total price: $45.99</a11y-visually-hidden>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SkipLink
+       ================================================================ -->
+  <section>
+    <h2>SkipLink</h2>
+    <p style="margin-bottom: 1rem;">A skip link is placed at the very top of the page. Press <kbd>Tab</kbd> at the top of this page to reveal it. It allows keyboard users to skip past navigation and jump to the main content.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <p><strong>How to test:</strong> Click in the browser address bar, then press <kbd>Tab</kbd>. The skip link will appear at the top-left corner of the page.</p>
+      <p style="color: #666; font-size: 0.875rem;">The skip link at the top of this page uses: <code>&lt;a11y-skip-link target="#main-content"&gt;</code></p>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       Alert
+       ================================================================ -->
+  <section>
+    <h2>Alert</h2>
+    <p style="margin-bottom: 1rem;">Static feedback messages with appropriate ARIA roles. Error/warning use <code>role="alert"</code> (assertive), info/success use <code>role="status"</code> (polite).</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <a11y-alert type="info" title="Tip">
+        You can customize alert colors using CSS custom properties.
+      </a11y-alert>
+
+      <a11y-alert type="success" title="Saved!">
+        Your changes have been saved successfully.
+      </a11y-alert>
+
+      <a11y-alert type="warning" title="Low storage">
+        You have less than 100MB of storage remaining.
+      </a11y-alert>
+
+      <a11y-alert type="error" title="Payment failed">
+        Your card was declined. Please try a different payment method.
+      </a11y-alert>
+
+      <a11y-alert type="info" dismissible>
+        This is a dismissible alert. Click the close button to remove it.
+      </a11y-alert>
+
+      <a11y-alert type="success" dismissible title="Upload complete">
+        Your file has been uploaded. This alert can be dismissed.
+      </a11y-alert>
+    </div>
   </section>
 
   <!-- Load compa11y - this registers all custom elements automatically -->

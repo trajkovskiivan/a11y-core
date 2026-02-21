@@ -24,6 +24,9 @@ import { A11yListbox, A11yOption, A11yOptgroup } from './components/listbox';
 import { A11yCheckbox, A11yCheckboxGroup } from './components/checkbox';
 import { A11yRadioGroup, A11yRadio } from './components/radio-group';
 import { A11yToast } from './components/toast';
+import { A11yVisuallyHidden } from './components/visually-hidden';
+import { A11ySkipLink } from './components/skip-link';
+import { A11yAlert } from './components/alert';
 
 // Re-export components
 export {
@@ -44,6 +47,9 @@ export {
   A11yRadioGroup,
   A11yRadio,
   A11yToast,
+  A11yVisuallyHidden,
+  A11ySkipLink,
+  A11yAlert,
 };
 
 // Core utilities for vanilla JS usage
@@ -133,6 +139,9 @@ if (typeof window !== 'undefined') {
     A11yRadioGroup,
     A11yRadio,
     A11yToast,
+    A11yVisuallyHidden,
+    A11ySkipLink,
+    A11yAlert,
     // Announcer utilities
     initAnnouncer,
     announce,
