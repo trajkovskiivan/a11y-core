@@ -213,11 +213,14 @@ export function Select({
 }
 
 export interface SelectTriggerProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {}
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {
+  /** Placeholder text shown when no value is selected (overrides the root Select placeholder) */
+  placeholder?: string;
+}
 
 export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
   function SelectTrigger(
-    { onKeyDown, onClick, onBlur, ...props },
+    { placeholder: triggerPlaceholder, onKeyDown, onClick, onBlur, ...props },
     forwardedRef
   ) {
     const {
@@ -232,9 +235,10 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
       getOptionId,
       onSelect,
       triggerRef,
-      placeholder,
+      placeholder: contextPlaceholder,
       disabled,
     } = useSelectContext();
+    const placeholder = triggerPlaceholder ?? contextPlaceholder;
     const { announce } = useAnnouncer();
 
     // Type-ahead: pressing characters jumps to matching option
