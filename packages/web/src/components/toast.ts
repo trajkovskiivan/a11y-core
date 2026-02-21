@@ -166,12 +166,12 @@ export class A11yToast extends Compa11yElement {
   /**
    * Remove a toast by ID.
    */
-  remove(id: string): void {
+  removeToast(id: string): void {
     const index = this._toasts.findIndex((t) => t.id === id);
     if (index === -1) return;
 
     const entry = this._toasts[index];
-    if (entry.timerId) clearTimeout(entry.timerId);
+    if (entry && entry.timerId) clearTimeout(entry.timerId);
     this._toasts.splice(index, 1);
     this._removeElement(id);
 
@@ -228,7 +228,7 @@ export class A11yToast extends Compa11yElement {
     el.addEventListener('mouseleave', () => this._resumeTimer(entry));
     el.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        this.remove(entry.id);
+        this.removeToast(entry.id);
       }
     });
 
@@ -247,7 +247,7 @@ export class A11yToast extends Compa11yElement {
 
     entry.startTime = Date.now();
     entry.timerId = setTimeout(() => {
-      this.remove(entry.id);
+      this.removeToast(entry.id);
     }, entry.remaining);
   }
 
@@ -269,7 +269,7 @@ export class A11yToast extends Compa11yElement {
     // Close button
     const closeId = target.getAttribute('data-close-id');
     if (closeId) {
-      this.remove(closeId);
+      this.removeToast(closeId);
       return;
     }
 
@@ -278,7 +278,7 @@ export class A11yToast extends Compa11yElement {
     if (actionId) {
       const entry = this._toasts.find((t) => t.id === actionId);
       entry?.action?.onClick();
-      this.remove(actionId);
+      this.removeToast(actionId);
     }
   };
 
