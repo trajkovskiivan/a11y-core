@@ -25,6 +25,7 @@
   - [VisuallyHidden](#visuallyhidden)
   - [SkipLink](#skiplink)
   - [Alert](#alert)
+  - [Link](#link)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -42,6 +43,7 @@
   - [`<a11y-visually-hidden>`](#a11y-visually-hidden)
   - [`<a11y-skip-link>`](#a11y-skip-link)
   - [`<a11y-alert>`](#a11y-alert)
+  - [`<a11y-link>`](#a11y-link)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -746,6 +748,39 @@ import { Alert } from '@compa11y/react';
 
 ---
 
+### Link
+
+An accessible anchor element with external link handling, navigation context, and disabled state.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **External links** | When `external` is true, adds `target="_blank"`, `rel="noopener noreferrer"`, external icon, and screen reader "(opens in new tab)" hint |
+| **`aria-current`** | Supports `"page"`, `"step"`, `"location"`, `"true"` for navigation context |
+| **Disabled state** | When `disabled` is true, removes `href`, sets `role="link"`, `aria-disabled="true"`, `tabIndex={-1}` |
+| **`unstyled` prop** | Removes default styles for full customization |
+
+#### Usage
+
+```tsx
+import { Link } from '@compa11y/react';
+
+// Basic link
+<Link href="/about">About us</Link>
+
+// External link (opens in new tab with screen reader hint)
+<Link href="https://example.com" external>Visit Example</Link>
+
+// Current page in navigation
+<Link href="/dashboard" current="page">Dashboard</Link>
+
+// Disabled link
+<Link href="/settings" disabled>Settings</Link>
+```
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -1284,6 +1319,39 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 **Attributes:** `type` (info/success/warning/error), `title`, `dismissible`
 **Methods:** `dismiss()`
 **Events:** `dismiss`
+
+---
+
+### `<a11y-link>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **External links** | When `external` attribute is present, adds `target="_blank"`, `rel="noopener noreferrer"`, external SVG icon, and screen reader "(opens in new tab)" hint |
+| **`aria-current`** | Supports `page`, `step`, `location`, `true` for navigation context |
+| **Disabled state** | When `disabled` attribute is present, removes `href`, sets `role="link"`, `aria-disabled="true"`, `tabindex="-1"` |
+| **CSS custom properties** | `--compa11y-link-color`, `--compa11y-link-color-hover`, `--compa11y-link-color-visited`, `--compa11y-link-underline`, `--compa11y-focus-color` |
+| **`::part()` exports** | `link`, `external-icon` |
+| **Forced colors support** | `@media (forced-colors: active)` with `LinkText`, `VisitedText`, `GrayText` |
+
+#### Usage
+
+```html
+<!-- Basic link -->
+<a11y-link href="/about">About us</a11y-link>
+
+<!-- External link (opens in new tab with screen reader hint) -->
+<a11y-link href="https://example.com" external>Visit Example</a11y-link>
+
+<!-- Current page in navigation -->
+<a11y-link href="/dashboard" current="page">Dashboard</a11y-link>
+
+<!-- Disabled link -->
+<a11y-link href="/settings" disabled>Settings</a11y-link>
+```
+
+**Attributes:** `href`, `external`, `current` (page/step/location/true), `disabled`
 
 ---
 

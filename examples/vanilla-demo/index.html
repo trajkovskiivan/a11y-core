@@ -78,7 +78,8 @@
     a11y-checkbox-group:not(:defined),
     a11y-visually-hidden:not(:defined),
     a11y-skip-link:not(:defined),
-    a11y-alert:not(:defined) {
+    a11y-alert:not(:defined),
+    a11y-link:not(:defined) {
       display: none;
     }
 
@@ -887,7 +888,8 @@
         <li><kbd>Home</kbd> moves to first radio</li>
         <li><kbd>End</kbd> moves to last radio</li>
         <li><kbd>Space</kbd> selects the focused radio</li>
-        <li>Groups use <code>role="radiogroup"</code> with <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code></li>
+        <li>Groups use <code>role="radiogroup"</code> with <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code>
+        </li>
       </ul>
     </div>
   </section>
@@ -913,7 +915,8 @@
        ================================================================ -->
   <section>
     <h2>VisuallyHidden</h2>
-    <p style="margin-bottom: 1rem;">Content hidden visually but accessible to screen readers. Inspect the DOM or use a screen reader to verify.</p>
+    <p style="margin-bottom: 1rem;">Content hidden visually but accessible to screen readers. Inspect the DOM or use a
+      screen reader to verify.</p>
 
     <div style="display: flex; flex-direction: column; gap: 1rem;">
       <!-- Basic: screen-reader-only text -->
@@ -929,7 +932,9 @@
       <div>
         <strong>Focusable (Tab to reveal):</strong>
         <a11y-visually-hidden focusable>
-          <a href="#main-content" style="padding: 0.5rem 1rem; background: #0066cc; color: white; text-decoration: none; border-radius: 4px;">Skip to main content</a>
+          <a href="#main-content"
+            style="padding: 0.5rem 1rem; background: #0066cc; color: white; text-decoration: none; border-radius: 4px;">Skip
+            to main content</a>
         </a11y-visually-hidden>
       </div>
 
@@ -947,11 +952,14 @@
        ================================================================ -->
   <section>
     <h2>SkipLink</h2>
-    <p style="margin-bottom: 1rem;">A skip link is placed at the very top of the page. Press <kbd>Tab</kbd> at the top of this page to reveal it. It allows keyboard users to skip past navigation and jump to the main content.</p>
+    <p style="margin-bottom: 1rem;">A skip link is placed at the very top of the page. Press <kbd>Tab</kbd> at the top
+      of this page to reveal it. It allows keyboard users to skip past navigation and jump to the main content.</p>
 
     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-      <p><strong>How to test:</strong> Click in the browser address bar, then press <kbd>Tab</kbd>. The skip link will appear at the top-left corner of the page.</p>
-      <p style="color: #666; font-size: 0.875rem;">The skip link at the top of this page uses: <code>&lt;a11y-skip-link target="#main-content"&gt;</code></p>
+      <p><strong>How to test:</strong> Click in the browser address bar, then press <kbd>Tab</kbd>. The skip link will
+        appear at the top-left corner of the page.</p>
+      <p style="color: #666; font-size: 0.875rem;">The skip link at the top of this page uses:
+        <code>&lt;a11y-skip-link target="#main-content"&gt;</code></p>
     </div>
   </section>
 
@@ -960,7 +968,8 @@
        ================================================================ -->
   <section>
     <h2>Alert</h2>
-    <p style="margin-bottom: 1rem;">Static feedback messages with appropriate ARIA roles. Error/warning use <code>role="alert"</code> (assertive), info/success use <code>role="status"</code> (polite).</p>
+    <p style="margin-bottom: 1rem;">Static feedback messages with appropriate ARIA roles. Error/warning use
+      <code>role="alert"</code> (assertive), info/success use <code>role="status"</code> (polite).</p>
 
     <div style="display: flex; flex-direction: column; gap: 1rem;">
       <a11y-alert type="info" title="Tip">
@@ -986,6 +995,40 @@
       <a11y-alert type="success" dismissible title="Upload complete">
         Your file has been uploaded. This alert can be dismissed.
       </a11y-alert>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       Link
+       ================================================================ -->
+  <section>
+    <h2>Link</h2>
+    <p style="margin-bottom: 1rem;">Accessible links with external indicators, <code>aria-current</code> for navigation,
+      and proper focus styling.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div>
+        <a11y-link href="/about">Internal link</a11y-link>
+      </div>
+
+      <div>
+        <a11y-link href="https://compa11y.org" external>Compa11y Documentation</a11y-link>
+        — opens in a new tab with screen reader hint
+      </div>
+
+      <div>
+        Navigation with <code>aria-current</code>:
+        <nav style="display: inline-flex; gap: 1rem; margin-left: 0.5rem;">
+          <a11y-link href="/home">Home</a11y-link>
+          <a11y-link href="/dashboard" current="page">Dashboard</a11y-link>
+          <a11y-link href="/settings">Settings</a11y-link>
+        </nav>
+      </div>
+
+      <div>
+        <a11y-link href="/disabled" disabled>Disabled link</a11y-link>
+        — not focusable or clickable
+      </div>
     </div>
   </section>
 

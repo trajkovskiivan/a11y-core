@@ -27,6 +27,7 @@ import { A11yToast } from './components/toast';
 import { A11yVisuallyHidden } from './components/visually-hidden';
 import { A11ySkipLink } from './components/skip-link';
 import { A11yAlert } from './components/alert';
+import { A11yLink } from './components/link';
 
 // Re-export components
 export {
@@ -50,6 +51,7 @@ export {
   A11yVisuallyHidden,
   A11ySkipLink,
   A11yAlert,
+  A11yLink,
 };
 
 // Core utilities for vanilla JS usage
@@ -142,6 +144,7 @@ if (typeof window !== 'undefined') {
     A11yVisuallyHidden,
     A11ySkipLink,
     A11yAlert,
+    A11yLink,
     // Announcer utilities
     initAnnouncer,
     announce,

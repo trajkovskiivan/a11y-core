@@ -18,6 +18,7 @@ import {
   VisuallyHidden,
   SkipLink,
   Alert,
+  Link,
 } from '@compa11y/react';
 
 const countries = [
@@ -44,7 +45,10 @@ const fruits = [
 function VisuallyHiddenDemo() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <p>Content hidden visually but accessible to screen readers. Inspect the DOM or use a screen reader to verify.</p>
+      <p>
+        Content hidden visually but accessible to screen readers. Inspect the
+        DOM or use a screen reader to verify.
+      </p>
 
       <div>
         <strong>Icon button with hidden label:</strong>{' '}
@@ -57,13 +61,23 @@ function VisuallyHiddenDemo() {
       <div>
         <strong>Focusable skip link (Tab to reveal):</strong>{' '}
         <VisuallyHidden focusable>
-          <a href="#main-content" style={{ padding: '0.5rem 1rem', background: '#0066cc', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>Skip to main content</a>
+          <a
+            href="#main-content"
+            style={{
+              padding: '0.5rem 1rem',
+              background: '#0066cc',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '4px',
+            }}
+          >
+            Skip to main content
+          </a>
         </VisuallyHidden>
       </div>
 
       <div>
-        <strong>Hidden status text:</strong>{' '}
-        <span>3 items in cart</span>
+        <strong>Hidden status text:</strong> <span>3 items in cart</span>
         <VisuallyHidden>, total price: $45.99</VisuallyHidden>
       </div>
     </div>
@@ -75,7 +89,9 @@ export function App() {
     <ToastProvider>
       <SkipLink target="#main-content" />
       <div className="app">
-        <h1 id="main-content" tabIndex={-1}>compa11y React Demo</h1>
+        <h1 id="main-content" tabIndex={-1}>
+          compa11y React Demo
+        </h1>
         <h3>Powered by Ivan Trajkovski</h3>
         <p>
           All components below are fully accessible with keyboard navigation,
@@ -154,16 +170,33 @@ export function App() {
 
         <section>
           <h2>SkipLink</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <p>A skip link is placed at the very top of this page. Press <kbd>Tab</kbd> from the address bar to reveal it.</p>
-            <p><strong>How to test:</strong> Click in the browser address bar, then press <kbd>Tab</kbd>. The skip link will appear at the top-left corner.</p>
-            <p style={{ color: '#666', fontSize: '0.875rem' }}>The skip link at the top of this page uses: <code>{'<SkipLink target="#main-content" />'}</code></p>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
+          >
+            <p>
+              A skip link is placed at the very top of this page. Press{' '}
+              <kbd>Tab</kbd> from the address bar to reveal it.
+            </p>
+            <p>
+              <strong>How to test:</strong> Click in the browser address bar,
+              then press <kbd>Tab</kbd>. The skip link will appear at the
+              top-left corner.
+            </p>
+            <p style={{ color: '#666', fontSize: '0.875rem' }}>
+              The skip link at the top of this page uses:{' '}
+              <code>{'<SkipLink target="#main-content" />'}</code>
+            </p>
           </div>
         </section>
 
         <section>
           <h2>Alert</h2>
           <AlertDemo />
+        </section>
+
+        <section>
+          <h2>Link</h2>
+          <LinkDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -1377,7 +1410,11 @@ function AlertDemo() {
       </Alert>
 
       {showDismissible1 && (
-        <Alert type="info" dismissible onDismiss={() => setShowDismissible1(false)}>
+        <Alert
+          type="info"
+          dismissible
+          onDismiss={() => setShowDismissible1(false)}
+        >
           This is a dismissible info alert. Click the close button to remove it.
         </Alert>
       )}
@@ -1411,6 +1448,50 @@ function AlertDemo() {
           Reset dismissed alerts
         </button>
       )}
+    </div>
+  );
+}
+
+function LinkDemo() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <p>
+        Accessible links with external indicators, <code>aria-current</code> for
+        navigation, and proper focus styling.
+      </p>
+
+      <div>
+        <Link href="/about">Internal link</Link>
+      </div>
+
+      <div>
+        <Link href="https://compa11y.org" external>
+          Compa11y Documentation
+        </Link>
+        {' — opens in a new tab with screen reader hint'}
+      </div>
+
+      <div>
+        {'Navigation with '}
+        <code>aria-current</code>
+        {': '}
+        <nav
+          style={{ display: 'inline-flex', gap: '1rem', marginLeft: '0.5rem' }}
+        >
+          <Link href="/home">Home</Link>
+          <Link href="/dashboard" current="page">
+            Dashboard
+          </Link>
+          <Link href="/settings">Settings</Link>
+        </nav>
+      </div>
+
+      <div>
+        <Link href="/disabled" disabled>
+          Disabled link
+        </Link>
+        {' — not focusable or clickable'}
+      </div>
     </div>
   );
 }
