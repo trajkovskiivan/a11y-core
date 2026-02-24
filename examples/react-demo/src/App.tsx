@@ -19,6 +19,13 @@ import {
   SkipLink,
   Alert,
   Link,
+  Heading,
+  Text,
+  FormField,
+  Popover,
+  Accordion,
+  Table,
+  type SortDirection,
 } from '@compa11y/react';
 
 const countries = [
@@ -197,6 +204,31 @@ export function App() {
         <section>
           <h2>Link</h2>
           <LinkDemo />
+        </section>
+
+        <section>
+          <h2>Text / Heading</h2>
+          <TextHeadingDemo />
+        </section>
+
+        <section>
+          <h2>FormField</h2>
+          <FormFieldDemo />
+        </section>
+
+        <section>
+          <h2>Popover</h2>
+          <PopoverDemo />
+        </section>
+
+        <section>
+          <h2>Accordion</h2>
+          <AccordionDemo />
+        </section>
+
+        <section>
+          <h2>Table</h2>
+          <TableDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -1491,6 +1523,780 @@ function LinkDemo() {
           Disabled link
         </Link>
         {' — not focusable or clickable'}
+      </div>
+    </div>
+  );
+}
+
+function TextHeadingDemo() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <Text color="muted" size="sm">
+        Semantic typography primitives. Headings render proper{' '}
+        <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> elements. Text renders{' '}
+        <code>&lt;p&gt;</code>, <code>&lt;span&gt;</code>, or <code>&lt;div&gt;</code>.
+      </Text>
+
+      <Heading level={1}>Heading Level 1</Heading>
+      <Heading level={2}>Heading Level 2</Heading>
+      <Heading level={3}>Heading Level 3</Heading>
+      <Heading level={4}>Heading Level 4</Heading>
+      <Heading level={5}>Heading Level 5</Heading>
+      <Heading level={6}>Heading Level 6</Heading>
+
+      <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0' }} />
+
+      <Text>Default body text paragraph (size md).</Text>
+      <Text size="sm" color="muted">Small muted text for secondary content.</Text>
+      <Text size="lg" weight="semibold">Large semibold text for emphasis.</Text>
+      <Text color="error">Error-colored text for validation messages.</Text>
+      <Text color="success">Success-colored text for confirmations.</Text>
+      <Text align="center" color="accent">Center-aligned accent text.</Text>
+      <Text truncate style={{ maxWidth: 300 }}>
+        This is a very long text that should be truncated with an ellipsis when it overflows the container boundary.
+      </Text>
+      <Text as="span">This is an inline <code>&lt;span&gt;</code> element.</Text>
+    </div>
+  );
+}
+
+function FormFieldDemo() {
+  const [emailError, setEmailError] = useState('');
+  const [email, setEmail] = useState('');
+
+  const validateEmail = (val: string) => {
+    if (!val) {
+      setEmailError('Email is required.');
+    } else if (!val.includes('@')) {
+      setEmailError('Please enter a valid email address.');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', maxWidth: 420 }}>
+      <Text color="muted" size="sm">
+        Generic wrapper that wires <code>aria-labelledby</code>,{' '}
+        <code>aria-describedby</code>, and <code>aria-invalid</code> on any
+        child control. Works with native inputs, selects, and custom components.
+      </Text>
+
+      {/* Native input — props mode */}
+      <FormField
+        label="Email"
+        hint="We'll never share your email."
+        error={emailError}
+        required
+      >
+        <FormField.Control>
+          {({ controlId, ariaProps }) => (
+            <input
+              id={controlId}
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => validateEmail(email)}
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: `1px solid ${emailError ? '#ef4444' : '#ccc'}`,
+                borderRadius: 4,
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+              }}
+              {...ariaProps}
+            />
+          )}
+        </FormField.Control>
+      </FormField>
+
+      {/* Native select */}
+      <FormField label="Country" hint="Select your country of residence." required>
+        <FormField.Control>
+          {({ controlId, ariaProps }) => (
+            <select
+              id={controlId}
+              defaultValue=""
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: '1px solid #ccc',
+                borderRadius: 4,
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+                background: 'white',
+              }}
+              {...ariaProps}
+            >
+              <option value="" disabled>Choose a country…</option>
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="ca">Canada</option>
+              <option value="au">Australia</option>
+            </select>
+          )}
+        </FormField.Control>
+      </FormField>
+
+      {/* Textarea */}
+      <FormField label="Bio" hint="Tell us a little about yourself (optional).">
+        <FormField.Control>
+          {({ controlId, ariaProps }) => (
+            <textarea
+              id={controlId}
+              rows={3}
+              placeholder="I'm a developer who loves accessibility…"
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: '1px solid #ccc',
+                borderRadius: 4,
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+                resize: 'vertical',
+              }}
+              {...ariaProps}
+            />
+          )}
+        </FormField.Control>
+      </FormField>
+
+      {/* Custom compound layout */}
+      <FormField error="This field is required." required disabled>
+        <FormField.Label>Organization</FormField.Label>
+        <FormField.Control>
+          {({ controlId, ariaProps }) => (
+            <input
+              id={controlId}
+              type="text"
+              placeholder="Acme Inc."
+              disabled
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: '1px solid #ef4444',
+                borderRadius: 4,
+                fontSize: '0.875rem',
+                fontFamily: 'inherit',
+                background: '#f5f5f5',
+                cursor: 'not-allowed',
+                color: '#999',
+              }}
+              {...ariaProps}
+            />
+          )}
+        </FormField.Control>
+        <FormField.Error>This field is required.</FormField.Error>
+      </FormField>
+    </div>
+  );
+}
+
+function PopoverDemo() {
+  const [controlled, setControlled] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start', paddingBottom: '12rem' }}>
+
+      {/* Basic — bottom (default) */}
+      <Popover>
+        <Popover.Trigger
+          style={{
+            padding: '0.5rem 1rem',
+            background: '#0066cc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          More info
+        </Popover.Trigger>
+        <Popover.Content>
+          <strong>Did you know?</strong>
+          <p style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>
+            Non-modal overlay. Press <kbd>Escape</kbd> or click outside to dismiss.
+          </p>
+        </Popover.Content>
+      </Popover>
+
+      {/* top-start placement */}
+      <Popover>
+        <Popover.Trigger
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'white',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Open (top-start)
+        </Popover.Trigger>
+        <Popover.Content placement="top-start">
+          <p style={{ fontSize: '0.875rem' }}>I appear above, aligned to the left edge.</p>
+        </Popover.Content>
+      </Popover>
+
+      {/* right placement */}
+      <Popover>
+        <Popover.Trigger
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'white',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Open (right)
+        </Popover.Trigger>
+        <Popover.Content placement="right">
+          <p style={{ fontSize: '0.875rem' }}>I appear to the right.</p>
+        </Popover.Content>
+      </Popover>
+
+      {/* With Close button */}
+      <Popover>
+        <Popover.Trigger
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'white',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          With close button
+        </Popover.Trigger>
+        <Popover.Content placement="bottom-start">
+          <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>
+            This popover has a close button inside.
+          </p>
+          <Popover.Close
+            style={{
+              padding: '0.375rem 0.75rem',
+              background: '#0066cc',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Dismiss
+          </Popover.Close>
+        </Popover.Content>
+      </Popover>
+
+      {/* Controlled */}
+      <div>
+        <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Controlled: {controlled ? 'open' : 'closed'}
+        </div>
+        <Popover open={controlled} onOpenChange={setControlled}>
+          <Popover.Trigger
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'white',
+              border: '1px solid #0066cc',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              color: '#0066cc',
+            }}
+          >
+            Controlled popover
+          </Popover.Trigger>
+          <Popover.Content placement="bottom">
+            <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>
+              Open state is managed externally.
+            </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => setControlled(false)}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  background: '#0066cc',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setControlled(false)}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  background: 'white',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </Popover.Content>
+        </Popover>
+      </div>
+
+    </div>
+  );
+}
+
+function AccordionDemo() {
+  const [singleValue, setSingleValue] = useState<string>('item-1');
+  const [multipleValue, setMultipleValue] = useState<string[]>([
+    'keyboard',
+  ]);
+
+  const triggerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: '1rem',
+    background: 'white',
+    border: 'none',
+    borderBottom: '1px solid #e0e0e0',
+    fontSize: '1rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    textAlign: 'left',
+  };
+
+  const accordionStyle: React.CSSProperties = {
+    border: '1px solid #e0e0e0',
+    borderRadius: '6px',
+    overflow: 'hidden',
+    maxWidth: 600,
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {/* Single mode, controlled, collapsible */}
+      <div>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Single (controlled, collapsible)
+        </h3>
+        <Accordion
+          type="single"
+          collapsible
+          value={singleValue}
+          onValueChange={(v) => setSingleValue(v as string)}
+          style={accordionStyle}
+        >
+          <Accordion.Item value="item-1">
+            <Accordion.Header>
+              <Accordion.Trigger style={triggerStyle}>
+                What is compa11y?
+                <span aria-hidden="true" style={{ fontSize: '0.75rem' }}>
+                  {singleValue === 'item-1' ? '▲' : '▼'}
+                </span>
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content
+              style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0' }}
+            >
+              <p>
+                compa11y is an accessible component library built with WCAG
+                AAA compliance. Every component ships with keyboard
+                navigation, ARIA attributes, and screen reader support.
+              </p>
+            </Accordion.Content>
+          </Accordion.Item>
+
+          <Accordion.Item value="item-2">
+            <Accordion.Header>
+              <Accordion.Trigger style={triggerStyle}>
+                How do I install it?
+                <span aria-hidden="true" style={{ fontSize: '0.75rem' }}>
+                  {singleValue === 'item-2' ? '▲' : '▼'}
+                </span>
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content
+              style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0' }}
+            >
+              <p>
+                Install via npm: <code>npm install @compa11y/react</code> or{' '}
+                <code>npm install @compa11y/web</code>.
+              </p>
+            </Accordion.Content>
+          </Accordion.Item>
+
+          <Accordion.Item value="item-3">
+            <Accordion.Header>
+              <Accordion.Trigger
+                style={{ ...triggerStyle, borderBottom: 'none' }}
+              >
+                Is it framework-agnostic?
+                <span aria-hidden="true" style={{ fontSize: '0.75rem' }}>
+                  {singleValue === 'item-3' ? '▲' : '▼'}
+                </span>
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content style={{ padding: '1rem' }}>
+              <p>
+                Yes! The web package provides vanilla Web Components. The
+                React package provides compound components.
+              </p>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Open: {singleValue || 'none'}
+        </p>
+      </div>
+
+      {/* Multiple mode, controlled */}
+      <div>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Multiple (controlled)
+        </h3>
+        <Accordion
+          type="multiple"
+          value={multipleValue}
+          onValueChange={(v) => setMultipleValue(v as string[])}
+          style={accordionStyle}
+        >
+          {(
+            [
+              {
+                value: 'keyboard',
+                title: 'Keyboard Navigation',
+                content:
+                  'Arrow Up/Down moves between headers. Home/End jumps to first/last. Enter or Space toggles a section.',
+              },
+              {
+                value: 'screen-reader',
+                title: 'Screen Reader Support',
+                content:
+                  'aria-expanded announces open/closed state. role="region" with aria-labelledby identifies each panel.',
+              },
+            ] as const
+          ).map(({ value, title, content }) => (
+            <Accordion.Item key={value} value={value}>
+              <Accordion.Header>
+                <Accordion.Trigger style={triggerStyle}>
+                  {title}
+                  <span
+                    aria-hidden="true"
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    {multipleValue.includes(value) ? '▲' : '▼'}
+                  </span>
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content
+                style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0' }}
+              >
+                <p>{content}</p>
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+
+          {/* Disabled item */}
+          <Accordion.Item value="disabled-item" disabled>
+            <Accordion.Header>
+              <Accordion.Trigger
+                style={{
+                  ...triggerStyle,
+                  borderBottom: 'none',
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                }}
+              >
+                Disabled Item
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content style={{ padding: '1rem' }}>
+              <p>This content is not reachable.</p>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Open: {multipleValue.join(', ') || 'none'}
+        </p>
+      </div>
+
+      {/* Uncontrolled */}
+      <div>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Uncontrolled (defaultValue)
+        </h3>
+        <Accordion defaultValue="faq-1" style={accordionStyle}>
+          <Accordion.Item value="faq-1">
+            <Accordion.Header>
+              <Accordion.Trigger style={triggerStyle}>
+                Open by default
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content
+              style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0' }}
+            >
+              <p>
+                This item is open by default via{' '}
+                <code>defaultValue="faq-1"</code>.
+              </p>
+            </Accordion.Content>
+          </Accordion.Item>
+
+          <Accordion.Item value="faq-2">
+            <Accordion.Header>
+              <Accordion.Trigger
+                style={{ ...triggerStyle, borderBottom: 'none' }}
+              >
+                Starts closed
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content style={{ padding: '1rem' }}>
+              <p>This item starts closed.</p>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>Tab</kbd> moves focus into the accordion triggers
+          </li>
+          <li>
+            <kbd>Enter</kbd> / <kbd>Space</kbd> toggles the focused section
+          </li>
+          <li>
+            <kbd>↓</kbd> moves to the next trigger
+          </li>
+          <li>
+            <kbd>↑</kbd> moves to the previous trigger
+          </li>
+          <li>
+            <kbd>Home</kbd> / <kbd>End</kbd> jumps to first/last trigger
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+// ─── TableDemo ───────────────────────────────────────────────────────────────
+
+const PRODUCTS = [
+  { id: 'p1', name: 'Wireless Keyboard',   category: 'Peripherals', price: 79,  inStock: true },
+  { id: 'p2', name: 'USB-C Hub',           category: 'Accessories', price: 49,  inStock: true },
+  { id: 'p3', name: '4K Monitor',          category: 'Displays',    price: 499, inStock: false },
+  { id: 'p4', name: 'Noise-Cancel Headset', category: 'Audio',      price: 149, inStock: true },
+  { id: 'p5', name: 'Mechanical Keyboard', category: 'Peripherals', price: 129, inStock: true },
+];
+
+type Product = typeof PRODUCTS[number];
+
+function sortProducts(
+  products: Product[],
+  key: string | null,
+  dir: SortDirection
+): Product[] {
+  if (!key || dir === 'none') return products;
+  return [...products].sort((a, b) => {
+    const av = (a as Record<string, unknown>)[key];
+    const bv = (b as Record<string, unknown>)[key];
+    const cmp =
+      typeof av === 'number' && typeof bv === 'number'
+        ? av - bv
+        : String(av ?? '').localeCompare(String(bv ?? ''));
+    return dir === 'ascending' ? cmp : -cmp;
+  });
+}
+
+function TableDemo() {
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<SortDirection>('none');
+  const [selected, setSelected] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sorted = sortProducts(PRODUCTS, sortKey, sortDir);
+
+  const handleSort = (key: string | null, dir: SortDirection) => {
+    setSortKey(key);
+    setSortDir(dir);
+  };
+
+  const tableStyle: React.CSSProperties = {
+    border: '1px solid #e0e0e0',
+    borderRadius: 6,
+    overflow: 'hidden',
+    maxWidth: 700,
+    width: '100%',
+    borderCollapse: 'collapse',
+  };
+
+  const thStyle: React.CSSProperties = {
+    padding: '0.625rem 0.875rem',
+    background: '#f5f5f5',
+    borderBottom: '2px solid #d0d0d0',
+    fontWeight: 600,
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+  };
+
+  const tdStyle: React.CSSProperties = {
+    padding: '0.625rem 0.875rem',
+    borderBottom: '1px solid #e8e8e8',
+    verticalAlign: 'top',
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+      {/* Sortable + selectable */}
+      <div>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Sortable &amp; Selectable
+        </h3>
+        <Table
+          caption="Product catalogue"
+          sortKey={sortKey}
+          sortDirection={sortDir}
+          onSortChange={handleSort}
+          selectedRows={selected}
+          onSelectionChange={setSelected}
+          style={tableStyle}
+        >
+          <Table.Head>
+            <Table.Row>
+              <Table.SelectAllCell
+                rowIds={PRODUCTS.map((p) => p.id)}
+                style={thStyle}
+              />
+              <Table.Header sortKey="name" style={thStyle}>
+                Name
+              </Table.Header>
+              <Table.Header sortKey="category" style={thStyle}>
+                Category
+              </Table.Header>
+              <Table.Header
+                sortKey="price"
+                style={{ ...thStyle, textAlign: 'right' }}
+              >
+                Price
+              </Table.Header>
+              <Table.Header style={{ ...thStyle, textAlign: 'center' }}>
+                In stock
+              </Table.Header>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            {sorted.map((product) => (
+              <Table.Row key={product.id} rowId={product.id}>
+                <Table.SelectCell
+                  label={`Select ${product.name}`}
+                  style={tdStyle}
+                />
+                <Table.Cell style={tdStyle}>{product.name}</Table.Cell>
+                <Table.Cell style={tdStyle}>{product.category}</Table.Cell>
+                <Table.Cell style={{ ...tdStyle, textAlign: 'right' }}>
+                  ${product.price}
+                </Table.Cell>
+                <Table.Cell style={{ ...tdStyle, textAlign: 'center' }}>
+                  {product.inStock ? '✓' : '✗'}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+          <Table.Foot>
+            <Table.Row>
+              <Table.Cell
+                colSpan={5}
+                style={{
+                  ...tdStyle,
+                  background: '#f5f5f5',
+                  borderTop: '2px solid #d0d0d0',
+                  borderBottom: 'none',
+                  fontWeight: 600,
+                }}
+              >
+                {PRODUCTS.length} products
+              </Table.Cell>
+            </Table.Row>
+          </Table.Foot>
+        </Table>
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Sort: {sortKey ? `${sortKey} (${sortDir})` : 'none'}&nbsp;|&nbsp;
+          Selected: {selected.length > 0 ? selected.join(', ') : 'none'}
+        </p>
+      </div>
+
+      {/* Loading / empty */}
+      <div>
+        <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          Loading &amp; Empty states
+        </h3>
+        <button
+          type="button"
+          onClick={() => setIsLoading((v) => !v)}
+          style={{ marginBottom: '0.5rem', padding: '0.25rem 0.75rem', cursor: 'pointer' }}
+        >
+          Toggle loading
+        </button>
+        <Table
+          caption="Products (loading demo)"
+          isLoading={isLoading}
+          style={{ ...tableStyle, marginBottom: '1rem' }}
+        >
+          <Table.Head>
+            <Table.Row>
+              <Table.Header style={thStyle}>Name</Table.Header>
+              <Table.Header style={thStyle}>Category</Table.Header>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            {isLoading ? (
+              <Table.LoadingState colSpan={2}>Loading products…</Table.LoadingState>
+            ) : (
+              PRODUCTS.slice(0, 2).map((p) => (
+                <Table.Row key={p.id}>
+                  <Table.Cell style={tdStyle}>{p.name}</Table.Cell>
+                  <Table.Cell style={tdStyle}>{p.category}</Table.Cell>
+                </Table.Row>
+              ))
+            )}
+          </Table.Body>
+        </Table>
+
+        <Table caption="Filtered products (empty)" style={tableStyle}>
+          <Table.Head>
+            <Table.Row>
+              <Table.Header style={thStyle}>Name</Table.Header>
+              <Table.Header style={thStyle}>Category</Table.Header>
+              <Table.Header style={thStyle}>Price</Table.Header>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            <Table.EmptyState colSpan={3}>
+              No products match your current filters.
+            </Table.EmptyState>
+          </Table.Body>
+        </Table>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li>
+            <kbd>Tab</kbd> moves between sort buttons and checkboxes
+          </li>
+          <li>
+            <kbd>Enter</kbd> / <kbd>Space</kbd> on a sort header cycles the sort direction
+          </li>
+          <li>
+            <kbd>Space</kbd> on a checkbox toggles row selection
+          </li>
+        </ul>
       </div>
     </div>
   );

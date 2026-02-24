@@ -79,7 +79,13 @@
     a11y-visually-hidden:not(:defined),
     a11y-skip-link:not(:defined),
     a11y-alert:not(:defined),
-    a11y-link:not(:defined) {
+    a11y-link:not(:defined),
+    a11y-heading:not(:defined),
+    a11y-text:not(:defined),
+    a11y-form-field:not(:defined),
+    a11y-popover:not(:defined),
+    a11y-accordion:not(:defined),
+    a11y-table:not(:defined) {
       display: none;
     }
 
@@ -1032,6 +1038,294 @@
     </div>
   </section>
 
+  <!-- ================================================================
+       Text / Heading
+       ================================================================ -->
+  <section>
+    <h2>Text / Heading</h2>
+    <p style="margin-bottom: 1rem;">Semantic typography primitives. Headings render <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code>. Text renders <code>&lt;p&gt;</code>, <code>&lt;span&gt;</code>, or <code>&lt;div&gt;</code>.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <a11y-heading level="1">Heading Level 1</a11y-heading>
+      <a11y-heading level="2">Heading Level 2</a11y-heading>
+      <a11y-heading level="3">Heading Level 3</a11y-heading>
+      <a11y-heading level="4">Heading Level 4</a11y-heading>
+      <a11y-heading level="5">Heading Level 5</a11y-heading>
+      <a11y-heading level="6">Heading Level 6</a11y-heading>
+
+      <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 0.5rem 0;">
+
+      <a11y-text>Default body text paragraph (size md).</a11y-text>
+      <a11y-text size="sm" color="muted">Small muted text for secondary content.</a11y-text>
+      <a11y-text size="lg" weight="semibold">Large semibold text for emphasis.</a11y-text>
+      <a11y-text color="error">Error-colored text for validation messages.</a11y-text>
+      <a11y-text color="success">Success-colored text for confirmations.</a11y-text>
+      <a11y-text align="center" color="accent">Center-aligned accent text.</a11y-text>
+      <a11y-text truncate style="max-width: 300px;">This is a very long text that should be truncated with an ellipsis when it overflows the container boundary.</a11y-text>
+      <a11y-text as="span">This is an inline <code>&lt;span&gt;</code> element.</a11y-text>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FormField
+       ================================================================ -->
+  <section>
+    <h2>FormField</h2>
+    <p style="margin-bottom: 1rem;">Generic wrapper that provides label, hint, error, and required indicator around <strong>any</strong> form control. Automatically wires <code>aria-labelledby</code>, <code>aria-describedby</code>, and <code>aria-invalid</code>.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+      <a11y-form-field label="Email" hint="We'll never share your email" required>
+        <input type="email" placeholder="you@example.com" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.875rem;">
+      </a11y-form-field>
+
+      <a11y-form-field label="Country" required>
+        <select style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.875rem;">
+          <option value="">Choose a country...</option>
+          <option value="us">United States</option>
+          <option value="uk">United Kingdom</option>
+          <option value="ca">Canada</option>
+        </select>
+      </a11y-form-field>
+
+      <a11y-form-field label="Password" error="Must be at least 8 characters">
+        <input type="password" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ef4444; border-radius: 4px; font-size: 0.875rem;">
+      </a11y-form-field>
+
+      <a11y-form-field label="Bio" hint="Tell us about yourself">
+        <textarea rows="3" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.875rem; font-family: inherit; resize: vertical;"></textarea>
+      </a11y-form-field>
+
+      <a11y-form-field label="Organization" disabled>
+        <input type="text" value="Compa11y Inc." style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.875rem;">
+      </a11y-form-field>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       Popover
+       ================================================================ -->
+  <section>
+    <h2>Popover</h2>
+    <p style="margin-bottom: 1rem;">Non-modal overlay anchored to a trigger. Distinct from Dialog: no focus trap, no scroll lock, dismissable via Escape or outside click.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; padding-bottom: 12rem;">
+
+      <!-- Basic popover -->
+      <a11y-popover placement="bottom">
+        <button slot="trigger" style="padding: 0.5rem 1rem; border: 1px solid #0066cc; background: #0066cc; color: white; border-radius: 4px; cursor: pointer;">
+          More info (bottom)
+        </button>
+        <div>
+          <strong>Did you know?</strong>
+          <p style="margin-top: 0.5rem; font-size: 0.875rem;">This popover is anchored to the button above. Press Escape or click outside to dismiss.</p>
+        </div>
+      </a11y-popover>
+
+      <!-- Top placement -->
+      <a11y-popover placement="top">
+        <button slot="trigger" style="padding: 0.5rem 1rem; border: 1px solid #555; background: white; border-radius: 4px; cursor: pointer;">
+          Open (top)
+        </button>
+        <p style="font-size: 0.875rem;">I appear above the trigger.</p>
+      </a11y-popover>
+
+      <!-- Right placement -->
+      <a11y-popover placement="right">
+        <button slot="trigger" style="padding: 0.5rem 1rem; border: 1px solid #555; background: white; border-radius: 4px; cursor: pointer;">
+          Open (right)
+        </button>
+        <p style="font-size: 0.875rem;">I appear to the right of the trigger.</p>
+      </a11y-popover>
+
+      <!-- With interactive content -->
+      <a11y-popover placement="bottom-start" id="demo-popover-interactive">
+        <button slot="trigger" style="padding: 0.5rem 1rem; border: 1px solid #555; background: white; border-radius: 4px; cursor: pointer;">
+          Interactive content
+        </button>
+        <div>
+          <p style="font-size: 0.875rem; margin-bottom: 0.75rem;">This popover contains interactive elements. Focus is moved inside on open.</p>
+          <div style="display: flex; gap: 0.5rem;">
+            <button style="padding: 0.375rem 0.75rem; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm</button>
+            <button style="padding: 0.375rem 0.75rem; background: white; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">Cancel</button>
+          </div>
+        </div>
+      </a11y-popover>
+
+      <!-- Disabled -->
+      <a11y-popover placement="bottom" disabled>
+        <button slot="trigger" disabled style="padding: 0.5rem 1rem; border: 1px solid #ccc; background: #f5f5f5; color: #999; border-radius: 4px; cursor: not-allowed;">
+          Disabled
+        </button>
+        <p>You won't see this.</p>
+      </a11y-popover>
+
+    </div>
+
+    <script type="module">
+      // Wire the Cancel button in the interactive popover to close it
+      const interactivePop = document.getElementById('demo-popover-interactive');
+      interactivePop?.shadowRoot?.addEventListener('slotchange', () => {}, { once: true });
+
+      // Get assigned elements in the default slot (content)
+      function closeInteractive() {
+        if (interactivePop) interactivePop.open = false;
+      }
+
+      // Attach after the component upgrades
+      customElements.whenDefined('a11y-popover').then(() => {
+        const cancelBtn = interactivePop?.querySelector('button:last-child');
+        cancelBtn?.addEventListener('click', closeInteractive);
+        const confirmBtn = interactivePop?.querySelector('button:first-child');
+        confirmBtn?.addEventListener('click', closeInteractive);
+      });
+
+      interactivePop?.addEventListener('a11y-popover-open', () => console.log('Popover opened'));
+      interactivePop?.addEventListener('a11y-popover-close', () => console.log('Popover closed'));
+    </script>
+  </section>
+
+  <!-- ========================================================================
+       Accordion
+       ======================================================================== -->
+  <section>
+    <h2>Accordion</h2>
+
+    <!-- Single mode (default): only one item open at a time -->
+    <h3 style="font-size: 0.875rem; margin-bottom: 0.5rem;">Single (collapsible)</h3>
+    <a11y-accordion id="accordion-single" type="single" collapsible style="max-width: 600px;">
+      <h4>
+        <button data-accordion-trigger>What is compa11y?</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>compa11y is an accessible component library built with WCAG AAA compliance in mind. Every component ships with full keyboard navigation, ARIA attributes, and screen reader support.</p>
+      </div>
+
+      <h4>
+        <button data-accordion-trigger>How do I install it?</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>Install via npm: <code>npm install @compa11y/web</code> or <code>npm install @compa11y/react</code>.</p>
+        <p style="margin-top: 0.5rem;">Then import the components you need and they register themselves automatically.</p>
+      </div>
+
+      <h4>
+        <button data-accordion-trigger>Is it framework-agnostic?</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>Yes! The <code>@compa11y/web</code> package provides vanilla Web Components that work with any framework or plain HTML. The <code>@compa11y/react</code> package provides React compound components.</p>
+      </div>
+    </a11y-accordion>
+
+    <!-- Multiple mode: multiple items can be open at once -->
+    <h3 style="font-size: 0.875rem; margin: 1.5rem 0 0.5rem;">Multiple</h3>
+    <a11y-accordion id="accordion-multiple" type="multiple" style="max-width: 600px;">
+      <h4>
+        <button data-accordion-trigger>Keyboard Navigation</button>
+      </h4>
+      <div data-accordion-panel>
+        <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.8;">
+          <li><kbd>Enter</kbd> / <kbd>Space</kbd> — Toggle section</li>
+          <li><kbd>↓</kbd> — Move to next header</li>
+          <li><kbd>↑</kbd> — Move to previous header</li>
+          <li><kbd>Home</kbd> — Move to first header</li>
+          <li><kbd>End</kbd> — Move to last header</li>
+        </ul>
+      </div>
+
+      <h4>
+        <button data-accordion-trigger>Screen Reader Support</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>Each trigger has <code>aria-expanded</code> to announce open/closed state. The panel uses <code>role="region"</code> with <code>aria-labelledby</code> pointing to its trigger.</p>
+      </div>
+
+      <h4>
+        <button data-accordion-trigger>Disabled Item</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>This item is not disabled — but the one below is.</p>
+      </div>
+
+      <h4>
+        <button data-accordion-trigger disabled>Disabled (cannot open)</button>
+      </h4>
+      <div data-accordion-panel>
+        <p>This content is not reachable because the trigger is disabled.</p>
+      </div>
+    </a11y-accordion>
+
+    <p id="accordion-status" style="margin-top: 1rem; font-size: 0.875rem; color: #666;">Last event: —</p>
+
+    <script>
+      const accordionSingle = document.getElementById('accordion-single');
+      const accordionMultiple = document.getElementById('accordion-multiple');
+      const accordionStatus = document.getElementById('accordion-status');
+
+      accordionSingle?.addEventListener('a11y-accordion-change', (e) => {
+        const state = e.detail.expanded ? 'expanded' : 'collapsed';
+        accordionStatus.textContent = `Single accordion item ${e.detail.index} ${state}`;
+        console.log('Accordion (single) changed:', e.detail);
+      });
+
+      accordionMultiple?.addEventListener('a11y-accordion-change', (e) => {
+        const state = e.detail.expanded ? 'expanded' : 'collapsed';
+        accordionStatus.textContent = `Multiple accordion item ${e.detail.index} ${state}`;
+        console.log('Accordion (multiple) changed:', e.detail);
+      });
+    </script>
+  </section>
+
+  <!-- ── Table ──────────────────────────────────────────────────────── -->
+  <section>
+    <!-- Table of Contents anchor -->
+    Table
+
+    <h2>Table</h2>
+
+    <!-- Basic read-only table -->
+    <h3 style="font-size: 0.875rem; margin: 0 0 0.5rem;">Basic (read-only)</h3>
+    <a11y-table
+      id="table-basic"
+      caption="Team members"
+      style="max-width: 700px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;"
+    ></a11y-table>
+
+    <!-- Sortable + selectable table -->
+    <h3 style="font-size: 0.875rem; margin: 1.5rem 0 0.5rem;">Sortable &amp; Selectable</h3>
+    <a11y-table
+      id="table-sortable"
+      caption="Product catalogue"
+      selectable
+      style="max-width: 700px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;"
+    ></a11y-table>
+    <p id="table-sort-status" style="margin-top: 0.5rem; font-size: 0.875rem; color: #666;">Sort: none</p>
+    <p id="table-select-status" style="font-size: 0.875rem; color: #666;">Selected: none</p>
+
+    <!-- Loading state -->
+    <h3 style="font-size: 0.875rem; margin: 1.5rem 0 0.5rem;">Loading state</h3>
+    <button
+      id="table-loading-toggle"
+      type="button"
+      style="margin-bottom: 0.5rem; padding: 0.25rem 0.75rem; cursor: pointer;"
+    >Toggle loading</button>
+    <a11y-table
+      id="table-loading"
+      caption="Loading example"
+      loading
+      style="max-width: 700px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;"
+    ></a11y-table>
+
+    <!-- Empty state -->
+    <h3 style="font-size: 0.875rem; margin: 1.5rem 0 0.5rem;">Empty state</h3>
+    <a11y-table
+      id="table-empty"
+      caption="Empty example"
+      empty-message="No products match your filters."
+      style="max-width: 700px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;"
+    ></a11y-table>
+
+  </section>
+
   <!-- Load compa11y - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
@@ -1324,6 +1618,115 @@
       console.log('Radio (error) changed:', e.detail.value);
       radioError.removeAttribute('error');
     });
+
+    // ── Table setup ──────────────────────────────────────────────────────────
+    // Must run inside the module script (after @compa11y/web is imported and
+    // all custom elements are defined) so property setters fire correctly.
+
+    // Basic read-only table
+    const tableBasic = document.getElementById('table-basic');
+    if (tableBasic) {
+      tableBasic.columns = [
+        { key: 'name', label: 'Name', rowHeader: true },
+        { key: 'role', label: 'Role' },
+        { key: 'dept', label: 'Department' },
+      ];
+      tableBasic.rows = [
+        { name: 'Alice Johnson', role: 'Senior Engineer',   dept: 'Platform' },
+        { name: 'Bob Smith',     role: 'Designer',          dept: 'Product' },
+        { name: 'Carol Davis',   role: 'Engineering Lead',  dept: 'Platform' },
+      ];
+    }
+
+    // Sortable + selectable table
+    const tableSortable      = document.getElementById('table-sortable');
+    const tableSortStatus    = document.getElementById('table-sort-status');
+    const tableSelectStatus  = document.getElementById('table-select-status');
+
+    // Source data — kept separate so we can re-sort without mutation
+    const tableProducts = [
+      { id: 'p1', name: 'Wireless Keyboard',   category: 'Peripherals', price: 79,  stock: 'Yes' },
+      { id: 'p2', name: 'USB-C Hub',            category: 'Accessories', price: 49,  stock: 'Yes' },
+      { id: 'p3', name: '4K Monitor',           category: 'Displays',    price: 499, stock: 'No'  },
+      { id: 'p4', name: 'Noise-Cancel Headset', category: 'Audio',       price: 149, stock: 'Yes' },
+    ];
+
+    // Sort helper — mirrors sortProducts() in the React demo
+    function sortTableProducts(rows, key, direction) {
+      if (!key || direction === 'none') return rows;
+      return [...rows].sort((a, b) => {
+        const av = a[key], bv = b[key];
+        const cmp =
+          typeof av === 'number' && typeof bv === 'number'
+            ? av - bv
+            : String(av ?? '').localeCompare(String(bv ?? ''));
+        return direction === 'ascending' ? cmp : -cmp;
+      });
+    }
+
+    if (tableSortable) {
+      tableSortable.columns = [
+        { key: 'name',     label: 'Name',     sortable: true },
+        { key: 'category', label: 'Category', sortable: true },
+        { key: 'price',    label: 'Price',    sortable: true, align: 'right' },
+        { key: 'stock',    label: 'In stock', sortable: false, align: 'center' },
+      ];
+      tableSortable.rows = tableProducts.map(p => ({ ...p, price: `$${p.price}` }));
+
+      tableSortable.addEventListener('a11y-table-sort', (e) => {
+        const { sortKey, sortDirection } = e.detail;
+
+        // Re-sort source data and push back to component (same pattern as React)
+        const sorted = sortTableProducts(tableProducts, sortKey, sortDirection);
+        tableSortable.rows = sorted.map(p => ({ ...p, price: `$${p.price}` }));
+
+        if (tableSortStatus) {
+          tableSortStatus.textContent = sortKey
+            ? `Sort: ${sortKey} (${sortDirection})`
+            : 'Sort: none';
+        }
+        console.log('Table sorted:', e.detail);
+      });
+
+      tableSortable.addEventListener('a11y-table-select', (e) => {
+        const { selectedRows } = e.detail;
+        if (tableSelectStatus) {
+          tableSelectStatus.textContent = selectedRows.length
+            ? `Selected: ${selectedRows.join(', ')}`
+            : 'Selected: none';
+        }
+        console.log('Table selection:', e.detail);
+      });
+    }
+
+    // Loading state table
+    const tableLoading       = document.getElementById('table-loading');
+    const tableLoadingToggle = document.getElementById('table-loading-toggle');
+    if (tableLoading) {
+      tableLoading.columns = [
+        { key: 'name',   label: 'Name' },
+        { key: 'status', label: 'Status' },
+      ];
+    }
+    if (tableLoading && tableLoadingToggle) {
+      tableLoadingToggle.addEventListener('click', () => {
+        if (tableLoading.hasAttribute('loading')) {
+          tableLoading.removeAttribute('loading');
+        } else {
+          tableLoading.setAttribute('loading', '');
+        }
+      });
+    }
+
+    // Empty state table
+    const tableEmpty = document.getElementById('table-empty');
+    if (tableEmpty) {
+      tableEmpty.columns = [
+        { key: 'name',  label: 'Name' },
+        { key: 'price', label: 'Price' },
+      ];
+      tableEmpty.rows = [];
+    }
 
   </script>
 

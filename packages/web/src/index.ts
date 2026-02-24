@@ -28,6 +28,11 @@ import { A11yVisuallyHidden } from './components/visually-hidden';
 import { A11ySkipLink } from './components/skip-link';
 import { A11yAlert } from './components/alert';
 import { A11yLink } from './components/link';
+import { A11yHeading, A11yText } from './components/text';
+import { A11yFormField } from './components/form-field';
+import { A11yPopover } from './components/popover';
+import { A11yAccordion } from './components/accordion';
+import { A11yTable } from './components/table';
 
 // Re-export components
 export {
@@ -52,6 +57,12 @@ export {
   A11ySkipLink,
   A11yAlert,
   A11yLink,
+  A11yHeading,
+  A11yText,
+  A11yFormField,
+  A11yPopover,
+  A11yAccordion,
+  A11yTable,
 };
 
 // Core utilities for vanilla JS usage
@@ -145,6 +156,12 @@ if (typeof window !== 'undefined') {
     A11ySkipLink,
     A11yAlert,
     A11yLink,
+    A11yHeading,
+    A11yText,
+    A11yFormField,
+    A11yPopover,
+    A11yAccordion,
+    A11yTable,
     // Announcer utilities
     initAnnouncer,
     announce,

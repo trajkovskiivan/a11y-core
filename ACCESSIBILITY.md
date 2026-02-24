@@ -26,6 +26,12 @@
   - [SkipLink](#skiplink)
   - [Alert](#alert)
   - [Link](#link)
+  - [Heading](#heading)
+  - [Text](#text)
+  - [FormField](#formfield)
+  - [Popover](#popover)
+  - [Accordion](#accordion)
+  - [Table](#table)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -44,6 +50,12 @@
   - [`<a11y-skip-link>`](#a11y-skip-link)
   - [`<a11y-alert>`](#a11y-alert)
   - [`<a11y-link>`](#a11y-link)
+  - [`<a11y-heading>`](#a11y-heading)
+  - [`<a11y-text>`](#a11y-text)
+  - [`<a11y-form-field>`](#a11y-form-field)
+  - [`<a11y-popover>`](#a11y-popover)
+  - [`<a11y-accordion>`](#a11y-accordion)
+  - [`<a11y-table>`](#a11y-table)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -781,6 +793,420 @@ import { Link } from '@compa11y/react';
 
 ---
 
+### Heading
+
+A semantic heading component that renders `<h1>`–`<h6>` elements with consistent typography.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Semantic elements** | Renders actual `<h1>`–`<h6>` based on `level` prop (default: `2`) |
+| **Size override** | Optional `size` prop to visually adjust without changing semantic level |
+| **Color, weight, alignment** | `color`, `weight`, `align` props for text styling |
+| **Truncation** | `truncate` prop adds ellipsis overflow |
+| **`unstyled` prop** | Removes default styles for full customization |
+
+#### Usage
+
+```tsx
+import { Heading } from '@compa11y/react';
+
+<Heading level={1}>Page Title</Heading>
+<Heading level={2} size="lg">Visually smaller h2</Heading>
+<Heading level={3} color="muted">Muted heading</Heading>
+```
+
+---
+
+### Text
+
+A semantic text component that renders `<p>`, `<span>`, `<div>`, or `<label>` with consistent typography.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Semantic elements** | Renders `<p>` (default), `<span>`, `<div>`, or `<label>` via `as` prop |
+| **Size scale** | `xs`, `sm`, `md` (default), `lg`, `xl`, `2xl`, `3xl` |
+| **Color variants** | `default`, `muted`, `accent`, `error`, `success`, `warning` |
+| **Weight, alignment** | `weight`, `align` props for text styling |
+| **Truncation** | `truncate` prop adds ellipsis overflow |
+| **`unstyled` prop** | Removes default styles for full customization |
+
+#### Usage
+
+```tsx
+import { Text } from '@compa11y/react';
+
+<Text>Default body paragraph.</Text>
+<Text size="sm" color="muted">Small muted text.</Text>
+<Text as="span" weight="bold">Bold inline text.</Text>
+<Text truncate style={{ maxWidth: 300 }}>Long text that truncates...</Text>
+```
+
+---
+
+### FormField
+
+A compound component that provides label, hint, error, and required indicator for **any** form control. Unlike `<Input>`, it is control-agnostic — wrap native inputs, selects, textareas, switches, or custom components.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-labelledby`** | Label element ID wired to control via `<FormField.Control>` render-prop |
+| **`aria-describedby`** | Includes hint and/or error IDs when present |
+| **`aria-invalid`** | Set when `error` prop is truthy |
+| **`aria-required`** | Set when `required` prop is true |
+| **`aria-disabled`** | Set when `disabled` prop is true |
+| **Required asterisk** | Rendered visually via `<span aria-hidden="true">*</span>` |
+| **Error live region** | `<FormField.Error>` renders with `role="alert"` |
+| **Dev warning** | Warns in development if `label` is missing |
+| **`unstyled` prop** | Removes default styles for full customization |
+| **Dual mode** | Props mode (`label`, `hint`, `error` as props) or compound mode (`<FormField.Label>`, sub-components) |
+
+#### Sub-components
+
+| Sub-component | Description |
+|--------------|-------------|
+| `<FormField.Label>` | `<label>` wired to control; rendered automatically when `label` prop is passed |
+| `<FormField.Control>` | Render-prop providing `controlId` and `ariaProps` to spread onto the control |
+| `<FormField.Hint>` | Hint text; registers itself in `aria-describedby` |
+| `<FormField.Error>` | Error message; renders with `role="alert"`, only when children are truthy |
+
+#### Usage
+
+```tsx
+import { FormField } from '@compa11y/react';
+
+// Props mode — label/hint/error as props, control via render-prop
+<FormField label="Email" hint="We'll never share it." error={emailError} required>
+  <FormField.Control>
+    {({ controlId, ariaProps }) => (
+      <input id={controlId} type="email" {...ariaProps} />
+    )}
+  </FormField.Control>
+</FormField>
+
+// Compound mode — sub-components for full layout control
+<FormField error={pwError} required>
+  <FormField.Label>Password</FormField.Label>
+  <FormField.Control>
+    {({ controlId, ariaProps }) => (
+      <input id={controlId} type="password" {...ariaProps} />
+    )}
+  </FormField.Control>
+  <FormField.Hint>Minimum 8 characters.</FormField.Hint>
+  <FormField.Error>{pwError}</FormField.Error>
+</FormField>
+
+// Works with any control — native select, custom component, etc.
+<FormField label="Country" required>
+  <FormField.Control>
+    {({ controlId, ariaProps }) => (
+      <select id={controlId} {...ariaProps}>
+        <option value="">Choose…</option>
+        <option value="us">United States</option>
+      </select>
+    )}
+  </FormField.Control>
+</FormField>
+```
+
+---
+
+### Popover
+
+A non-modal, anchored overlay — semantically distinct from Dialog (no focus trap, no scroll lock). Use for contextual information, actions, or forms anchored to a trigger.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-haspopup="dialog"`** | Set on `<Popover.Trigger>` to signal a popover will open |
+| **`aria-expanded`** | Toggled on the trigger to reflect open/closed state |
+| **`aria-controls`** | Points from trigger to content element |
+| **`role="dialog"` + `aria-modal="false"`** | Content is a non-modal dialog region |
+| **`aria-labelledby`** | Content is labelled by the trigger ID |
+| **Focus management** | First focusable element inside content receives focus on open; focus returns to trigger on close |
+| **Escape key** | Closes popover, returns focus to trigger |
+| **Outside click** | Clicking outside closes the popover (`pointerdown` listener) |
+| **Viewport positioning** | Automatically flips placement if content would overflow viewport |
+| **Scroll/resize tracking** | Position is updated while the popover is open |
+| **Controlled + Uncontrolled** | `open`/`defaultOpen` + `onOpenChange` |
+
+#### Sub-components
+
+| Sub-component | Description |
+|--------------|-------------|
+| `<Popover.Trigger>` | Button that toggles the popover; wired with ARIA |
+| `<Popover.Content>` | Positioned overlay rendered in a portal; manages focus and dismiss |
+| `<Popover.Close>` | Button inside content that closes the popover and returns focus |
+
+#### Usage
+
+```tsx
+import { Popover } from '@compa11y/react';
+
+// Basic
+<Popover>
+  <Popover.Trigger>More info</Popover.Trigger>
+  <Popover.Content>
+    <p>Non-modal overlay. Press Escape or click outside to dismiss.</p>
+  </Popover.Content>
+</Popover>
+
+// With placement and close button
+<Popover>
+  <Popover.Trigger>Settings</Popover.Trigger>
+  <Popover.Content placement="bottom-start">
+    <p>Configure your preferences here.</p>
+    <Popover.Close>Dismiss</Popover.Close>
+  </Popover.Content>
+</Popover>
+
+// Controlled
+const [open, setOpen] = useState(false);
+<Popover open={open} onOpenChange={setOpen}>
+  <Popover.Trigger>Open</Popover.Trigger>
+  <Popover.Content placement="right">
+    <p>Controlled popover content.</p>
+  </Popover.Content>
+</Popover>
+```
+
+#### Placement values
+
+`top` | `top-start` | `top-end` | `bottom` (default) | `bottom-start` | `bottom-end` | `left` | `left-start` | `left-end` | `right` | `right-start` | `right-end`
+
+---
+
+### Accordion
+
+Expand/collapse sections of content. Supports single or multiple open items, controlled and uncontrolled modes.
+
+**Components:** `<Accordion>` · `<Accordion.Item>` · `<Accordion.Trigger>` · `<Accordion.Content>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-expanded`** | Set to `"true"`/`"false"` on `Accordion.Trigger` to indicate open/closed state |
+| **`aria-controls`** | Trigger references its panel via `aria-controls` |
+| **`role="region"`** | Set on `Accordion.Content` for landmark navigation |
+| **`aria-labelledby`** | Panel references its trigger via `aria-labelledby` |
+| **`disabled`** | `disabled` attribute on trigger prevents interaction; keyboard skips it |
+| **Keyboard Navigation** | `↓`/`↑` between triggers, `Home`/`End` for first/last, `Enter`/`Space` to toggle |
+| **Screen Reader** | Announces `"Expanded"` or `"Collapsed"` after toggling |
+| **Single mode** | Only one item open at a time; `collapsible` prop controls whether active item can close |
+| **Multiple mode** | Any number of items can be open simultaneously |
+| **Controlled + Uncontrolled** | Works with `value`/`onValueChange` or `defaultValue` |
+
+#### Keyboard navigation
+
+| Key | Behavior |
+|-----|---------|
+| `Enter` / `Space` | Toggle the focused section |
+| `↓` | Move focus to the next accordion header |
+| `↑` | Move focus to the previous accordion header |
+| `Home` | Move focus to the first accordion header |
+| `End` | Move focus to the last accordion header |
+| `Tab` | Move focus into/out of the accordion |
+
+#### Usage
+
+```tsx
+// Uncontrolled, single mode
+<Accordion defaultValue="item-1">
+  <Accordion.Item value="item-1">
+    <h3><Accordion.Trigger>Section 1</Accordion.Trigger></h3>
+    <Accordion.Content>Content 1</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="item-2">
+    <h3><Accordion.Trigger>Section 2</Accordion.Trigger></h3>
+    <Accordion.Content>Content 2</Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+
+// Controlled, collapsible
+<Accordion
+  type="single"
+  collapsible
+  value={openItem}
+  onValueChange={setOpenItem}
+>
+  ...
+</Accordion>
+
+// Multiple items can be open
+<Accordion type="multiple" defaultValue={['item-1', 'item-2']}>
+  ...
+</Accordion>
+
+// Disabled item
+<Accordion.Item value="item-3" disabled>
+  <h3><Accordion.Trigger>Cannot open</Accordion.Trigger></h3>
+  <Accordion.Content>Unreachable</Accordion.Content>
+</Accordion.Item>
+```
+
+#### What you must provide
+
+| Requirement | Why |
+|-------------|-----|
+| Wrap `Accordion.Trigger` in a heading (`<h2>`–`<h6>`) | Provides document outline and visual hierarchy |
+| Unique `value` on each `Accordion.Item` | Required for state tracking |
+
+#### Props
+
+**`Accordion`**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `'single' \| 'multiple'` | `'single'` | One or many items open at once |
+| `collapsible` | `boolean` | `false` | In single mode, allow closing the active item |
+| `value` | `string \| string[]` | — | Controlled open item(s) |
+| `defaultValue` | `string \| string[]` | — | Default open item(s) |
+| `onValueChange` | `(v: string \| string[]) => void` | — | Change handler |
+
+**`Accordion.Item`**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | required | Unique identifier |
+| `disabled` | `boolean` | `false` | Prevents opening/closing |
+
+**`Accordion.Content`**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `forceMount` | `boolean` | `false` | Keep content in DOM when closed (hidden via `hidden` attribute) |
+
+---
+
+### Table
+
+Accessible data table component. Renders native semantic HTML (`<table>`, `<thead>`, `<th>`, `<td>`, etc.) with automatic ARIA wiring for sorting and row selection. No ARIA props required from consumers.
+
+**Components:** `<Table>` · `<Table.Head>` · `<Table.Body>` · `<Table.Foot>` · `<Table.Row>` · `<Table.Header>` · `<Table.Cell>` · `<Table.SelectAllCell>` · `<Table.SelectCell>` · `<Table.EmptyState>` · `<Table.LoadingState>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`<caption>`** | Rendered automatically from the `caption` prop; `captionHidden` visually hides it while keeping it accessible |
+| **`scope="col"`** | Applied automatically to `Table.Header` cells inside `Table.Head` |
+| **`scope="row"`** | Applied automatically to `Table.Header` cells inside `Table.Body` |
+| **`aria-sort`** | Set to `ascending`, `descending`, or `none` on the `<th>` of sortable columns; updates immediately on sort |
+| **Sort button** | Sortable headers render a native `<button>` internally — no `div` click handlers |
+| **Sort cycling** | `none → ascending → descending → none` on repeated activation |
+| **`aria-selected`** | Set on `<tr>` when the table is in selection mode (`rowId` prop supplied) |
+| **Select-all indeterminate** | `Table.SelectAllCell` sets `.indeterminate` on the checkbox via a ref when some (not all) rows are selected |
+| **Accessible checkbox labels** | `Table.SelectAllCell` uses `aria-label="Select all rows"`; `Table.SelectCell` requires a `label` prop |
+| **`aria-busy`** | Applied to `<table>` when `isLoading={true}` |
+| **Focus retention** | After sort re-renders, focus is returned to the activated sort button |
+| **Screen Reader** | Announces sort direction changes and selection count changes via polite live region |
+| **Dev warnings** | Warns in development if `caption`, `aria-label`, or `aria-labelledby` is missing; warns if `Table.SelectCell` is missing `label` |
+
+#### Keyboard interactions
+
+| Key | Target | Action |
+|-----|--------|--------|
+| `Tab` | All interactive elements | Move between sort buttons and checkboxes |
+| `Enter` / `Space` | Sort button | Cycle sort: none → ascending → descending → none |
+| `Space` | Row checkbox | Toggle row selection |
+
+> This is a **data table**, not a grid. Arrow-key cell navigation is intentionally absent — that belongs to a separate Grid component.
+
+#### Usage examples
+
+```tsx
+// Basic read-only
+<Table caption="Team members">
+  <Table.Head>
+    <Table.Row>
+      <Table.Header>Name</Table.Header>
+      <Table.Header>Role</Table.Header>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    {members.map(m => (
+      <Table.Row key={m.id}>
+        <Table.Cell>{m.name}</Table.Cell>
+        <Table.Cell>{m.role}</Table.Cell>
+      </Table.Row>
+    ))}
+  </Table.Body>
+</Table>
+
+// Sortable
+<Table
+  caption="Products"
+  sortKey={sortKey}
+  sortDirection={sortDir}
+  onSortChange={(key, dir) => { setSortKey(key); setSortDir(dir); }}
+>
+  <Table.Head>
+    <Table.Row>
+      <Table.Header sortKey="name">Name</Table.Header>
+      <Table.Header sortKey="price">Price</Table.Header>
+    </Table.Row>
+  </Table.Head>
+  ...
+</Table>
+
+// Selectable
+<Table caption="Users" selectedRows={selected} onSelectionChange={setSelected}>
+  <Table.Head>
+    <Table.Row>
+      <Table.SelectAllCell rowIds={users.map(u => u.id)} />
+      <Table.Header>Name</Table.Header>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    {users.map(u => (
+      <Table.Row key={u.id} rowId={u.id}>
+        <Table.SelectCell label={`Select ${u.name}`} />
+        <Table.Cell>{u.name}</Table.Cell>
+      </Table.Row>
+    ))}
+  </Table.Body>
+</Table>
+
+// Empty / loading states
+<Table.Body>
+  {isLoading
+    ? <Table.LoadingState colSpan={3}>Loading…</Table.LoadingState>
+    : rows.length === 0
+    ? <Table.EmptyState colSpan={3}>No results found</Table.EmptyState>
+    : rows.map(r => <Table.Row key={r.id}>…</Table.Row>)}
+</Table.Body>
+```
+
+#### API reference
+
+| Prop | Component | Type | Default | Description |
+|------|-----------|------|---------|-------------|
+| `caption` | `Table` | `string` | — | Renders `<caption>`; required for accessible name unless `aria-label`/`aria-labelledby` is used |
+| `captionHidden` | `Table` | `boolean` | `false` | Visually hides the caption (still accessible to AT) |
+| `sortKey` | `Table` | `string \| null` | — | Controlled sort column |
+| `sortDirection` | `Table` | `SortDirection` | `'none'` | Controlled sort direction |
+| `onSortChange` | `Table` | `(key, dir) => void` | — | Called when sort changes |
+| `selectedRows` | `Table` | `string[]` | — | Controlled selection |
+| `defaultSelectedRows` | `Table` | `string[]` | — | Uncontrolled default selection |
+| `onSelectionChange` | `Table` | `(rows) => void` | — | Called when selection changes |
+| `isLoading` | `Table` | `boolean` | `false` | Shows loading state (`aria-busy`) |
+| `sortKey` | `Table.Header` | `string` | — | Enables sort button on this column |
+| `scope` | `Table.Header` | `string` | auto | Override auto-detected `scope` attribute |
+| `rowId` | `Table.Row` | `string` | — | Required for selection; sets `aria-selected` |
+| `rowIds` | `Table.SelectAllCell` | `string[]` | — | All selectable IDs (drives indeterminate state) |
+| `label` | `Table.SelectCell` | `string` | — | **Required** — accessible label e.g. `"Select Alice"` |
+| `colSpan` | `Table.EmptyState` | `number` | — | Required — spans full table width |
+| `colSpan` | `Table.LoadingState` | `number` | — | Required — spans full table width |
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -1352,6 +1778,371 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 ```
 
 **Attributes:** `href`, `external`, `current` (page/step/location/true), `disabled`
+
+---
+
+### `<a11y-heading>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Semantic elements** | Renders `<h1>`–`<h6>` based on `level` attribute (default: `2`) |
+| **Size override** | Optional `size` attribute to visually adjust without changing semantic level |
+| **Color, weight, alignment** | `color`, `weight`, `align` attributes for text styling |
+| **Truncation** | `truncate` attribute adds ellipsis overflow |
+| **CSS custom properties** | `--compa11y-heading-font-family`, `--compa11y-heading-1-size` through `--compa11y-heading-6-size`, `--compa11y-text-color-*` |
+| **`::part()` exports** | `heading` |
+| **Forced colors support** | `@media (forced-colors: active)` resets color variants to `CanvasText` |
+
+#### Usage
+
+```html
+<a11y-heading level="1">Page Title</a11y-heading>
+<a11y-heading level="2" size="lg">Visually smaller h2</a11y-heading>
+<a11y-heading level="3" color="muted">Muted heading</a11y-heading>
+```
+
+**Attributes:** `level` (1–6), `size` (xs/sm/md/lg/xl/2xl/3xl), `color`, `weight`, `align`, `truncate`
+
+---
+
+### `<a11y-text>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Semantic elements** | Renders `<p>` (default), `<span>`, `<div>`, or `<label>` via `as` attribute |
+| **Size scale** | `xs`, `sm`, `md` (default), `lg`, `xl`, `2xl`, `3xl` |
+| **Color variants** | `default`, `muted`, `accent`, `error`, `success`, `warning` |
+| **Weight, alignment** | `weight`, `align` attributes for text styling |
+| **Truncation** | `truncate` attribute adds ellipsis overflow |
+| **CSS custom properties** | `--compa11y-text-font-family`, `--compa11y-text-size-*`, `--compa11y-text-color-*` |
+| **`::part()` exports** | `text` |
+| **Forced colors support** | `@media (forced-colors: active)` resets color variants to `CanvasText` |
+
+#### Usage
+
+```html
+<a11y-text>Default body paragraph.</a11y-text>
+<a11y-text size="sm" color="muted">Small muted text.</a11y-text>
+<a11y-text as="span" weight="bold">Bold inline text.</a11y-text>
+<a11y-text truncate style="max-width: 300px;">Long text that truncates...</a11y-text>
+```
+
+**Attributes:** `as` (p/span/div/label), `size`, `color`, `weight`, `align`, `truncate`
+
+---
+
+### `<a11y-form-field>`
+
+A generic wrapper that provides label, hint, error, and required indicator around any slotted control. Automatically wires ARIA on the first interactive element found in the slot.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-labelledby`** | Wired onto the slotted control when `label` attribute is present |
+| **`aria-describedby`** | Includes hint and/or error element IDs when present |
+| **`aria-invalid`** | Set on slotted control when `error` attribute is present |
+| **`aria-required`** | Set on slotted control when `required` attribute is present |
+| **`aria-disabled` / `disabled`** | Applied to slotted control when `disabled` attribute is present |
+| **Required asterisk** | Rendered via `<span aria-hidden="true">*</span>` inside the label |
+| **Error live region** | Error element renders with `role="alert"` |
+| **Dev warning** | Warns in development if `label` attribute is missing |
+| **CSS custom properties** | `--compa11y-field-gap`, `--compa11y-field-label-*`, `--compa11y-field-hint-*`, `--compa11y-field-error-*`, `--compa11y-field-required-color` |
+| **`::part()` exports** | `wrapper`, `label`, `hint`, `error`, `required` |
+| **Forced colors support** | `@media (forced-colors: active)` for label and error colors |
+
+#### Usage
+
+```html
+<!-- Wrap a native input -->
+<a11y-form-field label="Email" hint="We'll never share it." required>
+  <input type="email" placeholder="you@example.com" />
+</a11y-form-field>
+
+<!-- Wrap a native select -->
+<a11y-form-field label="Country" required>
+  <select>
+    <option value="">Choose…</option>
+    <option value="us">United States</option>
+  </select>
+</a11y-form-field>
+
+<!-- With error -->
+<a11y-form-field label="Password" error="Must be at least 8 characters">
+  <input type="password" />
+</a11y-form-field>
+
+<!-- Disabled -->
+<a11y-form-field label="Organization" disabled>
+  <input type="text" value="Compa11y Inc." />
+</a11y-form-field>
+```
+
+**Attributes:** `label`, `hint`, `error`, `required`, `disabled`
+
+---
+
+### `<a11y-popover>`
+
+Non-modal, anchored overlay. Wraps trigger and content in a single element using named slots. No focus trap, no scroll lock — use for contextual UI distinct from dialogs.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-haspopup="dialog"`** | Set on slotted trigger element when wired |
+| **`aria-expanded`** | Toggled on trigger to reflect open/closed state |
+| **`aria-controls`** | Points from trigger to the shadow DOM content container |
+| **`role="dialog"` + `aria-modal="false"`** | Content element is a non-modal dialog region |
+| **Focus management** | On open: first focusable in content receives focus. On close: focus returns to trigger |
+| **Escape key** | Closes popover and returns focus to trigger |
+| **Outside click** | `pointerdown` outside the component closes the popover |
+| **Viewport-aware positioning** | Automatically flips placement side if content overflows viewport |
+| **Scroll/resize tracking** | Position is recalculated on scroll and resize while open |
+| **CSS custom properties** | Full theming via `--compa11y-popover-*` tokens |
+| **`::part()` exports** | `trigger-slot`, `content` |
+| **Forced colors support** | `@media (forced-colors: active)` border handling |
+| **Reduced motion** | Transitions are disabled when `prefers-reduced-motion: reduce` is set |
+
+#### Usage
+
+```html
+<!-- Basic -->
+<a11y-popover placement="bottom">
+  <button slot="trigger">More info</button>
+  <p>Popover content. Press Escape or click outside to dismiss.</p>
+</a11y-popover>
+
+<!-- With interactive content -->
+<a11y-popover placement="bottom-start">
+  <button slot="trigger">Open settings</button>
+  <div>
+    <p>Choose an option:</p>
+    <button>Option A</button>
+    <button>Option B</button>
+  </div>
+</a11y-popover>
+
+<!-- Controlled via JS -->
+<a11y-popover id="my-pop" placement="right">
+  <button slot="trigger">Open</button>
+  <p>Controlled popover.</p>
+</a11y-popover>
+<script>
+  const pop = document.getElementById('my-pop');
+  pop.addEventListener('a11y-popover-open', () => console.log('opened'));
+  pop.addEventListener('a11y-popover-close', () => console.log('closed'));
+  // Programmatic: pop.open = true / pop.open = false
+</script>
+```
+
+**Attributes:** `open`, `placement`, `offset`, `disabled`
+
+**Events:** `a11y-popover-open`, `a11y-popover-close`
+
+**CSS Custom Properties:**
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-popover-bg` | `#fff` | Background color |
+| `--compa11y-popover-color` | inherit | Text color |
+| `--compa11y-popover-border` | `1px solid rgba(0,0,0,.15)` | Border |
+| `--compa11y-popover-radius` | `0.375rem` | Border radius |
+| `--compa11y-popover-shadow` | `0 4px 16px rgba(0,0,0,.12)` | Box shadow |
+| `--compa11y-popover-padding` | `1rem` | Content padding |
+| `--compa11y-popover-max-width` | `320px` | Max content width |
+| `--compa11y-popover-z-index` | `1000` | Z-index |
+
+---
+
+### `<a11y-accordion>`
+
+Accessible accordion web component. Supports single/multiple modes with full keyboard navigation.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`aria-expanded`** | Set on each `[data-accordion-trigger]` button |
+| **`aria-controls`** | Auto-assigned to link trigger to its panel |
+| **`role="region"`** | Set on each `[data-accordion-panel]` |
+| **`aria-labelledby`** | Panel references its trigger by ID |
+| **IDs** | Auto-generated for triggers and panels if not provided |
+| **Keyboard Navigation** | `↓`/`↑` between triggers, `Home`/`End` for first/last |
+| **Screen Reader** | Announces `"[label] expanded/collapsed"` on toggle |
+| **Global styles** | Injected into `<head>` once, scoped to `a11y-accordion` |
+
+#### Attributes
+
+| Attribute | Values | Default | Description |
+|-----------|--------|---------|-------------|
+| `type` | `single \| multiple` | `single` | One or many items open at once |
+| `collapsible` | boolean | `false` | In single mode, allow closing the active item |
+
+#### Events
+
+| Event | `detail` | Description |
+|-------|----------|-------------|
+| `a11y-accordion-change` | `{ index, expanded, trigger, panel }` | Fired when an item is toggled |
+
+#### Programmatic API
+
+```javascript
+const accordion = document.querySelector('a11y-accordion');
+accordion.open(0);    // Open item at index 0
+accordion.close(1);   // Close item at index 1
+accordion.toggle(2);  // Toggle item at index 2
+```
+
+#### Usage
+
+```html
+<!-- Single mode (default) — wrap triggers in headings for semantics -->
+<a11y-accordion type="single" collapsible>
+  <h3>
+    <button data-accordion-trigger>Section 1</button>
+  </h3>
+  <div data-accordion-panel>
+    <p>Content for section 1.</p>
+  </div>
+
+  <h3>
+    <button data-accordion-trigger>Section 2</button>
+  </h3>
+  <div data-accordion-panel>
+    <p>Content for section 2.</p>
+  </div>
+</a11y-accordion>
+
+<!-- Multiple mode -->
+<a11y-accordion type="multiple">
+  <h3><button data-accordion-trigger>Section A</button></h3>
+  <div data-accordion-panel>Content A</div>
+
+  <h3><button data-accordion-trigger>Section B</button></h3>
+  <div data-accordion-panel>Content B</div>
+</a11y-accordion>
+
+<!-- Disabled trigger -->
+<a11y-accordion>
+  <h3><button data-accordion-trigger disabled>Cannot open</button></h3>
+  <div data-accordion-panel>Unreachable content</div>
+</a11y-accordion>
+```
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-accordion-border-color` | `#e0e0e0` | Border color |
+| `--compa11y-accordion-radius` | `6px` | Border radius |
+| `--compa11y-accordion-trigger-bg` | `#ffffff` | Trigger background |
+| `--compa11y-accordion-trigger-hover-bg` | `#f9f9f9` | Trigger hover background |
+| `--compa11y-accordion-trigger-color` | `#1a1a1a` | Trigger text color |
+| `--compa11y-accordion-trigger-padding` | `1rem` | Trigger padding |
+| `--compa11y-accordion-content-bg` | `#ffffff` | Panel background |
+| `--compa11y-accordion-content-padding` | `1rem` | Panel padding |
+| `--compa11y-focus-color` | `#0066cc` | Focus ring color |
+
+---
+
+### `<a11y-table>`
+
+Data-driven accessible table. Accepts `columns` and `rows` as JavaScript properties and renders a fully semantic `<table>` in the light DOM. Supports sorting and row selection with automatic ARIA wiring.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **Semantic HTML** | Renders `<table>`, `<caption>`, `<thead>`, `<tbody>`, `<tr>`, `<th scope="col">`, `<td>` in the light DOM |
+| **`caption`** | Rendered from the `caption` attribute |
+| **`aria-sort`** | Set to `ascending`, `descending`, or `none` on sortable column headers |
+| **Sort button** | Renders a `<button>` inside each sortable `<th>`; focus preserved across re-renders |
+| **`aria-selected`** | Applied to `<tr>` in selection mode |
+| **Select-all** | Checkbox with `aria-label="Select all rows"` and automatic indeterminate state |
+| **Row checkboxes** | Auto-labeled using the first column value (e.g., `"Select Alice"`) |
+| **`aria-busy`** | Applied to host element when `loading` attribute is set |
+| **Empty state** | Full-width `<td>` with configurable `empty-message` |
+| **Loading state** | Full-width `<td>` with `aria-busy="true"` |
+| **Global styles** | Injected into `<head>` once, scoped to `a11y-table` |
+| **Screen Reader** | Announces sort direction changes and selection count changes |
+| **Dev warnings** | Warns if `caption` is absent; warns if selectable rows have no `id` field |
+
+#### Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `a11y-table-sort` | `{ sortKey, sortDirection }` | Fired when a sortable column header is activated |
+| `a11y-table-select` | `{ selectedRows: string[] }` | Fired when row selection changes |
+
+#### Usage
+
+```html
+<a11y-table caption="Product catalogue" selectable></a11y-table>
+
+<script>
+  const table = document.querySelector('a11y-table');
+
+  table.columns = [
+    { key: 'name',  label: 'Name',  sortable: true },
+    { key: 'price', label: 'Price', sortable: true, align: 'right' },
+    { key: 'stock', label: 'Stock', sortable: false, align: 'center' },
+  ];
+
+  table.rows = [
+    { id: 'p1', name: 'Widget A', price: '$49',  stock: 'In stock' },
+    { id: 'p2', name: 'Widget B', price: '$149', stock: 'Out of stock' },
+  ];
+
+  table.addEventListener('a11y-table-sort', (e) => {
+    console.log('Sort:', e.detail.sortKey, e.detail.sortDirection);
+  });
+
+  table.addEventListener('a11y-table-select', (e) => {
+    console.log('Selected:', e.detail.selectedRows);
+  });
+</script>
+```
+
+#### Column definition
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `key` | `string` | — | Matches row object key |
+| `label` | `string` | — | Header cell text |
+| `sortable` | `boolean` | `false` | Renders sort button |
+| `align` | `'left' \| 'center' \| 'right'` | `'left'` | Text alignment |
+| `rowHeader` | `boolean` | `false` | Renders `<th scope="row">` instead of `<td>` |
+
+#### Public methods
+
+| Method | Description |
+|--------|-------------|
+| `sort(key, dir?)` | Sort by column; cycles direction if `dir` omitted |
+| `selectRow(id)` | Select a row by ID |
+| `deselectRow(id)` | Deselect a row by ID |
+| `selectAll()` | Select all rows |
+| `deselectAll()` | Clear selection |
+
+#### CSS custom properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-table-color` | `#1a1a1a` | Default text color |
+| `--compa11y-table-bg` | `#ffffff` | Table background |
+| `--compa11y-table-head-bg` | `#f5f5f5` | Header row background |
+| `--compa11y-table-foot-bg` | `#f5f5f5` | Footer row background |
+| `--compa11y-table-border-color` | `#d0d0d0` | Border color |
+| `--compa11y-table-cell-padding` | `0.625rem 0.875rem` | Cell padding |
+| `--compa11y-table-row-hover-bg` | `#fafafa` | Row hover background |
+| `--compa11y-table-selected-bg` | `#e8f0fe` | Selected row background |
+| `--compa11y-table-selected-hover-bg` | `#dde7fd` | Selected row hover background |
+| `--compa11y-table-muted-color` | `#6b6b6b` | Empty/loading cell text color |
+| `--compa11y-focus-color` | `#0066cc` | Focus ring color |
 
 ---
 

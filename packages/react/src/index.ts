@@ -285,6 +285,110 @@ export {
 } from './components/link';
 
 // ============================================================================
+// Text / Heading
+// ============================================================================
+
+export {
+  Heading,
+  Text,
+  type HeadingProps,
+  type TextProps,
+} from './components/text';
+
+// ============================================================================
+// Popover
+// ============================================================================
+
+export {
+  Popover,
+  PopoverCompound,
+  usePopoverContext,
+  type PopoverProps,
+  type PopoverTriggerProps,
+  type PopoverContentProps,
+  type PopoverCloseProps,
+  type PopoverPlacement,
+  type PopoverContextValue,
+} from './components/popover';
+
+// ============================================================================
+// Accordion
+// ============================================================================
+
+export {
+  AccordionCompound as Accordion,
+  Accordion as AccordionBase,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  useAccordionContext,
+  useAccordionItemContext,
+  type AccordionProps,
+  type AccordionItemProps,
+  type AccordionHeaderProps,
+  type AccordionTriggerProps,
+  type AccordionContentProps,
+  type AccordionContextValue,
+  type AccordionItemContextValue,
+} from './components/accordion';
+
+// ============================================================================
+// Table
+// ============================================================================
+
+export {
+  TableCompound as Table,
+  Table as TableBase,
+  TableHead,
+  TableBody,
+  TableFoot,
+  TableRow,
+  TableHeader,
+  TableCell,
+  TableSelectAllCell,
+  TableSelectCell,
+  TableEmptyState,
+  TableLoadingState,
+  useTableContext,
+  useTableSectionContext,
+  useTableRowContext,
+  type TableProps,
+  type TableHeadProps,
+  type TableBodyProps,
+  type TableFootProps,
+  type TableRowProps,
+  type TableHeaderProps,
+  type TableCellProps,
+  type TableSelectAllCellProps,
+  type TableSelectCellProps,
+  type TableEmptyStateProps,
+  type TableLoadingStateProps,
+  type SortDirection,
+  type TableSection,
+  type TableContextValue,
+  type TableSectionContextValue,
+  type TableRowContextValue,
+} from './components/table';
+
+// ============================================================================
+// FormField
+// ============================================================================
+
+export {
+  FormField,
+  FormFieldCompound,
+  useFormFieldContext,
+  type FormFieldProps,
+  type FormFieldLabelProps,
+  type FormFieldHintProps,
+  type FormFieldErrorProps,
+  type FormFieldControlProps,
+  type FormFieldControlRenderProps,
+  type FormFieldContextValue,
+} from './components/form-field';
+
+// ============================================================================
 // Re-export core utilities
 // ============================================================================
 

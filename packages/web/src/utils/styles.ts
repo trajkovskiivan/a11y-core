@@ -1515,3 +1515,253 @@ export const TOAST_STYLES = `
     outline-offset: 2px;
   }
 `;
+
+/**
+ * Accordion-specific styles (injected into document head for light DOM styling)
+ */
+export const ACCORDION_GLOBAL_STYLES = `
+  a11y-accordion {
+    display: block;
+    border: 1px solid var(--compa11y-accordion-border-color, #e0e0e0);
+    border-radius: var(--compa11y-accordion-radius, 6px);
+    overflow: hidden;
+  }
+
+  a11y-accordion h1,
+  a11y-accordion h2,
+  a11y-accordion h3,
+  a11y-accordion h4,
+  a11y-accordion h5,
+  a11y-accordion h6 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  a11y-accordion [data-accordion-trigger] {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--compa11y-accordion-trigger-bg, #ffffff);
+    border: none;
+    border-bottom: 1px solid var(--compa11y-accordion-border-color, #e0e0e0);
+    padding: var(--compa11y-accordion-trigger-padding, 1rem);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--compa11y-accordion-trigger-color, #1a1a1a);
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    transition: background 0.15s ease;
+  }
+
+  a11y-accordion [data-accordion-trigger]:hover {
+    background: var(--compa11y-accordion-trigger-hover-bg, #f9f9f9);
+  }
+
+  a11y-accordion [data-accordion-trigger]:focus-visible {
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
+    outline-offset: -2px;
+  }
+
+  a11y-accordion [data-accordion-trigger][aria-disabled="true"],
+  a11y-accordion [data-accordion-trigger]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  a11y-accordion [data-accordion-trigger]::after {
+    content: '';
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.2s ease;
+  }
+
+  a11y-accordion [data-accordion-trigger][aria-expanded="true"]::after {
+    transform: rotate(-135deg) translateY(-2px);
+  }
+
+  a11y-accordion [data-accordion-panel] {
+    padding: var(--compa11y-accordion-content-padding, 1rem);
+    background: var(--compa11y-accordion-content-bg, #ffffff);
+    border-bottom: 1px solid var(--compa11y-accordion-border-color, #e0e0e0);
+  }
+
+  a11y-accordion [data-accordion-panel][hidden] {
+    display: none;
+  }
+
+  a11y-accordion > *:last-child [data-accordion-trigger],
+  a11y-accordion > [data-accordion-panel]:last-child {
+    border-bottom: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a11y-accordion [data-accordion-trigger],
+    a11y-accordion [data-accordion-trigger]::after {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    a11y-accordion {
+      border: 2px solid ButtonText;
+    }
+    a11y-accordion [data-accordion-trigger] {
+      border-bottom: 1px solid ButtonText;
+      forced-color-adjust: none;
+    }
+  }
+`;
+
+export const TABLE_GLOBAL_STYLES = `
+  /* ── Host ── */
+  a11y-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Table element ── */
+  a11y-table table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9375rem;
+    color: var(--compa11y-table-color, #1a1a1a);
+    background: var(--compa11y-table-bg, #ffffff);
+  }
+
+  /* ── Caption ── */
+  a11y-table caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
+    color: var(--compa11y-table-caption-color, #1a1a1a);
+  }
+
+  /* ── Header cells ── */
+  a11y-table th {
+    text-align: left;
+    font-weight: 600;
+    padding: var(--compa11y-table-cell-padding, 0.625rem 0.875rem);
+    background: var(--compa11y-table-head-bg, #f5f5f5);
+    border-bottom: 2px solid var(--compa11y-table-border-color, #d0d0d0);
+    white-space: nowrap;
+  }
+
+  /* ── Data cells ── */
+  a11y-table td {
+    padding: var(--compa11y-table-cell-padding, 0.625rem 0.875rem);
+    border-bottom: 1px solid var(--compa11y-table-border-color, #e8e8e8);
+    vertical-align: top;
+  }
+
+  /* ── Row hover ── */
+  a11y-table tbody tr:hover {
+    background: var(--compa11y-table-row-hover-bg, #fafafa);
+  }
+
+  /* ── Selected row ── */
+  a11y-table tr[aria-selected="true"] {
+    background: var(--compa11y-table-selected-bg, #e8f0fe);
+  }
+  a11y-table tr[aria-selected="true"]:hover {
+    background: var(--compa11y-table-selected-hover-bg, #dde7fd);
+  }
+
+  /* ── Sort button ── */
+  a11y-table [data-sort-btn] {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375em;
+    text-align: left;
+    width: 100%;
+  }
+
+  a11y-table [data-sort-btn]:focus-visible {
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  a11y-table [data-sort-icon] {
+    font-size: 0.75em;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* ── Select checkboxes ── */
+  a11y-table [data-select-cb] {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+  }
+  a11y-table [data-select-cb]:focus-visible {
+    outline: 2px solid var(--compa11y-focus-color, #0066cc);
+    outline-offset: 2px;
+  }
+
+  /* ── Empty / Loading cells ── */
+  a11y-table [data-empty-cell],
+  a11y-table [data-loading-cell] {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--compa11y-table-muted-color, #6b6b6b);
+    font-style: italic;
+  }
+
+  /* ── Footer ── */
+  a11y-table tfoot td,
+  a11y-table tfoot th {
+    background: var(--compa11y-table-foot-bg, #f5f5f5);
+    border-top: 2px solid var(--compa11y-table-border-color, #d0d0d0);
+    border-bottom: none;
+    font-weight: 600;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    a11y-table tr,
+    a11y-table td,
+    a11y-table th {
+      transition: none;
+    }
+  }
+
+  /* ── Windows High Contrast ── */
+  @media (forced-colors: active) {
+    a11y-table table {
+      border: 1px solid ButtonText;
+      forced-color-adjust: none;
+    }
+    a11y-table th,
+    a11y-table td {
+      border: 1px solid ButtonText;
+    }
+    a11y-table tr[aria-selected="true"] {
+      outline: 2px solid Highlight;
+    }
+    a11y-table [data-sort-btn]:focus-visible {
+      outline: 2px solid Highlight;
+    }
+  }
+`;
