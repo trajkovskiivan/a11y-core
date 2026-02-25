@@ -209,11 +209,6 @@ export class A11yPopover extends Compa11yElement {
   private _triggerEl: HTMLElement | null = null;
   private _contentEl: HTMLElement | null = null;
 
-  /**
-   * Element that had focus before we opened the popover. Used to decide
-   * whether to restore focus on close.
-   */
-  private _focusOrigin: Element | null = null;
   /** Set to true only when WE move focus into the content. */
   private _weMovedFocus = false;
 
@@ -442,8 +437,6 @@ export class A11yPopover extends Compa11yElement {
   private _show(): void {
     if (!this._contentEl) return;
 
-    this._focusOrigin = document.activeElement;
-
     this._contentEl.removeAttribute('hidden');
     this._updateTriggerAria(); // set aria-expanded=true + aria-controls
 
@@ -525,7 +518,6 @@ export class A11yPopover extends Compa11yElement {
       this._contentEl.contains(document.activeElement);
 
     this._weMovedFocus = false;
-    this._focusOrigin = null;
 
     if (focusIsInContent) {
       this._triggerEl?.focus();

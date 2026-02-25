@@ -32,6 +32,7 @@
   - [Popover](#popover)
   - [Accordion](#accordion)
   - [Table](#table)
+  - [Pagination](#pagination)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -56,6 +57,7 @@
   - [`<a11y-popover>`](#a11y-popover)
   - [`<a11y-accordion>`](#a11y-accordion)
   - [`<a11y-table>`](#a11y-table)
+  - [`<a11y-pagination>`](#a11y-pagination)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -1207,6 +1209,106 @@ Accessible data table component. Renders native semantic HTML (`<table>`, `<thea
 
 ---
 
+### Pagination
+
+Accessible pagination control. Renders a `<nav>` landmark with a labelled `<ul>` of page buttons, optional First/Last buttons, an optional rows-per-page `<select>`, and an optional "Go to page" number input. Works fully controlled, fully uncontrolled, or mixed.
+
+**Component:** `<Pagination>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`<nav>` landmark** | Wraps all controls; `aria-label` defaults to `"Pagination"` and is customisable via `ariaLabel` |
+| **`aria-current="page"`** | Applied to the active page button; no other ARIA role needed |
+| **`aria-label` on every button** | `"Page N"`, `"Previous page"`, `"Next page"`, `"First page"`, `"Last page"` — meaningful out of context |
+| **`disabled` attribute** | Native HTML `disabled` on buttons (not `aria-disabled`) for Prev/First at page 1, Next/Last at the last page, and when `disabled={true}` |
+| **Live region** | `role="status" aria-live="polite" aria-atomic="true"` always present in the DOM; announces `"Page N of M"` on navigation, `"Showing 1–N of M"` on page-size change |
+| **Ellipsis hiding** | Ellipsis `<li>` items carry `aria-hidden="true"` — they are purely visual |
+| **Labelled page-size selector** | `<label>` is programmatically linked via `htmlFor` / `id` |
+| **Labelled jump input** | `<label>` linked via `htmlFor`; validation error rendered in a `role="alert"` span linked to the input via `aria-describedby` |
+| **Stable IDs** | `useId` generates unique IDs even when multiple instances share a page |
+| **Controlled + uncontrolled** | `currentPage` / `onPageChange` for controlled; `defaultPage` seeds uncontrolled state |
+| **Dev warnings** | Error if neither `totalPages` nor `totalItems` is supplied; warning if `currentPage` is out of range |
+
+#### Keyboard interactions
+
+| Key | Target | Action |
+|-----|--------|--------|
+| `Tab` | All buttons / inputs | Move between controls in DOM order |
+| `Enter` / `Space` | Any page button | Navigate to that page |
+| `Enter` | Jump-to input | Navigate to the entered page number; shows inline error if invalid |
+
+#### Page range algorithm
+
+The component never shows an ellipsis when it would only collapse a single page number. Given `boundaryCount` pages at each end and `siblingCount` pages either side of the current page:
+
+- A gap of exactly 1 page → the page number is shown directly
+- A gap of 2+ pages → a single `…` ellipsis is inserted
+
+#### Usage examples
+
+```tsx
+// Uncontrolled (simplest)
+<Pagination totalPages={24} />
+
+// Controlled
+const [page, setPage] = useState(1);
+<Pagination
+  totalPages={24}
+  currentPage={page}
+  onPageChange={setPage}
+/>
+
+// Derived from totalItems
+<Pagination
+  totalItems={312}
+  pageSize={25}
+  currentPage={page}
+  onPageChange={setPage}
+/>
+
+// Full-featured
+<Pagination
+  totalItems={312}
+  currentPage={page}
+  onPageChange={setPage}
+  showFirstLast
+  showPageSize
+  pageSizeOptions={[10, 25, 50, 100]}
+  pageSize={pageSize}
+  onPageSizeChange={setPageSize}
+  showJumpTo
+  ariaLabel="Products pagination"
+/>
+
+// Disabled
+<Pagination totalPages={10} currentPage={1} disabled />
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `totalPages` | `number` | — | Total page count. Required unless `totalItems` is set |
+| `totalItems` | `number` | — | Total item count; used to derive `totalPages` when `totalPages` is not set |
+| `currentPage` | `number` | — | Controlled current page (1-indexed) |
+| `defaultPage` | `number` | `1` | Initial page for uncontrolled usage |
+| `onPageChange` | `(page: number) => void` | — | Called when the active page changes |
+| `ariaLabel` | `string` | `"Pagination"` | `aria-label` for the `<nav>` landmark — must be unique when multiple instances appear on the same page |
+| `siblingCount` | `number` | `1` | Pages shown either side of the current page |
+| `boundaryCount` | `number` | `1` | Pages shown at each end of the range |
+| `showFirstLast` | `boolean` | `false` | Show First (««) and Last (»») buttons |
+| `disabled` | `boolean` | `false` | Disable all controls |
+| `unstyled` | `boolean` | `false` | Omit `data-compa11y-*` attributes and inline layout styles |
+| `showPageSize` | `boolean` | `false` | Render a rows-per-page `<select>` |
+| `pageSize` | `number` | — | Controlled page size |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50]` | Options for the rows-per-page selector |
+| `onPageSizeChange` | `(size: number) => void` | — | Called when page size changes; component automatically resets to page 1 |
+| `showJumpTo` | `boolean` | `false` | Render a "Go to page" number input |
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -2142,6 +2244,117 @@ Data-driven accessible table. Accepts `columns` and `rows` as JavaScript propert
 | `--compa11y-table-selected-bg` | `#e8f0fe` | Selected row background |
 | `--compa11y-table-selected-hover-bg` | `#dde7fd` | Selected row hover background |
 | `--compa11y-table-muted-color` | `#6b6b6b` | Empty/loading cell text color |
+| `--compa11y-focus-color` | `#0066cc` | Focus ring color |
+
+---
+
+### `<a11y-pagination>`
+
+Accessible pagination web component. Renders a shadow-DOM `<nav>` landmark containing a `<ul>` of page buttons, optional First/Last buttons, an optional rows-per-page `<select>`, and an optional "Go to page" number input. Emits `page-change` and `page-size-change` custom events.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`<nav>` landmark** | Shadow DOM `<nav>` with `aria-label` (defaults to `"Pagination"`) |
+| **`aria-current="page"`** | Applied to the active page button |
+| **`aria-label` on every button** | `"Page N"`, `"Previous page"`, `"Next page"`, `"First page"`, `"Last page"` |
+| **`disabled` attribute** | Native `disabled` on Prev/First at page 1, Next/Last at the last page, and when the `disabled` attribute is set |
+| **Live region** | `role="status" aria-live="polite" aria-atomic="true"` always in shadow DOM; announces `"Page N of M"` or `"Showing 1–N of M"` |
+| **Ellipsis hiding** | Ellipsis `<li>` items carry `aria-hidden="true"` |
+| **Labelled controls** | Page-size `<select>` and jump-to `<input>` each have a linked `<label>` |
+| **Jump validation** | Invalid jump input shows an inline `role="alert"` error linked via `aria-describedby` |
+| **Focus restoration** | After innerHTML rebuild (required when the page range changes), focus is restored to the equivalent button via `requestAnimationFrame` |
+| **Dev warnings** | Error if neither `total-pages` nor `total-items` is set |
+
+#### Keyboard interactions
+
+| Key | Target | Action |
+|-----|--------|--------|
+| `Tab` | All buttons / inputs | Move between controls in DOM order |
+| `Enter` / `Space` | Any page button | Navigate to that page |
+| `Enter` | Jump-to input | Navigate to the entered page; shows inline error if invalid |
+
+#### Events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `page-change` | `{ page: number }` | Fired when the active page changes |
+| `page-size-change` | `{ pageSize: number }` | Fired when the rows-per-page selector changes |
+
+#### Usage
+
+```html
+<!-- Basic -->
+<a11y-pagination total-pages="24"></a11y-pagination>
+
+<!-- Derived from totalItems with page size -->
+<a11y-pagination
+  total-items="312"
+  page-size="25"
+  current-page="1"
+></a11y-pagination>
+
+<!-- Full-featured -->
+<a11y-pagination
+  total-items="312"
+  current-page="1"
+  show-first-last
+  show-page-size
+  page-size-options="10,25,50,100"
+  show-jump-to
+  aria-label="Products pagination"
+></a11y-pagination>
+
+<script>
+  const pg = document.querySelector('a11y-pagination');
+
+  pg.addEventListener('page-change', (e) => {
+    console.log('Page:', e.detail.page);
+  });
+
+  pg.addEventListener('page-size-change', (e) => {
+    console.log('Page size:', e.detail.pageSize);
+  });
+</script>
+```
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `total-pages` | `number` | `1` | Total page count. Required unless `total-items` is set |
+| `total-items` | `number` | — | Total item count; used to derive `total-pages` when `total-pages` is absent |
+| `current-page` | `number` | `1` | Active page (1-indexed) |
+| `page-size` | `number` | `25` | Items per page (used with `total-items`) |
+| `page-size-options` | `string` | `"10,25,50"` | Comma-separated list of page size options |
+| `sibling-count` | `number` | `1` | Pages shown either side of the current page |
+| `boundary-count` | `number` | `1` | Pages shown at each end of the range |
+| `show-first-last` | boolean attr | absent | Show First (««) and Last (»») buttons |
+| `show-page-size` | boolean attr | absent | Render a rows-per-page `<select>` |
+| `show-jump-to` | boolean attr | absent | Render a "Go to page" number input |
+| `disabled` | boolean attr | absent | Disable all controls |
+| `aria-label` | `string` | `"Pagination"` | Label for the `<nav>` landmark |
+
+#### Public methods
+
+| Method | Description |
+|--------|-------------|
+| `goTo(page)` | Navigate to a specific page |
+| `next()` | Navigate to the next page |
+| `previous()` | Navigate to the previous page |
+
+#### CSS custom properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-pagination-color` | `inherit` | Button text color |
+| `--compa11y-pagination-bg` | `transparent` | Button background |
+| `--compa11y-pagination-border` | `currentColor` | Button border color |
+| `--compa11y-pagination-radius` | `4px` | Button border radius |
+| `--compa11y-pagination-size` | `44px` | Minimum button width and height (touch target) |
+| `--compa11y-pagination-current-bg` | `currentColor` | Current page button background |
+| `--compa11y-pagination-current-color` | `canvas` | Current page button text color |
 | `--compa11y-focus-color` | `#0066cc` | Focus ring color |
 
 ---

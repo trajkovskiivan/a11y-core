@@ -25,6 +25,7 @@ import {
   Popover,
   Accordion,
   Table,
+  Pagination,
   type SortDirection,
 } from '@compa11y/react';
 
@@ -229,6 +230,11 @@ export function App() {
         <section>
           <h2>Table</h2>
           <TableDemo />
+        </section>
+
+        <section>
+          <h2>Pagination</h2>
+          <PaginationDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -2297,6 +2303,74 @@ function TableDemo() {
             <kbd>Space</kbd> on a checkbox toggles row selection
           </li>
         </ul>
+      </div>
+    </div>
+  );
+}
+
+function PaginationDemo() {
+  const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(6);
+  const [pageSize, setPageSize] = useState(25);
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setPage2(1);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Basic (5 pages):</strong>
+        </p>
+        <Pagination
+          currentPage={page}
+          totalPages={5}
+          onPageChange={setPage}
+          showFirstLast
+          style={{ fontFamily: 'inherit' } as React.CSSProperties}
+        />
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Current page: {page}
+        </p>
+      </div>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Full-featured (312 items, page size selector, jump-to):</strong>
+        </p>
+        <Pagination
+          currentPage={page2}
+          totalItems={312}
+          pageSize={pageSize}
+          pageSizeOptions={[10, 25, 50, 100]}
+          onPageChange={setPage2}
+          onPageSizeChange={handlePageSizeChange}
+          ariaLabel="Search results pagination"
+          showFirstLast
+          showPageSize
+          showJumpTo
+          siblingCount={1}
+          boundaryCount={1}
+        />
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          Page {page2} · {pageSize} per page ·{' '}
+          Showing {(page2 - 1) * pageSize + 1}–
+          {Math.min(page2 * pageSize, 312)} of 312
+        </p>
+      </div>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Disabled:</strong>
+        </p>
+        <Pagination
+          currentPage={3}
+          totalPages={10}
+          onPageChange={() => {}}
+          disabled
+        />
       </div>
     </div>
   );

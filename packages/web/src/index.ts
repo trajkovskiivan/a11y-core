@@ -33,6 +33,7 @@ import { A11yFormField } from './components/form-field';
 import { A11yPopover } from './components/popover';
 import { A11yAccordion } from './components/accordion';
 import { A11yTable } from './components/table';
+import { A11yPagination } from './components/pagination';
 
 // Re-export components
 export {
@@ -63,6 +64,7 @@ export {
   A11yPopover,
   A11yAccordion,
   A11yTable,
+  A11yPagination,
 };
 
 // Core utilities for vanilla JS usage
@@ -162,6 +164,7 @@ if (typeof window !== 'undefined') {
     A11yPopover,
     A11yAccordion,
     A11yTable,
+    A11yPagination,
     // Announcer utilities
     initAnnouncer,
     announce,

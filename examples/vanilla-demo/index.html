@@ -85,7 +85,8 @@
     a11y-form-field:not(:defined),
     a11y-popover:not(:defined),
     a11y-accordion:not(:defined),
-    a11y-table:not(:defined) {
+    a11y-table:not(:defined),
+    a11y-pagination:not(:defined) {
       display: none;
     }
 
@@ -1326,6 +1327,45 @@
 
   </section>
 
+  <!-- ================================================================
+       Pagination
+       ================================================================ -->
+  <section>
+    <h2>Pagination</h2>
+
+    <h3>Basic (24 pages)</h3>
+    <a11y-pagination
+      id="pagination-basic"
+      current-page="6"
+      total-pages="24"
+      show-first-last
+    ></a11y-pagination>
+
+    <h3 style="margin-top:1.5rem">Full-featured (312 items)</h3>
+    <a11y-pagination
+      id="pagination-full"
+      current-page="1"
+      total-items="312"
+      page-size="25"
+      page-size-options="10,25,50,100"
+      show-first-last
+      show-page-size
+      show-jump-to
+      aria-label="Search results pagination"
+    ></a11y-pagination>
+
+    <p id="pagination-status" style="margin-top:0.75rem;font-size:0.875rem;color:#555">
+      Showing items 1–25 of 312
+    </p>
+
+    <h3 style="margin-top:1.5rem">Disabled</h3>
+    <a11y-pagination
+      current-page="3"
+      total-pages="10"
+      disabled
+    ></a11y-pagination>
+  </section>
+
   <!-- Load compa11y - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
@@ -1734,6 +1774,37 @@
     function handleDelete() {
       alert('Item deleted!');
       document.querySelector('a11y-dialog').close();
+    }
+  </script>
+
+  <script type="module">
+    // Pagination event wiring
+    const paginationFull = document.getElementById('pagination-full');
+    const paginationBasic = document.getElementById('pagination-basic');
+    const paginationStatus = document.getElementById('pagination-status');
+
+    if (paginationFull && paginationStatus) {
+      paginationFull.addEventListener('page-change', (e) => {
+        const { page } = e.detail;
+        const pageSize = parseInt(paginationFull.getAttribute('page-size') || '25', 10);
+        const totalItems = 312;
+        const start = (page - 1) * pageSize + 1;
+        const end = Math.min(page * pageSize, totalItems);
+        paginationStatus.textContent = `Showing items ${start}–${end} of ${totalItems}`;
+        paginationFull.setAttribute('current-page', String(page));
+      });
+
+      paginationFull.addEventListener('page-size-change', (e) => {
+        const { pageSize } = e.detail;
+        paginationFull.setAttribute('page-size', String(pageSize));
+        paginationStatus.textContent = `Showing items 1–${Math.min(pageSize, 312)} of 312`;
+      });
+    }
+
+    if (paginationBasic) {
+      paginationBasic.addEventListener('page-change', (e) => {
+        paginationBasic.setAttribute('current-page', String(e.detail.page));
+      });
     }
   </script>
 </body>
