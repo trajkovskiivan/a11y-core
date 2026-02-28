@@ -85,12 +85,73 @@
       "types": "./dist/components/listbox/index.d.ts",
       "import": "./dist/components/listbox/index.js",
       "require": "./dist/components/listbox/index.cjs"
+    },
+    "./switch": {
+      "types": "./dist/components/switch/index.d.ts",
+      "import": "./dist/components/switch/index.js",
+      "require": "./dist/components/switch/index.cjs"
+    },
+    "./visually-hidden": {
+      "types": "./dist/components/visually-hidden/index.d.ts",
+      "import": "./dist/components/visually-hidden/index.js",
+      "require": "./dist/components/visually-hidden/index.cjs"
+    },
+    "./skip-link": {
+      "types": "./dist/components/skip-link/index.d.ts",
+      "import": "./dist/components/skip-link/index.js",
+      "require": "./dist/components/skip-link/index.cjs"
+    },
+    "./alert": {
+      "types": "./dist/components/alert/index.d.ts",
+      "import": "./dist/components/alert/index.js",
+      "require": "./dist/components/alert/index.cjs"
+    },
+    "./link": {
+      "types": "./dist/components/link/index.d.ts",
+      "import": "./dist/components/link/index.js",
+      "require": "./dist/components/link/index.cjs"
+    },
+    "./text": {
+      "types": "./dist/components/text/index.d.ts",
+      "import": "./dist/components/text/index.js",
+      "require": "./dist/components/text/index.cjs"
+    },
+    "./popover": {
+      "types": "./dist/components/popover/index.d.ts",
+      "import": "./dist/components/popover/index.js",
+      "require": "./dist/components/popover/index.cjs"
+    },
+    "./accordion": {
+      "types": "./dist/components/accordion/index.d.ts",
+      "import": "./dist/components/accordion/index.js",
+      "require": "./dist/components/accordion/index.cjs"
+    },
+    "./table": {
+      "types": "./dist/components/table/index.d.ts",
+      "import": "./dist/components/table/index.js",
+      "require": "./dist/components/table/index.cjs"
+    },
+    "./form-field": {
+      "types": "./dist/components/form-field/index.d.ts",
+      "import": "./dist/components/form-field/index.js",
+      "require": "./dist/components/form-field/index.cjs"
+    },
+    "./pagination": {
+      "types": "./dist/components/pagination/index.d.ts",
+      "import": "./dist/components/pagination/index.js",
+      "require": "./dist/components/pagination/index.cjs"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/components/breadcrumbs/index.d.ts",
+      "import": "./dist/components/breadcrumbs/index.js",
+      "require": "./dist/components/breadcrumbs/index.cjs"
     }
   },
- "files": [
-    "dist",      
+  "files": [
+    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsup",
@@ -117,6 +178,13 @@
     "tsup": "^8.0.0",
     "typescript": "^5.3.0",
     "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/trajkovskiivan"
   },
   "sideEffects": false,
   "keywords": [

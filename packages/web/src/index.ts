@@ -34,6 +34,7 @@ import { A11yPopover } from './components/popover';
 import { A11yAccordion } from './components/accordion';
 import { A11yTable } from './components/table';
 import { A11yPagination } from './components/pagination';
+import { A11yBreadcrumbs } from './components/breadcrumbs';
 
 // Re-export components
 export {
@@ -65,6 +66,7 @@ export {
   A11yAccordion,
   A11yTable,
   A11yPagination,
+  A11yBreadcrumbs,
 };
 
 // Core utilities for vanilla JS usage
@@ -165,6 +167,7 @@ if (typeof window !== 'undefined') {
     A11yAccordion,
     A11yTable,
     A11yPagination,
+    A11yBreadcrumbs,
     // Announcer utilities
     initAnnouncer,
     announce,

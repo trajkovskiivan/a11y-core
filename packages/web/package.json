@@ -73,14 +73,63 @@
     "./listbox": {
       "types": "./dist/components/listbox.d.ts",
       "import": "./dist/components/listbox.js"
+    },
+    "./toast": {
+      "types": "./dist/components/toast.d.ts",
+      "import": "./dist/components/toast.js"
+    },
+    "./visually-hidden": {
+      "types": "./dist/components/visually-hidden.d.ts",
+      "import": "./dist/components/visually-hidden.js"
+    },
+    "./skip-link": {
+      "types": "./dist/components/skip-link.d.ts",
+      "import": "./dist/components/skip-link.js"
+    },
+    "./alert": {
+      "types": "./dist/components/alert.d.ts",
+      "import": "./dist/components/alert.js"
+    },
+    "./link": {
+      "types": "./dist/components/link.d.ts",
+      "import": "./dist/components/link.js"
+    },
+    "./text": {
+      "types": "./dist/components/text.d.ts",
+      "import": "./dist/components/text.js"
+    },
+    "./popover": {
+      "types": "./dist/components/popover.d.ts",
+      "import": "./dist/components/popover.js"
+    },
+    "./accordion": {
+      "types": "./dist/components/accordion.d.ts",
+      "import": "./dist/components/accordion.js"
+    },
+    "./table": {
+      "types": "./dist/components/table.d.ts",
+      "import": "./dist/components/table.js"
+    },
+    "./form-field": {
+      "types": "./dist/components/form-field.d.ts",
+      "import": "./dist/components/form-field.js"
+    },
+    "./pagination": {
+      "types": "./dist/components/pagination.d.ts",
+      "import": "./dist/components/pagination.js"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/components/breadcrumbs.d.ts",
+      "import": "./dist/components/breadcrumbs.js"
     }
   },
   "unpkg": "./dist/compa11y.iife.js",
   "jsdelivr": "./dist/compa11y.iife.js",
   "files": [
-    "dist",     
+    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "vite build",
@@ -99,6 +148,13 @@
     "vite": "^5.0.0",
     "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/trajkovskiivan"
   },
   "sideEffects": true,
   "keywords": [

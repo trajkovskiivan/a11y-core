@@ -86,7 +86,8 @@
     a11y-popover:not(:defined),
     a11y-accordion:not(:defined),
     a11y-table:not(:defined),
-    a11y-pagination:not(:defined) {
+    a11y-pagination:not(:defined),
+    a11y-breadcrumbs:not(:defined) {
       display: none;
     }
 
@@ -1364,6 +1365,45 @@
       total-pages="10"
       disabled
     ></a11y-pagination>
+  </section>
+
+  <!-- ================================================================
+       Breadcrumbs
+       ================================================================ -->
+  <section>
+    <h2>Breadcrumbs</h2>
+
+    <h3>Basic — last item as span (current page)</h3>
+    <a11y-breadcrumbs aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/products/keyboards">Keyboards</a>
+      <span>Model X</span>
+    </a11y-breadcrumbs>
+
+    <h3 style="margin-top:1.5rem">Custom separator — arrow</h3>
+    <a11y-breadcrumbs separator="›" aria-label="Docs breadcrumb">
+      <a href="/">Home</a>
+      <a href="/docs">Docs</a>
+      <a href="/docs/components">Components</a>
+      <span>Breadcrumbs</span>
+    </a11y-breadcrumbs>
+
+    <h3 style="margin-top:1.5rem">Collapsed (max-items=3) — click … to expand</h3>
+    <a11y-breadcrumbs max-items="3" aria-label="Deep breadcrumb">
+      <a href="/">Home</a>
+      <a href="/cat">Category</a>
+      <a href="/cat/sub">Subcategory</a>
+      <a href="/cat/sub/item">Item</a>
+      <span>Detail</span>
+    </a11y-breadcrumbs>
+
+    <h3 style="margin-top:1.5rem">Last item as anchor (aria-current on link)</h3>
+    <a11y-breadcrumbs aria-label="Product breadcrumb">
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/products/model-x">Model X</a>
+    </a11y-breadcrumbs>
   </section>
 
   <!-- Load compa11y - this registers all custom elements automatically -->

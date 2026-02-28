@@ -26,6 +26,7 @@ import {
   Accordion,
   Table,
   Pagination,
+  Breadcrumbs,
   type SortDirection,
 } from '@compa11y/react';
 
@@ -235,6 +236,11 @@ export function App() {
         <section>
           <h2>Pagination</h2>
           <PaginationDemo />
+        </section>
+
+        <section>
+          <h2>Breadcrumbs</h2>
+          <BreadcrumbsDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -2372,6 +2378,98 @@ function PaginationDemo() {
           disabled
         />
       </div>
+    </div>
+  );
+}
+
+function BreadcrumbsDemo() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Basic — last item as span (no href, current page):</strong>
+        </p>
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Products', href: '/products' },
+            { label: 'Keyboards', href: '/products/keyboards' },
+            { label: 'Model X' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Last item as link (aria-current="page" on anchor):</strong>
+        </p>
+        <Breadcrumbs
+          ariaLabel="Product breadcrumb"
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Products', href: '/products' },
+            { label: 'Model X', href: '/products/model-x' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Custom separator — arrow:</strong>
+        </p>
+        <Breadcrumbs
+          separator="›"
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Docs', href: '/docs' },
+            { label: 'Components', href: '/docs/components' },
+            { label: 'Breadcrumbs' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <p style={{ marginBottom: '0.5rem' }}>
+          <strong>Collapsed (maxItems=3) — click … to expand:</strong>
+        </p>
+        <Breadcrumbs
+          maxItems={3}
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Category', href: '/cat' },
+            { label: 'Subcategory', href: '/cat/sub' },
+            { label: 'Item', href: '/cat/sub/item' },
+            { label: 'Detail' },
+          ]}
+        />
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li><kbd>Tab</kbd> — move between breadcrumb links</li>
+          <li><kbd>Enter</kbd> — follow focused link</li>
+          <li>
+            When collapsed: <kbd>Tab</kbd> to the <strong>…</strong> button,{' '}
+            <kbd>Enter</kbd> / <kbd>Space</kbd> to expand; focus moves to first
+            newly revealed link
+          </li>
+        </ul>
+        <h3>Screen Reader</h3>
+        <ul>
+          <li>
+            Announced as a <strong>navigation</strong> landmark (
+            <code>nav aria-label="Breadcrumb"</code>)
+          </li>
+          <li>Separators are hidden from screen readers (<code>aria-hidden</code>)</li>
+          <li>
+            Current page announced as{' '}
+            <em>"Model X, current page"</em>
+          </li>
+        </ul>
+      </div>
+
     </div>
   );
 }

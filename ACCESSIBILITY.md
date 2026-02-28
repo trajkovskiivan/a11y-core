@@ -33,6 +33,7 @@
   - [Accordion](#accordion)
   - [Table](#table)
   - [Pagination](#pagination)
+  - [Breadcrumbs](#breadcrumbs)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -58,6 +59,7 @@
   - [`<a11y-accordion>`](#a11y-accordion)
   - [`<a11y-table>`](#a11y-table)
   - [`<a11y-pagination>`](#a11y-pagination)
+  - [`<a11y-breadcrumbs>`](#a11y-breadcrumbs)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -1309,6 +1311,90 @@ const [page, setPage] = useState(1);
 
 ---
 
+### Breadcrumbs
+
+Accessible trail-of-links navigation. Renders a `<nav aria-label>` > `<ol>` with `aria-current="page"` on the last item and `aria-hidden` separators. Supports an optional collapsible middle section when the trail is long.
+
+**Component:** `<Breadcrumbs>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`<nav>` landmark** | Wraps all items; `aria-label` defaults to `"Breadcrumb"` |
+| **`<ol>` list** | Order is semantic — `<ul>` would be wrong here |
+| **`aria-current="page"`** | Automatically applied to the last item (link or span) |
+| **Separators hidden** | Each separator `<li>` carries `aria-hidden="true"` — never read by screen readers |
+| **`<a>` vs `<span>` for current** | If the last item has `href`, renders an `<a aria-current="page">`; otherwise a `<span aria-current="page">` |
+| **Decorative icons** | Icon nodes inside items are wrapped in `<span aria-hidden="true">` |
+| **Collapse / expand** | When `maxItems > 0` and trail exceeds that count, middle items are hidden behind a `<button aria-expanded="false" aria-label="Show full breadcrumb path">` |
+| **Focus after expand** | On expand, focus is moved programmatically to the first newly-revealed link |
+| **Dev warnings** | Error if `items` is empty; warning if only one item is provided |
+
+#### Keyboard interactions
+
+| Key | Target | Action |
+|-----|--------|--------|
+| `Tab` | Links / expand button | Move between interactive items |
+| `Enter` | Link | Navigate to that crumb |
+| `Enter` / `Space` | Expand (…) button | Show all items; focus moves to first revealed link |
+
+#### Usage examples
+
+```tsx
+// Basic
+<Breadcrumbs
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Model X' },          // last item — no href → <span>
+  ]}
+/>
+
+// Last item as link (aria-current on anchor)
+<Breadcrumbs
+  ariaLabel="Product breadcrumb"
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Model X', href: '/products/model-x' },
+  ]}
+/>
+
+// Custom separator
+<Breadcrumbs separator="›" items={items} />
+
+// Collapsed middle (click … to expand)
+<Breadcrumbs maxItems={3} items={longItems} />
+
+// With icons
+<Breadcrumbs
+  items={[
+    { label: 'Home', href: '/', icon: <HomeIcon /> },
+    { label: 'Settings' },
+  ]}
+/>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `BreadcrumbItem[]` | **required** | Ordered crumbs; last item is current page |
+| `ariaLabel` | `string` | `"Breadcrumb"` | `aria-label` for the `<nav>` — must be unique per page when multiple instances appear |
+| `separator` | `ReactNode` | `"/"` | Visual separator between items; automatically `aria-hidden` |
+| `maxItems` | `number` | `0` | Collapse middle items when trail is longer; `0` = never collapse |
+| `unstyled` | `boolean` | `false` | Strip all inline styles (layout, colors, focus ring) |
+
+#### `BreadcrumbItem` shape
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `label` | `string` | Visible text |
+| `href` | `string?` | Navigation target; omit for the current-page item |
+| `icon` | `ReactNode?` | Decorative icon; rendered `aria-hidden` |
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -2355,6 +2441,75 @@ Accessible pagination web component. Renders a shadow-DOM `<nav>` landmark conta
 | `--compa11y-pagination-size` | `44px` | Minimum button width and height (touch target) |
 | `--compa11y-pagination-current-bg` | `currentColor` | Current page button background |
 | `--compa11y-pagination-current-color` | `canvas` | Current page button text color |
+| `--compa11y-focus-color` | `#0066cc` | Focus ring color |
+
+---
+
+### `<a11y-breadcrumbs>`
+
+Reads slotted `<a>` and `<span>` children from the light DOM, clones them into a shadow `<nav><ol>` with separators and `aria-current="page"` injected automatically on the last child.
+
+#### What the library handles automatically
+
+| Feature | Details |
+|---------|---------|
+| `<nav aria-label>` | Defaults to `"Breadcrumb"`; override with the `aria-label` attribute |
+| `<ol>` list | Semantic ordered list; children cloned into shadow DOM |
+| `aria-current="page"` | Applied automatically to the last child's shadow clone |
+| Separators | `aria-hidden="true"` `<li>` nodes injected between each item |
+| `<a>` vs `<span>` | If the source child is `<a href>` the clone is an anchor; `<span>` otherwise |
+| Collapse / expand | `max-items` attribute hides middle items behind a keyboard-accessible `<button>` |
+| Focus after expand | Focus moves to the first newly-revealed link |
+| Child change detection | `MutationObserver` watches for added/removed children and re-renders |
+
+#### Attributes
+
+| Attribute | Default | Description |
+|-----------|---------|-------------|
+| `aria-label` | `"Breadcrumb"` | Accessible name for the `<nav>` landmark |
+| `separator` | `"/"` | Separator text between items |
+| `max-items` | `0` | Collapse threshold; `0` = never collapse |
+
+#### Usage
+
+```html
+<!-- Basic -->
+<a11y-breadcrumbs aria-label="Breadcrumb">
+  <a href="/">Home</a>
+  <a href="/products">Products</a>
+  <span>Model X</span>        <!-- last child → current page -->
+</a11y-breadcrumbs>
+
+<!-- Last item as link -->
+<a11y-breadcrumbs>
+  <a href="/">Home</a>
+  <a href="/products/model-x">Model X</a>
+</a11y-breadcrumbs>
+
+<!-- Custom separator -->
+<a11y-breadcrumbs separator="›">
+  <a href="/">Home</a>
+  <span>Settings</span>
+</a11y-breadcrumbs>
+
+<!-- Collapsible -->
+<a11y-breadcrumbs max-items="3">
+  <a href="/">Home</a>
+  <a href="/cat">Category</a>
+  <a href="/cat/sub">Subcategory</a>
+  <a href="/cat/sub/item">Item</a>
+  <span>Detail</span>
+</a11y-breadcrumbs>
+```
+
+#### CSS custom properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-breadcrumbs-link-color` | `#0066cc` | Link text color |
+| `--compa11y-breadcrumbs-current-color` | `inherit` | Current-page item color |
+| `--compa11y-breadcrumbs-separator-color` | `#999` | Separator color |
+| `--compa11y-breadcrumbs-separator-padding` | `0.375rem` | Horizontal padding around each separator |
 | `--compa11y-focus-color` | `#0066cc` | Focus ring color |
 
 ---
