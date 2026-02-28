@@ -2138,11 +2138,15 @@ function TableDemo() {
     setSortDir(dir);
   };
 
-  const tableStyle: React.CSSProperties = {
+  const tableWrapperStyle: React.CSSProperties = {
     border: '1px solid #e0e0e0',
     borderRadius: 6,
     overflow: 'hidden',
     maxWidth: 700,
+    width: '100%',
+  };
+
+  const tableStyle: React.CSSProperties = {
     width: '100%',
     borderCollapse: 'collapse',
   };
@@ -2170,6 +2174,7 @@ function TableDemo() {
         <h3 style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>
           Sortable &amp; Selectable
         </h3>
+        <div style={tableWrapperStyle}>
         <Table
           caption="Product catalogue"
           sortKey={sortKey}
@@ -2237,6 +2242,7 @@ function TableDemo() {
             </Table.Row>
           </Table.Foot>
         </Table>
+        </div>
         <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
           Sort: {sortKey ? `${sortKey} (${sortDir})` : 'none'}&nbsp;|&nbsp;
           Selected: {selected.length > 0 ? selected.join(', ') : 'none'}

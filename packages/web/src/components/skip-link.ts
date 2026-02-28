@@ -10,14 +10,14 @@
  * @example
  * ```html
  * <!-- Place as first child of <body> -->
- * <a11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
+ * <compa11y-skip-link target="#main-content">Skip to main content</compa11y-skip-link>
  *
  * <!-- With custom label -->
- * <a11y-skip-link target="#main-content" label="Skip navigation"></a11y-skip-link>
+ * <compa11y-skip-link target="#main-content" label="Skip navigation"></compa11y-skip-link>
  *
  * <!-- Multiple skip links -->
- * <a11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
- * <a11y-skip-link target="#search">Skip to search</a11y-skip-link>
+ * <compa11y-skip-link target="#main-content">Skip to main content</compa11y-skip-link>
+ * <compa11y-skip-link target="#search">Skip to search</compa11y-skip-link>
  * ```
  *
  * Keyboard: Tab to reveal, Enter to activate.
@@ -29,7 +29,7 @@ import { createComponentWarnings } from '@compa11y/core';
 
 const warn = createComponentWarnings('SkipLink');
 
-export class A11ySkipLink extends Compa11yElement {
+export class Compa11ySkipLink extends Compa11yElement {
   static get observedAttributes() {
     return ['target', 'label'];
   }
@@ -138,4 +138,4 @@ export class A11ySkipLink extends Compa11yElement {
   }
 }
 
-defineElement('a11y-skip-link', A11ySkipLink);
+defineElement('compa11y-skip-link', Compa11ySkipLink);

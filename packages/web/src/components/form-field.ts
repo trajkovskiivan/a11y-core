@@ -5,35 +5,35 @@
  * around any slotted form control. Automatically wires up `aria-labelledby`,
  * `aria-describedby`, and `aria-invalid` on the slotted control.
  *
- * Unlike `<a11y-input>` which bundles its own `<input>`, FormField wraps
+ * Unlike `<compa11y-input>` which bundles its own `<input>`, FormField wraps
  * **any** control you slot into it — native `<input>`, `<select>`, `<textarea>`,
  * or custom elements.
  *
  * @example
  * ```html
  * <!-- With a native input -->
- * <a11y-form-field label="Email" hint="We won't share it" required>
+ * <compa11y-form-field label="Email" hint="We won't share it" required>
  *   <input type="email" placeholder="you@example.com" />
- * </a11y-form-field>
+ * </compa11y-form-field>
  *
  * <!-- With a native select -->
- * <a11y-form-field label="Country" required>
+ * <compa11y-form-field label="Country" required>
  *   <select>
  *     <option value="">Choose...</option>
  *     <option value="us">United States</option>
  *     <option value="uk">United Kingdom</option>
  *   </select>
- * </a11y-form-field>
+ * </compa11y-form-field>
  *
  * <!-- With error state -->
- * <a11y-form-field label="Password" error="Must be at least 8 characters">
+ * <compa11y-form-field label="Password" error="Must be at least 8 characters">
  *   <input type="password" />
- * </a11y-form-field>
+ * </compa11y-form-field>
  *
  * <!-- Disabled -->
- * <a11y-form-field label="Organization" disabled>
+ * <compa11y-form-field label="Organization" disabled>
  *   <input type="text" value="Compa11y Inc." />
- * </a11y-form-field>
+ * </compa11y-form-field>
  * ```
  *
  * @attr {string} label - Visible label text
@@ -120,7 +120,7 @@ const FORM_FIELD_STYLES = `
   }
 `;
 
-export class A11yFormField extends Compa11yElement {
+export class Compa11yFormField extends Compa11yElement {
   static get observedAttributes() {
     return ['label', 'hint', 'error', 'required', 'disabled'];
   }
@@ -133,7 +133,7 @@ export class A11yFormField extends Compa11yElement {
       if (!this.hasAttribute('label')) {
         console.warn(
           '[compa11y/FormField] FormField has no label. Add label="..." attribute.\n' +
-            '💡 Suggestion: <a11y-form-field label="Email">...</a11y-form-field>'
+            '💡 Suggestion: <compa11y-form-field label="Email">...</compa11y-form-field>'
         );
       }
     }
@@ -287,4 +287,4 @@ export class A11yFormField extends Compa11yElement {
   }
 }
 
-defineElement('a11y-form-field', A11yFormField);
+defineElement('compa11y-form-field', Compa11yFormField);

@@ -74,7 +74,7 @@ export function initFocusVisible(): () => void {
     if (!(target instanceof HTMLElement)) return;
 
     if (state.hadKeyboardEvent || shouldShowFocusForElement(target)) {
-      target.dataset.a11ykitFocusVisible = 'true';
+      target.dataset.compa11yFocusVisible = 'true';
     }
   }
 
@@ -82,7 +82,7 @@ export function initFocusVisible(): () => void {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
-    delete target.dataset.a11ykitFocusVisible;
+    delete target.dataset.compa11yFocusVisible;
   }
 
   function handleVisibilityChange(): void {
@@ -161,7 +161,7 @@ export function isFocusVisible(): boolean {
  * Check if an element has visible focus
  */
 export function hasVisibleFocus(element: HTMLElement): boolean {
-  return element.dataset.a11ykitFocusVisible === 'true';
+  return element.dataset.compa11yFocusVisible === 'true';
 }
 
 /**
@@ -176,9 +176,9 @@ export function getLastFocusSource(): FocusSource {
  */
 export function setFocusVisible(element: HTMLElement, visible: boolean): void {
   if (visible) {
-    element.dataset.a11ykitFocusVisible = 'true';
+    element.dataset.compa11yFocusVisible = 'true';
   } else {
-    delete element.dataset.a11ykitFocusVisible;
+    delete element.dataset.compa11yFocusVisible;
   }
 }
 

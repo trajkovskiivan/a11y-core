@@ -2,10 +2,10 @@
  * compa11y Pagination Web Component
  *
  * Usage:
- * <a11y-pagination
+ * <compa11y-pagination
  *   current-page="3"
  *   total-pages="24"
- * ></a11y-pagination>
+ * ></compa11y-pagination>
  *
  * Events:
  *   page-change      → { page: number }
@@ -81,7 +81,7 @@ function getPageRange(
 // Web Component
 // --------------------------------------------------------------------------
 
-export class A11yPagination extends Compa11yElement {
+export class Compa11yPagination extends Compa11yElement {
   private _currentPage = 1;
   private _totalPages = 1;
   private _totalItems: number | null = null;
@@ -288,7 +288,7 @@ export class A11yPagination extends Compa11yElement {
     if (!hasTotal) {
       warn.error(
         'Either total-pages or total-items attribute is required.',
-        'Add total-pages="n" or total-items="n" to <a11y-pagination>.'
+        'Add total-pages="n" or total-items="n" to <compa11y-pagination>.'
       );
     }
   }
@@ -622,6 +622,6 @@ export class A11yPagination extends Compa11yElement {
   }
 }
 
-defineElement('a11y-pagination', A11yPagination);
+defineElement('compa11y-pagination', Compa11yPagination);
 
-export default A11yPagination;
+export default Compa11yPagination;

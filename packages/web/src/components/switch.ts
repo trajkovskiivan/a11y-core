@@ -6,24 +6,24 @@
  * @example
  * ```html
  * <!-- Basic usage -->
- * <a11y-switch label="Enable notifications"></a11y-switch>
+ * <compa11y-switch label="Enable notifications"></compa11y-switch>
  *
  * <!-- Checked by default -->
- * <a11y-switch checked label="Dark mode"></a11y-switch>
+ * <compa11y-switch checked label="Dark mode"></compa11y-switch>
  *
  * <!-- Disabled -->
- * <a11y-switch disabled label="Unavailable feature"></a11y-switch>
+ * <compa11y-switch disabled label="Unavailable feature"></compa11y-switch>
  *
  * <!-- Different sizes -->
- * <a11y-switch size="sm" label="Small"></a11y-switch>
- * <a11y-switch size="md" label="Medium"></a11y-switch>
- * <a11y-switch size="lg" label="Large"></a11y-switch>
+ * <compa11y-switch size="sm" label="Small"></compa11y-switch>
+ * <compa11y-switch size="md" label="Medium"></compa11y-switch>
+ * <compa11y-switch size="lg" label="Large"></compa11y-switch>
  *
  * <!-- Listen to changes -->
- * <a11y-switch
+ * <compa11y-switch
  *   label="Notifications"
  *   onchange="handleChange(event.detail.checked)"
- * ></a11y-switch>
+ * ></compa11y-switch>
  * ```
  *
  * @fires change - Emitted when the switch state changes, detail: { checked: boolean }
@@ -46,7 +46,7 @@ import { announcePolite } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { SWITCH_STYLES } from '../utils/styles';
 
-export class A11ySwitch extends Compa11yElement {
+export class Compa11ySwitch extends Compa11yElement {
   private _checked = false;
   private _button: HTMLButtonElement | null = null;
   private _label: HTMLLabelElement | null = null;
@@ -127,7 +127,7 @@ export class A11ySwitch extends Compa11yElement {
       if (!this.label && !this.getAttribute('aria-label')) {
         console.warn(
           '[compa11y/Switch] Switch has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
-            '💡 Suggestion: <a11y-switch label="Enable feature"></a11y-switch>'
+            '💡 Suggestion: <compa11y-switch label="Enable feature"></compa11y-switch>'
         );
       }
     }
@@ -309,6 +309,6 @@ export class A11ySwitch extends Compa11yElement {
 }
 
 // Register the custom element
-defineElement('a11y-switch', A11ySwitch);
+defineElement('compa11y-switch', Compa11ySwitch);
 
-export default A11ySwitch;
+export default Compa11ySwitch;

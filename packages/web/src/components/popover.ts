@@ -10,22 +10,22 @@
  * @example
  * ```html
  * <!-- Basic -->
- * <a11y-popover>
+ * <compa11y-popover>
  *   <button slot="trigger">More info</button>
  *   <p>Popover content. Escape or click outside to close.</p>
- * </a11y-popover>
+ * </compa11y-popover>
  *
  * <!-- Custom role + label -->
- * <a11y-popover content-role="region" content-label="Filter options" placement="bottom-start">
+ * <compa11y-popover content-role="region" content-label="Filter options" placement="bottom-start">
  *   <button slot="trigger">Filters</button>
  *   <form>...</form>
- * </a11y-popover>
+ * </compa11y-popover>
  *
  * <!-- Informational (no autofocus) -->
- * <a11y-popover focus-policy="none">
+ * <compa11y-popover focus-policy="none">
  *   <button slot="trigger">?</button>
  *   <p>This field accepts ISO-8601 dates.</p>
- * </a11y-popover>
+ * </compa11y-popover>
  * ```
  *
  * @attr {boolean}  open          - Whether the popover is currently visible
@@ -194,7 +194,7 @@ const POPOVER_STYLES = `
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export class A11yPopover extends Compa11yElement {
+export class Compa11yPopover extends Compa11yElement {
   // ── state ──
   private _open = false;
   private _placement: Placement = 'bottom';
@@ -357,7 +357,7 @@ export class A11yPopover extends Compa11yElement {
       if (!el) {
         warn.warning(
           'Popover has no trigger. Add an element to the "trigger" slot.',
-          '<a11y-popover><button slot="trigger">Open</button>...</a11y-popover>'
+          '<compa11y-popover><button slot="trigger">Open</button>...</compa11y-popover>'
         );
       }
     }
@@ -457,8 +457,8 @@ export class A11yPopover extends Compa11yElement {
         const hasHeading = !!c.querySelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
         if (!hasLabel && !hasHeading) {
           warn.warning(
-            'Popover content has no accessible name. Add content-label="..." on <a11y-popover>, or place a heading inside the content.',
-            'Example: <a11y-popover content-label="Filter options">...</a11y-popover>'
+            'Popover content has no accessible name. Add content-label="..." on <compa11y-popover>, or place a heading inside the content.',
+            'Example: <compa11y-popover content-label="Filter options">...</compa11y-popover>'
           );
         }
       });
@@ -484,7 +484,7 @@ export class A11yPopover extends Compa11yElement {
     });
 
     this._addGlobalListeners();
-    this.emit('a11y-popover-open');
+    this.emit('compa11y-popover-open');
   }
 
   private _hide(): void {
@@ -523,7 +523,7 @@ export class A11yPopover extends Compa11yElement {
       this._triggerEl?.focus();
     }
 
-    this.emit('a11y-popover-close');
+    this.emit('compa11y-popover-close');
   }
 
   // ─── Positioning ───────────────────────────────────────────────────────────
@@ -598,4 +598,4 @@ export class A11yPopover extends Compa11yElement {
   };
 }
 
-defineElement('a11y-popover', A11yPopover);
+defineElement('compa11y-popover', Compa11yPopover);

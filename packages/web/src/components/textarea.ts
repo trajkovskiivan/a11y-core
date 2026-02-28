@@ -5,23 +5,23 @@
  *
  * @example
  * ```html
- * <a11y-textarea
+ * <compa11y-textarea
  *   label="Description"
  *   hint="Provide a brief summary"
  *   required
  *   rows="4"
  *   placeholder="Enter description..."
- * ></a11y-textarea>
+ * ></compa11y-textarea>
  *
  * <!-- With error -->
- * <a11y-textarea
+ * <compa11y-textarea
  *   label="Bio"
  *   error="Bio is required"
  *   rows="5"
- * ></a11y-textarea>
+ * ></compa11y-textarea>
  *
  * <!-- Disabled -->
- * <a11y-textarea label="Notes" value="Read only content" disabled></a11y-textarea>
+ * <compa11y-textarea label="Notes" value="Read only content" disabled></compa11y-textarea>
  * ```
  *
  * @fires input - Emitted on each keystroke, detail: { value: string }
@@ -64,7 +64,7 @@ import { announceAssertive } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { TEXTAREA_STYLES } from '../utils/styles';
 
-export class A11yTextarea extends Compa11yElement {
+export class Compa11yTextarea extends Compa11yElement {
   private _value = '';
   private _textareaEl: HTMLTextAreaElement | null = null;
   private _labelEl: HTMLLabelElement | null = null;
@@ -163,7 +163,7 @@ export class A11yTextarea extends Compa11yElement {
       if (!hasLabel) {
         console.warn(
           '[compa11y/Textarea] Textarea has no accessible label. Add label="...", aria-label="...", or aria-labelledby="..." attribute.\n' +
-            '💡 Suggestion: <a11y-textarea label="Description"></a11y-textarea>'
+            '💡 Suggestion: <compa11y-textarea label="Description"></compa11y-textarea>'
         );
       }
     }
@@ -428,11 +428,11 @@ export class A11yTextarea extends Compa11yElement {
   };
 
   private handleFocus = (): void => {
-    this.emit('a11y-textarea-focus');
+    this.emit('compa11y-textarea-focus');
   };
 
   private handleBlur = (): void => {
-    this.emit('a11y-textarea-blur');
+    this.emit('compa11y-textarea-blur');
   };
 
   // =========================================================================
@@ -563,6 +563,6 @@ export class A11yTextarea extends Compa11yElement {
 }
 
 // Register the custom element
-defineElement('a11y-textarea', A11yTextarea);
+defineElement('compa11y-textarea', Compa11yTextarea);
 
-export default A11yTextarea;
+export default Compa11yTextarea;

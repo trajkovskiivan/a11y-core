@@ -125,30 +125,30 @@ function App() {
 
 <!-- Dialog -->
 <button id="open-dialog">Open Dialog</button>
-<a11y-dialog trigger="#open-dialog">
+<compa11y-dialog trigger="#open-dialog">
   <h2 slot="title">Confirm Action</h2>
   <p slot="description">Are you sure?</p>
   <div slot="actions">
-    <button onclick="this.closest('a11y-dialog').close()">Cancel</button>
+    <button onclick="this.closest('compa11y-dialog').close()">Cancel</button>
     <button onclick="handleConfirm()">Confirm</button>
   </div>
-</a11y-dialog>
+</compa11y-dialog>
 
 <!-- Tabs -->
-<a11y-tabs>
+<compa11y-tabs>
   <button role="tab" aria-controls="panel-1">Tab 1</button>
   <button role="tab" aria-controls="panel-2">Tab 2</button>
   <div role="tabpanel" id="panel-1">Content 1</div>
   <div role="tabpanel" id="panel-2">Content 2</div>
-</a11y-tabs>
+</compa11y-tabs>
 
 <!-- Menu -->
-<a11y-menu>
+<compa11y-menu>
   <button slot="trigger">Actions</button>
   <button role="menuitem">Edit</button>
   <div role="separator"></div>
   <button role="menuitem">Delete</button>
-</a11y-menu>
+</compa11y-menu>
 ```
 
 ## Components

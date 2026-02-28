@@ -5,11 +5,11 @@
  * Uses a button trigger and follows WAI-ARIA Listbox pattern.
  *
  * Usage:
- * <a11y-select placeholder="Choose..." aria-label="Select a country">
+ * <compa11y-select placeholder="Choose..." aria-label="Select a country">
  *   <option value="us">United States</option>
  *   <option value="uk">United Kingdom</option>
  *   <option value="de" disabled>Germany (unavailable)</option>
- * </a11y-select>
+ * </compa11y-select>
  */
 
 import { announce, createTypeAhead } from '@compa11y/core';
@@ -23,7 +23,7 @@ interface SelectOption {
   element: HTMLElement;
 }
 
-export class A11ySelect extends Compa11yElement {
+export class Compa11ySelect extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _options: SelectOption[] = [];
@@ -395,7 +395,7 @@ export class A11ySelect extends Compa11yElement {
     this.renderOptions();
 
     announce(`${option.label} selected`);
-    this.emit('a11y-select-change', {
+    this.emit('compa11y-select-change', {
       value: option.value,
       label: option.label,
     });
@@ -500,7 +500,7 @@ export class A11ySelect extends Compa11yElement {
       // Viewport-aware positioning
       this.updateListboxPosition();
 
-      this.emit('a11y-select-open');
+      this.emit('compa11y-select-open');
     } else {
       this._listboxElement.hidden = true;
       this._triggerElement.setAttribute('aria-expanded', 'false');
@@ -512,7 +512,7 @@ export class A11ySelect extends Compa11yElement {
       this._listboxElement.style.bottom = '';
       this.removeAttribute('data-position');
 
-      this.emit('a11y-select-close');
+      this.emit('compa11y-select-close');
     }
   }
 
@@ -552,6 +552,6 @@ export class A11ySelect extends Compa11yElement {
   }
 }
 
-defineElement('a11y-select', A11ySelect);
+defineElement('compa11y-select', Compa11ySelect);
 
-export default A11ySelect;
+export default Compa11ySelect;

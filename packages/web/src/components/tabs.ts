@@ -2,19 +2,19 @@
  * compa11y Tabs Web Component
  *
  * Usage:
- * <a11y-tabs>
+ * <compa11y-tabs>
  *   <button role="tab" aria-controls="panel-1">Tab 1</button>
  *   <button role="tab" aria-controls="panel-2">Tab 2</button>
  *   <div role="tabpanel" id="panel-1">Content 1</div>
  *   <div role="tabpanel" id="panel-2">Content 2</div>
- * </a11y-tabs>
+ * </compa11y-tabs>
  */
 
 import { announce } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { TABS_STYLES } from '../utils/styles';
 
-export class A11yTabs extends Compa11yElement {
+export class Compa11yTabs extends Compa11yElement {
   private _tabs: HTMLElement[] = [];
   private _panels: HTMLElement[] = [];
   private _selectedIndex = 0;
@@ -216,7 +216,7 @@ export class A11yTabs extends Compa11yElement {
     if (oldIndex !== index) {
       const tab = this._tabs[index];
       announce(`${tab?.textContent || 'Tab'} selected`);
-      this.emit('a11y-tabs-change', {
+      this.emit('compa11y-tabs-change', {
         index,
         tab: this._tabs[index],
         panel: this._panels[index],
@@ -260,6 +260,6 @@ export class A11yTabs extends Compa11yElement {
   }
 }
 
-defineElement('a11y-tabs', A11yTabs);
+defineElement('compa11y-tabs', Compa11yTabs);
 
-export default A11yTabs;
+export default Compa11yTabs;

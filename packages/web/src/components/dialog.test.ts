@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import './dialog';
-import type { A11yDialog } from './dialog';
+import type { Compa11yDialog } from './dialog';
 
-describe('A11yDialog', () => {
-  let dialog: A11yDialog;
+describe('Compa11yDialog', () => {
+  let dialog: Compa11yDialog;
   let trigger: HTMLButtonElement;
 
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('A11yDialog', () => {
     document.body.appendChild(trigger);
 
     // Create dialog with trigger attribute
-    dialog = document.createElement('a11y-dialog') as A11yDialog;
+    dialog = document.createElement('compa11y-dialog') as Compa11yDialog;
     dialog.setAttribute('trigger', '#open-dialog-btn');
 
     const title = document.createElement('span');
@@ -35,7 +35,7 @@ describe('A11yDialog', () => {
   });
 
   it('should be defined as a custom element', () => {
-    expect(customElements.get('a11y-dialog')).toBeDefined();
+    expect(customElements.get('compa11y-dialog')).toBeDefined();
   });
 
   it('should have closed state by default', () => {
@@ -64,7 +64,7 @@ describe('A11yDialog', () => {
 
   it('should emit a11y-dialog-open event when opened', () => {
     const handler = vi.fn();
-    dialog.addEventListener('a11y-dialog-open', handler);
+    dialog.addEventListener('compa11y-dialog-open', handler);
 
     dialog.show();
 
@@ -73,7 +73,7 @@ describe('A11yDialog', () => {
 
   it('should emit a11y-dialog-close event when closed', () => {
     const handler = vi.fn();
-    dialog.addEventListener('a11y-dialog-close', handler);
+    dialog.addEventListener('compa11y-dialog-close', handler);
 
     dialog.show();
     dialog.close();

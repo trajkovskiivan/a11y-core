@@ -2,20 +2,20 @@
  * compa11y Menu Web Component
  *
  * Usage:
- * <a11y-menu>
+ * <compa11y-menu>
  *   <button slot="trigger">Open Menu</button>
  *   <button role="menuitem">Option 1</button>
  *   <button role="menuitem">Option 2</button>
  *   <div role="separator"></div>
  *   <button role="menuitem">Option 3</button>
- * </a11y-menu>
+ * </compa11y-menu>
  */
 
 // No core imports needed - using base element
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { MENU_STYLES } from '../utils/styles';
 
-export class A11yMenu extends Compa11yElement {
+export class Compa11yMenu extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _menuItems: HTMLElement[] = [];
@@ -281,7 +281,7 @@ export class A11yMenu extends Compa11yElement {
   private selectItem(index: number): void {
     const item = this._menuItems[index];
     if (item) {
-      this.emit('a11y-menu-select', { item, index });
+      this.emit('compa11y-menu-select', { item, index });
       item.click();
     }
     this.close();
@@ -295,7 +295,7 @@ export class A11yMenu extends Compa11yElement {
       menu?.removeAttribute('hidden');
       trigger?.setAttribute('aria-expanded', 'true');
       this.updateMenuItems();
-      this.emit('a11y-menu-open');
+      this.emit('compa11y-menu-open');
     } else {
       menu?.setAttribute('hidden', '');
       trigger?.setAttribute('aria-expanded', 'false');
@@ -308,7 +308,7 @@ export class A11yMenu extends Compa11yElement {
 
       // Return focus to trigger
       trigger?.focus();
-      this.emit('a11y-menu-close');
+      this.emit('compa11y-menu-close');
     }
   }
 
@@ -334,6 +334,6 @@ export class A11yMenu extends Compa11yElement {
   }
 }
 
-defineElement('a11y-menu', A11yMenu);
+defineElement('compa11y-menu', Compa11yMenu);
 
-export default A11yMenu;
+export default Compa11yMenu;

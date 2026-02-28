@@ -10,7 +10,7 @@ export abstract class Compa11yElement extends HTMLElement {
 
   constructor() {
     super();
-    this._id = generateId(this.tagName.toLowerCase().replace('a11y-', ''));
+    this._id = generateId(this.tagName.toLowerCase().replace('compa11y-', ''));
 
     // Use ElementInternals if available
     if ('attachInternals' in this) {

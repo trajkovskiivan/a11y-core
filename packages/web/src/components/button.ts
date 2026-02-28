@@ -5,9 +5,9 @@
  *
  * @example
  * ```html
- * <a11y-button variant="primary">Save</a11y-button>
- * <a11y-button variant="danger" loading>Deleting...</a11y-button>
- * <a11y-button variant="outline" disabled discoverable>Unavailable</a11y-button>
+ * <compa11y-button variant="primary">Save</compa11y-button>
+ * <compa11y-button variant="danger" loading>Deleting...</compa11y-button>
+ * <compa11y-button variant="outline" disabled discoverable>Unavailable</compa11y-button>
  * ```
  *
  * @fires click - Standard click event (prevented when disabled/loading)
@@ -34,7 +34,7 @@
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { BUTTON_STYLES } from '../utils/styles';
 
-export class A11yButton extends Compa11yElement {
+export class Compa11yButton extends Compa11yElement {
   private _buttonEl: HTMLButtonElement | null = null;
 
   static get observedAttributes() {
@@ -109,7 +109,7 @@ export class A11yButton extends Compa11yElement {
       if (!hasLabel) {
         console.warn(
           '[compa11y/Button] Button has no accessible label. Add text content, aria-label="...", or aria-labelledby="..." attribute.\n' +
-            '💡 Suggestion: <a11y-button>Click me</a11y-button>'
+            '💡 Suggestion: <compa11y-button>Click me</compa11y-button>'
         );
       }
     }
@@ -213,7 +213,7 @@ export class A11yButton extends Compa11yElement {
       event.stopPropagation();
       return;
     }
-    this.emit('a11y-button-click');
+    this.emit('compa11y-button-click');
   };
 
   // =========================================================================
@@ -287,6 +287,6 @@ export class A11yButton extends Compa11yElement {
 }
 
 // Register the custom element
-defineElement('a11y-button', A11yButton);
+defineElement('compa11y-button', Compa11yButton);
 
-export default A11yButton;
+export default Compa11yButton;

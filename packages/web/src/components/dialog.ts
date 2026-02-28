@@ -2,11 +2,11 @@
  * compa11y Dialog Web Component
  *
  * Usage:
- * <a11y-dialog trigger="#open-btn">
+ * <compa11y-dialog trigger="#open-btn">
  *   <h2 slot="title">Dialog Title</h2>
  *   <p slot="description">Optional description</p>
  *   <div>Dialog content here</div>
- * </a11y-dialog>
+ * </compa11y-dialog>
  */
 
 import { announce } from '@compa11y/core';
@@ -36,7 +36,7 @@ function unlockBodyScroll(): void {
   }
 }
 
-export class A11yDialog extends Compa11yElement {
+export class Compa11yDialog extends Compa11yElement {
   private _open = false;
   private _previouslyFocused: HTMLElement | null = null;
   private _triggerElement: HTMLElement | null = null;
@@ -276,7 +276,7 @@ export class A11yDialog extends Compa11yElement {
     announce('Dialog opened', { politeness: 'polite' });
 
     // Emit event
-    this.emit('a11y-dialog-open');
+    this.emit('compa11y-dialog-open');
   }
 
   private hideDialog(): void {
@@ -293,7 +293,7 @@ export class A11yDialog extends Compa11yElement {
     announce('Dialog closed', { politeness: 'polite' });
 
     // Emit event
-    this.emit('a11y-dialog-close');
+    this.emit('compa11y-dialog-close');
   }
 
   /**
@@ -311,6 +311,6 @@ export class A11yDialog extends Compa11yElement {
   }
 }
 
-defineElement('a11y-dialog', A11yDialog);
+defineElement('compa11y-dialog', Compa11yDialog);
 
-export default A11yDialog;
+export default Compa11yDialog;

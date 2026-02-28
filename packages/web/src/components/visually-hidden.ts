@@ -10,19 +10,19 @@
  * @example
  * ```html
  * <!-- Screen-reader-only text -->
- * <a11y-visually-hidden>Loading, please wait</a11y-visually-hidden>
+ * <compa11y-visually-hidden>Loading, please wait</compa11y-visually-hidden>
  *
  * <!-- Focusable (becomes visible on focus, e.g. skip links) -->
- * <a11y-visually-hidden focusable>
+ * <compa11y-visually-hidden focusable>
  *   <a href="#main-content">Skip to main content</a>
- * </a11y-visually-hidden>
+ * </compa11y-visually-hidden>
  * ```
  */
 
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { VISUALLY_HIDDEN_STYLES } from '../utils/styles';
 
-export class A11yVisuallyHidden extends Compa11yElement {
+export class Compa11yVisuallyHidden extends Compa11yElement {
   static get observedAttributes() {
     return ['focusable'];
   }
@@ -67,4 +67,4 @@ export class A11yVisuallyHidden extends Compa11yElement {
   protected cleanupEventListeners(): void {}
 }
 
-defineElement('a11y-visually-hidden', A11yVisuallyHidden);
+defineElement('compa11y-visually-hidden', Compa11yVisuallyHidden);

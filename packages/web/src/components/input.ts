@@ -5,23 +5,23 @@
  *
  * @example
  * ```html
- * <a11y-input
+ * <compa11y-input
  *   label="Full Name"
  *   hint="Enter your first and last name"
  *   required
  *   placeholder="John Doe"
  *   type="text"
- * ></a11y-input>
+ * ></compa11y-input>
  *
  * <!-- With error -->
- * <a11y-input
+ * <compa11y-input
  *   label="Email"
  *   error="Please enter a valid email"
  *   type="email"
- * ></a11y-input>
+ * ></compa11y-input>
  *
  * <!-- Disabled -->
- * <a11y-input label="Organization" value="Compa11y Inc." disabled></a11y-input>
+ * <compa11y-input label="Organization" value="Compa11y Inc." disabled></compa11y-input>
  * ```
  *
  * @fires input - Emitted on each keystroke, detail: { value: string }
@@ -62,7 +62,7 @@ import { announceAssertive } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { INPUT_STYLES } from '../utils/styles';
 
-export class A11yInput extends Compa11yElement {
+export class Compa11yInput extends Compa11yElement {
   private _value = '';
   private _inputEl: HTMLInputElement | null = null;
   private _labelEl: HTMLLabelElement | null = null;
@@ -162,7 +162,7 @@ export class A11yInput extends Compa11yElement {
       if (!hasLabel) {
         console.warn(
           '[compa11y/Input] Input has no accessible label. Add label="...", aria-label="...", or aria-labelledby="..." attribute.\n' +
-            '💡 Suggestion: <a11y-input label="Full Name"></a11y-input>'
+            '💡 Suggestion: <compa11y-input label="Full Name"></compa11y-input>'
         );
       }
     }
@@ -444,11 +444,11 @@ export class A11yInput extends Compa11yElement {
   };
 
   private handleFocus = (): void => {
-    this.emit('a11y-input-focus');
+    this.emit('compa11y-input-focus');
   };
 
   private handleBlur = (): void => {
-    this.emit('a11y-input-blur');
+    this.emit('compa11y-input-blur');
   };
 
   // =========================================================================
@@ -579,6 +579,6 @@ export class A11yInput extends Compa11yElement {
 }
 
 // Register the custom element
-defineElement('a11y-input', A11yInput);
+defineElement('compa11y-input', Compa11yInput);
 
-export default A11yInput;
+export default Compa11yInput;

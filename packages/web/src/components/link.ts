@@ -7,16 +7,16 @@
  * @example
  * ```html
  * <!-- Basic link -->
- * <a11y-link href="/about">About us</a11y-link>
+ * <compa11y-link href="/about">About us</compa11y-link>
  *
  * <!-- External link (opens in new tab, announces to screen readers) -->
- * <a11y-link href="https://example.com" external>Visit Example</a11y-link>
+ * <compa11y-link href="https://example.com" external>Visit Example</compa11y-link>
  *
  * <!-- Current page in navigation -->
- * <a11y-link href="/dashboard" current="page">Dashboard</a11y-link>
+ * <compa11y-link href="/dashboard" current="page">Dashboard</compa11y-link>
  *
  * <!-- Disabled link -->
- * <a11y-link href="/settings" disabled>Settings</a11y-link>
+ * <compa11y-link href="/settings" disabled>Settings</compa11y-link>
  * ```
  *
  * @attr {string} href - Link destination URL
@@ -100,7 +100,7 @@ const LINK_STYLES = `
   }
 `;
 
-export class A11yLink extends Compa11yElement {
+export class Compa11yLink extends Compa11yElement {
   static get observedAttributes() {
     return ['href', 'external', 'current', 'disabled'];
   }
@@ -169,4 +169,4 @@ export class A11yLink extends Compa11yElement {
   }
 }
 
-defineElement('a11y-link', A11yLink);
+defineElement('compa11y-link', Compa11yLink);

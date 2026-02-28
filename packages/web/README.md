@@ -16,7 +16,7 @@ Or via CDN:
 
 ## Components
 
-`<a11y-dialog>`, `<a11y-menu>`, `<a11y-tabs>`, `<a11y-toast>`, `<a11y-combobox>`, `<a11y-select>`, `<a11y-listbox>`, `<a11y-checkbox>`, `<a11y-radio-group>`, `<a11y-switch>`, `<a11y-input>`, `<a11y-textarea>`, `<a11y-button>`
+`<compa11y-dialog>`, `<compa11y-menu>`, `<compa11y-tabs>`, `<compa11y-toast>`, `<compa11y-combobox>`, `<compa11y-select>`, `<compa11y-listbox>`, `<compa11y-checkbox>`, `<compa11y-radio-group>`, `<compa11y-switch>`, `<compa11y-input>`, `<compa11y-textarea>`, `<compa11y-button>`
 
 ## Quick start
 
@@ -24,14 +24,14 @@ Or via CDN:
 <!-- Fully accessible dialog — focus trap, Escape to close, screen reader announcements -->
 <button id="open-btn">Open Dialog</button>
 
-<a11y-dialog trigger="#open-btn">
+<compa11y-dialog trigger="#open-btn">
   <h2 slot="title">Confirm</h2>
   <p>Are you sure?</p>
   <div slot="actions">
     <button>Cancel</button>
     <button>Confirm</button>
   </div>
-</a11y-dialog>
+</compa11y-dialog>
 ```
 
 ## Documentation

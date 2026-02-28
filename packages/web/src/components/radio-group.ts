@@ -8,37 +8,37 @@
  * @example
  * ```html
  * <!-- Basic radio group with legend -->
- * <a11y-radio-group legend="Favorite color" value="red">
- *   <a11y-radio value="red" label="Red"></a11y-radio>
- *   <a11y-radio value="green" label="Green"></a11y-radio>
- *   <a11y-radio value="blue" label="Blue"></a11y-radio>
- * </a11y-radio-group>
+ * <compa11y-radio-group legend="Favorite color" value="red">
+ *   <compa11y-radio value="red" label="Red"></compa11y-radio>
+ *   <compa11y-radio value="green" label="Green"></compa11y-radio>
+ *   <compa11y-radio value="blue" label="Blue"></compa11y-radio>
+ * </compa11y-radio-group>
  *
  * <!-- With aria-label instead of legend -->
- * <a11y-radio-group aria-label="Favorite color" value="red">
- *   <a11y-radio value="red" label="Red"></a11y-radio>
- *   <a11y-radio value="green" label="Green"></a11y-radio>
- * </a11y-radio-group>
+ * <compa11y-radio-group aria-label="Favorite color" value="red">
+ *   <compa11y-radio value="red" label="Red"></compa11y-radio>
+ *   <compa11y-radio value="green" label="Green"></compa11y-radio>
+ * </compa11y-radio-group>
  *
  * <!-- Horizontal orientation -->
- * <a11y-radio-group legend="Size" orientation="horizontal">
- *   <a11y-radio value="sm" label="Small"></a11y-radio>
- *   <a11y-radio value="md" label="Medium"></a11y-radio>
- *   <a11y-radio value="lg" label="Large"></a11y-radio>
- * </a11y-radio-group>
+ * <compa11y-radio-group legend="Size" orientation="horizontal">
+ *   <compa11y-radio value="sm" label="Small"></compa11y-radio>
+ *   <compa11y-radio value="md" label="Medium"></compa11y-radio>
+ *   <compa11y-radio value="lg" label="Large"></compa11y-radio>
+ * </compa11y-radio-group>
  *
  * <!-- Required with error -->
- * <a11y-radio-group legend="Payment method" required error="Please select a payment method">
- *   <a11y-radio value="card" label="Credit Card"></a11y-radio>
- *   <a11y-radio value="paypal" label="PayPal"></a11y-radio>
- * </a11y-radio-group>
+ * <compa11y-radio-group legend="Payment method" required error="Please select a payment method">
+ *   <compa11y-radio value="card" label="Credit Card"></compa11y-radio>
+ *   <compa11y-radio value="paypal" label="PayPal"></compa11y-radio>
+ * </compa11y-radio-group>
  *
  * <!-- With disabled options -->
- * <a11y-radio-group legend="Delivery speed" value="standard">
- *   <a11y-radio value="standard" label="Standard"></a11y-radio>
- *   <a11y-radio value="express" label="Express" disabled></a11y-radio>
- *   <a11y-radio value="overnight" label="Overnight"></a11y-radio>
- * </a11y-radio-group>
+ * <compa11y-radio-group legend="Delivery speed" value="standard">
+ *   <compa11y-radio value="standard" label="Standard"></compa11y-radio>
+ *   <compa11y-radio value="express" label="Express" disabled></compa11y-radio>
+ *   <compa11y-radio value="overnight" label="Overnight"></compa11y-radio>
+ * </compa11y-radio-group>
  * ```
  *
  * Keyboard support:
@@ -77,10 +77,10 @@ import { RADIO_GROUP_STYLES, RADIO_STYLES } from '../utils/styles';
 import { announcePolite } from '@compa11y/core';
 
 // ============================================================================
-// A11yRadioGroup
+// Compa11yRadioGroup
 // ============================================================================
 
-export class A11yRadioGroup extends Compa11yElement {
+export class Compa11yRadioGroup extends Compa11yElement {
   private _value = '';
   private _disabled = false;
   private _discoverable = true;
@@ -295,11 +295,11 @@ export class A11yRadioGroup extends Compa11yElement {
 
   // ===== Radio Management =====
 
-  private getRadios(): A11yRadio[] {
-    return Array.from(this.querySelectorAll('a11y-radio')) as A11yRadio[];
+  private getRadios(): Compa11yRadio[] {
+    return Array.from(this.querySelectorAll('compa11y-radio')) as Compa11yRadio[];
   }
 
-  private getEnabledRadios(): A11yRadio[] {
+  private getEnabledRadios(): Compa11yRadio[] {
     return this.getRadios().filter(
       (radio) => !radio.disabled && !this._disabled
     );
@@ -337,7 +337,7 @@ export class A11yRadioGroup extends Compa11yElement {
     }
 
     this.emit('change', { value });
-    this.emit('a11y-radiogroup-change', { value });
+    this.emit('compa11y-radiogroup-change', { value });
   }
 
   // ===== Event Handlers =====
@@ -499,7 +499,7 @@ export class A11yRadioGroup extends Compa11yElement {
 }
 
 // ============================================================================
-// A11yRadio
+// Compa11yRadio
 // ============================================================================
 
 /**
@@ -507,9 +507,9 @@ export class A11yRadioGroup extends Compa11yElement {
  *
  * @example
  * ```html
- * <a11y-radio value="option1" label="Option 1"></a11y-radio>
- * <a11y-radio value="option2" label="Option 2" hint="Additional info"></a11y-radio>
- * <a11y-radio value="option3" label="Option 3" disabled></a11y-radio>
+ * <compa11y-radio value="option1" label="Option 1"></compa11y-radio>
+ * <compa11y-radio value="option2" label="Option 2" hint="Additional info"></compa11y-radio>
+ * <compa11y-radio value="option3" label="Option 3" disabled></compa11y-radio>
  * ```
  *
  * @attr {string} value - Radio value
@@ -531,7 +531,7 @@ export class A11yRadioGroup extends Compa11yElement {
  * @cssprop --compa11y-radio-hint-color - Hint text color
  * @cssprop --compa11y-focus-color - Focus outline color
  */
-export class A11yRadio extends Compa11yElement {
+export class Compa11yRadio extends Compa11yElement {
   private _value = '';
   private _checked = false;
   private _disabled = false;
@@ -818,5 +818,5 @@ export class A11yRadio extends Compa11yElement {
 // Register elements
 // ============================================================================
 
-defineElement('a11y-radio-group', A11yRadioGroup);
-defineElement('a11y-radio', A11yRadio);
+defineElement('compa11y-radio-group', Compa11yRadioGroup);
+defineElement('compa11y-radio', Compa11yRadio);

@@ -9,20 +9,20 @@
  *
  * @example
  * ```html
- * <a11y-breadcrumbs aria-label="Breadcrumb">
+ * <compa11y-breadcrumbs aria-label="Breadcrumb">
  *   <a href="/">Home</a>
  *   <a href="/products">Products</a>
  *   <span>Model X</span>
- * </a11y-breadcrumbs>
+ * </compa11y-breadcrumbs>
  *
  * <!-- With collapse -->
- * <a11y-breadcrumbs max-items="3">
+ * <compa11y-breadcrumbs max-items="3">
  *   <a href="/">Home</a>
  *   <a href="/cat">Category</a>
  *   <a href="/sub">Subcategory</a>
  *   <a href="/item">Item</a>
  *   <span>Detail</span>
- * </a11y-breadcrumbs>
+ * </compa11y-breadcrumbs>
  * ```
  *
  * @fires page-change - Not used; breadcrumbs are static navigation
@@ -168,7 +168,7 @@ const BREADCRUMBS_STYLES = `
 // Component
 // =============================================================================
 
-export class A11yBreadcrumbs extends Compa11yElement {
+export class Compa11yBreadcrumbs extends Compa11yElement {
   private _isExpanded = false;
   private _observer: MutationObserver | null = null;
 
@@ -407,4 +407,4 @@ export class A11yBreadcrumbs extends Compa11yElement {
   };
 }
 
-defineElement('a11y-breadcrumbs', A11yBreadcrumbs);
+defineElement('compa11y-breadcrumbs', Compa11yBreadcrumbs);

@@ -522,7 +522,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Styles
     const wrapperStyle: React.CSSProperties = {
       display: 'inline-flex',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       gap: '0.5rem',
       cursor: disabled ? 'not-allowed' : 'pointer',
       userSelect: 'none',
@@ -552,8 +552,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       : {
           width: sizeConfig.box,
           height: sizeConfig.box,
-          minWidth: 24,
-          minHeight: 24,
           border:
             checked || indeterminate
               ? 'var(--compa11y-checkbox-checked-border, 2px solid #0066cc)'
@@ -582,7 +580,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       display: 'flex',
       flexDirection: 'column',
       gap: '0.125rem',
-      paddingTop: '0.125rem',
     };
 
     const labelStyle: React.CSSProperties = unstyled

@@ -5,17 +5,17 @@
  * screen-reader announcements via an aria-live region.
  *
  * Usage (imperative):
- *   <a11y-toast position="bottom-right"></a11y-toast>
+ *   <compa11y-toast position="bottom-right"></compa11y-toast>
  *
- *   const toast = document.querySelector('a11y-toast');
+ *   const toast = document.querySelector('compa11y-toast');
  *   toast.add({ type: 'success', title: 'Saved', description: 'Changes saved.' });
  *
  * Usage (declarative, for static toasts):
- *   <a11y-toast>
+ *   <compa11y-toast>
  *     <div slot="toast" data-type="info">
  *       <span slot="title">Hello</span>
  *     </div>
- *   </a11y-toast>
+ *   </compa11y-toast>
  */
 
 import { Compa11yElement, defineElement } from '../utils/base-element';
@@ -43,7 +43,7 @@ interface ToastEntry extends Required<Pick<ToastOptions, 'type'>> {
   startTime: number;
 }
 
-export class A11yToast extends Compa11yElement {
+export class Compa11yToast extends Compa11yElement {
   private _toasts: ToastEntry[] = [];
   private _counter = 0;
   private _containerEl: HTMLElement | null = null;
@@ -158,7 +158,7 @@ export class A11yToast extends Compa11yElement {
     this._renderToast(entry);
     this._startTimer(entry);
 
-    this.emit('a11y-toast-add', { id, ...options });
+    this.emit('compa11y-toast-add', { id, ...options });
 
     return id;
   }
@@ -175,7 +175,7 @@ export class A11yToast extends Compa11yElement {
     this._toasts.splice(index, 1);
     this._removeElement(id);
 
-    this.emit('a11y-toast-remove', { id });
+    this.emit('compa11y-toast-remove', { id });
   }
 
   /**
@@ -289,6 +289,6 @@ export class A11yToast extends Compa11yElement {
   }
 }
 
-defineElement('a11y-toast', A11yToast);
+defineElement('compa11y-toast', Compa11yToast);
 
-export default A11yToast;
+export default Compa11yToast;

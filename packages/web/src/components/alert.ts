@@ -8,29 +8,29 @@
  * @example
  * ```html
  * <!-- Error alert (assertive, role="alert") -->
- * <a11y-alert type="error" title="Payment failed">
+ * <compa11y-alert type="error" title="Payment failed">
  *   Your card was declined. Please try a different payment method.
- * </a11y-alert>
+ * </compa11y-alert>
  *
  * <!-- Success alert -->
- * <a11y-alert type="success" title="Saved!">
+ * <compa11y-alert type="success" title="Saved!">
  *   Your changes have been saved successfully.
- * </a11y-alert>
+ * </compa11y-alert>
  *
  * <!-- Info alert (polite, role="status") -->
- * <a11y-alert type="info">
+ * <compa11y-alert type="info">
  *   Your session will expire in 5 minutes.
- * </a11y-alert>
+ * </compa11y-alert>
  *
  * <!-- Warning alert -->
- * <a11y-alert type="warning" title="Low storage">
+ * <compa11y-alert type="warning" title="Low storage">
  *   You have less than 100MB of storage remaining.
- * </a11y-alert>
+ * </compa11y-alert>
  *
  * <!-- Dismissible alert -->
- * <a11y-alert type="info" dismissible>
+ * <compa11y-alert type="info" dismissible>
  *   This alert can be closed by the user.
- * </a11y-alert>
+ * </compa11y-alert>
  * ```
  *
  * @fires dismiss - Emitted when the alert is dismissed by the user
@@ -190,7 +190,7 @@ const ICONS: Record<string, string> = {
   error: '\u274C',           // ❌
 };
 
-export class A11yAlert extends Compa11yElement {
+export class Compa11yAlert extends Compa11yElement {
   private _closeButton: HTMLButtonElement | null = null;
 
   static get observedAttributes() {
@@ -294,4 +294,4 @@ export class A11yAlert extends Compa11yElement {
   }
 }
 
-defineElement('a11y-alert', A11yAlert);
+defineElement('compa11y-alert', Compa11yAlert);

@@ -7,13 +7,13 @@
  * @example
  * ```html
  * <!-- Heading (renders <h1>–<h6>) -->
- * <a11y-heading level="1">Page Title</a11y-heading>
- * <a11y-heading level="2">Section Title</a11y-heading>
+ * <compa11y-heading level="1">Page Title</compa11y-heading>
+ * <compa11y-heading level="2">Section Title</compa11y-heading>
  *
  * <!-- Text (renders <p> by default) -->
- * <a11y-text>Body text paragraph.</a11y-text>
- * <a11y-text size="sm" color="muted">Small muted text.</a11y-text>
- * <a11y-text as="span">Inline text.</a11y-text>
+ * <compa11y-text>Body text paragraph.</compa11y-text>
+ * <compa11y-text size="sm" color="muted">Small muted text.</compa11y-text>
+ * <compa11y-text as="span">Inline text.</compa11y-text>
  * ```
  *
  * @attr {string} level - Heading level: '1' | '2' | '3' | '4' | '5' | '6' (a11y-heading only)
@@ -151,7 +151,7 @@ function buildClasses(el: HTMLElement, defaultSize?: string): string {
 // Heading
 // ============================================================================
 
-export class A11yHeading extends Compa11yElement {
+export class Compa11yHeading extends Compa11yElement {
   static get observedAttributes() {
     return ['level', 'size', 'color', 'weight', 'align', 'truncate'];
   }
@@ -195,7 +195,7 @@ export class A11yHeading extends Compa11yElement {
 // Text
 // ============================================================================
 
-export class A11yText extends Compa11yElement {
+export class Compa11yText extends Compa11yElement {
   static get observedAttributes() {
     return ['as', 'size', 'color', 'weight', 'align', 'truncate'];
   }
@@ -231,5 +231,5 @@ export class A11yText extends Compa11yElement {
   }
 }
 
-defineElement('a11y-heading', A11yHeading);
-defineElement('a11y-text', A11yText);
+defineElement('compa11y-heading', Compa11yHeading);
+defineElement('compa11y-text', Compa11yText);

@@ -6,26 +6,26 @@
  * @example
  * ```html
  * <!-- Basic checkbox -->
- * <a11y-checkbox label="Subscribe to updates"></a11y-checkbox>
+ * <compa11y-checkbox label="Subscribe to updates"></compa11y-checkbox>
  *
  * <!-- With helper text -->
- * <a11y-checkbox label="Subscribe" hint="We'll email you weekly."></a11y-checkbox>
+ * <compa11y-checkbox label="Subscribe" hint="We'll email you weekly."></compa11y-checkbox>
  *
  * <!-- Checked by default -->
- * <a11y-checkbox checked label="Accept terms"></a11y-checkbox>
+ * <compa11y-checkbox checked label="Accept terms"></compa11y-checkbox>
  *
  * <!-- Indeterminate / mixed state -->
- * <a11y-checkbox indeterminate label="Select all"></a11y-checkbox>
+ * <compa11y-checkbox indeterminate label="Select all"></compa11y-checkbox>
  *
  * <!-- Disabled -->
- * <a11y-checkbox disabled label="Unavailable option"></a11y-checkbox>
+ * <compa11y-checkbox disabled label="Unavailable option"></compa11y-checkbox>
  *
  * <!-- Checkbox group -->
- * <a11y-checkbox-group legend="Select toppings">
- *   <a11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
- *   <a11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
- *   <a11y-checkbox value="olives" label="Olives"></a11y-checkbox>
- * </a11y-checkbox-group>
+ * <compa11y-checkbox-group legend="Select toppings">
+ *   <compa11y-checkbox value="cheese" label="Cheese"></compa11y-checkbox>
+ *   <compa11y-checkbox value="peppers" label="Peppers"></compa11y-checkbox>
+ *   <compa11y-checkbox value="olives" label="Olives"></compa11y-checkbox>
+ * </compa11y-checkbox-group>
  * ```
  *
  * @fires change - Emitted when checkbox state changes, detail: { checked: boolean, value: string }
@@ -67,7 +67,7 @@ const DASH_SVG = `<svg class="checkbox-dash" width="12" height="12" viewBox="0 0
   <path d="M3 6H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
 </svg>`;
 
-export class A11yCheckbox extends Compa11yElement {
+export class Compa11yCheckbox extends Compa11yElement {
   private _checked = false;
   private _indeterminate = false;
   private _input: HTMLInputElement | null = null;
@@ -233,7 +233,7 @@ export class A11yCheckbox extends Compa11yElement {
       if (!this.label && !this.getAttribute('aria-label')) {
         console.warn(
           '[compa11y/Checkbox] Checkbox has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
-            '💡 Suggestion: <a11y-checkbox label="Accept terms"></a11y-checkbox>'
+            '💡 Suggestion: <compa11y-checkbox label="Accept terms"></compa11y-checkbox>'
         );
       }
     }
@@ -447,11 +447,11 @@ export class A11yCheckbox extends Compa11yElement {
  *
  * @example
  * ```html
- * <a11y-checkbox-group legend="Select toppings" error="Pick at least 2">
- *   <a11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
- *   <a11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
- *   <a11y-checkbox value="olives" label="Olives"></a11y-checkbox>
- * </a11y-checkbox-group>
+ * <compa11y-checkbox-group legend="Select toppings" error="Pick at least 2">
+ *   <compa11y-checkbox value="cheese" label="Cheese"></compa11y-checkbox>
+ *   <compa11y-checkbox value="peppers" label="Peppers"></compa11y-checkbox>
+ *   <compa11y-checkbox value="olives" label="Olives"></compa11y-checkbox>
+ * </compa11y-checkbox-group>
  * ```
  *
  * @fires change - Emitted when any checkbox in the group changes, detail: { value: string[] }
@@ -466,7 +466,7 @@ export class A11yCheckbox extends Compa11yElement {
  * @cssprop --compa11y-checkbox-group-legend-color - Legend text color
  * @cssprop --compa11y-checkbox-group-error-color - Error text color
  */
-export class A11yCheckboxGroup extends Compa11yElement {
+export class Compa11yCheckboxGroup extends Compa11yElement {
   private _value: string[] = [];
 
   static get observedAttributes() {
@@ -560,7 +560,7 @@ export class A11yCheckboxGroup extends Compa11yElement {
       ) {
         console.warn(
           '[compa11y/CheckboxGroup] CheckboxGroup has no accessible label. Add legend="..." or aria-label="..." attribute.\n' +
-            '💡 Suggestion: <a11y-checkbox-group legend="Select options"></a11y-checkbox-group>'
+            '💡 Suggestion: <compa11y-checkbox-group legend="Select options"></compa11y-checkbox-group>'
         );
       }
     }
@@ -632,7 +632,7 @@ export class A11yCheckboxGroup extends Compa11yElement {
    */
   private handleChildChange = (event: Event): void => {
     const target = event.target;
-    if (!(target instanceof A11yCheckbox)) return;
+    if (!(target instanceof Compa11yCheckbox)) return;
 
     // Don't re-emit our own events
     if (target === (this as unknown)) return;
@@ -657,7 +657,7 @@ export class A11yCheckboxGroup extends Compa11yElement {
   private initValueFromChildren(): void {
     // Use requestAnimationFrame to wait for children to be upgraded
     requestAnimationFrame(() => {
-      const checkboxes = this.querySelectorAll('a11y-checkbox');
+      const checkboxes = this.querySelectorAll('compa11y-checkbox');
       const values: string[] = [];
       checkboxes.forEach((checkbox) => {
         if (
@@ -676,8 +676,8 @@ export class A11yCheckboxGroup extends Compa11yElement {
    */
   private syncCheckboxStates(): void {
     const checkboxes = this.querySelectorAll(
-      'a11y-checkbox'
-    ) as NodeListOf<A11yCheckbox>;
+      'compa11y-checkbox'
+    ) as NodeListOf<Compa11yCheckbox>;
     checkboxes.forEach((checkbox) => {
       const val = checkbox.value;
       if (val) {
@@ -702,7 +702,7 @@ export class A11yCheckboxGroup extends Compa11yElement {
 }
 
 // Register custom elements
-defineElement('a11y-checkbox', A11yCheckbox);
-defineElement('a11y-checkbox-group', A11yCheckboxGroup);
+defineElement('compa11y-checkbox', Compa11yCheckbox);
+defineElement('compa11y-checkbox-group', Compa11yCheckboxGroup);
 
-export default A11yCheckbox;
+export default Compa11yCheckbox;

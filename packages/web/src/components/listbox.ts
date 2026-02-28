@@ -8,20 +8,20 @@
  * @example
  * ```html
  * <!-- Single select -->
- * <a11y-listbox aria-label="Favorite fruit" value="apple">
- *   <a11y-option value="apple">Apple</a11y-option>
- *   <a11y-option value="banana" disabled>Banana</a11y-option>
- *   <a11y-optgroup label="Citrus">
- *     <a11y-option value="orange">Orange</a11y-option>
- *     <a11y-option value="lemon">Lemon</a11y-option>
- *   </a11y-optgroup>
- * </a11y-listbox>
+ * <compa11y-listbox aria-label="Favorite fruit" value="apple">
+ *   <compa11y-option value="apple">Apple</compa11y-option>
+ *   <compa11y-option value="banana" disabled>Banana</compa11y-option>
+ *   <compa11y-optgroup label="Citrus">
+ *     <compa11y-option value="orange">Orange</compa11y-option>
+ *     <compa11y-option value="lemon">Lemon</compa11y-option>
+ *   </compa11y-optgroup>
+ * </compa11y-listbox>
  *
  * <!-- Multi select -->
- * <a11y-listbox multiple aria-label="Toppings" value="cheese,pepperoni">
- *   <a11y-option value="cheese">Cheese</a11y-option>
- *   <a11y-option value="pepperoni">Pepperoni</a11y-option>
- * </a11y-listbox>
+ * <compa11y-listbox multiple aria-label="Toppings" value="cheese,pepperoni">
+ *   <compa11y-option value="cheese">Cheese</compa11y-option>
+ *   <compa11y-option value="pepperoni">Pepperoni</compa11y-option>
+ * </compa11y-listbox>
  * ```
  */
 
@@ -34,10 +34,10 @@ import {
 import { announcePolite, createTypeAhead } from '@compa11y/core';
 
 // ============================================================================
-// A11yOptgroup
+// Compa11yOptgroup
 // ============================================================================
 
-export class A11yOptgroup extends Compa11yElement {
+export class Compa11yOptgroup extends Compa11yElement {
   private _label = '';
   private _disabled = false;
 
@@ -145,10 +145,10 @@ export class A11yOptgroup extends Compa11yElement {
 }
 
 // ============================================================================
-// A11yOption
+// Compa11yOption
 // ============================================================================
 
-export class A11yOption extends Compa11yElement {
+export class Compa11yOption extends Compa11yElement {
   private _value = '';
   private _disabled = false;
   private _selected = false;
@@ -210,7 +210,7 @@ export class A11yOption extends Compa11yElement {
    */
   get effectivelyDisabled(): boolean {
     if (this._disabled) return true;
-    const group = this.closest('a11y-optgroup') as A11yOptgroup | null;
+    const group = this.closest('compa11y-optgroup') as Compa11yOptgroup | null;
     return group?.disabled ?? false;
   }
 
@@ -298,10 +298,10 @@ export class A11yOption extends Compa11yElement {
 }
 
 // ============================================================================
-// A11yListbox
+// Compa11yListbox
 // ============================================================================
 
-export class A11yListbox extends Compa11yElement {
+export class Compa11yListbox extends Compa11yElement {
   private _value: string | null = null;
   private _values: Set<string> = new Set();
   private _multiple = false;
@@ -494,11 +494,11 @@ export class A11yListbox extends Compa11yElement {
 
   // ===== Option Queries =====
 
-  private getAllOptions(): A11yOption[] {
-    return Array.from(this.querySelectorAll('a11y-option')) as A11yOption[];
+  private getAllOptions(): Compa11yOption[] {
+    return Array.from(this.querySelectorAll('compa11y-option')) as Compa11yOption[];
   }
 
-  private getEnabledOptions(): A11yOption[] {
+  private getEnabledOptions(): Compa11yOption[] {
     return this.getAllOptions().filter((option) => !option.effectivelyDisabled);
   }
 
@@ -582,7 +582,7 @@ export class A11yListbox extends Compa11yElement {
 
   // ===== Selection =====
 
-  private selectOption(option: A11yOption): void {
+  private selectOption(option: Compa11yOption): void {
     if (option.effectivelyDisabled || this._disabled) return;
 
     if (this._multiple) {
@@ -592,7 +592,7 @@ export class A11yListbox extends Compa11yElement {
     }
   }
 
-  private selectSingle(option: A11yOption): void {
+  private selectSingle(option: Compa11yOption): void {
     const oldValue = this._value;
     this._value = option.value;
     this.setAttribute('value', option.value);
@@ -601,12 +601,12 @@ export class A11yListbox extends Compa11yElement {
     if (oldValue !== this._value) {
       const label = option.textContent?.trim() || option.value;
       this.emit('change', { value: this._value, label });
-      this.emit('a11y-listbox-change', { value: this._value, label });
+      this.emit('compa11y-listbox-change', { value: this._value, label });
       announcePolite(`${label} selected`);
     }
   }
 
-  private toggleOptionSelection(option: A11yOption): void {
+  private toggleOptionSelection(option: Compa11yOption): void {
     if (option.effectivelyDisabled || this._disabled) return;
 
     const label = option.textContent?.trim() || option.value;
@@ -625,7 +625,7 @@ export class A11yListbox extends Compa11yElement {
     this.setAttribute('value', valueArray.join(','));
 
     this.emit('change', { value: valueArray });
-    this.emit('a11y-listbox-change', { value: valueArray });
+    this.emit('compa11y-listbox-change', { value: valueArray });
   }
 
   private selectRange(fromIndex: number, toIndex: number): void {
@@ -644,7 +644,7 @@ export class A11yListbox extends Compa11yElement {
     const valueArray = Array.from(this._values);
     this.setAttribute('value', valueArray.join(','));
     this.emit('change', { value: valueArray });
-    this.emit('a11y-listbox-change', { value: valueArray });
+    this.emit('compa11y-listbox-change', { value: valueArray });
     announcePolite(`${end - start + 1} items selected`);
   }
 
@@ -669,7 +669,7 @@ export class A11yListbox extends Compa11yElement {
     const valueArray = Array.from(this._values);
     this.setAttribute('value', valueArray.join(','));
     this.emit('change', { value: valueArray });
-    this.emit('a11y-listbox-change', { value: valueArray });
+    this.emit('compa11y-listbox-change', { value: valueArray });
   }
 
   // ===== Type-ahead =====
@@ -979,6 +979,6 @@ export class A11yListbox extends Compa11yElement {
 // Register elements
 // ============================================================================
 
-defineElement('a11y-optgroup', A11yOptgroup);
-defineElement('a11y-option', A11yOption);
-defineElement('a11y-listbox', A11yListbox);
+defineElement('compa11y-optgroup', Compa11yOptgroup);
+defineElement('compa11y-option', Compa11yOption);
+defineElement('compa11y-listbox', Compa11yListbox);

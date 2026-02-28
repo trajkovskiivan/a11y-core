@@ -11,62 +11,62 @@
  */
 
 // Components - importing auto-registers them as custom elements
-import { A11yDialog } from './components/dialog';
-import { A11yMenu } from './components/menu';
-import { A11yTabs } from './components/tabs';
-import { A11yCombobox } from './components/combobox';
-import { A11ySwitch } from './components/switch';
-import { A11ySelect } from './components/select';
-import { A11yInput } from './components/input';
-import { A11yTextarea } from './components/textarea';
-import { A11yButton } from './components/button';
-import { A11yListbox, A11yOption, A11yOptgroup } from './components/listbox';
-import { A11yCheckbox, A11yCheckboxGroup } from './components/checkbox';
-import { A11yRadioGroup, A11yRadio } from './components/radio-group';
-import { A11yToast } from './components/toast';
-import { A11yVisuallyHidden } from './components/visually-hidden';
-import { A11ySkipLink } from './components/skip-link';
-import { A11yAlert } from './components/alert';
-import { A11yLink } from './components/link';
-import { A11yHeading, A11yText } from './components/text';
-import { A11yFormField } from './components/form-field';
-import { A11yPopover } from './components/popover';
-import { A11yAccordion } from './components/accordion';
-import { A11yTable } from './components/table';
-import { A11yPagination } from './components/pagination';
-import { A11yBreadcrumbs } from './components/breadcrumbs';
+import { Compa11yDialog } from './components/dialog';
+import { Compa11yMenu } from './components/menu';
+import { Compa11yTabs } from './components/tabs';
+import { Compa11yCombobox } from './components/combobox';
+import { Compa11ySwitch } from './components/switch';
+import { Compa11ySelect } from './components/select';
+import { Compa11yInput } from './components/input';
+import { Compa11yTextarea } from './components/textarea';
+import { Compa11yButton } from './components/button';
+import { Compa11yListbox, Compa11yOption, Compa11yOptgroup } from './components/listbox';
+import { Compa11yCheckbox, Compa11yCheckboxGroup } from './components/checkbox';
+import { Compa11yRadioGroup, Compa11yRadio } from './components/radio-group';
+import { Compa11yToast } from './components/toast';
+import { Compa11yVisuallyHidden } from './components/visually-hidden';
+import { Compa11ySkipLink } from './components/skip-link';
+import { Compa11yAlert } from './components/alert';
+import { Compa11yLink } from './components/link';
+import { Compa11yHeading, Compa11yText } from './components/text';
+import { Compa11yFormField } from './components/form-field';
+import { Compa11yPopover } from './components/popover';
+import { Compa11yAccordion } from './components/accordion';
+import { Compa11yTable } from './components/table';
+import { Compa11yPagination } from './components/pagination';
+import { Compa11yBreadcrumbs } from './components/breadcrumbs';
 
 // Re-export components
 export {
-  A11yDialog,
-  A11yMenu,
-  A11yTabs,
-  A11yCombobox,
-  A11ySwitch,
-  A11ySelect,
-  A11yInput,
-  A11yTextarea,
-  A11yButton,
-  A11yListbox,
-  A11yOption,
-  A11yOptgroup,
-  A11yCheckbox,
-  A11yCheckboxGroup,
-  A11yRadioGroup,
-  A11yRadio,
-  A11yToast,
-  A11yVisuallyHidden,
-  A11ySkipLink,
-  A11yAlert,
-  A11yLink,
-  A11yHeading,
-  A11yText,
-  A11yFormField,
-  A11yPopover,
-  A11yAccordion,
-  A11yTable,
-  A11yPagination,
-  A11yBreadcrumbs,
+  Compa11yDialog,
+  Compa11yMenu,
+  Compa11yTabs,
+  Compa11yCombobox,
+  Compa11ySwitch,
+  Compa11ySelect,
+  Compa11yInput,
+  Compa11yTextarea,
+  Compa11yButton,
+  Compa11yListbox,
+  Compa11yOption,
+  Compa11yOptgroup,
+  Compa11yCheckbox,
+  Compa11yCheckboxGroup,
+  Compa11yRadioGroup,
+  Compa11yRadio,
+  Compa11yToast,
+  Compa11yVisuallyHidden,
+  Compa11ySkipLink,
+  Compa11yAlert,
+  Compa11yLink,
+  Compa11yHeading,
+  Compa11yText,
+  Compa11yFormField,
+  Compa11yPopover,
+  Compa11yAccordion,
+  Compa11yTable,
+  Compa11yPagination,
+  Compa11yBreadcrumbs,
 };
 
 // Core utilities for vanilla JS usage
@@ -139,35 +139,35 @@ if (typeof window !== 'undefined') {
   // This allows: compa11y.announcePolite('message')
   (window as any).compa11y = {
     // Components (classes)
-    A11yDialog,
-    A11yMenu,
-    A11yTabs,
-    A11yCombobox,
-    A11ySwitch,
-    A11ySelect,
-    A11yInput,
-    A11yTextarea,
-    A11yButton,
-    A11yListbox,
-    A11yOption,
-    A11yOptgroup,
-    A11yCheckbox,
-    A11yCheckboxGroup,
-    A11yRadioGroup,
-    A11yRadio,
-    A11yToast,
-    A11yVisuallyHidden,
-    A11ySkipLink,
-    A11yAlert,
-    A11yLink,
-    A11yHeading,
-    A11yText,
-    A11yFormField,
-    A11yPopover,
-    A11yAccordion,
-    A11yTable,
-    A11yPagination,
-    A11yBreadcrumbs,
+    Compa11yDialog,
+    Compa11yMenu,
+    Compa11yTabs,
+    Compa11yCombobox,
+    Compa11ySwitch,
+    Compa11ySelect,
+    Compa11yInput,
+    Compa11yTextarea,
+    Compa11yButton,
+    Compa11yListbox,
+    Compa11yOption,
+    Compa11yOptgroup,
+    Compa11yCheckbox,
+    Compa11yCheckboxGroup,
+    Compa11yRadioGroup,
+    Compa11yRadio,
+    Compa11yToast,
+    Compa11yVisuallyHidden,
+    Compa11ySkipLink,
+    Compa11yAlert,
+    Compa11yLink,
+    Compa11yHeading,
+    Compa11yText,
+    Compa11yFormField,
+    Compa11yPopover,
+    Compa11yAccordion,
+    Compa11yTable,
+    Compa11yPagination,
+    Compa11yBreadcrumbs,
     // Announcer utilities
     initAnnouncer,
     announce,

@@ -2,11 +2,11 @@
  * compa11y Combobox Web Component
  *
  * Usage:
- * <a11y-combobox placeholder="Search...">
+ * <compa11y-combobox placeholder="Search...">
  *   <option value="1">Option 1</option>
  *   <option value="2">Option 2</option>
  *   <option value="3" disabled>Option 3 (disabled)</option>
- * </a11y-combobox>
+ * </compa11y-combobox>
  */
 
 import { announce } from '@compa11y/core';
@@ -20,7 +20,7 @@ interface ComboboxOption {
   element: HTMLElement;
 }
 
-export class A11yCombobox extends Compa11yElement {
+export class Compa11yCombobox extends Compa11yElement {
   private _open = false;
   private _highlightedIndex = -1;
   private _options: ComboboxOption[] = [];
@@ -356,8 +356,8 @@ export class A11yCombobox extends Compa11yElement {
     this._filteredOptions = [...this._options];
     this.renderOptions();
     this.updateClearButton();
-    this.emit('a11y-combobox-clear');
-    this.emit('a11y-combobox-change', { value: null, label: null });
+    this.emit('compa11y-combobox-clear');
+    this.emit('compa11y-combobox-change', { value: null, label: null });
   };
 
   private handleOutsideClick = (event: MouseEvent): void => {
@@ -381,11 +381,11 @@ export class A11yCombobox extends Compa11yElement {
     this.updateClearButton();
 
     announce(`${option.label} selected`);
-    this.emit('a11y-combobox-select', {
+    this.emit('compa11y-combobox-select', {
       value: option.value,
       label: option.label,
     });
-    this.emit('a11y-combobox-change', {
+    this.emit('compa11y-combobox-change', {
       value: option.value,
       label: option.label,
     });
@@ -422,7 +422,7 @@ export class A11yCombobox extends Compa11yElement {
       // Viewport-aware positioning
       this.updateListboxPosition();
 
-      this.emit('a11y-combobox-open');
+      this.emit('compa11y-combobox-open');
     } else {
       this._listboxElement.hidden = true;
       this._inputElement.setAttribute('aria-expanded', 'false');
@@ -434,7 +434,7 @@ export class A11yCombobox extends Compa11yElement {
       this._listboxElement.style.bottom = '';
       this.removeAttribute('data-position');
 
-      this.emit('a11y-combobox-close');
+      this.emit('compa11y-combobox-close');
     }
   }
 
@@ -501,6 +501,6 @@ export class A11yCombobox extends Compa11yElement {
   }
 }
 
-defineElement('a11y-combobox', A11yCombobox);
+defineElement('compa11y-combobox', Compa11yCombobox);
 
-export default A11yCombobox;
+export default Compa11yCombobox;

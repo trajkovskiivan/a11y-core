@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import './menu';
-import type { A11yMenu } from './menu';
+import type { Compa11yMenu } from './menu';
 
-describe('A11yMenu', () => {
-  let menu: A11yMenu;
+describe('Compa11yMenu', () => {
+  let menu: Compa11yMenu;
   let trigger: HTMLButtonElement;
   let item1: HTMLButtonElement;
   let item2: HTMLButtonElement;
 
   beforeEach(() => {
-    menu = document.createElement('a11y-menu') as A11yMenu;
+    menu = document.createElement('compa11y-menu') as Compa11yMenu;
     trigger = document.createElement('button');
     trigger.setAttribute('slot', 'trigger');
     trigger.textContent = 'Open Menu';
@@ -33,7 +33,7 @@ describe('A11yMenu', () => {
   });
 
   it('should be defined as a custom element', () => {
-    expect(customElements.get('a11y-menu')).toBeDefined();
+    expect(customElements.get('compa11y-menu')).toBeDefined();
   });
 
   it('should have closed state by default', () => {
@@ -69,7 +69,7 @@ describe('A11yMenu', () => {
 
   it('should emit a11y-menu-open event when opened', () => {
     const handler = vi.fn();
-    menu.addEventListener('a11y-menu-open', handler);
+    menu.addEventListener('compa11y-menu-open', handler);
 
     menu.show();
 
@@ -78,7 +78,7 @@ describe('A11yMenu', () => {
 
   it('should emit a11y-menu-close event when closed', () => {
     const handler = vi.fn();
-    menu.addEventListener('a11y-menu-close', handler);
+    menu.addEventListener('compa11y-menu-close', handler);
 
     menu.show();
     menu.close();

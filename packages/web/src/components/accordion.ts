@@ -2,7 +2,7 @@
  * compa11y Accordion Web Component
  *
  * Usage:
- * <a11y-accordion type="single" collapsible>
+ * <compa11y-accordion type="single" collapsible>
  *   <h3>
  *     <button data-accordion-trigger>Section 1</button>
  *   </h3>
@@ -12,20 +12,20 @@
  *     <button data-accordion-trigger>Section 2</button>
  *   </h3>
  *   <div data-accordion-panel>Content 2</div>
- * </a11y-accordion>
+ * </compa11y-accordion>
  *
  * Without headings (button as direct child):
- * <a11y-accordion>
+ * <compa11y-accordion>
  *   <button data-accordion-trigger>Section 1</button>
  *   <div data-accordion-panel>Content 1</div>
- * </a11y-accordion>
+ * </compa11y-accordion>
  */
 
 import { announce, createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { BASE_STYLES, ACCORDION_GLOBAL_STYLES } from '../utils/styles';
 
-const warn = createComponentWarnings('A11yAccordion');
+const warn = createComponentWarnings('Compa11yAccordion');
 
 // Inject global (light DOM) styles once per document
 let _globalStylesInjected = false;
@@ -39,7 +39,7 @@ function ensureGlobalStyles(): void {
   document.head.appendChild(style);
 }
 
-export class A11yAccordion extends Compa11yElement {
+export class Compa11yAccordion extends Compa11yElement {
   private _triggers: HTMLElement[] = [];
   private _panels: HTMLElement[] = [];
   private _openItems: Set<number> = new Set();
@@ -273,7 +273,7 @@ export class A11yAccordion extends Compa11yElement {
       this._triggers[index]?.textContent?.trim() || 'Section';
     announce(`${label} ${isNowOpen ? 'expanded' : 'collapsed'}`);
 
-    this.emit('a11y-accordion-change', {
+    this.emit('compa11y-accordion-change', {
       index,
       expanded: isNowOpen,
       trigger: this._triggers[index],
@@ -313,6 +313,6 @@ export class A11yAccordion extends Compa11yElement {
   }
 }
 
-defineElement('a11y-accordion', A11yAccordion);
+defineElement('compa11y-accordion', Compa11yAccordion);
 
-export default A11yAccordion;
+export default Compa11yAccordion;

@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import './tabs';
-import type { A11yTabs } from './tabs';
+import type { Compa11yTabs } from './tabs';
 
-describe('A11yTabs', () => {
-  let tabs: A11yTabs;
+describe('Compa11yTabs', () => {
+  let tabs: Compa11yTabs;
   let tab1: HTMLButtonElement;
   let tab2: HTMLButtonElement;
   let panel1: HTMLDivElement;
   let panel2: HTMLDivElement;
 
   beforeEach(() => {
-    tabs = document.createElement('a11y-tabs') as A11yTabs;
+    tabs = document.createElement('compa11y-tabs') as Compa11yTabs;
 
     tab1 = document.createElement('button');
     tab1.setAttribute('role', 'tab');
@@ -40,7 +40,7 @@ describe('A11yTabs', () => {
   });
 
   it('should be defined as a custom element', () => {
-    expect(customElements.get('a11y-tabs')).toBeDefined();
+    expect(customElements.get('compa11y-tabs')).toBeDefined();
   });
 
   it('should set first tab as selected by default', () => {
@@ -74,7 +74,7 @@ describe('A11yTabs', () => {
 
   it('should emit a11y-tabs-change event when tab changes', () => {
     const handler = vi.fn();
-    tabs.addEventListener('a11y-tabs-change', handler);
+    tabs.addEventListener('compa11y-tabs-change', handler);
 
     tabs.select(1);
 

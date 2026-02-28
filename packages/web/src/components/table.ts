@@ -5,10 +5,10 @@
  * in the light DOM so screen readers correctly associate headers with cells.
  *
  * Usage:
- * <a11y-table caption="Users" selectable></a11y-table>
+ * <compa11y-table caption="Users" selectable></compa11y-table>
  *
  * <script>
- *   const table = document.querySelector('a11y-table');
+ *   const table = document.querySelector('compa11y-table');
  *   table.columns = [
  *     { key: 'name', label: 'Name', sortable: true },
  *     { key: 'role', label: 'Role', sortable: true, align: 'center' },
@@ -18,10 +18,10 @@
  *     { id: '2', name: 'Bob',   role: 'User' },
  *   ];
  *
- *   table.addEventListener('a11y-table-sort', (e) => {
+ *   table.addEventListener('compa11y-table-sort', (e) => {
  *     console.log(e.detail); // { sortKey, sortDirection }
  *   });
- *   table.addEventListener('a11y-table-select', (e) => {
+ *   table.addEventListener('compa11y-table-select', (e) => {
  *     console.log(e.detail); // { selectedRows: string[] }
  *   });
  * </script>
@@ -31,7 +31,7 @@ import { announce, createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { BASE_STYLES, TABLE_GLOBAL_STYLES } from '../utils/styles';
 
-const warn = createComponentWarnings('A11yTable');
+const warn = createComponentWarnings('Compa11yTable');
 
 export type SortDirection = 'ascending' | 'descending' | 'none';
 
@@ -61,7 +61,7 @@ function ensureGlobalStyles(): void {
   document.head.appendChild(style);
 }
 
-export class A11yTable extends Compa11yElement {
+export class Compa11yTable extends Compa11yElement {
   private _columns: ColumnDef[] = [];
   private _rows: RowData[] = [];
   private _sortKey: string | null = null;
@@ -180,7 +180,7 @@ export class A11yTable extends Compa11yElement {
       !this.getAttribute('aria-labelledby')
     ) {
       warn.warning(
-        'a11y-table must have an accessible name. Provide a caption attribute, aria-label, or aria-labelledby.'
+        'compa11y-table must have an accessible name. Provide a caption attribute, aria-label, or aria-labelledby.'
       );
     }
   }
@@ -470,7 +470,7 @@ export class A11yTable extends Compa11yElement {
       const missingId = this._rows.some((r) => !r.id);
       if (missingId) {
         warn.warning(
-          'a11y-table: When selectable is enabled, each row object must have an "id" field.'
+          'compa11y-table: When selectable is enabled, each row object must have an "id" field.'
         );
       }
     }
@@ -581,7 +581,7 @@ export class A11yTable extends Compa11yElement {
             : `sorted ${this._sortDirection}`;
         announce(`${label} ${dirLabel}`);
 
-        this.emit('a11y-table-sort', {
+        this.emit('compa11y-table-sort', {
           sortKey: this._sortKey,
           sortDirection: this._sortDirection,
         });
@@ -632,12 +632,12 @@ export class A11yTable extends Compa11yElement {
   };
 
   private emitSelectEvent(): void {
-    this.emit('a11y-table-select', {
+    this.emit('compa11y-table-select', {
       selectedRows: Array.from(this._selectedRows),
     });
   }
 }
 
-defineElement('a11y-table', A11yTable);
+defineElement('compa11y-table', Compa11yTable);
 
-export default A11yTable;
+export default Compa11yTable;
