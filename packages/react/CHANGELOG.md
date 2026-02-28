@@ -1,11 +1,12 @@
 # @compa11y/react
 
-## 0.1.12
+## 0.2.0
 
 ### Patch Changes
 
 - Add `funding` and `engines` metadata fields to package.json
 - Add missing sub-path exports for Switch, VisuallyHidden, SkipLink, Alert, Link, Text, Popover, Accordion, Table, FormField, Pagination, and Breadcrumbs
+- Move to full compa11y nomenclature
 
 ## 0.1.11
 
