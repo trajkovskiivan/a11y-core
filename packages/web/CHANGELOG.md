@@ -1,5 +1,11 @@
 # @compa11y/web
 
+## 0.2.2
+
+### Minor Changes
+
+- Tooltip added
+
 ## 0.2.1
 
 ### Minor Changes

@@ -35,6 +35,7 @@ import { Compa11yAccordion } from './components/accordion';
 import { Compa11yTable } from './components/table';
 import { Compa11yPagination } from './components/pagination';
 import { Compa11yBreadcrumbs } from './components/breadcrumbs';
+import { Compa11yTooltip } from './components/tooltip';
 
 // Re-export components
 export {
@@ -67,6 +68,7 @@ export {
   Compa11yTable,
   Compa11yPagination,
   Compa11yBreadcrumbs,
+  Compa11yTooltip,
 };
 
 // Core utilities for vanilla JS usage
@@ -168,6 +170,7 @@ if (typeof window !== 'undefined') {
     Compa11yTable,
     Compa11yPagination,
     Compa11yBreadcrumbs,
+    Compa11yTooltip,
     // Announcer utilities
     initAnnouncer,
     announce,

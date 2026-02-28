@@ -34,6 +34,7 @@
   - [Table](#table)
   - [Pagination](#pagination)
   - [Breadcrumbs](#breadcrumbs)
+  - [Tooltip](#tooltip)
 - [Web Components](#web-components)
   - [`<a11y-button>`](#a11y-button)
   - [`<a11y-input>`](#a11y-input)
@@ -60,6 +61,7 @@
   - [`<a11y-table>`](#a11y-table)
   - [`<a11y-pagination>`](#a11y-pagination)
   - [`<a11y-breadcrumbs>`](#a11y-breadcrumbs)
+  - [`<compa11y-tooltip>`](#compa11y-tooltip)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -1395,6 +1397,96 @@ Accessible trail-of-links navigation. Renders a `<nav aria-label>` > `<ol>` with
 
 ---
 
+### Tooltip
+
+A short descriptive overlay anchored to a trigger element. Uses `role="tooltip"` and `aria-describedby` so screen readers announce the tooltip text after the trigger's name and role. Meets WCAG 2.1 SC 1.4.13 (Content on Hover or Focus).
+
+**Component:** `<Tooltip>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="tooltip"`** | Applied to the tooltip content element |
+| **`aria-describedby`** | Injected automatically onto the trigger child; points to the tooltip ID |
+| **Hover trigger** | `mouseenter` shows tooltip (after `delay`), `mouseleave` hides it |
+| **Focus trigger** | `focus` shows tooltip immediately (no delay — WCAG 2.1 SC 1.4.13); `blur` hides it |
+| **Escape to dismiss** | Closes the tooltip without moving focus (WCAG 2.1 SC 1.4.13) |
+| **Viewport-aware positioning** | Auto-flips placement side if tooltip would overflow viewport |
+| **Scroll/resize tracking** | Position recalculated while tooltip is open |
+| **Always in DOM** | Tooltip element remains in the DOM (opacity 0) so `aria-describedby` reference is always valid |
+| **Controlled + Uncontrolled** | `open` / `onOpenChange` for controlled; uncontrolled by default |
+| **Existing `aria-describedby` preserved** | Merged with the tooltip ID — does not overwrite existing references |
+| **Dev warnings** | Warns if `label` is empty or `children` is not a single React element |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `Tab` to trigger | Tooltip appears immediately |
+| `Escape` | Tooltip closes; focus stays on trigger |
+| `Tab` away | Tooltip closes |
+
+#### Usage
+
+```tsx
+import { Tooltip } from '@compa11y/react';
+
+// Basic
+<Tooltip label="Save your changes">
+  <button>Save</button>
+</Tooltip>
+
+// Custom placement
+<Tooltip label="Format: YYYY-MM-DD" placement="bottom">
+  <input type="text" placeholder="Date" />
+</Tooltip>
+
+// Controlled
+<Tooltip label="Read only" open={isOpen} onOpenChange={setIsOpen}>
+  <span tabIndex={0}>Hover me</span>
+</Tooltip>
+
+// Disabled
+<Tooltip label="Cannot delete" disabled>
+  <button>Delete</button>
+</Tooltip>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `ReactNode` | — | **Required.** Tooltip text or content |
+| `children` | `ReactElement` | — | **Required.** Single trigger element |
+| `placement` | `TooltipPlacement` | `'top'` | Preferred side; auto-flips on overflow |
+| `delay` | `number` | `300` | Hover show delay in ms. Focus always immediate. |
+| `hideDelay` | `number` | `0` | Hide delay in ms on mouse-leave |
+| `offset` | `number` | `8` | Gap between trigger and tooltip in px |
+| `disabled` | `boolean` | `false` | Suppresses tooltip entirely |
+| `unstyled` | `boolean` | `false` | Remove default visual styles |
+| `container` | `HTMLElement \| null` | `document.body` | Portal target |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Called when open state changes |
+
+#### Placement values
+
+`top` | `top-start` | `top-end` | `bottom` | `bottom-start` | `bottom-end` | `left` | `left-start` | `left-end` | `right` | `right-start` | `right-end`
+
+#### CSS Custom Properties
+
+```css
+--compa11y-tooltip-bg          /* Background color (default: #1a1a1a) */
+--compa11y-tooltip-color       /* Text color (default: #fff) */
+--compa11y-tooltip-radius      /* Border radius (default: 4px) */
+--compa11y-tooltip-padding     /* Padding (default: 0.375rem 0.625rem) */
+--compa11y-tooltip-font-size   /* Font size (default: 0.8125rem) */
+--compa11y-tooltip-max-width   /* Max width (default: 280px) */
+--compa11y-tooltip-shadow      /* Box shadow */
+```
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
@@ -2511,6 +2603,83 @@ Reads slotted `<a>` and `<span>` children from the light DOM, clones them into a
 | `--compa11y-breadcrumbs-separator-color` | `#999` | Separator color |
 | `--compa11y-breadcrumbs-separator-padding` | `0.375rem` | Horizontal padding around each separator |
 | `--compa11y-focus-color` | `#0066cc` | Focus ring color |
+
+---
+
+### `<compa11y-tooltip>`
+
+Anchors a descriptive tooltip to a slotted trigger element. Automatically sets `aria-describedby` on the trigger. Because `aria-describedby` cannot cross shadow DOM boundaries, the component mirrors the tooltip text into a visually-hidden `<span role="tooltip">` appended to `document.body` — the shadow DOM tooltip is visual only.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="tooltip"` (body span)** | A visually-hidden `<span role="tooltip">` in `document.body` carries the label text for screen readers |
+| **`aria-describedby`** | Set on the slotted trigger element; points to the body-level tooltip span |
+| **Visual tooltip** | Shadow DOM element handles positioning, animation, and styling — marked `aria-hidden="true"` |
+| **Hover trigger** | `mouseenter` → show (after `delay` ms), `mouseleave` → hide |
+| **Focus trigger** | `focus` → show immediately (WCAG 2.1 SC 1.4.13), `blur` → hide immediately |
+| **Escape to dismiss** | Closes tooltip without moving focus |
+| **Viewport-aware positioning** | Auto-flips if tooltip would overflow viewport |
+| **`label` sync** | Both the visual tooltip and the SR span are updated when `label` attribute changes |
+| **Dev warnings** | Warns if `label` attribute is missing or trigger slot is empty |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `Tab` to trigger | Tooltip appears immediately |
+| `Escape` | Tooltip closes; focus stays on trigger |
+| `Tab` away | Tooltip closes |
+
+#### Usage
+
+```html
+<!-- Basic -->
+<compa11y-tooltip label="Save your changes">
+  <button slot="trigger">Save</button>
+</compa11y-tooltip>
+
+<!-- Custom placement -->
+<compa11y-tooltip label="Format: YYYY-MM-DD" placement="bottom">
+  <input slot="trigger" type="text" placeholder="Date" />
+</compa11y-tooltip>
+
+<!-- With delay -->
+<compa11y-tooltip label="Opens in a new window" delay="500">
+  <a slot="trigger" href="/docs" target="_blank">Docs</a>
+</compa11y-tooltip>
+
+<!-- Disabled -->
+<compa11y-tooltip label="Cannot delete" disabled>
+  <button slot="trigger" disabled>Delete</button>
+</compa11y-tooltip>
+```
+
+**Events:** `compa11y-tooltip-show`, `compa11y-tooltip-hide`
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `label` | `string` | — | **Required.** Tooltip text |
+| `placement` | `string` | `top` | Preferred side (top/bottom/left/right and -start/-end variants) |
+| `delay` | `number` | `300` | Hover show delay in ms |
+| `hide-delay` | `number` | `0` | Hide delay in ms on mouse-leave |
+| `offset` | `number` | `8` | Gap between trigger and tooltip in px |
+| `disabled` | boolean attr | absent | Suppress the tooltip |
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-tooltip-bg` | `#1a1a1a` | Background color |
+| `--compa11y-tooltip-color` | `#fff` | Text color |
+| `--compa11y-tooltip-radius` | `4px` | Border radius |
+| `--compa11y-tooltip-padding` | `0.375rem 0.625rem` | Padding |
+| `--compa11y-tooltip-font-size` | `0.8125rem` | Font size |
+| `--compa11y-tooltip-max-width` | `280px` | Max width |
+| `--compa11y-tooltip-shadow` | `0 2px 8px rgba(0,0,0,.2)` | Box shadow |
 
 ---
 

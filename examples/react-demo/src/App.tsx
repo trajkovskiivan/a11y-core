@@ -27,6 +27,7 @@ import {
   Table,
   Pagination,
   Breadcrumbs,
+  Tooltip,
   type SortDirection,
 } from '@compa11y/react';
 
@@ -241,6 +242,11 @@ export function App() {
         <section>
           <h2>Breadcrumbs</h2>
           <BreadcrumbsDemo />
+        </section>
+
+        <section>
+          <h2>Tooltip</h2>
+          <TooltipDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -2473,6 +2479,133 @@ function BreadcrumbsDemo() {
             Current page announced as{' '}
             <em>"Model X, current page"</em>
           </li>
+        </ul>
+      </div>
+
+    </div>
+  );
+}
+
+function TooltipDemo() {
+  const btnStyle: React.CSSProperties = {
+    padding: '0.5rem 1rem',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    background: 'white',
+    font: 'inherit',
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '4rem' }}>
+
+      {/* Basic placements */}
+      <div>
+        <p style={{ marginBottom: '0.75rem' }}><strong>Placements — hover or Tab to each button:</strong></p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+          <Tooltip label="I appear above" placement="top">
+            <button style={btnStyle}>Top (default)</button>
+          </Tooltip>
+          <Tooltip label="I appear below" placement="bottom">
+            <button style={btnStyle}>Bottom</button>
+          </Tooltip>
+          <Tooltip label="I appear to the right" placement="right">
+            <button style={btnStyle}>Right</button>
+          </Tooltip>
+          <Tooltip label="I appear to the left" placement="left">
+            <button style={btnStyle}>Left</button>
+          </Tooltip>
+          <Tooltip label="top-start — aligned to left edge" placement="top-start">
+            <button style={btnStyle}>Top-start</button>
+          </Tooltip>
+          <Tooltip label="bottom-end — aligned to right edge" placement="bottom-end">
+            <button style={btnStyle}>Bottom-end</button>
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* Icon buttons */}
+      <div>
+        <p style={{ marginBottom: '0.75rem' }}><strong>Icon-only buttons with tooltip as description:</strong></p>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <Tooltip label="Delete item">
+            <button
+              aria-label="Delete"
+              style={{ ...btnStyle, width: '2.5rem', height: '2.5rem', padding: 0, fontSize: '1.25rem' }}
+            >
+              🗑
+            </button>
+          </Tooltip>
+          <Tooltip label="Edit item">
+            <button
+              aria-label="Edit"
+              style={{ ...btnStyle, width: '2.5rem', height: '2.5rem', padding: 0, fontSize: '1.25rem' }}
+            >
+              ✏️
+            </button>
+          </Tooltip>
+          <Tooltip label="Share this link">
+            <button
+              aria-label="Share"
+              style={{ ...btnStyle, width: '2.5rem', height: '2.5rem', padding: 0, fontSize: '1.25rem' }}
+            >
+              🔗
+            </button>
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* Input with tooltip */}
+      <div>
+        <p style={{ marginBottom: '0.75rem' }}><strong>Input with tooltip description:</strong></p>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <label htmlFor="tooltip-date-input" style={{ fontWeight: 500 }}>Date</label>
+          <Tooltip label="Format: YYYY-MM-DD (e.g. 2024-12-31)" placement="right">
+            <input
+              id="tooltip-date-input"
+              type="text"
+              placeholder="YYYY-MM-DD"
+              style={{ padding: '0.375rem 0.625rem', border: '1px solid #ccc', borderRadius: '4px', font: 'inherit' }}
+            />
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* Disabled tooltip */}
+      <div>
+        <p style={{ marginBottom: '0.75rem' }}><strong>Disabled tooltip:</strong></p>
+        <Tooltip label="This will never show" disabled>
+          <button style={btnStyle}>Hover me (tooltip disabled)</button>
+        </Tooltip>
+      </div>
+
+      {/* Long label */}
+      <div>
+        <p style={{ marginBottom: '0.75rem' }}><strong>Long label — wraps at max-width:</strong></p>
+        <Tooltip
+          label="This is a longer tooltip that wraps across multiple lines once it reaches the maximum width."
+          placement="bottom"
+        >
+          <button style={btnStyle}>Long description</button>
+        </Tooltip>
+      </div>
+
+      <div className="keyboard-hints">
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li><kbd>Tab</kbd> to trigger — tooltip appears immediately (no delay)</li>
+          <li><kbd>Escape</kbd> — closes tooltip; focus stays on trigger</li>
+          <li><kbd>Tab</kbd> away — tooltip closes</li>
+          <li>Mouse hover shows tooltip after 300 ms delay</li>
+        </ul>
+        <h3>Screen Reader</h3>
+        <ul>
+          <li>
+            <code>aria-describedby</code> injected on the trigger automatically —
+            screen readers announce the tooltip after the element's name and role
+          </li>
+          <li>Tooltip element stays in the DOM (opacity 0) so the reference is always valid</li>
+          <li>Tooltip is not focusable — focus stays on the trigger at all times</li>
         </ul>
       </div>
 

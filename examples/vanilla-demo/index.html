@@ -87,7 +87,8 @@
     compa11y-accordion:not(:defined),
     compa11y-table:not(:defined),
     compa11y-pagination:not(:defined),
-    compa11y-breadcrumbs:not(:defined) {
+    compa11y-breadcrumbs:not(:defined),
+    compa11y-tooltip:not(:defined) {
       display: none;
     }
 
@@ -1406,6 +1407,73 @@
     </compa11y-breadcrumbs>
   </section>
 
+  <!-- ================================================================
+       Tooltip
+       ================================================================ -->
+  <section>
+    <h2>Tooltip</h2>
+
+    <h3>Basic placements — hover or Tab to each trigger</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center">
+      <compa11y-tooltip label="I appear above" placement="top">
+        <button slot="trigger">Top (default)</button>
+      </compa11y-tooltip>
+
+      <compa11y-tooltip label="I appear below" placement="bottom">
+        <button slot="trigger">Bottom</button>
+      </compa11y-tooltip>
+
+      <compa11y-tooltip label="I appear to the right" placement="right">
+        <button slot="trigger">Right</button>
+      </compa11y-tooltip>
+
+      <compa11y-tooltip label="I appear to the left" placement="left">
+        <button slot="trigger">Left</button>
+      </compa11y-tooltip>
+    </div>
+
+    <h3 style="margin-top:1.5rem">Icon-only buttons with tooltip as description</h3>
+    <div style="display:flex;gap:0.75rem;align-items:center">
+      <compa11y-tooltip label="Delete item">
+        <button slot="trigger" aria-label="Delete" style="width:2.5rem;height:2.5rem;font-size:1.25rem;cursor:pointer">🗑</button>
+      </compa11y-tooltip>
+
+      <compa11y-tooltip label="Edit item">
+        <button slot="trigger" aria-label="Edit" style="width:2.5rem;height:2.5rem;font-size:1.25rem;cursor:pointer">✏️</button>
+      </compa11y-tooltip>
+
+      <compa11y-tooltip label="Share this link">
+        <button slot="trigger" aria-label="Share" style="width:2.5rem;height:2.5rem;font-size:1.25rem;cursor:pointer">🔗</button>
+      </compa11y-tooltip>
+    </div>
+
+    <h3 style="margin-top:1.5rem">Input with tooltip description</h3>
+    <div style="display:flex;gap:0.5rem;align-items:center">
+      <label for="tooltip-date">Date</label>
+      <compa11y-tooltip label="Format: YYYY-MM-DD (e.g. 2024-12-31)" placement="right">
+        <input slot="trigger" id="tooltip-date" type="text" placeholder="YYYY-MM-DD" />
+      </compa11y-tooltip>
+    </div>
+
+    <h3 style="margin-top:1.5rem">Custom delay — shows after 800 ms hover</h3>
+    <compa11y-tooltip label="Slow tooltip — 800 ms delay" delay="800">
+      <button slot="trigger">Slow hover (800 ms)</button>
+    </compa11y-tooltip>
+
+    <h3 style="margin-top:1.5rem">Disabled tooltip</h3>
+    <compa11y-tooltip label="This will never show" disabled>
+      <button slot="trigger">Hover me (tooltip disabled)</button>
+    </compa11y-tooltip>
+
+    <h3 style="margin-top:1.5rem">Long label — wraps at max-width</h3>
+    <compa11y-tooltip
+      label="This is a longer tooltip that wraps across multiple lines once it reaches the maximum width."
+      placement="bottom"
+    >
+      <button slot="trigger">Long description</button>
+    </compa11y-tooltip>
+  </section>
+
   <!-- Load compa11y - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
@@ -1846,6 +1914,16 @@
         paginationBasic.setAttribute('current-page', String(e.detail.page));
       });
     }
+
+    // Tooltip events
+    document.querySelectorAll('compa11y-tooltip').forEach(tip => {
+      tip.addEventListener('compa11y-tooltip-show', () => {
+        console.log('Tooltip shown:', tip.getAttribute('label'));
+      });
+      tip.addEventListener('compa11y-tooltip-hide', () => {
+        console.log('Tooltip hidden:', tip.getAttribute('label'));
+      });
+    });
   </script>
 </body>
 
