@@ -1,5 +1,11 @@
 # @compa11y/web
 
+## 0.2.1
+
+### Minor Changes
+
+- Packages update
+
 ## 0.2.0
 
 ### Patch Changes

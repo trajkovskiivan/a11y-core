@@ -1,6 +1,6 @@
 {
   "name": "@compa11y/compa11y",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The complete accessibility toolkit. React primitives and Web Components.",
   "author": "Ivan Trajkovski",
   "license": "MIT",
