@@ -1,5 +1,11 @@
 # @compa11y/react
 
+## 0.2.2
+
+### Minor Changes
+
+- Tooltip added
+
 ## 0.2.1
 
 ### Minor Changes
