@@ -693,6 +693,60 @@ export {
   type CarouselContextValue,
 } from './components/carousel';
 
+// ============================================================================
+// RichTextEditor
+// ============================================================================
+
+export {
+  RichTextEditor,
+  RTEToolbar,
+  RTEContent,
+  RTEBold,
+  RTEItalic,
+  RTEUnderline,
+  RTEStrike,
+  RTECode,
+  RTECodeBlock,
+  RTEHeadingSelect,
+  RTEBulletedList,
+  RTENumberedList,
+  RTEIndent,
+  RTEOutdent,
+  RTEBlockquote,
+  RTELink,
+  RTEUndo,
+  RTERedo,
+  RTESeparator,
+  RTELinkDialog,
+  RTEImageDialog,
+  RTEFooter,
+  RTECharacterCount,
+  RTEHelpText,
+  useRichTextEditorContext,
+  type RichTextEditorProps,
+  type RTEToolbarProps,
+  type RTEContentProps,
+  type RTEHeadingSelectProps,
+  type RTESeparatorProps,
+  type RTELinkDialogProps,
+  type RTEImageDialogProps,
+  type RTEFooterProps,
+  type RTECharacterCountProps,
+  type RTEHelpTextProps,
+  type RichTextEditorContextValue,
+  type RTEAdapter,
+  type RTEAdapterFactory,
+  type RTEFormat,
+  type RTEMark,
+  type RTEBlock,
+  type RTESelectionState,
+  type RTEFeatures,
+  type RTECommands,
+  type RTECapabilities,
+  type RTEMountOptions,
+  type RTEValue,
+} from './components/rich-text-editor';
+
 // Re-export core utilities
 // ============================================================================
 

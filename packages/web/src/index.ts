@@ -52,6 +52,7 @@ import { Compa11yTimePicker } from './components/time-picker';
 import { Compa11yTreeView } from './components/tree-view';
 import { Compa11yCommandPalette } from './components/command-palette';
 import { Compa11yCarousel } from './components/carousel';
+import { Compa11yRichTextEditor } from './components/rich-text-editor';
 
 // Re-export components
 export {
@@ -101,6 +102,7 @@ export {
   Compa11yTreeView,
   Compa11yCommandPalette,
   Compa11yCarousel,
+  Compa11yRichTextEditor,
 };
 
 // Core utilities for vanilla JS usage
@@ -219,6 +221,7 @@ if (typeof window !== 'undefined') {
     Compa11yTreeView,
     Compa11yCommandPalette,
     Compa11yCarousel,
+    Compa11yRichTextEditor,
     // Announcer utilities
     initAnnouncer,
     announce,

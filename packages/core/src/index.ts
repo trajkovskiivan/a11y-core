@@ -30,6 +30,9 @@ export * from './aria';
 // Development Tools
 export * from './dev';
 
+// Rich Text Editor (adapter types)
+export * from './utilities/rich-text-editor';
+
 /**
  * Initialize all compa11y systems
  * Call this once at app startup for optimal behavior

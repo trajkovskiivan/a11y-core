@@ -46,6 +46,7 @@ import {
   TreeView,
   CommandPalette,
   Carousel,
+  RichTextEditor,
   type TreeNodeData,
   type TimePickerValue,
   type DataGridColumnDef,
@@ -53,6 +54,7 @@ import {
   type FileUploadFile,
   type SortDirection,
   type DataGridSortDirection,
+  type RTEAdapter,
 } from '@compa11y/react';
 
 const countries = [
@@ -350,6 +352,11 @@ export function App() {
 
         <section>
           <CarouselDemo />
+        </section>
+
+        <section>
+          <h2>RichTextEditor</h2>
+          <RichTextEditorDemo />
         </section>
 
         <ToastViewport position="bottom-right" />
@@ -4517,6 +4524,499 @@ function CarouselDemo() {
       <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#6b7280' }}>
         Slides transition with <code>transform</code>. Users with <code>prefers-reduced-motion</code> see instant snapping instead of animation.
       </p>
+    </div>
+  );
+}
+
+// ============================================================================
+// RichTextEditor Demo
+// ============================================================================
+
+/**
+ * Mock adapter for demo purposes.
+ * In production, use @compa11y/rte-lexical or @compa11y/rte-tiptap.
+ */
+function createMockAdapter(): RTEAdapter {
+  let content = '';
+  let onChangeCb: (() => void) | null = null;
+  let onSelectionChangeCb: (() => void) | null = null;
+  let editorEl: HTMLDivElement | null = null;
+  let isBold = false;
+  let isItalic = false;
+  let isUnderline = false;
+  let currentBlock: 'paragraph' | 'heading1' | 'heading2' | 'heading3' | 'heading4' | 'heading5' | 'heading6' | 'blockquote' | 'bulletList' | 'numberList' | 'codeBlock' = 'paragraph';
+  const undoStack: string[] = [];
+  const redoStack: string[] = [];
+
+  // Save/restore selection so commands work after dialog closes
+  let savedRange: Range | null = null;
+  function saveSelection() {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && editorEl?.contains(sel.anchorNode)) {
+      savedRange = sel.getRangeAt(0).cloneRange();
+    }
+  }
+  function restoreSelection() {
+    if (savedRange && editorEl) {
+      editorEl.focus();
+      const sel = window.getSelection();
+      if (sel) {
+        sel.removeAllRanges();
+        sel.addRange(savedRange);
+      }
+    }
+  }
+
+  return {
+    mount(el, opts) {
+      editorEl = document.createElement('div');
+      editorEl.contentEditable = opts.disabled ? 'false' : opts.readOnly ? 'false' : 'true';
+      editorEl.setAttribute('role', 'textbox');
+      editorEl.setAttribute('aria-multiline', 'true');
+      if (opts.ariaLabelledBy) editorEl.setAttribute('aria-labelledby', opts.ariaLabelledBy);
+      if (opts.ariaDescribedBy) editorEl.setAttribute('aria-describedby', opts.ariaDescribedBy);
+      editorEl.style.outline = 'none';
+      editorEl.style.minHeight = '120px';
+
+      if (opts.placeholder) {
+        editorEl.setAttribute('data-placeholder', opts.placeholder);
+        editorEl.style.position = 'relative';
+      }
+
+      if (content) editorEl.innerHTML = content;
+
+      onChangeCb = opts.onChange;
+      onSelectionChangeCb = opts.onSelectionChange;
+
+      editorEl.addEventListener('input', () => {
+        undoStack.push(content);
+        redoStack.length = 0;
+        content = editorEl!.innerHTML;
+        onChangeCb?.();
+        onSelectionChangeCb?.();
+      });
+
+      editorEl.addEventListener('focus', () => opts.onFocus?.());
+      editorEl.addEventListener('blur', () => {
+        saveSelection();
+        opts.onBlur?.();
+      });
+
+      // Keyboard shortcuts
+      editorEl.addEventListener('keydown', (e: KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+          e.preventDefault();
+          document.execCommand('bold');
+          isBold = !isBold;
+          onSelectionChangeCb?.();
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'i') {
+          e.preventDefault();
+          document.execCommand('italic');
+          isItalic = !isItalic;
+          onSelectionChangeCb?.();
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'u') {
+          e.preventDefault();
+          document.execCommand('underline');
+          isUnderline = !isUnderline;
+          onSelectionChangeCb?.();
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
+          e.preventDefault();
+          if (e.shiftKey) {
+            // Redo
+            if (redoStack.length > 0) {
+              undoStack.push(content);
+              content = redoStack.pop()!;
+              editorEl!.innerHTML = content;
+              onChangeCb?.();
+              onSelectionChangeCb?.();
+            }
+          } else {
+            // Undo
+            if (undoStack.length > 0) {
+              redoStack.push(content);
+              content = undoStack.pop()!;
+              editorEl!.innerHTML = content;
+              onChangeCb?.();
+              onSelectionChangeCb?.();
+            }
+          }
+        }
+      });
+
+      el.appendChild(editorEl);
+
+      return () => {
+        editorEl?.remove();
+        editorEl = null;
+        onChangeCb = null;
+        onSelectionChangeCb = null;
+      };
+    },
+
+    getSelectionState: () => ({
+      isCollapsed: true,
+      marks: { bold: isBold, italic: isItalic, underline: isUnderline },
+      block: currentBlock,
+      canUndo: undoStack.length > 0,
+      canRedo: redoStack.length > 0,
+      link: null,
+    }),
+
+    getValue: () => content,
+    setValue: (value) => {
+      content = typeof value === 'string' ? value : JSON.stringify(value);
+      if (editorEl) editorEl.innerHTML = content;
+    },
+
+    isEmpty: () => !content || content === '<br>' || content.replace(/<[^>]*>/g, '').trim() === '',
+    getPlainText: () => content.replace(/<[^>]*>/g, ''),
+    getCharacterCount: () => content.replace(/<[^>]*>/g, '').length,
+
+    commands: {
+      focus: () => editorEl?.focus(),
+      undo: () => {
+        if (undoStack.length > 0) {
+          redoStack.push(content);
+          content = undoStack.pop()!;
+          if (editorEl) editorEl.innerHTML = content;
+          onChangeCb?.();
+          onSelectionChangeCb?.();
+        }
+      },
+      redo: () => {
+        if (redoStack.length > 0) {
+          undoStack.push(content);
+          content = redoStack.pop()!;
+          if (editorEl) editorEl.innerHTML = content;
+          onChangeCb?.();
+          onSelectionChangeCb?.();
+        }
+      },
+      toggleMark: (mark) => {
+        if (mark === 'bold') { document.execCommand('bold'); isBold = !isBold; }
+        if (mark === 'italic') { document.execCommand('italic'); isItalic = !isItalic; }
+        if (mark === 'underline') { document.execCommand('underline'); isUnderline = !isUnderline; }
+        if (mark === 'strikethrough') document.execCommand('strikeThrough');
+        onSelectionChangeCb?.();
+      },
+      setBlock: (block) => {
+        currentBlock = block;
+        if (block === 'paragraph') document.execCommand('formatBlock', false, 'p');
+        else if (block.startsWith('heading')) {
+          const level = block.replace('heading', '');
+          document.execCommand('formatBlock', false, `h${level}`);
+        } else if (block === 'blockquote') document.execCommand('formatBlock', false, 'blockquote');
+        onSelectionChangeCb?.();
+      },
+      toggleBulletList: () => { document.execCommand('insertUnorderedList'); onSelectionChangeCb?.(); },
+      toggleNumberList: () => { document.execCommand('insertOrderedList'); onSelectionChangeCb?.(); },
+      indent: () => { document.execCommand('indent'); },
+      outdent: () => { document.execCommand('outdent'); },
+      insertOrEditLink: (opts) => {
+        if (!editorEl) return;
+        restoreSelection();
+        const sel = window.getSelection();
+
+        // Check if selection is inside the editor
+        const selIsInsideEditor = sel && sel.rangeCount > 0 && editorEl.contains(sel.anchorNode);
+
+        if (sel && selIsInsideEditor && !sel.isCollapsed) {
+          // Text is selected inside editor — wrap it with createLink
+          document.execCommand('createLink', false, opts.href);
+        } else {
+          // No selection or collapsed — insert an <a> element
+          const linkText = opts.text || opts.href;
+          const a = document.createElement('a');
+          a.href = opts.href;
+          a.textContent = linkText;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+
+          if (selIsInsideEditor && sel!.rangeCount > 0) {
+            // Cursor is inside editor — insert at cursor
+            const range = sel!.getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(a);
+            range.setStartAfter(a);
+            range.collapse(true);
+            sel!.removeAllRanges();
+            sel!.addRange(range);
+          } else {
+            // No valid cursor position — append at end of editor
+            editorEl.appendChild(a);
+          }
+        }
+        content = editorEl.innerHTML;
+        onChangeCb?.();
+      },
+      removeLink: () => {
+        restoreSelection();
+        document.execCommand('unlink');
+        if (editorEl) content = editorEl.innerHTML;
+        onChangeCb?.();
+      },
+      toggleCodeBlock: () => {
+        document.execCommand('formatBlock', false, 'pre');
+        currentBlock = currentBlock === 'codeBlock' ? 'paragraph' : 'codeBlock';
+        onSelectionChangeCb?.();
+      },
+    },
+  };
+}
+
+function RichTextEditorDemo() {
+  const [value, setValue] = useState('');
+  const [adapter] = useState(() => createMockAdapter());
+
+  return (
+    <div style={{ maxWidth: '700px' }}>
+      <p style={{ marginBottom: '1rem', color: '#6b7280', fontSize: '0.9rem' }}>
+        This demo uses a mock adapter based on <code>document.execCommand</code> for illustration.
+        In production, use <code>@compa11y/rte-lexical</code> or <code>@compa11y/rte-tiptap</code> for
+        full engine support.
+      </p>
+
+      <style>{`
+        [data-compa11y-rte] {
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        [data-compa11y-rte-toolbar] {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 2px;
+          padding: 6px 8px;
+          background: #f9fafb;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        [data-compa11y-rte-button] {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 32px;
+          height: 32px;
+          padding: 0 8px;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          background: transparent;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: #374151;
+        }
+        [data-compa11y-rte-button]:hover {
+          background: #e5e7eb;
+        }
+        [data-compa11y-rte-button][aria-pressed="true"] {
+          background: #dbeafe;
+          color: #1d4ed8;
+          border-color: #93c5fd;
+        }
+        [data-compa11y-rte-button]:disabled {
+          opacity: 0.4;
+          cursor: default;
+        }
+        [data-compa11y-rte-heading-select] {
+          height: 32px;
+          padding: 0 8px;
+          border: 1px solid #d1d5db;
+          border-radius: 4px;
+          background: white;
+          font-size: 0.85rem;
+          color: #374151;
+        }
+        [data-compa11y-rte-separator] {
+          width: 1px;
+          height: 24px;
+          background: #e5e7eb;
+          margin: 0 4px;
+        }
+        [data-compa11y-rte-content] {
+          min-height: 180px;
+          padding: 12px 16px;
+          outline: none;
+          font-size: 1rem;
+          line-height: 1.6;
+        }
+        [data-compa11y-rte-content]:focus-within {
+          box-shadow: inset 0 0 0 2px #3b82f6;
+        }
+        [data-compa11y-rte-footer] {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 6px 12px;
+          border-top: 1px solid #e5e7eb;
+          background: #f9fafb;
+          font-size: 0.8rem;
+          color: #6b7280;
+        }
+        [data-compa11y-rte-character-count] {
+          font-variant-numeric: tabular-nums;
+        }
+        /* Editor content formatting */
+        [data-compa11y-rte-content] pre,
+        .rte-preview pre {
+          background: #1e293b;
+          color: #e2e8f0;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+          font-size: 0.875rem;
+          overflow-x: auto;
+          margin: 0.5rem 0;
+        }
+        [data-compa11y-rte-content] code,
+        .rte-preview code {
+          background: #f1f5f9;
+          color: #e11d48;
+          padding: 0.15em 0.4em;
+          border-radius: 3px;
+          font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+          font-size: 0.875em;
+        }
+        [data-compa11y-rte-content] pre code,
+        .rte-preview pre code {
+          background: none;
+          color: inherit;
+          padding: 0;
+          border-radius: 0;
+          font-size: inherit;
+        }
+        [data-compa11y-rte-content] blockquote,
+        .rte-preview blockquote {
+          border-left: 3px solid #6366f1;
+          margin: 0.5rem 0;
+          padding: 0.5rem 1rem;
+          color: #4b5563;
+          background: #f9fafb;
+        }
+        [data-compa11y-rte-content] a,
+        .rte-preview a {
+          color: #2563eb;
+          text-decoration: underline;
+        }
+        [data-compa11y-rte-content] ul,
+        [data-compa11y-rte-content] ol,
+        .rte-preview ul,
+        .rte-preview ol {
+          padding-left: 1.5rem;
+          margin: 0.5rem 0;
+        }
+        /* Link dialog styling */
+        [data-compa11y-rte-link-dialog-actions],
+        [data-compa11y-rte-image-dialog-actions] {
+          display: flex;
+          gap: 8px;
+          justify-content: flex-end;
+        }
+        [data-compa11y-rte-link-dialog-actions] button,
+        [data-compa11y-rte-image-dialog-actions] button {
+          padding: 6px 16px;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          background: white;
+          cursor: pointer;
+          font: inherit;
+          font-size: 0.875rem;
+        }
+        [data-compa11y-rte-link-dialog-apply],
+        [data-compa11y-rte-image-dialog-insert] {
+          background: #2563eb !important;
+          color: white !important;
+          border-color: #2563eb !important;
+        }
+        [data-compa11y-rte-link-dialog-remove] {
+          color: #dc2626 !important;
+          border-color: #dc2626 !important;
+          margin-right: auto !important;
+        }
+      `}</style>
+
+      <RichTextEditor
+        adapter={adapter}
+        label="Message"
+        description="Write your message below. Formatting toolbar above the editor."
+        value={value}
+        onChange={(v) => setValue(v as string)}
+        format="html"
+        features={{
+          bold: true,
+          italic: true,
+          underline: true,
+          headings: true,
+          lists: true,
+          link: true,
+          code: true,
+          blockquote: true,
+        }}
+      >
+        <RichTextEditor.Toolbar>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Separator />
+          <RichTextEditor.HeadingSelect />
+          <RichTextEditor.BulletedList />
+          <RichTextEditor.NumberedList />
+          <RichTextEditor.Separator />
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Code />
+          <RichTextEditor.CodeBlock />
+          <RichTextEditor.Separator />
+          <RichTextEditor.Link />
+          <RichTextEditor.Separator />
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.Toolbar>
+
+        <RichTextEditor.Content placeholder="Start typing…" />
+
+        <RichTextEditor.Footer>
+          <RichTextEditor.CharacterCount max={500} />
+          <RichTextEditor.HelpText>
+            <span style={{ fontSize: '0.85rem', color: '#9ca3af' }}>
+              Ctrl+B bold · Ctrl+I italic · Ctrl+U underline · Ctrl+K link
+            </span>
+          </RichTextEditor.HelpText>
+        </RichTextEditor.Footer>
+
+        <RichTextEditor.LinkDialog />
+      </RichTextEditor>
+
+      {value && (
+        <>
+          <div style={{ marginTop: '1.5rem' }}>
+            <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: '#374151' }}>Rendered Preview</h4>
+            <div
+              className="rte-preview"
+              style={{
+                padding: '1rem',
+                border: '1px solid #e5e7eb',
+                borderRadius: 8,
+                background: '#fff',
+                lineHeight: 1.6,
+                fontSize: '1rem',
+              }}
+              dangerouslySetInnerHTML={{ __html: value }}
+            />
+          </div>
+
+          <details style={{ marginTop: '1rem' }}>
+            <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '0.85rem' }}>
+              Raw HTML output
+            </summary>
+            <pre style={{ marginTop: '0.5rem', padding: '0.75rem', background: '#f3f4f6', borderRadius: 6, fontSize: '0.8rem', overflow: 'auto', maxHeight: '200px' }}>
+              {value}
+            </pre>
+          </details>
+        </>
+      )}
     </div>
   );
 }

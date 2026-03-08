@@ -2356,6 +2356,68 @@
     </p>
   </section>
 
+  <!-- ================================================================ -->
+  <!-- RichTextEditor -->
+  <!-- ================================================================ -->
+  <section>
+    <h2>RichTextEditor</h2>
+    <p style="color:#6b7280;font-size:0.9rem;margin-bottom:1rem">
+      Engine-agnostic rich text editor. This demo uses a mock adapter.
+      In production, set the <code>adapter</code> property to a real engine adapter.
+    </p>
+    <compa11y-rich-text-editor
+      id="rte-demo"
+      label="Message"
+      description="Write your message below."
+      format="html"
+      placeholder="Start typing…"
+    >
+      <div slot="footer" style="font-size:0.85rem;color:#9ca3af;padding:4px 0">
+        Ctrl+B bold · Ctrl+I italic · Ctrl+U underline
+      </div>
+    </compa11y-rich-text-editor>
+    <div id="rte-output" style="margin-top:1rem;display:none">
+      <h4 style="margin:0 0 0.5rem;font-size:0.9rem;color:#374151">Rendered Preview</h4>
+      <div id="rte-preview" style="padding:1rem;border:1px solid #e5e7eb;border-radius:8px;background:#fff;line-height:1.6;font-size:1rem"></div>
+      <details style="margin-top:1rem">
+        <summary style="cursor:pointer;color:#6b7280;font-size:0.85rem">Raw HTML output</summary>
+        <pre id="rte-output-pre" style="margin-top:0.5rem;padding:0.75rem;background:#f3f4f6;border-radius:6px;font-size:0.8rem;overflow:auto;max-height:200px"></pre>
+      </details>
+    </div>
+    <style>
+      #rte-preview pre {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+        font-size: 0.875rem;
+        overflow-x: auto;
+        margin: 0.5rem 0;
+      }
+      #rte-preview code {
+        background: #f1f5f9;
+        color: #e11d48;
+        padding: 0.15em 0.4em;
+        border-radius: 3px;
+        font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+        font-size: 0.875em;
+      }
+      #rte-preview pre code {
+        background: none; color: inherit; padding: 0; border-radius: 0; font-size: inherit;
+      }
+      #rte-preview blockquote {
+        border-left: 3px solid #6366f1;
+        margin: 0.5rem 0;
+        padding: 0.5rem 1rem;
+        color: #4b5563;
+        background: #f9fafb;
+      }
+      #rte-preview a { color: #2563eb; text-decoration: underline; }
+      #rte-preview ul, #rte-preview ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+    </style>
+  </section>
+
   <!-- TreeView setup moved to module script below (after @compa11y/web import) -->
 
   <script>
@@ -3136,6 +3198,169 @@
     cmdPalette?.addEventListener('compa11y-command-palette-select', function(e) {
       alert('Selected: ' + e.detail.value);
     });
+
+    // RichTextEditor mock adapter demo
+    var rteDemo = document.getElementById('rte-demo');
+    var rteOutput = document.getElementById('rte-output');
+    var rteOutputPre = document.getElementById('rte-output-pre');
+    if (rteDemo) {
+      // Create a simple mock adapter using contenteditable + execCommand
+      var rteContent = '';
+      var rteIsBold = false;
+      var rteIsItalic = false;
+      var rteIsUnderline = false;
+      var rteUndoStack = [];
+      var rteRedoStack = [];
+      var rteSavedRange = null;
+      function rteSaveSelection() {
+        var sel = window.getSelection();
+        if (sel && sel.rangeCount > 0 && rteDemo._editorDiv && rteDemo._editorDiv.contains(sel.anchorNode)) {
+          rteSavedRange = sel.getRangeAt(0).cloneRange();
+        }
+      }
+      function rteRestoreSelection() {
+        if (rteSavedRange && rteDemo._editorDiv) {
+          rteDemo._editorDiv.focus();
+          var sel = window.getSelection();
+          if (sel) { sel.removeAllRanges(); sel.addRange(rteSavedRange); }
+        }
+      }
+
+      rteDemo.adapter = {
+        mount: function(el, opts) {
+          var editorDiv = document.createElement('div');
+          editorDiv.contentEditable = opts.disabled ? 'false' : opts.readOnly ? 'false' : 'true';
+          editorDiv.setAttribute('role', 'textbox');
+          editorDiv.setAttribute('aria-multiline', 'true');
+          if (opts.ariaLabelledBy) editorDiv.setAttribute('aria-labelledby', opts.ariaLabelledBy);
+          if (opts.ariaDescribedBy) editorDiv.setAttribute('aria-describedby', opts.ariaDescribedBy);
+          editorDiv.style.outline = 'none';
+          editorDiv.style.minHeight = '120px';
+
+          editorDiv.addEventListener('input', function() {
+            rteUndoStack.push(rteContent);
+            rteRedoStack.length = 0;
+            rteContent = editorDiv.innerHTML;
+            opts.onChange();
+            opts.onSelectionChange();
+          });
+
+          editorDiv.addEventListener('focus', function() { if (opts.onFocus) opts.onFocus(); });
+          editorDiv.addEventListener('blur', function() { rteSaveSelection(); if (opts.onBlur) opts.onBlur(); });
+
+          editorDiv.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+              e.preventDefault(); document.execCommand('bold'); rteIsBold = !rteIsBold; opts.onSelectionChange();
+            }
+            if ((e.metaKey || e.ctrlKey) && e.key === 'i') {
+              e.preventDefault(); document.execCommand('italic'); rteIsItalic = !rteIsItalic; opts.onSelectionChange();
+            }
+            if ((e.metaKey || e.ctrlKey) && e.key === 'u') {
+              e.preventDefault(); document.execCommand('underline'); rteIsUnderline = !rteIsUnderline; opts.onSelectionChange();
+            }
+          });
+
+          el.appendChild(editorDiv);
+          rteDemo._editorDiv = editorDiv;
+
+          return function() { editorDiv.remove(); };
+        },
+        getSelectionState: function() {
+          return {
+            isCollapsed: true,
+            marks: { bold: rteIsBold, italic: rteIsItalic, underline: rteIsUnderline },
+            block: 'paragraph',
+            canUndo: rteUndoStack.length > 0,
+            canRedo: rteRedoStack.length > 0,
+            link: null,
+          };
+        },
+        getValue: function() { return rteContent; },
+        setValue: function(v) { rteContent = v; if (rteDemo._editorDiv) rteDemo._editorDiv.innerHTML = v; },
+        isEmpty: function() { return !rteContent || rteContent.replace(/<[^>]*>/g, '').trim() === ''; },
+        getPlainText: function() { return rteContent.replace(/<[^>]*>/g, ''); },
+        getCharacterCount: function() { return rteContent.replace(/<[^>]*>/g, '').length; },
+        commands: {
+          focus: function() { if (rteDemo._editorDiv) rteDemo._editorDiv.focus(); },
+          undo: function() {
+            if (rteUndoStack.length > 0) {
+              rteRedoStack.push(rteContent);
+              rteContent = rteUndoStack.pop();
+              if (rteDemo._editorDiv) rteDemo._editorDiv.innerHTML = rteContent;
+            }
+          },
+          redo: function() {
+            if (rteRedoStack.length > 0) {
+              rteUndoStack.push(rteContent);
+              rteContent = rteRedoStack.pop();
+              if (rteDemo._editorDiv) rteDemo._editorDiv.innerHTML = rteContent;
+            }
+          },
+          toggleMark: function(mark) {
+            if (mark === 'bold') { document.execCommand('bold'); rteIsBold = !rteIsBold; }
+            if (mark === 'italic') { document.execCommand('italic'); rteIsItalic = !rteIsItalic; }
+            if (mark === 'underline') { document.execCommand('underline'); rteIsUnderline = !rteIsUnderline; }
+          },
+          setBlock: function(block) {
+            if (block === 'paragraph') document.execCommand('formatBlock', false, 'p');
+            else if (block.startsWith('heading')) document.execCommand('formatBlock', false, 'h' + block.replace('heading', ''));
+            else if (block === 'blockquote') document.execCommand('formatBlock', false, 'blockquote');
+          },
+          toggleBulletList: function() { document.execCommand('insertUnorderedList'); },
+          toggleNumberList: function() { document.execCommand('insertOrderedList'); },
+          indent: function() { document.execCommand('indent'); },
+          outdent: function() { document.execCommand('outdent'); },
+          insertOrEditLink: function(opts) {
+            if (!rteDemo._editorDiv) return;
+            rteRestoreSelection();
+            var sel = window.getSelection();
+            var insideEditor = sel && sel.rangeCount > 0 && rteDemo._editorDiv.contains(sel.anchorNode);
+
+            if (sel && insideEditor && !sel.isCollapsed) {
+              // Text selected inside editor — wrap with createLink
+              document.execCommand('createLink', false, opts.href);
+            } else {
+              // No selection or collapsed — insert <a> element
+              var linkText = opts.text || opts.href;
+              var a = document.createElement('a');
+              a.href = opts.href;
+              a.textContent = linkText;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+
+              if (insideEditor && sel.rangeCount > 0) {
+                var range = sel.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(a);
+                range.setStartAfter(a);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              } else {
+                // No valid cursor — append at end
+                rteDemo._editorDiv.appendChild(a);
+              }
+            }
+            rteContent = rteDemo._editorDiv.innerHTML;
+          },
+          removeLink: function() {
+            rteRestoreSelection();
+            document.execCommand('unlink');
+            if (rteDemo._editorDiv) rteContent = rteDemo._editorDiv.innerHTML;
+          },
+          toggleCodeBlock: function() { document.execCommand('formatBlock', false, 'pre'); },
+        },
+      };
+
+      var rtePreview = document.getElementById('rte-preview');
+      rteDemo.addEventListener('compa11y-rte-change', function(e) {
+        if (e.detail && e.detail.value) {
+          rteOutput.style.display = '';
+          rteOutputPre.textContent = e.detail.value;
+          if (rtePreview) rtePreview.innerHTML = e.detail.value;
+        }
+      });
+    }
 
     // Stepper navigation demo
     var stepperNav = document.getElementById('stepper-nav');

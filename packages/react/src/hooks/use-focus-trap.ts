@@ -32,11 +32,22 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>(
   const containerRef = useRef<T>(null);
   const trapRef = useRef<ReturnType<typeof createFocusTrap> | null>(null);
 
+  // Store callbacks in refs so they don't cause the effect to re-run
+  // (which would destroy + recreate the trap and steal focus)
+  const onDeactivateRef = useRef(trapOptions.onDeactivate);
+  onDeactivateRef.current = trapOptions.onDeactivate;
+  const onEscapeFocusRef = useRef(trapOptions.onEscapeFocus);
+  onEscapeFocusRef.current = trapOptions.onEscapeFocus;
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    trapRef.current = createFocusTrap(container, trapOptions);
+    trapRef.current = createFocusTrap(container, {
+      ...trapOptions,
+      onDeactivate: () => onDeactivateRef.current?.(),
+      onEscapeFocus: (el) => onEscapeFocusRef.current?.(el),
+    });
 
     if (active) {
       trapRef.current.activate();
@@ -48,12 +59,13 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>(
       trapRef.current?.destroy();
       trapRef.current = null;
     };
+  // Only re-create the trap when config values (not callbacks) change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     trapOptions.initialFocus,
     trapOptions.returnFocus,
     trapOptions.clickOutsideDeactivates,
     trapOptions.escapeDeactivates,
-    trapOptions.onDeactivate,
   ]);
 
   useEffect(() => {

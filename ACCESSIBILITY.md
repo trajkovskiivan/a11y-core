@@ -46,6 +46,7 @@
   - [Stepper](#stepper)
   - [DataGrid](#datagrid)
   - [Carousel](#carousel)
+  - [RichTextEditor](#richtexteditor)
 - [Web Components](#web-components)
   - [`<compa11y-button>`](#compa11y-button)
   - [`<compa11y-input>`](#compa11y-input)
@@ -84,6 +85,7 @@
   - [`<compa11y-stepper>`](#stepper)
   - [`<compa11y-data-grid>`](#datagrid)
   - [`<compa11y-carousel>`](#compa11y-carousel)
+  - [`<compa11y-rich-text-editor>`](#compa11y-rich-text-editor)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -2302,6 +2304,193 @@ A scrollable region of slides with controls, pagination, and optional autoplay.
   <Carousel.Pagination />
 </Carousel>
 ```
+
+---
+
+### RichTextEditor
+
+**Component:** `<RichTextEditor>` / `<compa11y-rich-text-editor>`
+**Type:** Type 3 (Compound) — Engine-agnostic rich text editing shell
+**Pattern:** Toolbar + contenteditable region + auxiliary dialogs, wrapping an editor engine via `RTEAdapter`
+
+#### Architecture
+
+compa11y owns the accessible UI shell (labeling, toolbar semantics, dialog semantics, keyboard contracts, dev warnings). The editor engine (Lexical, ProseMirror/Tiptap, Slate) is provided via an adapter that implements the `RTEAdapter` interface from `@compa11y/core`.
+
+#### What the library handles
+
+| Concern | Implementation |
+|---|---|
+| Editor labeling | `aria-labelledby` to visible label, `aria-describedby` for description + error |
+| Toolbar semantics | `role="toolbar"`, `aria-label="Formatting"`, `aria-controls` → editor region |
+| Toggle buttons | `aria-pressed` for bold/italic/underline/etc. — reflects current selection state |
+| Link dialog | `role="dialog"`, `aria-modal="true"`, focus trap, Escape closes, returns focus to editor |
+| Image dialog | Same as link dialog; **requires alt text** (strict mode errors if missing) |
+| Validation | `aria-invalid`, `aria-required`, error message via `aria-describedby` |
+| Focus management | Tab exits editor (no trap), focus returns to editor after toolbar/dialog actions |
+| Screen reader announcements | Link applied/removed, image inserted, dialog open/close |
+| Feature gating | Feature flags control which toolbar controls render; unsupported features hidden |
+| Dev warnings | Missing label, HTML without sanitizer, image without alt path, unsupported adapter features |
+
+#### Keyboard contract
+
+| Key | Context | Action |
+|---|---|---|
+| `Ctrl/Cmd+B` | Editor | Toggle bold |
+| `Ctrl/Cmd+I` | Editor | Toggle italic |
+| `Ctrl/Cmd+U` | Editor | Toggle underline |
+| `Ctrl/Cmd+K` | Editor | Open link dialog |
+| `Ctrl/Cmd+Z` | Editor | Undo |
+| `Ctrl/Cmd+Shift+Z` / `Ctrl/Cmd+Y` | Editor | Redo |
+| `Tab` | Editor | Move focus **out** of editor (no trap) |
+| `Shift+Tab` | Editor | Move focus backwards out of editor |
+| `Enter` / `Space` | Toolbar button | Activate formatting command |
+| `Escape` | Link/Image dialog | Close dialog, return focus to editor |
+| `Enter` | Link/Image dialog | Submit dialog |
+
+#### React compound API
+
+```tsx
+<RichTextEditor
+  adapter={createLexicalAdapter()}
+  label="Message"
+  description="Describe your issue."
+  errorMessage={error}
+  value={value}
+  onChange={setValue}
+  format="html"
+  required
+  features={{ bold: true, italic: true, link: true, lists: true, headings: true }}
+  sanitizeHtml={sanitize}
+  strict
+>
+  <RichTextEditor.Toolbar>
+    <RichTextEditor.Bold />
+    <RichTextEditor.Italic />
+    <RichTextEditor.Underline />
+    <RichTextEditor.Separator />
+    <RichTextEditor.HeadingSelect />
+    <RichTextEditor.BulletedList />
+    <RichTextEditor.NumberedList />
+    <RichTextEditor.Separator />
+    <RichTextEditor.Link />
+    <RichTextEditor.Code />
+    <RichTextEditor.Blockquote />
+    <RichTextEditor.Separator />
+    <RichTextEditor.Undo />
+    <RichTextEditor.Redo />
+  </RichTextEditor.Toolbar>
+
+  <RichTextEditor.Content placeholder="Write your message…" />
+
+  <RichTextEditor.Footer>
+    <RichTextEditor.CharacterCount max={500} />
+    <RichTextEditor.HelpText>Markdown shortcuts supported</RichTextEditor.HelpText>
+  </RichTextEditor.Footer>
+
+  <RichTextEditor.LinkDialog />
+  <RichTextEditor.ImageDialog />
+</RichTextEditor>
+```
+
+#### Props (React)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `adapter` | `RTEAdapter` | — | Editor engine adapter (required) |
+| `value` | `string \| object` | — | Controlled value |
+| `defaultValue` | `string \| object` | — | Uncontrolled initial value |
+| `onChange` | `(value) => void` | — | Called on content change |
+| `format` | `'html' \| 'json' \| 'markdown'` | `'html'` | Serialization format |
+| `label` | `string` | — | Visible label text |
+| `aria-label` | `string` | — | Accessible label (if no visible label) |
+| `description` | `string` | — | Description text |
+| `errorMessage` | `string` | — | Error message (makes field invalid) |
+| `required` | `boolean` | `false` | Required field |
+| `disabled` | `boolean` | `false` | Disables all interaction |
+| `readOnly` | `boolean` | `false` | Content selectable but not editable |
+| `features` | `RTEFeatures` | all common on | Feature flags for toolbar controls |
+| `sanitizeHtml` | `(html) => string` | — | HTML sanitizer (required for HTML format) |
+| `strict` | `boolean` | `false` | Upgrade dev warnings to errors |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+
+#### Sub-components
+
+| Component | Description |
+|---|---|
+| `RichTextEditor.Toolbar` | `role="toolbar"` container for formatting controls |
+| `RichTextEditor.Content` | Editor mounting point (adapter mounts here) |
+| `RichTextEditor.Bold` / `.Italic` / `.Underline` / `.Strike` / `.Code` | Inline mark toggle buttons with `aria-pressed` |
+| `RichTextEditor.HeadingSelect` | `<select>` for paragraph/heading levels |
+| `RichTextEditor.BulletedList` / `.NumberedList` | List toggle buttons |
+| `RichTextEditor.Indent` / `.Outdent` | Indentation controls |
+| `RichTextEditor.Blockquote` / `.CodeBlock` | Block-level toggles |
+| `RichTextEditor.Link` | Opens link dialog (`aria-pressed` when in link) |
+| `RichTextEditor.Undo` / `.Redo` | History controls (disabled when unavailable) |
+| `RichTextEditor.Separator` | Visual `role="separator"` divider |
+| `RichTextEditor.LinkDialog` | Accessible modal for inserting/editing/removing links |
+| `RichTextEditor.ImageDialog` | Accessible modal for inserting images (requires alt text) |
+| `RichTextEditor.Footer` | Container for footer content |
+| `RichTextEditor.CharacterCount` | Live-region character counter with optional `max` |
+| `RichTextEditor.HelpText` | Arbitrary help text in footer |
+
+#### Dev warnings
+
+| Condition | Severity | Strict mode |
+|---|---|---|
+| Missing `label` and `aria-label` | Warning | Error |
+| `format="html"` without `sanitizeHtml` | Warning | Error |
+| `features.image` enabled but adapter lacks `insertImage` | Warning | Error |
+| `features.link` enabled but adapter reports unsupported | Warning | Warning |
+
+#### Data attributes (for styling)
+
+| Attribute | Element |
+|---|---|
+| `data-compa11y-rte` | Root wrapper |
+| `data-compa11y-rte-label` | Label element |
+| `data-compa11y-rte-description` | Description text |
+| `data-compa11y-rte-error` | Error message |
+| `data-compa11y-rte-toolbar` | Toolbar container |
+| `data-compa11y-rte-content` | Editor content area |
+| `data-compa11y-rte-button` | Any toolbar button |
+| `data-compa11y-rte-button-mark` | Mark toggle (value: bold/italic/etc.) |
+| `data-compa11y-rte-button-list` | List toggle (value: bullet/number) |
+| `data-compa11y-rte-button-block` | Block toggle (value: blockquote/codeBlock) |
+| `data-compa11y-rte-button-action` | Action button (value: undo/redo/link/indent/outdent) |
+| `data-compa11y-rte-heading-select` | Heading level select |
+| `data-compa11y-rte-separator` | Toolbar separator |
+| `data-compa11y-rte-footer` | Footer container |
+| `data-compa11y-rte-character-count` | Character count span |
+| `data-compa11y-rte-help-text` | Help text |
+| `data-compa11y-rte-link-dialog` | Link dialog |
+| `data-compa11y-rte-image-dialog` | Image dialog |
+| `data-active` | Active/pressed toggle |
+| `data-disabled` | Disabled state |
+| `data-readonly` | Read-only state |
+| `data-invalid` | Invalid state |
+| `data-over` | Character count exceeds max |
+
+#### RTEAdapter interface (from `@compa11y/core`)
+
+The adapter contract is engine-agnostic. Implement it for each engine:
+
+```typescript
+interface RTEAdapter {
+  mount(el: HTMLElement, opts: RTEMountOptions): () => void;  // returns unmount
+  getSelectionState(): RTESelectionState;
+  getValue(format: RTEFormat): RTEValue;
+  setValue(value: RTEValue, format: RTEFormat): void;
+  isEmpty(): boolean;
+  getPlainText(): string;
+  getCharacterCount(): number;
+  commands: RTECommands;  // toggleMark, setBlock, insertOrEditLink, undo/redo, etc.
+  supports?: RTECapabilities;
+  sanitizeHtml?: (html: string) => string;
+}
+```
+
+Adapter packages (separate): `@compa11y/rte-lexical`, `@compa11y/rte-tiptap`
 
 ---
 
@@ -5259,6 +5448,76 @@ A carousel web component with slide navigation, pagination dots, and optional au
 | `--compa11y-carousel-dot-active-color` | `#333` | Active dot color |
 
 **Keyboard and ARIA:** Same as React Carousel — see [Carousel](#carousel) above.
+
+---
+
+### `<compa11y-rich-text-editor>`
+
+An engine-agnostic rich text editor web component. Set the adapter via the `adapter` JS property.
+
+```html
+<compa11y-rich-text-editor
+  label="Message"
+  description="Describe your issue."
+  format="html"
+  required
+>
+</compa11y-rich-text-editor>
+
+<script>
+  const editor = document.querySelector('compa11y-rich-text-editor');
+  editor.adapter = createLexicalAdapter();
+  editor.features = { bold: true, italic: true, link: true, lists: true };
+
+  editor.addEventListener('compa11y-rte-change', (e) => {
+    console.log('Value:', e.detail.value);
+  });
+</script>
+```
+
+**Attributes:** `label`, `aria-label`, `description`, `error-message`, `required`, `disabled`, `readonly`, `format`, `placeholder`, `features` (JSON string)
+
+**JS Properties:**
+- `adapter` — `RTEAdapter` instance (required, set via JS)
+- `value` — get/set editor value
+- `disabled`, `readOnly`, `features` — get/set
+
+**Events:**
+- `compa11y-rte-change` — `{ value: string | object }` — content changed
+- `compa11y-rte-focus` — editor focused
+- `compa11y-rte-blur` — editor blurred
+
+**Slots:**
+| Name | Purpose |
+|---|---|
+| `footer` | Optional footer content |
+
+**Parts:** `wrapper`, `label`, `description`, `toolbar`, `content`, `error`
+
+**CSS custom properties:**
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-rte-border-color` | `#d1d5db` | Border color |
+| `--compa11y-rte-border-radius` | `8px` | Border radius |
+| `--compa11y-rte-toolbar-bg` | `#f9fafb` | Toolbar background |
+| `--compa11y-rte-toolbar-border-color` | `#e5e7eb` | Toolbar border |
+| `--compa11y-rte-toolbar-gap` | `4px` | Gap between toolbar items |
+| `--compa11y-rte-btn-size` | `32px` | Toolbar button min size |
+| `--compa11y-rte-btn-radius` | `4px` | Button border radius |
+| `--compa11y-rte-btn-hover-bg` | `#e5e7eb` | Button hover background |
+| `--compa11y-rte-btn-active-bg` | `#dbeafe` | Active toggle background |
+| `--compa11y-rte-btn-active-color` | `#1d4ed8` | Active toggle text color |
+| `--compa11y-rte-content-min-height` | `150px` | Editor minimum height |
+| `--compa11y-rte-content-padding` | `12px` | Editor content padding |
+| `--compa11y-rte-error-color` | `#dc2626` | Error text color |
+| `--compa11y-rte-label-font-weight` | `600` | Label font weight |
+
+**Built-in toolbar:** Automatically rendered from `features` — includes inline marks, heading select, list toggles, blockquote, code block, link, image, undo/redo.
+
+**Built-in dialogs:** Link dialog and image dialog are rendered inside shadow DOM with full accessibility (focus trap, Escape to close, return focus, validation).
+
+**Keyboard and ARIA:** Same as React RichTextEditor — see [RichTextEditor](#richtexteditor) above.
 
 ---
 
