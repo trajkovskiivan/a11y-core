@@ -61,6 +61,33 @@ export {
 } from './components/dialog';
 
 // ============================================================================
+// Drawer
+// ============================================================================
+
+export {
+  DrawerCompound as Drawer,
+  Drawer as DrawerBase,
+  DrawerTrigger,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+  DrawerContent,
+  DrawerActions,
+  DrawerHandle,
+  useDrawerContext,
+  type DrawerProps,
+  type DrawerSide,
+  type DrawerTriggerProps,
+  type DrawerTitleProps,
+  type DrawerDescriptionProps,
+  type DrawerCloseProps,
+  type DrawerContentProps,
+  type DrawerActionsProps,
+  type DrawerHandleProps,
+  type DrawerContextValue,
+} from './components/drawer';
+
+// ============================================================================
 // ActionMenu
 // ============================================================================
 
@@ -419,6 +446,253 @@ export {
 } from './components/tooltip';
 
 // ============================================================================
+// Slider
+// ============================================================================
+
+export { Slider, type SliderProps } from './components/slider';
+
+// ============================================================================
+// ProgressBar
+// ============================================================================
+
+export {
+  ProgressBar,
+  type ProgressBarProps,
+  type ProgressBarStatus,
+} from './components/progress-bar';
+
+// ============================================================================
+// Skeleton
+// ============================================================================
+
+export {
+  Skeleton,
+  type SkeletonProps,
+  type SkeletonVariant,
+} from './components/skeleton';
+
+// ============================================================================
+// EmptyState
+// ============================================================================
+
+export {
+  EmptyState,
+  type EmptyStateProps,
+  type EmptyStateHeadingLevel,
+} from './components/empty-state';
+
+// ============================================================================
+// ErrorSummary
+// ============================================================================
+
+export {
+  ErrorSummary,
+  type ErrorSummaryProps,
+  type ErrorSummaryError,
+} from './components/error-summary';
+
+// ============================================================================
+// NumberField
+// ============================================================================
+
+export { NumberField, type NumberFieldProps } from './components/number-field';
+
+// ============================================================================
+// SearchField
+// ============================================================================
+
+export { SearchField, type SearchFieldProps } from './components/search-field';
+
+// ============================================================================
+// FileUpload
+// ============================================================================
+
+export {
+  FileUploadCompound as FileUpload,
+  FileUpload as FileUploadBase,
+  FileUploadLabel,
+  FileUploadDescription,
+  FileUploadError,
+  FileUploadTrigger,
+  FileUploadDropzone,
+  FileUploadFileList,
+  FileUploadFileItem,
+  useFileUploadContext,
+  type FileUploadProps,
+  type FileUploadFile,
+  type FileUploadLabelProps,
+  type FileUploadDescriptionProps,
+  type FileUploadErrorProps,
+  type FileUploadTriggerProps,
+  type FileUploadDropzoneProps,
+  type FileUploadFileListProps,
+  type FileUploadFileItemProps,
+  type FileUploadContextValue,
+} from './components/file-upload';
+
+// ============================================================================
+// Stepper
+// ============================================================================
+
+export {
+  Stepper,
+  type StepperProps,
+  type StepItem,
+  type StepState,
+} from './components/stepper';
+
+// ============================================================================
+// DataGrid
+// ============================================================================
+
+export {
+  DataGridCompound as DataGrid,
+  DataGrid as DataGridBase,
+  DataGridToolbar,
+  useDataGridContext,
+  type DataGridProps,
+  type DataGridToolbarProps,
+  type DataGridContextValue,
+  type DataGridColumnDef,
+  type DataGridRowData,
+  type DataGridMode,
+  type DataGridSortDirection,
+} from './components/data-grid';
+
+// ============================================================================
+// DatePicker
+// ============================================================================
+
+export {
+  DatePickerCompound as DatePicker,
+  DatePicker as DatePickerBase,
+  DatePickerInput,
+  DatePickerRangeInputs,
+  DatePickerTrigger,
+  DatePickerCalendar,
+  useDatePickerContext,
+  type DatePickerProps,
+  type DatePickerInputProps,
+  type DatePickerRangeInputsProps,
+  type DatePickerTriggerProps,
+  type DatePickerCalendarProps,
+  type DatePickerContextValue,
+  type DatePickerMode,
+  type DatePickerPrecision,
+  type DatePickerOverlay,
+  type DatePickerView,
+} from './components/date-picker';
+
+// ============================================================================
+// Calendar (standalone)
+// ============================================================================
+
+export {
+  Calendar,
+  type CalendarProps,
+  type CalendarView,
+  type CalendarMode,
+} from './components/date-picker';
+
+// ============================================================================
+// TimeField (standalone)
+// ============================================================================
+
+export {
+  TimeField,
+  type TimeFieldProps,
+} from './components/date-picker';
+
+// ============================================================================
+// TimePicker
+// ============================================================================
+
+export {
+  TimePicker,
+  type TimePickerProps,
+  type TimePickerValue,
+} from './components/time-picker';
+
+// ============================================================================
+// ============================================================================
+// TreeView
+// ============================================================================
+
+export {
+  TreeViewCompound as TreeView,
+  TreeView as TreeViewBase,
+  useTreeViewContext,
+  type TreeViewProps,
+  type TreeViewContextValue,
+  type TreeViewMode,
+  type TreeViewSelectionMode,
+  type TreeNodeData,
+} from './components/tree-view';
+
+// ============================================================================
+// CommandPalette
+// ============================================================================
+
+export {
+  CommandPaletteCompound as CommandPalette,
+  CommandPalette as CommandPaletteBase,
+  CommandPaletteTrigger,
+  CommandPaletteContent,
+  CommandPaletteTitle,
+  CommandPaletteDescription,
+  CommandPaletteInput,
+  CommandPaletteList,
+  CommandPaletteEmpty,
+  CommandPaletteLoading,
+  CommandPaletteGroup,
+  CommandPaletteSeparator,
+  CommandPaletteItem,
+  CommandPaletteFooter,
+  useCommandPaletteContext,
+  type CommandPaletteProps,
+  type CommandPaletteTriggerProps,
+  type CommandPaletteContentProps,
+  type CommandPaletteTitleProps,
+  type CommandPaletteDescriptionProps,
+  type CommandPaletteInputProps,
+  type CommandPaletteListProps,
+  type CommandPaletteEmptyProps,
+  type CommandPaletteLoadingProps,
+  type CommandPaletteGroupProps,
+  type CommandPaletteSeparatorProps,
+  type CommandPaletteItemProps,
+  type CommandPaletteFooterProps,
+  type CommandPaletteContextValue,
+} from './components/command-palette';
+
+// ============================================================================
+// Carousel
+// ============================================================================
+
+export {
+  CarouselCompound as Carousel,
+  Carousel as CarouselBase,
+  CarouselContent,
+  CarouselItem,
+  CarouselControls,
+  CarouselPrev,
+  CarouselNext,
+  CarouselPause,
+  CarouselPagination,
+  CarouselStatus,
+  useCarouselContext,
+  type CarouselProps,
+  type CarouselContentProps,
+  type CarouselItemProps,
+  type CarouselControlsProps,
+  type CarouselPrevProps,
+  type CarouselNextProps,
+  type CarouselPauseProps,
+  type CarouselPaginationProps,
+  type CarouselStatusProps,
+  type CarouselContextValue,
+} from './components/carousel';
+
 // Re-export core utilities
 // ============================================================================
 

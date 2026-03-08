@@ -36,6 +36,22 @@ import { Compa11yTable } from './components/table';
 import { Compa11yPagination } from './components/pagination';
 import { Compa11yBreadcrumbs } from './components/breadcrumbs';
 import { Compa11yTooltip } from './components/tooltip';
+import { Compa11yDrawer } from './components/drawer';
+import { Compa11ySlider } from './components/slider';
+import { Compa11yProgressBar } from './components/progress-bar';
+import { Compa11ySkeleton } from './components/skeleton';
+import { Compa11yEmptyState } from './components/empty-state';
+import { Compa11yNumberField } from './components/number-field';
+import { Compa11ySearchField } from './components/search-field';
+import { Compa11yFileUpload } from './components/file-upload';
+import { Compa11yErrorSummary } from './components/error-summary';
+import { Compa11yStepper } from './components/stepper';
+import { Compa11yDataGrid } from './components/data-grid';
+import { Compa11yDatePicker } from './components/date-picker';
+import { Compa11yTimePicker } from './components/time-picker';
+import { Compa11yTreeView } from './components/tree-view';
+import { Compa11yCommandPalette } from './components/command-palette';
+import { Compa11yCarousel } from './components/carousel';
 
 // Re-export components
 export {
@@ -69,6 +85,22 @@ export {
   Compa11yPagination,
   Compa11yBreadcrumbs,
   Compa11yTooltip,
+  Compa11yDrawer,
+  Compa11ySlider,
+  Compa11yProgressBar,
+  Compa11ySkeleton,
+  Compa11yEmptyState,
+  Compa11yNumberField,
+  Compa11ySearchField,
+  Compa11yFileUpload,
+  Compa11yErrorSummary,
+  Compa11yStepper,
+  Compa11yDataGrid,
+  Compa11yDatePicker,
+  Compa11yTimePicker,
+  Compa11yTreeView,
+  Compa11yCommandPalette,
+  Compa11yCarousel,
 };
 
 // Core utilities for vanilla JS usage
@@ -171,6 +203,22 @@ if (typeof window !== 'undefined') {
     Compa11yPagination,
     Compa11yBreadcrumbs,
     Compa11yTooltip,
+    Compa11yDrawer,
+    Compa11ySlider,
+    Compa11yProgressBar,
+    Compa11ySkeleton,
+    Compa11yEmptyState,
+    Compa11yNumberField,
+    Compa11ySearchField,
+    Compa11yFileUpload,
+    Compa11yErrorSummary,
+    Compa11yStepper,
+    Compa11yDataGrid,
+    Compa11yDatePicker,
+    Compa11yTimePicker,
+    Compa11yTreeView,
+    Compa11yCommandPalette,
+    Compa11yCarousel,
     // Announcer utilities
     initAnnouncer,
     announce,

@@ -183,6 +183,10 @@ export interface PaginationProps {
    * @default false
    */
   showJumpTo?: boolean;
+  /** Inline styles applied to the root `<nav>` element. */
+  style?: React.CSSProperties;
+  /** Class name applied to the root `<nav>` element. */
+  className?: string;
 }
 
 // --------------------------------------------------------------------------
@@ -208,6 +212,8 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
       pageSizeOptions = [10, 25, 50],
       onPageSizeChange,
       showJumpTo = false,
+      style,
+      className,
     },
     ref
   ) {
@@ -398,7 +404,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
         };
 
     return (
-      <nav ref={ref} aria-label={ariaLabel} {...navAttr}>
+      <nav ref={ref} aria-label={ariaLabel} style={style} className={className} {...navAttr}>
         {/*
          * Live region — MUST be in the DOM before any page change fires so
          * screen readers register it. Content is updated after activation.

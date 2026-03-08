@@ -35,33 +35,55 @@
   - [Pagination](#pagination)
   - [Breadcrumbs](#breadcrumbs)
   - [Tooltip](#tooltip)
+  - [Drawer](#drawer)
+  - [Slider](#slider)
+  - [ProgressBar](#progressbar)
+  - [Skeleton](#skeleton)
+  - [EmptyState](#emptystate)
+  - [NumberField](#numberfield)
+  - [SearchField](#searchfield)
+  - [ErrorSummary](#errorsummary)
+  - [Stepper](#stepper)
+  - [DataGrid](#datagrid)
+  - [Carousel](#carousel)
 - [Web Components](#web-components)
-  - [`<a11y-button>`](#a11y-button)
-  - [`<a11y-input>`](#a11y-input)
-  - [`<a11y-textarea>`](#a11y-textarea)
-  - [`<a11y-checkbox>` & `<a11y-checkbox-group>`](#a11y-checkbox)
-  - [`<a11y-radio-group>` & `<a11y-radio>`](#a11y-radio-group)
-  - [`<a11y-switch>`](#a11y-switch)
-  - [`<a11y-select>`](#a11y-select)
-  - [`<a11y-combobox>`](#a11y-combobox)
-  - [`<a11y-listbox>`](#a11y-listbox)
-  - [`<a11y-dialog>`](#a11y-dialog)
-  - [`<a11y-menu>`](#a11y-menu)
-  - [`<a11y-tabs>`](#a11y-tabs)
-  - [`<a11y-toast>`](#a11y-toast)
-  - [`<a11y-visually-hidden>`](#a11y-visually-hidden)
-  - [`<a11y-skip-link>`](#a11y-skip-link)
-  - [`<a11y-alert>`](#a11y-alert)
-  - [`<a11y-link>`](#a11y-link)
-  - [`<a11y-heading>`](#a11y-heading)
-  - [`<a11y-text>`](#a11y-text)
-  - [`<a11y-form-field>`](#a11y-form-field)
-  - [`<a11y-popover>`](#a11y-popover)
-  - [`<a11y-accordion>`](#a11y-accordion)
-  - [`<a11y-table>`](#a11y-table)
-  - [`<a11y-pagination>`](#a11y-pagination)
-  - [`<a11y-breadcrumbs>`](#a11y-breadcrumbs)
+  - [`<compa11y-button>`](#compa11y-button)
+  - [`<compa11y-input>`](#compa11y-input)
+  - [`<compa11y-textarea>`](#compa11y-textarea)
+  - [`<compa11y-checkbox>` & `<compa11y-checkbox-group>`](#compa11y-checkbox)
+  - [`<compa11y-radio-group>` & `<compa11y-radio>`](#compa11y-radio-group)
+  - [`<compa11y-switch>`](#compa11y-switch)
+  - [`<compa11y-select>`](#compa11y-select)
+  - [`<compa11y-combobox>`](#compa11y-combobox)
+  - [`<compa11y-listbox>`](#compa11y-listbox)
+  - [`<compa11y-dialog>`](#compa11y-dialog)
+  - [`<compa11y-menu>`](#compa11y-menu)
+  - [`<compa11y-tabs>`](#compa11y-tabs)
+  - [`<compa11y-toast>`](#compa11y-toast)
+  - [`<compa11y-visually-hidden>`](#compa11y-visually-hidden)
+  - [`<compa11y-skip-link>`](#compa11y-skip-link)
+  - [`<compa11y-alert>`](#compa11y-alert)
+  - [`<compa11y-link>`](#compa11y-link)
+  - [`<compa11y-heading>`](#compa11y-heading)
+  - [`<compa11y-text>`](#compa11y-text)
+  - [`<compa11y-form-field>`](#compa11y-form-field)
+  - [`<compa11y-popover>`](#compa11y-popover)
+  - [`<compa11y-accordion>`](#compa11y-accordion)
+  - [`<compa11y-table>`](#compa11y-table)
+  - [`<compa11y-pagination>`](#compa11y-pagination)
+  - [`<compa11y-breadcrumbs>`](#compa11y-breadcrumbs)
   - [`<compa11y-tooltip>`](#compa11y-tooltip)
+  - [`<compa11y-drawer>`](#compa11y-drawer)
+  - [`<compa11y-slider>`](#compa11y-slider)
+  - [`<compa11y-progress-bar>`](#compa11y-progress-bar)
+  - [`<compa11y-skeleton>`](#compa11y-skeleton)
+  - [`<compa11y-number-field>`](#compa11y-number-field)
+  - [`<compa11y-empty-state>`](#emptystate)
+  - [`<compa11y-search-field>`](#searchfield)
+  - [`<compa11y-error-summary>`](#errorsummary)
+  - [`<compa11y-stepper>`](#stepper)
+  - [`<compa11y-data-grid>`](#datagrid)
+  - [`<compa11y-carousel>`](#compa11y-carousel)
 - [React Hooks](#react-hooks)
   - [ID Generation](#id-generation-hooks)
   - [Focus Management](#focus-management-hooks)
@@ -1487,11 +1509,807 @@ import { Tooltip } from '@compa11y/react';
 
 ---
 
+### Drawer
+
+A panel that slides in from any edge of the viewport. Built on `role="dialog"` with a full focus trap, body scroll lock, and optional drag-to-dismiss.
+
+**Component:** `<Drawer>` (compound) — `Drawer.Trigger`, `Drawer.Title`, `Drawer.Description`, `Drawer.Close`, `Drawer.Content`, `Drawer.Actions`, `Drawer.Handle`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="dialog"` + `aria-modal="true"`** | Set on the drawer panel automatically |
+| **`aria-labelledby`** | Wired to `Drawer.Title`'s id; falls back to the `aria-label` prop |
+| **`aria-describedby`** | Wired to `Drawer.Description`'s id when `Drawer.Description` is rendered |
+| **Focus trap** | All keyboard focus is contained within the open drawer (`useFocusTrap`) |
+| **Focus return** | Focus returns to the element that was active when the drawer opened |
+| **Body scroll lock** | `document.body` overflow is hidden while drawer is open; uses a stacking counter shared with Dialog so nested usage is safe |
+| **Screen reader announcements** | "Drawer opened" / "Drawer closed" announced politely on open/close |
+| **`Drawer.Trigger`** | Returns `null` when the drawer is open to avoid a duplicate trigger inside the portal |
+| **`Drawer.Handle`** | Marked `aria-hidden="true"` — purely decorative pill bar |
+| **`Drawer.Close`** | Falls back to `aria-label="Close drawer"` when no text children are provided |
+| **Drag to dismiss** | When `draggable` is set, dragging the handle past 40 % of the panel dimension closes the drawer; releasing earlier snaps it back with a CSS transition |
+| **Controlled + Uncontrolled** | `open` / `onOpenChange` for controlled; `defaultOpen` for uncontrolled |
+| **Dev warnings** | Warns if neither `Drawer.Title` nor `aria-label` is provided while the drawer is open |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `Tab` / `Shift+Tab` | Cycle focus through interactive elements inside the drawer (wraps) |
+| `Escape` | Closes the drawer and returns focus to the trigger |
+
+#### Usage
+
+```tsx
+import { Drawer } from '@compa11y/react';
+
+// Uncontrolled with compound sub-components
+<Drawer>
+  <Drawer.Trigger>Open Settings</Drawer.Trigger>
+  <Drawer.Title>Settings</Drawer.Title>
+  <Drawer.Description>Adjust your preferences below.</Drawer.Description>
+  <Drawer.Content>…content…</Drawer.Content>
+  <Drawer.Actions>
+    <Drawer.Close>Done</Drawer.Close>
+  </Drawer.Actions>
+</Drawer>
+
+// Controlled, slides in from the bottom (bottom sheet)
+<Drawer open={isOpen} onOpenChange={setIsOpen} side="bottom" draggable>
+  <Drawer.Handle />
+  <Drawer.Title>Share</Drawer.Title>
+  <Drawer.Content>…</Drawer.Content>
+</Drawer>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | — | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Uncontrolled starting state |
+| `onOpenChange` | `(open: boolean) => void` | — | Called when open state should change |
+| `side` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'right'` | Edge the drawer slides in from |
+| `draggable` | `boolean` | `false` | Enable drag-to-dismiss via the handle |
+| `closeOnOutsideClick` | `boolean` | `true` | Close when clicking the backdrop |
+| `closeOnEscape` | `boolean` | `true` | Close on `Escape` key |
+| `initialFocus` | `RefObject<HTMLElement>` | — | Element to focus when drawer opens |
+| `container` | `HTMLElement` | `document.body` | Portal mount target |
+| `aria-label` | `string` | — | Accessible label (use if no `Drawer.Title`) |
+| `aria-labelledby` | `string` | — | ID of external label element |
+| `unstyled` | `boolean` | `false` | Remove default visual styles |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-drawer-width          /* Panel width for left/right drawers (default: 400px) */
+--compa11y-drawer-height         /* Panel height for top/bottom drawers (default: 400px) */
+```
+
+---
+
+### Slider
+
+A single-thumb or range (two-thumb) slider with full keyboard support, pointer drag, and live region announcements.
+
+**Component:** `<Slider>`
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="slider"`** | Applied to each thumb element |
+| **`aria-valuemin` / `aria-valuemax` / `aria-valuenow`** | Kept in sync with the current value on every change |
+| **`aria-valuetext`** | Set via the `valueText` callback when provided (e.g. `"50%"`, `"Low"`) |
+| **`aria-orientation`** | Set to `"horizontal"` or `"vertical"` to match the `orientation` prop |
+| **`aria-disabled`** | Applied to thumbs when `disabled` is true |
+| **`aria-label`** | Each thumb receives its own label. In range mode, falls back to `"{label} minimum"` / `"{label} maximum"` if `minThumbLabel` / `maxThumbLabel` are not provided |
+| **`aria-labelledby`** | Forwarded to the thumb when only `ariaLabelledBy` is supplied |
+| **Live region** | A `role="status" aria-live="polite"` region announces the new value after every change; always mounted before any interaction |
+| **Focus ring** | Managed in JavaScript state rather than CSS `:focus-visible` (inline styles would otherwise override it) |
+| **Keyboard navigation** | See keyboard table below |
+| **Pointer drag** | `setPointerCapture` ensures drag works even when the cursor leaves the thumb; works with mouse and touch |
+| **Track click** | Clicking anywhere on the track moves the thumb (range mode: moves the nearest thumb) |
+| **Controlled + Uncontrolled** | `value` / `onValueChange` for controlled single-thumb; `values` / `onValuesChange` for controlled range |
+| **Dev warnings** | Errors if no accessible label is provided; warns if range mode is missing `minThumbLabel` / `maxThumbLabel`; errors if `min >= max` |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `→` / `↑` | Increase value by one `step` |
+| `←` / `↓` | Decrease value by one `step` |
+| `Home` | Set to minimum value |
+| `End` | Set to maximum value |
+| `Page Up` | Increase by `largeStep` (default: 10 × step or 10 % of range) |
+| `Page Down` | Decrease by `largeStep` |
+
+#### Usage
+
+```tsx
+import { Slider } from '@compa11y/react';
+
+// Single thumb — uncontrolled
+<Slider label="Volume" defaultValue={50} />
+
+// Controlled with custom value text
+<Slider
+  label="Brightness"
+  value={brightness}
+  onValueChange={setBrightness}
+  valueText={(v) => `${v}%`}
+/>
+
+// Range slider
+<Slider
+  label="Price"
+  range
+  defaultValues={[20, 80]}
+  min={0}
+  max={200}
+  minThumbLabel="Minimum price"
+  maxThumbLabel="Maximum price"
+  valueText={(v) => `$${v}`}
+  onValuesChange={([lo, hi]) => setRange([lo, hi])}
+/>
+
+// Vertical
+<Slider label="Level" orientation="vertical" />
+
+// Disabled
+<Slider label="Read-only setting" value={40} disabled />
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | — | Visible label and base for thumb `aria-label` |
+| `ariaLabel` | `string` | — | `aria-label` on the thumb (invisible label) |
+| `ariaLabelledBy` | `string` | — | `aria-labelledby` on the thumb |
+| `value` | `number` | — | Controlled value (single-thumb) |
+| `defaultValue` | `number` | `0` | Uncontrolled starting value |
+| `onValueChange` | `(value: number) => void` | — | Called on value change (single-thumb) |
+| `range` | `boolean` | `false` | Enable two-thumb range mode |
+| `values` | `[number, number]` | — | Controlled values (range mode) |
+| `defaultValues` | `[number, number]` | `[min, max]` | Uncontrolled starting values (range mode) |
+| `onValuesChange` | `(values: [number, number]) => void` | — | Called on value change (range mode) |
+| `minThumbLabel` | `string` | `"{label} minimum"` | Accessible label for the lower thumb |
+| `maxThumbLabel` | `string` | `"{label} maximum"` | Accessible label for the upper thumb |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Arrow-key step size |
+| `largeStep` | `number` | `max(10×step, (max-min)/10)` | Page Up / Page Down step |
+| `disabled` | `boolean` | `false` | Disable all interaction |
+| `valueText` | `(value: number) => string` | — | Maps value to `aria-valuetext` string |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Track orientation |
+| `unstyled` | `boolean` | `false` | Remove default visual styles |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-slider-track-bg              /* Track background (default: #e2e8f0) */
+--compa11y-slider-track-size            /* Track thickness (default: 4px) */
+--compa11y-slider-track-length          /* Track length in vertical mode (default: 160px) */
+--compa11y-slider-fill-bg               /* Filled range color (default: #0066cc) */
+--compa11y-slider-fill-bg-disabled      /* Filled range color when disabled (default: #94a3b8) */
+--compa11y-slider-thumb-size            /* Thumb diameter (default: 20px) */
+--compa11y-slider-thumb-bg              /* Thumb background (default: white) */
+--compa11y-slider-thumb-bg-disabled     /* Thumb background when disabled (default: #cbd5e1) */
+--compa11y-slider-thumb-border          /* Thumb border color (default: #0066cc) */
+--compa11y-slider-thumb-border-disabled /* Thumb border when disabled (default: #94a3b8) */
+--compa11y-focus-color                  /* Focus ring color (default: #0066cc) */
+```
+
+---
+
+### ProgressBar
+
+A status indicator that communicates how much of a task is complete. The user never interacts with it — the system drives the value. This is fundamentally different from a Slider.
+
+**Component:** `<ProgressBar>`
+
+#### Determinate vs indeterminate
+
+| Mode | When to use | ARIA |
+|---|---|---|
+| **Determinate** | You know actual progress (65 % uploaded, step 2 of 5) | `aria-valuenow`, `aria-valuemin`, `aria-valuemax` all set |
+| **Indeterminate** | Task is running but progress is unknown | `aria-valuenow` intentionally omitted — no fake precision |
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`role="progressbar"`** | Applied to the track element |
+| **`aria-labelledby`** | Points to the visible label element (always visible — no blind labelling) |
+| **`aria-valuemin` / `aria-valuemax` / `aria-valuenow`** | Set when `value` prop is provided (determinate); omitted when indeterminate |
+| **`aria-valuetext`** | Set via the `valueText` callback when provided (e.g. `"Step 2 of 5"`) |
+| **Milestone announcements** | Politely announced when `value` crosses any threshold in `milestones` (e.g. `[25, 50, 75, 100]`). Only the first crossed threshold per change is announced to avoid noise. |
+| **Status announcements** | Transitioning to `status="complete"` → polite `"Label complete"`. Transitioning to `status="error"` → assertive `"Label failed"`. |
+| **Indeterminate animation** | CSS keyframe animation injected once into `<head>`; replaced by a gentle opacity pulse when `prefers-reduced-motion` is active |
+| **`forced-colors`** | Track and fill use semantic `ButtonFace` / `Highlight` system colors |
+| **Dev warnings** | Errors when `label` is missing; errors when `min >= max`; warns when value is out of range |
+
+#### What you must provide
+
+```tsx
+// label is required — it is both visible and the accessible name
+<ProgressBar label="Uploading invoice PDF" value={65} />
+```
+
+#### Usage
+
+```tsx
+import { ProgressBar } from '@compa11y/react';
+
+// Determinate — announce at milestones
+<ProgressBar
+  label="Uploading invoice PDF"
+  value={65}
+  milestones={[25, 50, 75, 100]}
+  statusText="Uploading 3 of 10 files…"
+/>
+
+// Indeterminate — progress unknown, do not fake a value
+<ProgressBar label="Loading reports" statusText="Fetching data from server…" />
+
+// Custom valueText
+<ProgressBar
+  label="Onboarding"
+  value={2}
+  min={0}
+  max={5}
+  valueText={(v, _min, max) => `Step ${v} of ${max}`}
+/>
+
+// Complete
+<ProgressBar
+  label="Video export"
+  value={100}
+  status="complete"
+  statusText="Export ready — check your downloads"
+/>
+
+// Error
+<ProgressBar
+  label="Database backup"
+  value={37}
+  status="error"
+  statusText="Connection lost. Retry?"
+/>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | — | **Required.** Visible label and accessible name |
+| `value` | `number` | `undefined` | Current value; omit for indeterminate mode |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `valueText` | `(v, min, max) => string` | — | Maps value to `aria-valuetext` string |
+| `showValue` | `boolean` | `true` when determinate | Show percentage / valueText beside the label |
+| `status` | `'active' \| 'complete' \| 'error'` | `'active'` | Status of the operation |
+| `statusText` | `string` | — | Visible message below the track |
+| `milestones` | `number[]` | — | Announce when value crosses these thresholds |
+| `announceLabel` | `string` | `label` | Override label used in SR announcements |
+| `unstyled` | `boolean` | `false` | Remove default visual styles |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-progress-bar-track-bg          /* Track background (default: #e2e8f0) */
+--compa11y-progress-bar-track-size        /* Track height (default: 8px) */
+--compa11y-progress-bar-fill-bg           /* Determinate fill (default: #0066cc) */
+--compa11y-progress-bar-fill-bg-complete  /* Complete fill (default: #22c55e) */
+--compa11y-progress-bar-fill-bg-error     /* Error fill (default: #ef4444) */
+--compa11y-progress-bar-label-color       /* Label text color (default: inherit) */
+--compa11y-progress-bar-value-color       /* Value text color (default: #555) */
+--compa11y-progress-bar-status-color      /* Status text color (default: #555) */
+--compa11y-progress-bar-error-color       /* Error status text (default: #ef4444) */
+```
+
+---
+
+### Skeleton
+
+A purely decorative loading placeholder that mimics the shape of content before it loads. Individual skeleton blocks carry no meaningful semantics — the surrounding region communicates loading state.
+
+**Component:** `<Skeleton>`
+
+#### A11y design principle
+
+| Layer | Responsibility |
+|---|---|
+| **`<Skeleton>` itself** | `aria-hidden="true"` — invisible to assistive technology |
+| **Surrounding container** | `aria-busy="true"` + accessible label → tells screen readers what is loading |
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`aria-hidden="true"`** | Applied to every skeleton block — screen readers skip them entirely |
+| **Not focusable** | No `tabIndex`, no interactive content |
+| **Shimmer animation** | CSS keyframe automatically replaced by a gentle opacity fade when `prefers-reduced-motion: reduce` is active |
+| **High Contrast mode** | Shimmer hidden; border applied via `forced-colors` media query |
+| **Variants** | `text` (pill, 1em tall) · `circular` (50% radius) · `rectangular` (default) |
+
+#### What you must provide
+
+```tsx
+// The container must communicate loading state — the skeleton does not
+<section aria-label="Loading profile" aria-busy={isLoading}>
+  <div aria-hidden="true">
+    <Skeleton variant="circular" width={56} height={56} />
+    <Skeleton variant="text" width="60%" />
+  </div>
+</section>
+```
+
+#### Usage
+
+```tsx
+import { Skeleton } from '@compa11y/react';
+
+// Basic shapes
+<Skeleton variant="text" width="80%" />
+<Skeleton variant="circular" width={48} height={48} />
+<Skeleton variant="rectangular" height={200} />
+
+// Disable animation (e.g. when user preference is set programmatically)
+<Skeleton animated={false} />
+
+// Composed card skeleton — container owns the a11y
+<section aria-label="Loading article" aria-busy="true">
+  <div aria-hidden="true">
+    <Skeleton variant="rectangular" height={180} style={{ borderRadius: 0 }} />
+    <Skeleton variant="text" width="55%" />
+    <Skeleton variant="text" />
+  </div>
+</section>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `'text' \| 'circular' \| 'rectangular'` | `'rectangular'` | Shape of the placeholder |
+| `width` | `string \| number` | `100%` (circular: `40px`) | Width; number = px |
+| `height` | `string \| number` | `20px` (text: `1em`, circular: `40px`) | Height; number = px |
+| `animated` | `boolean` | `true` | Enable shimmer animation |
+| `unstyled` | `boolean` | `false` | Remove all default visual styles |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-skeleton-bg             /* Skeleton fill (default: #e2e8f0) */
+--compa11y-skeleton-shimmer-color  /* Shimmer highlight (default: rgba(255,255,255,0.6)) */
+--compa11y-skeleton-radius         /* Border radius (default: 6px / 4px for text) */
+```
+
+---
+
+### EmptyState
+
+Renders a clear, structured message when a list, table, search result, or section has no content. Answers: **what** is empty, **why**, and **what** the user can do next.
+
+**Component:** `<EmptyState>`
+
+#### A11y design principle
+
+Two distinct modes require different treatment:
+
+| Mode | When | What the library does |
+|---|---|---|
+| **Static** | Brand-new account, no data ever existed | Regular page content — no live region needed |
+| **Dynamic** | Search/filter returned zero results; item was deleted | `role="status" aria-live="polite"` so screen readers announce the change |
+
+Use the `live` prop to switch between them.
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **Heading** | `title` renders as a real `<h1>`–`<h6>` element (default `<h2>`) — semantic, not a styled `<div>` |
+| **Icon is decorative** | `icon` slot is always wrapped in `aria-hidden="true"` — meaning must come from `title`/`description` text |
+| **Live region** | When `live={true}`: `role="status" aria-live="polite" aria-atomic="true"` on the container |
+| **No motion** | `prefers-reduced-motion` rule strips any future transition/animation |
+| **High Contrast** | Title, description, and icon color use system `CanvasText` token |
+| **Dev warning** | `title` absence warned in development |
+
+#### What you must provide
+
+- A clear `title` that names the empty state ("No projects yet", not "Nothing here")
+- A `description` that explains why and optionally hints at next steps
+- An `action` that helps the user recover (when applicable)
+
+#### Usage
+
+```tsx
+import { EmptyState } from '@compa11y/react';
+
+// Static — brand-new account (no live region)
+<EmptyState
+  title="No projects yet"
+  description="Create your first project to get started."
+  icon={<FolderIcon aria-hidden="true" />}
+  action={<Button>Create project</Button>}
+  secondaryAction={<Button variant="ghost">Browse templates</Button>}
+/>
+
+// Dynamic — search returned zero results (announces to screen readers)
+<EmptyState
+  live
+  title="No results"
+  description='No items match "wireless mouse". Try clearing filters.'
+  action={<Button onClick={clearFilters}>Clear filters</Button>}
+/>
+
+// Minimal — no icon, no actions
+<EmptyState
+  title="No notifications"
+  description="You're all caught up."
+/>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `title` | `string` | — | **Required.** Heading text naming the empty state |
+| `description` | `string` | — | Supporting paragraph explaining why and what to do |
+| `icon` | `ReactNode` | — | Decorative illustration/icon — always `aria-hidden` |
+| `action` | `ReactNode` | — | Primary action (Button, Link, etc.) |
+| `secondaryAction` | `ReactNode` | — | Secondary action |
+| `headingLevel` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2` | Heading level for the title — pick one that fits the document outline |
+| `live` | `boolean` | `false` | Adds `role="status" aria-live="polite"` for dynamic states |
+| `unstyled` | `boolean` | `false` | Remove all default inline styles |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-empty-state-gap                   /* Gap between sections (default: 0.75rem) */
+--compa11y-empty-state-padding               /* Container padding (default: 3rem 1.5rem) */
+--compa11y-empty-state-icon-color            /* Icon color (default: #9ca3af) */
+--compa11y-empty-state-icon-size             /* Icon font-size (default: 3rem) */
+--compa11y-empty-state-title-size            /* Title font-size (default: 1.125rem) */
+--compa11y-empty-state-title-weight          /* Title font-weight (default: 600) */
+--compa11y-empty-state-title-color           /* Title color (default: inherit) */
+--compa11y-empty-state-description-size      /* Description font-size (default: 0.9375rem) */
+--compa11y-empty-state-description-color     /* Description color (default: #6b7280) */
+--compa11y-empty-state-description-max-width /* Max-width of description (default: 36ch) */
+--compa11y-empty-state-actions-gap           /* Gap between action buttons (default: 0.5rem) */
+--compa11y-empty-state-actions-margin        /* Top margin above actions (default: 0.25rem) */
+```
+
+#### Web Component
+
+```html
+<!-- Static -->
+<compa11y-empty-state
+  title="No projects yet"
+  description="Create your first project to get started."
+>
+  <svg slot="icon" aria-hidden="true">…</svg>
+  <div slot="actions">
+    <button>Create project</button>
+  </div>
+</compa11y-empty-state>
+
+<!-- Dynamic (search/filter) -->
+<compa11y-empty-state
+  live
+  title="No results"
+  description="No items match your search. Try clearing filters."
+>
+  <div slot="actions">
+    <button onclick="clearFilters()">Clear filters</button>
+  </div>
+</compa11y-empty-state>
+```
+
+**Web Component attributes:** `title`, `description`, `heading-level` (default `2`), `live` (boolean)
+
+---
+
+### NumberField
+
+An accessible numeric input with optional stepper buttons, on-blur formatting, and built-in min/max validation. Implements `role="spinbutton"` semantics — the correct ARIA pattern for a field whose value can be incremented and decremented.
+
+**Component:** `<NumberField>`
+
+#### Why not `<input type="number">`?
+
+`type="number"` is semantically correct but has significant practical problems: it rejects mid-type input (e.g. typing `"-"` before the digits), behaves inconsistently across locales (`,` vs `.` as decimal separator), and renders browser-native spinners that vary widely between browsers and break in some screen reader / browser combinations.
+
+`NumberField` uses `<input type="text" inputMode="numeric|decimal">` with explicit `role="spinbutton"` + `aria-valuenow/min/max` for the same semantics with full input control.
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`role="spinbutton"`** | Set on the `<input>` — correct ARIA pattern for a numeric field with increment/decrement |
+| **`aria-valuenow`** | Kept in sync with the committed numeric value |
+| **`aria-valuemin` / `aria-valuemax`** | Set from `min` / `max` props |
+| **`aria-valuetext`** | Set from `formatOptions` when provided — gives screen readers the human-readable formatted string |
+| **`aria-invalid`** | Set on validation error (internal or external) |
+| **`aria-describedby`** | Links hint and error message to the input |
+| **`aria-required`** | Set when `required={true}` |
+| **`aria-disabled`** | Set when `disabled={true}` |
+| **Keyboard — Arrow Up/Down** | Increment/decrement by `step` |
+| **Keyboard — Page Up/Down** | Increment/decrement by `largeStep` (default: `step × 10`) |
+| **Keyboard — Home / End** | Jump to `min` / `max` (requires props to be set) |
+| **Keyboard — Enter** | Commit current typed value without blurring |
+| **Commit on blur** | Parses, validates, snaps to step, and commits when focus leaves |
+| **Formatting on blur** | Shows `Intl.NumberFormat` formatted value when blurred (raw number shown while focused for easy editing) |
+| **Validation errors** | Built-in min/max error message; announced **assertively** via live region |
+| **`inputMode`** | Auto-selected: `"numeric"` for integer steps, `"decimal"` for fractional — triggers the right mobile keyboard |
+| **Stepper buttons** | When `showSteppers={true}`: −/+ buttons with `aria-label="Decrease"/"Increase"`, min 44×44 px touch targets |
+| **Stepper disabled state** | Decrement button disabled when `value ≤ min`; increment when `value ≥ max` |
+| **Live region** | Pre-mounted `role="status"` region — always in DOM before any message |
+| **High Contrast** | Borders use `ButtonText`/`FieldText` system tokens |
+| **Reduced motion** | All transitions removed |
+| **Dev warnings** | Missing label, `min ≥ max` |
+
+#### What you must provide
+
+- A `label` (or `aria-label` / `aria-labelledby`) that names **what** the number represents ("Quantity", "Budget", "Rating")
+- A `hint` explaining constraints when they aren't obvious ("Enter a value from 0 to 100")
+- Use `error` to communicate validation failures from your form logic; the component handles wiring
+
+#### Usage
+
+```tsx
+import { NumberField } from '@compa11y/react';
+
+// Basic with steppers
+<NumberField
+  label="Quantity"
+  min={1}
+  max={99}
+  step={1}
+  showSteppers
+  hint="Maximum 99 units per order."
+/>
+
+// Controlled
+<NumberField
+  label="Guests"
+  value={guests}
+  onValueChange={setGuests}
+  min={1}
+  max={12}
+  step={1}
+  showSteppers
+/>
+
+// Currency formatting (raw on focus, formatted on blur)
+<NumberField
+  label="Budget"
+  min={0}
+  step={0.01}
+  formatOptions={{ style: 'currency', currency: 'USD' }}
+  hint="Enter an amount in US dollars."
+/>
+
+// With external error from form validation
+<NumberField
+  label="Score"
+  min={1}
+  max={10}
+  required
+  error={formErrors.score}
+/>
+```
+
+#### API reference
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | `ReactNode` | — | Visible label text |
+| `hint` | `ReactNode` | — | Description text linked via `aria-describedby` |
+| `error` | `ReactNode` | — | External error message; takes priority over built-in validation |
+| `value` | `number` | — | Controlled value (`undefined` = empty field) |
+| `defaultValue` | `number` | — | Uncontrolled starting value |
+| `onValueChange` | `(value: number \| undefined) => void` | — | Called on commit (blur or Enter) |
+| `min` | `number` | — | Minimum allowed value |
+| `max` | `number` | — | Maximum allowed value |
+| `step` | `number` | `1` | Arrow-key / stepper increment |
+| `largeStep` | `number` | `step × 10` | Page Up / Down increment |
+| `showSteppers` | `boolean` | `false` | Show −/+ buttons alongside the input |
+| `formatOptions` | `Intl.NumberFormatOptions` | — | Format applied when blurred (e.g. `{ style: 'currency', currency: 'USD' }`) |
+| `locale` | `string` | user locale | BCP 47 locale for `Intl.NumberFormat` |
+| `placeholder` | `string` | — | Input placeholder |
+| `required` | `boolean` | `false` | Marks field as required |
+| `disabled` | `boolean` | `false` | Disables all interaction |
+| `readOnly` | `boolean` | `false` | Makes the field read-only |
+| `aria-label` | `string` | — | Accessible name when no visible label |
+| `aria-labelledby` | `string` | — | ID of an external labelling element |
+| `name` | `string` | — | Name for form submission |
+| `unstyled` | `boolean` | `false` | Remove all default inline styles |
+| `className` | `string` | — | CSS class on the root wrapper |
+| `style` | `CSSProperties` | — | Inline styles on the root wrapper |
+
+#### CSS Custom Properties
+
+```css
+--compa11y-number-field-input-bg               /* Input background (default: white) */
+--compa11y-number-field-input-border           /* Input border (default: 1px solid #ccc) */
+--compa11y-number-field-input-border-focus     /* Border color on focus (default: #0066cc) */
+--compa11y-number-field-input-border-error     /* Border color on error (default: #ef4444) */
+--compa11y-number-field-input-radius           /* Border radius (default: 4px) */
+--compa11y-number-field-input-padding          /* Input padding (default: 0.5rem 0.75rem) */
+--compa11y-number-field-input-font-size        /* Font size (default: 0.875rem) */
+--compa11y-number-field-label-color            /* Label color (default: inherit) */
+--compa11y-number-field-label-size             /* Label font size (default: 0.875rem) */
+--compa11y-number-field-label-weight           /* Label font weight (default: 500) */
+--compa11y-number-field-hint-color             /* Hint text color (default: #666) */
+--compa11y-number-field-error-color            /* Error text color (default: #ef4444) */
+--compa11y-number-field-stepper-bg             /* Stepper button background (default: #f0f0f0) */
+--compa11y-number-field-stepper-color          /* Stepper button color (default: inherit) */
+--compa11y-number-field-stepper-border         /* Stepper button border (default: 1px solid #ccc) */
+--compa11y-focus-color                         /* Focus ring color (shared, default: #0066cc) */
+```
+
+#### Web Component
+
+```html
+<!-- Basic with steppers -->
+<compa11y-number-field
+  label="Quantity"
+  value="1"
+  min="1"
+  max="99"
+  step="1"
+  show-steppers
+  hint="Maximum 99 units per order."
+></compa11y-number-field>
+
+<!-- Fractional step -->
+<compa11y-number-field
+  label="Rating"
+  value="7.5"
+  min="0"
+  max="10"
+  step="0.5"
+  large-step="2"
+></compa11y-number-field>
+
+<!-- With external error -->
+<compa11y-number-field
+  label="Score"
+  min="1"
+  max="10"
+  required
+  error="Score must be between 1 and 10."
+></compa11y-number-field>
+```
+
+```js
+// Events
+el.addEventListener('compa11y-number-field-change', (e) => {
+  console.log(e.detail.value); // number | undefined
+});
+
+el.addEventListener('compa11y-number-field-input', (e) => {
+  console.log(e.detail.rawValue); // string — fires on each keystroke
+});
+```
+
+**Web Component attributes:** `label`, `hint`, `error`, `value`, `min`, `max`, `step`, `large-step`, `show-steppers` (boolean), `disabled` (boolean), `readonly` (boolean), `required` (boolean), `placeholder`, `name`, `aria-label`, `aria-labelledby`
+
+#### Keyboard reference
+
+| Key | Action |
+|---|---|
+| `↑` Arrow Up | Increment by `step` |
+| `↓` Arrow Down | Decrement by `step` |
+| `Page Up` | Increment by `largeStep` |
+| `Page Down` | Decrement by `largeStep` |
+| `Home` | Jump to `min` (if set) |
+| `End` | Jump to `max` (if set) |
+| `Enter` | Commit current typed value |
+| `Tab` / `Shift+Tab` | Leave field — triggers commit + validation |
+
+#### When to use NumberField vs other components
+
+| Need | Use |
+|---|---|
+| Quantity, age, price, count — a true numeric quantity | **NumberField** |
+| Approximate value on a continuous scale | **Slider** |
+| System-reported progress (upload, loading) | **ProgressBar** |
+| Phone number, ZIP code, credit card, OTP | **Input** with `inputMode="numeric"` |
+
+---
+
+### Carousel
+
+A scrollable region of slides with controls, pagination, and optional autoplay.
+
+#### Semantic structure
+- Container: `<section aria-label="…" aria-roledescription="carousel">`
+- Slides: `<ul role="list">` with `<li aria-roledescription="slide" aria-label="Slide X of Y">`
+- Controls: real `<button>` elements with `aria-label`
+- Pagination: `<div role="group" aria-label="Choose slide">` with dot buttons using `aria-current="true"`
+- Status: visible "Slide X of Y" text linked via `aria-describedby`
+
+#### Auto-set ARIA
+| Attribute | Where | Value |
+|---|---|---|
+| `aria-roledescription` | root `<section>` | `"carousel"` |
+| `aria-roledescription` | each slide | `"slide"` |
+| `aria-label` | each slide | `"Slide X of Y"` |
+| `aria-label` | prev/next buttons | `"Previous slide"` / `"Next slide"` |
+| `aria-label` | each dot | `"Go to slide X of Y"` |
+| `aria-current` | active dot | `"true"` |
+| `aria-pressed` | pause button | toggles with play/pause |
+| `aria-hidden` | non-visible slides (multi-slide mode) | `"true"` |
+| `disabled` | prev/next at boundaries (non-loop) | native `disabled` |
+
+#### Keyboard
+| Key | Context | Action |
+|---|---|---|
+| `Enter` / `Space` | Prev button | Go to previous slide |
+| `Enter` / `Space` | Next button | Go to next slide |
+| `Enter` / `Space` | Dot button | Go to that slide |
+| `Enter` / `Space` | Pause button | Toggle autoplay |
+| `ArrowLeft` / `ArrowUp` | Viewport (if focused) | Previous slide |
+| `ArrowRight` / `ArrowDown` | Viewport (if focused) | Next slide |
+| `Home` | Viewport | First slide |
+| `End` | Viewport | Last slide |
+
+#### Screen reader announcements
+- On slide change: `"Slide X of Y"` (polite) or `"Showing slides X to Y of Z"` (multi-slide)
+- On autoplay toggle: `"Autoplay paused"` / `"Autoplay started"` (polite)
+
+#### Autoplay rules
+- Off by default
+- Disabled when `prefers-reduced-motion: reduce` is detected
+- Auto-pauses on focus entering carousel
+- Auto-pauses on mouse hover
+- Pause/Play button required for WCAG compliance (dev warning if missing)
+
+#### Dev warnings
+- Missing accessible name (`ariaLabel` or `aria-labelledby`)
+- Autoplay enabled without a Pause control
+- Hide-non-active mode with slides not properly hidden
+
+#### Props (React)
+```tsx
+<Carousel
+  ariaLabel="Featured products"
+  value={index}               // controlled
+  defaultValue={0}            // uncontrolled
+  onValueChange={setIndex}
+  loop                        // wrap navigation
+  slidesPerView={1}           // 1 = single, >1 = multi
+  hideNonActiveSlides          // remove hidden slides from a11y tree
+  autoplay={false}            // default off
+  autoplayInterval={5000}
+  orientation="horizontal"
+>
+  <Carousel.Status />
+  <Carousel.Controls>
+    <Carousel.Prev />
+    <Carousel.Next />
+    <Carousel.Pause />
+  </Carousel.Controls>
+  <Carousel.Content>
+    <Carousel.Item>…</Carousel.Item>
+  </Carousel.Content>
+  <Carousel.Pagination />
+</Carousel>
+```
+
+---
+
 ## Web Components
 
 All web components use Shadow DOM and extend the `Compa11yElement` base class. They are fully functional without JavaScript frameworks and can be used in any HTML page.
 
-### `<a11y-button>`
+### `<compa11y-button>`
 
 #### What the library handles
 
@@ -1507,9 +2325,9 @@ All web components use Shadow DOM and extend the `Compa11yElement` base class. T
 #### Usage
 
 ```html
-<a11y-button variant="primary" size="md">Save Changes</a11y-button>
-<a11y-button loading aria-label="Saving">Save</a11y-button>
-<a11y-button disabled>Cannot Click</a11y-button>
+<compa11y-button variant="primary" size="md">Save Changes</a11y-button>
+<compa11y-button loading aria-label="Saving">Save</a11y-button>
+<compa11y-button disabled>Cannot Click</a11y-button>
 ```
 
 #### CSS Custom Properties
@@ -1523,7 +2341,7 @@ All web components use Shadow DOM and extend the `Compa11yElement` base class. T
 
 ---
 
-### `<a11y-input>`
+### `<compa11y-input>`
 
 #### What the library handles
 
@@ -1539,7 +2357,7 @@ All web components use Shadow DOM and extend the `Compa11yElement` base class. T
 #### Usage
 
 ```html
-<a11y-input
+<compa11y-input
   label="Email"
   type="email"
   hint="We won't share your email"
@@ -1552,11 +2370,11 @@ All web components use Shadow DOM and extend the `Compa11yElement` base class. T
 
 ---
 
-### `<a11y-textarea>`
+### `<compa11y-textarea>`
 
 #### What the library handles
 
-Same as `<a11y-input>` but for multi-line text.
+Same as `<compa11y-input>` but for multi-line text.
 
 | Feature | Details |
 |---------|---------|
@@ -1569,7 +2387,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-textarea
+<compa11y-textarea
   label="Description"
   hint="Maximum 500 characters"
   rows="4"
@@ -1579,7 +2397,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-checkbox>`
+### `<compa11y-checkbox>`
 
 #### What the library handles
 
@@ -1592,18 +2410,18 @@ Same as `<a11y-input>` but for multi-line text.
 | **`aria-disabled`** | When disabled |
 | **`aria-required`** | When required |
 | **Keyboard** | **Space** toggles checkbox |
-| **Group: `<fieldset>` + `<legend>`** | `<a11y-checkbox-group>` uses semantic grouping |
+| **Group: `<fieldset>` + `<legend>`** | `<compa11y-checkbox-group>` uses semantic grouping |
 | **Group: `aria-invalid`** | Set when group has error |
 | **Screen reader** | Announces "{label} checked/unchecked" |
 
 #### Usage
 
 ```html
-<a11y-checkbox label="I agree to the terms" required></a11y-checkbox>
+<compa11y-checkbox label="I agree to the terms" required></a11y-checkbox>
 
-<a11y-checkbox-group legend="Select toppings">
-  <a11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
-  <a11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
+<compa11y-checkbox-group legend="Select toppings">
+  <compa11y-checkbox value="cheese" label="Cheese"></a11y-checkbox>
+  <compa11y-checkbox value="peppers" label="Peppers"></a11y-checkbox>
 </a11y-checkbox-group>
 ```
 
@@ -1611,7 +2429,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-radio-group>`
+### `<compa11y-radio-group>`
 
 #### What the library handles
 
@@ -1632,10 +2450,10 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-radio-group legend="Size" orientation="horizontal" value="md">
-  <a11y-radio value="sm" label="Small"></a11y-radio>
-  <a11y-radio value="md" label="Medium"></a11y-radio>
-  <a11y-radio value="lg" label="Large"></a11y-radio>
+<compa11y-radio-group legend="Size" orientation="horizontal" value="md">
+  <compa11y-radio value="sm" label="Small"></a11y-radio>
+  <compa11y-radio value="md" label="Medium"></a11y-radio>
+  <compa11y-radio value="lg" label="Large"></a11y-radio>
 </a11y-radio-group>
 ```
 
@@ -1643,7 +2461,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-switch>`
+### `<compa11y-switch>`
 
 #### What the library handles
 
@@ -1658,8 +2476,8 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-switch label="Enable notifications" checked></a11y-switch>
-<a11y-switch size="lg" label="Dark mode"></a11y-switch>
+<compa11y-switch label="Enable notifications" checked></a11y-switch>
+<compa11y-switch size="lg" label="Dark mode"></a11y-switch>
 ```
 
 **Methods:** `toggle()`, `setChecked(boolean)`
@@ -1667,7 +2485,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-select>`
+### `<compa11y-select>`
 
 #### What the library handles
 
@@ -1687,7 +2505,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-select placeholder="Choose..." aria-label="Select country">
+<compa11y-select placeholder="Choose..." aria-label="Select country">
   <option value="us">United States</option>
   <option value="uk">United Kingdom</option>
   <option value="de" disabled>Germany (unavailable)</option>
@@ -1699,7 +2517,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-combobox>`
+### `<compa11y-combobox>`
 
 #### What the library handles
 
@@ -1718,7 +2536,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-combobox placeholder="Search..." clearable>
+<compa11y-combobox placeholder="Search..." clearable>
   <option value="apple">Apple</option>
   <option value="banana">Banana</option>
   <option value="cherry">Cherry</option>
@@ -1730,7 +2548,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-listbox>`
+### `<compa11y-listbox>`
 
 #### What the library handles
 
@@ -1742,7 +2560,7 @@ Same as `<a11y-input>` but for multi-line text.
 | **`aria-activedescendant`** | Focused option |
 | **Option: `role="option"`** | On each option |
 | **`aria-selected`** | Selection state |
-| **Group: `role="group"`** | `<a11y-optgroup>` with `aria-labelledby` |
+| **Group: `role="group"`** | `<compa11y-optgroup>` with `aria-labelledby` |
 | **Single-select keyboard** | Arrow/Home/End + auto-select + type-ahead |
 | **Multi-select keyboard** | Arrow (focus only), Space (toggle), Shift+Arrow (extend), Ctrl+A (all), Shift+Home/End (range) |
 | **Screen reader** | Announces selection/deselection, range counts, select/deselect all |
@@ -1751,15 +2569,15 @@ Same as `<a11y-input>` but for multi-line text.
 
 ```html
 <!-- Single select -->
-<a11y-listbox aria-label="Favorite fruit" value="apple">
-  <a11y-option value="apple">Apple</a11y-option>
-  <a11y-option value="banana">Banana</a11y-option>
+<compa11y-listbox aria-label="Favorite fruit" value="apple">
+  <compa11y-option value="apple">Apple</a11y-option>
+  <compa11y-option value="banana">Banana</a11y-option>
 </a11y-listbox>
 
 <!-- Multi-select with groups -->
-<a11y-listbox multiple aria-label="Toppings">
-  <a11y-optgroup label="Meats">
-    <a11y-option value="pepperoni">Pepperoni</a11y-option>
+<compa11y-listbox multiple aria-label="Toppings">
+  <compa11y-optgroup label="Meats">
+    <compa11y-option value="pepperoni">Pepperoni</a11y-option>
   </a11y-optgroup>
 </a11y-listbox>
 ```
@@ -1768,7 +2586,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-dialog>`
+### `<compa11y-dialog>`
 
 #### What the library handles
 
@@ -1790,7 +2608,7 @@ Same as `<a11y-input>` but for multi-line text.
 ```html
 <button id="open-btn">Open Dialog</button>
 
-<a11y-dialog trigger="#open-btn">
+<compa11y-dialog trigger="#open-btn">
   <h2 slot="title">Confirm Action</h2>
   <p slot="description">This cannot be undone.</p>
   <p>Are you sure you want to proceed?</p>
@@ -1807,7 +2625,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-menu>`
+### `<compa11y-menu>`
 
 #### What the library handles
 
@@ -1826,7 +2644,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-menu>
+<compa11y-menu>
   <button slot="trigger">Actions</button>
   <button role="menuitem">Edit</button>
   <button role="menuitem">Duplicate</button>
@@ -1840,7 +2658,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-tabs>`
+### `<compa11y-tabs>`
 
 #### What the library handles
 
@@ -1861,7 +2679,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-tabs>
+<compa11y-tabs>
   <button slot="tab" role="tab" aria-controls="panel-1">Profile</button>
   <button slot="tab" role="tab" aria-controls="panel-2">Settings</button>
 
@@ -1870,7 +2688,7 @@ Same as `<a11y-input>` but for multi-line text.
 </a11y-tabs>
 
 <!-- Vertical with manual activation -->
-<a11y-tabs orientation="vertical" activation-mode="manual">
+<compa11y-tabs orientation="vertical" activation-mode="manual">
   <!-- ... -->
 </a11y-tabs>
 ```
@@ -1880,7 +2698,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-toast>`
+### `<compa11y-toast>`
 
 #### What the library handles
 
@@ -1899,7 +2717,7 @@ Same as `<a11y-input>` but for multi-line text.
 #### Usage
 
 ```html
-<a11y-toast position="bottom-right" duration="5000" max-toasts="5"></a11y-toast>
+<compa11y-toast position="bottom-right" duration="5000" max-toasts="5"></a11y-toast>
 
 <script>
   const toast = document.querySelector('a11y-toast');
@@ -1928,7 +2746,7 @@ Same as `<a11y-input>` but for multi-line text.
 
 ---
 
-### `<a11y-visually-hidden>`
+### `<compa11y-visually-hidden>`
 
 #### What the library handles
 
@@ -1944,18 +2762,18 @@ Same as `<a11y-input>` but for multi-line text.
 <!-- Hidden label -->
 <button>
   <span aria-hidden="true">&times;</span>
-  <a11y-visually-hidden>Close dialog</a11y-visually-hidden>
+  <compa11y-visually-hidden>Close dialog</a11y-visually-hidden>
 </button>
 
 <!-- Focusable (appears on focus) -->
-<a11y-visually-hidden focusable>
+<compa11y-visually-hidden focusable>
   <a href="#main-content">Skip to main content</a>
 </a11y-visually-hidden>
 ```
 
 ---
 
-### `<a11y-skip-link>`
+### `<compa11y-skip-link>`
 
 #### What the library handles
 
@@ -1973,21 +2791,21 @@ Same as `<a11y-input>` but for multi-line text.
 
 ```html
 <!-- Place as first child of <body> -->
-<a11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
+<compa11y-skip-link target="#main-content">Skip to main content</a11y-skip-link>
 
 <!-- With custom label attribute -->
-<a11y-skip-link target="#main-content" label="Skip navigation"></a11y-skip-link>
+<compa11y-skip-link target="#main-content" label="Skip navigation"></a11y-skip-link>
 
 <!-- Multiple skip links -->
-<a11y-skip-link target="#main-content">Skip to content</a11y-skip-link>
-<a11y-skip-link target="#search">Skip to search</a11y-skip-link>
+<compa11y-skip-link target="#main-content">Skip to content</a11y-skip-link>
+<compa11y-skip-link target="#search">Skip to search</a11y-skip-link>
 ```
 
 Keyboard: **Tab** to reveal, **Enter** to activate.
 
 ---
 
-### `<a11y-alert>`
+### `<compa11y-alert>`
 
 #### What the library handles
 
@@ -2007,17 +2825,17 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 
 ```html
 <!-- Error alert (assertive) -->
-<a11y-alert type="error" title="Payment failed">
+<compa11y-alert type="error" title="Payment failed">
   Your card was declined. Please try a different payment method.
 </a11y-alert>
 
 <!-- Success alert -->
-<a11y-alert type="success" title="Saved!">
+<compa11y-alert type="success" title="Saved!">
   Your changes have been saved successfully.
 </a11y-alert>
 
 <!-- Dismissible -->
-<a11y-alert type="info" dismissible>
+<compa11y-alert type="info" dismissible>
   This alert can be closed by the user.
 </a11y-alert>
 ```
@@ -2028,7 +2846,7 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 
 ---
 
-### `<a11y-link>`
+### `<compa11y-link>`
 
 #### What the library handles
 
@@ -2045,23 +2863,23 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 
 ```html
 <!-- Basic link -->
-<a11y-link href="/about">About us</a11y-link>
+<compa11y-link href="/about">About us</a11y-link>
 
 <!-- External link (opens in new tab with screen reader hint) -->
-<a11y-link href="https://example.com" external>Visit Example</a11y-link>
+<compa11y-link href="https://example.com" external>Visit Example</a11y-link>
 
 <!-- Current page in navigation -->
-<a11y-link href="/dashboard" current="page">Dashboard</a11y-link>
+<compa11y-link href="/dashboard" current="page">Dashboard</a11y-link>
 
 <!-- Disabled link -->
-<a11y-link href="/settings" disabled>Settings</a11y-link>
+<compa11y-link href="/settings" disabled>Settings</a11y-link>
 ```
 
 **Attributes:** `href`, `external`, `current` (page/step/location/true), `disabled`
 
 ---
 
-### `<a11y-heading>`
+### `<compa11y-heading>`
 
 #### What the library handles
 
@@ -2078,16 +2896,16 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 #### Usage
 
 ```html
-<a11y-heading level="1">Page Title</a11y-heading>
-<a11y-heading level="2" size="lg">Visually smaller h2</a11y-heading>
-<a11y-heading level="3" color="muted">Muted heading</a11y-heading>
+<compa11y-heading level="1">Page Title</a11y-heading>
+<compa11y-heading level="2" size="lg">Visually smaller h2</a11y-heading>
+<compa11y-heading level="3" color="muted">Muted heading</a11y-heading>
 ```
 
 **Attributes:** `level` (1–6), `size` (xs/sm/md/lg/xl/2xl/3xl), `color`, `weight`, `align`, `truncate`
 
 ---
 
-### `<a11y-text>`
+### `<compa11y-text>`
 
 #### What the library handles
 
@@ -2105,17 +2923,17 @@ Keyboard: **Tab** to reveal, **Enter** to activate.
 #### Usage
 
 ```html
-<a11y-text>Default body paragraph.</a11y-text>
-<a11y-text size="sm" color="muted">Small muted text.</a11y-text>
-<a11y-text as="span" weight="bold">Bold inline text.</a11y-text>
-<a11y-text truncate style="max-width: 300px;">Long text that truncates...</a11y-text>
+<compa11y-text>Default body paragraph.</a11y-text>
+<compa11y-text size="sm" color="muted">Small muted text.</a11y-text>
+<compa11y-text as="span" weight="bold">Bold inline text.</a11y-text>
+<compa11y-text truncate style="max-width: 300px;">Long text that truncates...</a11y-text>
 ```
 
 **Attributes:** `as` (p/span/div/label), `size`, `color`, `weight`, `align`, `truncate`
 
 ---
 
-### `<a11y-form-field>`
+### `<compa11y-form-field>`
 
 A generic wrapper that provides label, hint, error, and required indicator around any slotted control. Automatically wires ARIA on the first interactive element found in the slot.
 
@@ -2139,12 +2957,12 @@ A generic wrapper that provides label, hint, error, and required indicator aroun
 
 ```html
 <!-- Wrap a native input -->
-<a11y-form-field label="Email" hint="We'll never share it." required>
+<compa11y-form-field label="Email" hint="We'll never share it." required>
   <input type="email" placeholder="you@example.com" />
 </a11y-form-field>
 
 <!-- Wrap a native select -->
-<a11y-form-field label="Country" required>
+<compa11y-form-field label="Country" required>
   <select>
     <option value="">Choose…</option>
     <option value="us">United States</option>
@@ -2152,12 +2970,12 @@ A generic wrapper that provides label, hint, error, and required indicator aroun
 </a11y-form-field>
 
 <!-- With error -->
-<a11y-form-field label="Password" error="Must be at least 8 characters">
+<compa11y-form-field label="Password" error="Must be at least 8 characters">
   <input type="password" />
 </a11y-form-field>
 
 <!-- Disabled -->
-<a11y-form-field label="Organization" disabled>
+<compa11y-form-field label="Organization" disabled>
   <input type="text" value="Compa11y Inc." />
 </a11y-form-field>
 ```
@@ -2166,7 +2984,7 @@ A generic wrapper that provides label, hint, error, and required indicator aroun
 
 ---
 
-### `<a11y-popover>`
+### `<compa11y-popover>`
 
 Non-modal, anchored overlay. Wraps trigger and content in a single element using named slots. No focus trap, no scroll lock — use for contextual UI distinct from dialogs.
 
@@ -2192,13 +3010,13 @@ Non-modal, anchored overlay. Wraps trigger and content in a single element using
 
 ```html
 <!-- Basic -->
-<a11y-popover placement="bottom">
+<compa11y-popover placement="bottom">
   <button slot="trigger">More info</button>
   <p>Popover content. Press Escape or click outside to dismiss.</p>
 </a11y-popover>
 
 <!-- With interactive content -->
-<a11y-popover placement="bottom-start">
+<compa11y-popover placement="bottom-start">
   <button slot="trigger">Open settings</button>
   <div>
     <p>Choose an option:</p>
@@ -2208,7 +3026,7 @@ Non-modal, anchored overlay. Wraps trigger and content in a single element using
 </a11y-popover>
 
 <!-- Controlled via JS -->
-<a11y-popover id="my-pop" placement="right">
+<compa11y-popover id="my-pop" placement="right">
   <button slot="trigger">Open</button>
   <p>Controlled popover.</p>
 </a11y-popover>
@@ -2239,7 +3057,7 @@ Non-modal, anchored overlay. Wraps trigger and content in a single element using
 
 ---
 
-### `<a11y-accordion>`
+### `<compa11y-accordion>`
 
 Accessible accordion web component. Supports single/multiple modes with full keyboard navigation.
 
@@ -2282,7 +3100,7 @@ accordion.toggle(2);  // Toggle item at index 2
 
 ```html
 <!-- Single mode (default) — wrap triggers in headings for semantics -->
-<a11y-accordion type="single" collapsible>
+<compa11y-accordion type="single" collapsible>
   <h3>
     <button data-accordion-trigger>Section 1</button>
   </h3>
@@ -2299,7 +3117,7 @@ accordion.toggle(2);  // Toggle item at index 2
 </a11y-accordion>
 
 <!-- Multiple mode -->
-<a11y-accordion type="multiple">
+<compa11y-accordion type="multiple">
   <h3><button data-accordion-trigger>Section A</button></h3>
   <div data-accordion-panel>Content A</div>
 
@@ -2308,7 +3126,7 @@ accordion.toggle(2);  // Toggle item at index 2
 </a11y-accordion>
 
 <!-- Disabled trigger -->
-<a11y-accordion>
+<compa11y-accordion>
   <h3><button data-accordion-trigger disabled>Cannot open</button></h3>
   <div data-accordion-panel>Unreachable content</div>
 </a11y-accordion>
@@ -2330,7 +3148,7 @@ accordion.toggle(2);  // Toggle item at index 2
 
 ---
 
-### `<a11y-table>`
+### `<compa11y-table>`
 
 Data-driven accessible table. Accepts `columns` and `rows` as JavaScript properties and renders a fully semantic `<table>` in the light DOM. Supports sorting and row selection with automatic ARIA wiring.
 
@@ -2362,7 +3180,7 @@ Data-driven accessible table. Accepts `columns` and `rows` as JavaScript propert
 #### Usage
 
 ```html
-<a11y-table caption="Product catalogue" selectable></a11y-table>
+<compa11y-table caption="Product catalogue" selectable></a11y-table>
 
 <script>
   const table = document.querySelector('a11y-table');
@@ -2426,7 +3244,7 @@ Data-driven accessible table. Accepts `columns` and `rows` as JavaScript propert
 
 ---
 
-### `<a11y-pagination>`
+### `<compa11y-pagination>`
 
 Accessible pagination web component. Renders a shadow-DOM `<nav>` landmark containing a `<ul>` of page buttons, optional First/Last buttons, an optional rows-per-page `<select>`, and an optional "Go to page" number input. Emits `page-change` and `page-size-change` custom events.
 
@@ -2464,17 +3282,17 @@ Accessible pagination web component. Renders a shadow-DOM `<nav>` landmark conta
 
 ```html
 <!-- Basic -->
-<a11y-pagination total-pages="24"></a11y-pagination>
+<compa11y-pagination total-pages="24"></a11y-pagination>
 
 <!-- Derived from totalItems with page size -->
-<a11y-pagination
+<compa11y-pagination
   total-items="312"
   page-size="25"
   current-page="1"
 ></a11y-pagination>
 
 <!-- Full-featured -->
-<a11y-pagination
+<compa11y-pagination
   total-items="312"
   current-page="1"
   show-first-last
@@ -2537,7 +3355,7 @@ Accessible pagination web component. Renders a shadow-DOM `<nav>` landmark conta
 
 ---
 
-### `<a11y-breadcrumbs>`
+### `<compa11y-breadcrumbs>`
 
 Reads slotted `<a>` and `<span>` children from the light DOM, clones them into a shadow `<nav><ol>` with separators and `aria-current="page"` injected automatically on the last child.
 
@@ -2566,26 +3384,26 @@ Reads slotted `<a>` and `<span>` children from the light DOM, clones them into a
 
 ```html
 <!-- Basic -->
-<a11y-breadcrumbs aria-label="Breadcrumb">
+<compa11y-breadcrumbs aria-label="Breadcrumb">
   <a href="/">Home</a>
   <a href="/products">Products</a>
   <span>Model X</span>        <!-- last child → current page -->
 </a11y-breadcrumbs>
 
 <!-- Last item as link -->
-<a11y-breadcrumbs>
+<compa11y-breadcrumbs>
   <a href="/">Home</a>
   <a href="/products/model-x">Model X</a>
 </a11y-breadcrumbs>
 
 <!-- Custom separator -->
-<a11y-breadcrumbs separator="›">
+<compa11y-breadcrumbs separator="›">
   <a href="/">Home</a>
   <span>Settings</span>
 </a11y-breadcrumbs>
 
 <!-- Collapsible -->
-<a11y-breadcrumbs max-items="3">
+<compa11y-breadcrumbs max-items="3">
   <a href="/">Home</a>
   <a href="/cat">Category</a>
   <a href="/cat/sub">Subcategory</a>
@@ -2680,6 +3498,1767 @@ Anchors a descriptive tooltip to a slotted trigger element. Automatically sets `
 | `--compa11y-tooltip-font-size` | `0.8125rem` | Font size |
 | `--compa11y-tooltip-max-width` | `280px` | Max width |
 | `--compa11y-tooltip-shadow` | `0 2px 8px rgba(0,0,0,.2)` | Box shadow |
+
+---
+
+### `<compa11y-drawer>`
+
+A panel that slides in from any edge of the viewport. Uses Shadow DOM with named slots for title, description, content, and actions.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="dialog"` + `aria-modal="true"`** | Set on the inner panel element |
+| **`aria-labelledby`** | Points to the shadow-DOM wrapper around the `title` slot |
+| **`aria-describedby`** | Points to the shadow-DOM wrapper around the `description` slot |
+| **Focus trap (Tab / Shift+Tab)** | Tab order cycles through all focusable elements inside the open drawer; wraps at both ends |
+| **Focus return** | Saves the previously focused element and restores it on close |
+| **Body scroll lock** | Prevents background scroll while drawer is open; uses a stacking counter so multiple overlays are safe |
+| **Screen reader announcements** | "Drawer opened" / "Drawer closed" announced politely on open/close |
+| **Drag to dismiss** | When `draggable` attribute is present, dragging the handle past 40 % of the panel closes the drawer; releasing earlier snaps it back |
+| **Trigger wiring** | `trigger` attribute accepts a CSS selector; the matched element gets a click listener that opens the drawer |
+| **Escape key** | Closes the drawer (disable with `close-on-escape="false"`) |
+| **Backdrop click** | Closes the drawer (disable with `close-on-outside-click="false"`) |
+| **Dev warnings** | Warns if no label-providing slot or `aria-label` attribute is found |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `Tab` / `Shift+Tab` | Cycle focus inside the drawer (wraps) |
+| `Escape` | Close the drawer and return focus to the trigger |
+
+#### Usage
+
+```html
+<!-- Basic right-side drawer -->
+<button id="open-drawer">Open Settings</button>
+<compa11y-drawer trigger="#open-drawer">
+  <h2 slot="title">Settings</h2>
+  <p slot="description">Adjust your preferences.</p>
+  <div>…content…</div>
+  <div slot="actions">
+    <button id="close-btn">Done</button>
+  </div>
+</compa11y-drawer>
+
+<!-- Bottom sheet with drag-to-dismiss -->
+<compa11y-drawer side="bottom" trigger="#share-btn" draggable>
+  <h2 slot="title">Share</h2>
+  <div>…</div>
+</compa11y-drawer>
+
+<!-- Programmatic control -->
+<compa11y-drawer id="my-drawer" side="left">
+  <h2 slot="title">Menu</h2>
+  <div>…</div>
+</compa11y-drawer>
+<script>
+  document.querySelector('#my-drawer').show();
+  // later…
+  document.querySelector('#my-drawer').close();
+</script>
+```
+
+**Events:** `compa11y-drawer-open`, `compa11y-drawer-close`
+
+**Methods:** `show()`, `close()`
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `open` | boolean attr | absent | Open/close state (reflects JS property) |
+| `side` | `string` | `right` | Edge to slide in from: `left`, `right`, `top`, `bottom` |
+| `trigger` | `string` | — | CSS selector for the external trigger element |
+| `draggable` | boolean attr | absent | Enable drag-to-dismiss on the handle |
+| `close-on-outside-click` | `string` | `true` | Set to `"false"` to prevent backdrop click from closing |
+| `close-on-escape` | `string` | `true` | Set to `"false"` to prevent Escape from closing |
+
+#### Slots
+
+| Slot | Description |
+|------|-------------|
+| `title` | Drawer heading — wired to `aria-labelledby` |
+| `description` | Optional subtitle — wired to `aria-describedby` |
+| `actions` | Footer action buttons |
+| *(default)* | Main body content |
+
+#### CSS Parts
+
+`overlay` · `drawer` · `handle` · `title` · `description` · `content` · `actions`
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-drawer-width` | `400px` | Panel width (left / right drawers) |
+| `--compa11y-drawer-height` | `400px` | Panel height (top / bottom drawers) |
+| `--compa11y-drawer-bg` | `#fff` | Panel background color |
+| `--compa11y-drawer-overlay-bg` | `rgba(0,0,0,0.5)` | Backdrop color |
+| `--compa11y-drawer-z-index` | `9999` | Stacking order |
+| `--compa11y-drawer-padding` | `1.5rem` | Panel padding |
+| `--compa11y-drawer-shadow` | directional shadow | Box shadow (direction matches `side`) |
+| `--compa11y-drawer-border` | — | Optional border on the panel edge |
+
+---
+
+### `<compa11y-slider>`
+
+A single-thumb or range (two-thumb) slider with full keyboard support, pointer drag, and live region announcements.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`role="slider"`** | Applied to each thumb element |
+| **`aria-valuemin` / `aria-valuemax` / `aria-valuenow`** | Kept in sync with the current value after every change |
+| **`aria-orientation`** | Set to `"horizontal"` or `"vertical"` |
+| **`aria-disabled`** | Applied to thumbs when `disabled` attribute is present |
+| **`aria-label`** | Each thumb receives its own label. In range mode, falls back to `"{label} minimum"` / `"{label} maximum"` |
+| **Live region** | A `role="status" aria-live="polite"` region announces the new value after every change; always in the DOM |
+| **Focus ring** | Applied via inline style on focus; CSS `forced-colors` media query ensures visibility in high-contrast mode |
+| **Keyboard navigation** | See keyboard table below |
+| **Pointer drag** | `setPointerCapture` keeps drag active when the pointer leaves the thumb; works with mouse and touch |
+| **Track click** | Clicking the track sets value (range mode: moves the nearest thumb) |
+| **Dev warnings** | Errors if no accessible label; warns if range mode is missing `min-thumb-label` / `max-thumb-label` |
+
+#### Keyboard interactions
+
+| Key | Action |
+|-----|--------|
+| `→` / `↑` | Increase value by one `step` |
+| `←` / `↓` | Decrease value by one `step` |
+| `Home` | Set to minimum value |
+| `End` | Set to maximum value |
+| `Page Up` | Increase by `large-step` |
+| `Page Down` | Decrease by `large-step` |
+
+#### Usage
+
+```html
+<!-- Single thumb -->
+<compa11y-slider label="Volume" value="50" min="0" max="100"></compa11y-slider>
+
+<!-- Discrete steps -->
+<compa11y-slider label="Fan speed" value="2" min="1" max="5" step="1"></compa11y-slider>
+
+<!-- Range -->
+<compa11y-slider
+  label="Price range"
+  range
+  min-value="20"
+  max-value="80"
+  min-thumb-label="Minimum price"
+  max-thumb-label="Maximum price"
+></compa11y-slider>
+
+<!-- Vertical -->
+<compa11y-slider label="Level" orientation="vertical" value="40"></compa11y-slider>
+
+<!-- Disabled -->
+<compa11y-slider label="Brightness" value="70" disabled></compa11y-slider>
+```
+
+**Events:**
+- `compa11y-slider-change` — detail: `{ value: number }` (single-thumb)
+- `compa11y-slider-range-change` — detail: `{ minValue: number, maxValue: number }` (range)
+
+```js
+document.querySelector('compa11y-slider').addEventListener('compa11y-slider-change', (e) => {
+  console.log(e.detail.value);
+});
+```
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `label` | `string` | — | Visible label and base for thumb `aria-label` |
+| `aria-label` | `string` | — | Hidden label on the thumb |
+| `aria-labelledby` | `string` | — | ID of external label element |
+| `value` | `number` | `50` | Current value (single-thumb mode) |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Arrow-key step size |
+| `large-step` | `number` | `10 % of range` | Page Up / Page Down step |
+| `disabled` | boolean attr | absent | Disable all interaction |
+| `range` | boolean attr | absent | Enable two-thumb range mode |
+| `min-value` | `number` | `min` | Lower thumb value (range mode) |
+| `max-value` | `number` | `max` | Upper thumb value (range mode) |
+| `min-thumb-label` | `string` | `"{label} minimum"` | `aria-label` for the lower thumb |
+| `max-thumb-label` | `string` | `"{label} maximum"` | `aria-label` for the upper thumb |
+| `orientation` | `string` | `horizontal` | `horizontal` or `vertical` |
+
+#### CSS Parts
+
+`root` · `label` · `track` · `fill` · `thumb` · `thumb-0` · `thumb-1`
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-slider-track-bg` | `#e2e8f0` | Track background |
+| `--compa11y-slider-track-size` | `4px` | Track thickness |
+| `--compa11y-slider-fill-bg` | `#0066cc` | Filled range color |
+| `--compa11y-slider-thumb-size` | `20px` | Thumb diameter |
+| `--compa11y-slider-thumb-bg` | `#fff` | Thumb background |
+| `--compa11y-slider-thumb-border` | `#0066cc` | Thumb border color |
+| `--compa11y-focus-color` | `#0066cc` | Focus ring color |
+
+---
+
+### `<compa11y-progress-bar>`
+
+Accessible progress bar web component. Communicates task progress to all users. Supports determinate and indeterminate modes.
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`role="progressbar"`** | Applied to the inner track element |
+| **`aria-labelledby`** | Points to the visible `label` text |
+| **`aria-valuemin` / `aria-valuemax` / `aria-valuenow`** | Set in determinate mode; omitted in indeterminate mode |
+| **Milestone announcements** | `announcePolite()` fired when `value` crosses any threshold in `milestones`; emits `compa11y-progress-milestone` event |
+| **Status announcements** | `"complete"` → `announcePolite`; `"error"` → `announceAssertive`; events `compa11y-progress-complete` / `compa11y-progress-error` |
+| **Indeterminate animation** | CSS keyframe in shadow DOM; paused under `prefers-reduced-motion` |
+| **`forced-colors`** | Track/fill use `ButtonFace` / `Highlight` system colors |
+| **Dev warnings** | Error if `label` attribute is missing |
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | — | **Required.** Visible label and accessible name |
+| `value` | `number` | absent | Current value; absent = indeterminate |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `show-value` | boolean / `"false"` | auto | Show percentage text; defaults true when determinate |
+| `status` | `active\|complete\|error` | `active` | Status of the operation |
+| `status-text` | `string` | — | Visible message below the track |
+| `milestones` | `string` | — | Comma-separated thresholds, e.g. `"25,50,75,100"` |
+| `announce-label` | `string` | `label` | Override label used in announcements |
+
+#### Events
+
+- `compa11y-progress-milestone` — detail: `{ milestone, value, percent }`
+- `compa11y-progress-complete` — detail: `{ label }`
+- `compa11y-progress-error` — detail: `{ label }`
+
+#### Usage
+
+```html
+<!-- Determinate -->
+<compa11y-progress-bar
+  label="Uploading invoice PDF"
+  value="65"
+  milestones="25,50,75,100"
+  status-text="Uploading 3 of 10 files…"
+></compa11y-progress-bar>
+
+<!-- Indeterminate -->
+<compa11y-progress-bar
+  label="Loading reports"
+  status-text="Fetching data from server…"
+></compa11y-progress-bar>
+
+<!-- Complete -->
+<compa11y-progress-bar
+  label="Video export"
+  value="100"
+  status="complete"
+  status-text="Export ready"
+></compa11y-progress-bar>
+```
+
+```js
+// Programmatic update
+const bar = document.querySelector('compa11y-progress-bar');
+bar.value = 75;
+bar.setAttribute('status-text', 'Almost done…');
+
+bar.addEventListener('compa11y-progress-milestone', (e) => {
+  console.log('Milestone reached:', e.detail.percent + '%');
+});
+```
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-progress-bar-track-bg` | `#e2e8f0` | Track background |
+| `--compa11y-progress-bar-track-size` | `8px` | Track height |
+| `--compa11y-progress-bar-fill-bg` | `#0066cc` | Determinate fill |
+| `--compa11y-progress-bar-fill-bg-complete` | `#22c55e` | Complete fill |
+| `--compa11y-progress-bar-fill-bg-error` | `#ef4444` | Error fill |
+| `--compa11y-progress-bar-label-color` | inherit | Label text color |
+| `--compa11y-progress-bar-value-color` | `#555` | Value text color |
+| `--compa11y-progress-bar-status-color` | `#555` | Status text color |
+| `--compa11y-progress-bar-error-color` | `#ef4444` | Error status text |
+
+---
+
+### `<compa11y-skeleton>`
+
+Accessible skeleton web component. Purely decorative — hidden from assistive technology. The surrounding container communicates loading state.
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`aria-hidden="true"`** | Applied to all inner shadow DOM content |
+| **Not focusable** | No interactive content, no tabindex |
+| **Shimmer animation** | CSS keyframe; replaced by opacity fade under `prefers-reduced-motion` |
+| **High Contrast mode** | Shimmer hidden; border applied via `forced-colors` query |
+| **Variants** | `text` · `circular` · `rectangular` |
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `text\|circular\|rectangular` | `rectangular` | Shape of the placeholder |
+| `width` | `string` | `100%` (circular: `40px`) | CSS width |
+| `height` | `string` | `20px` (text: `1em`, circular: `40px`) | CSS height |
+| `animated` | boolean / `"false"` | `true` | Enable shimmer animation |
+
+#### Usage
+
+```html
+<!-- Basic shapes -->
+<compa11y-skeleton variant="text" width="80%"></compa11y-skeleton>
+<compa11y-skeleton variant="circular" width="48px" height="48px"></compa11y-skeleton>
+<compa11y-skeleton variant="rectangular" height="200px"></compa11y-skeleton>
+
+<!-- Card skeleton — container owns the a11y -->
+<section aria-label="Loading article" aria-busy="true">
+  <div aria-hidden="true">
+    <compa11y-skeleton variant="rectangular" height="180px"></compa11y-skeleton>
+    <compa11y-skeleton variant="text" width="55%"></compa11y-skeleton>
+    <compa11y-skeleton variant="text"></compa11y-skeleton>
+  </div>
+</section>
+```
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-skeleton-bg` | `#e2e8f0` | Skeleton fill color |
+| `--compa11y-skeleton-shimmer-color` | `rgba(255,255,255,0.6)` | Shimmer highlight |
+| `--compa11y-skeleton-radius` | `6px` / `4px` for text | Border radius |
+
+---
+
+### `<compa11y-number-field>`
+
+Accessible numeric input web component. Mirrors the React `NumberField` — same keyboard model, same spinbutton semantics, same validation behaviour.
+
+#### What the library handles
+
+| Feature | Details |
+|---|---|
+| **`role="spinbutton"`** | Set on the inner `<input>` |
+| **`aria-valuenow/min/max`** | Kept in sync with the current committed value |
+| **`aria-invalid`** | Set on validation error |
+| **`aria-describedby`** | Links `hint` and `error` to the input |
+| **`aria-required`** | Set when `required` attribute is present |
+| **Keyboard navigation** | Arrow Up/Down step · Page Up/Down large step · Home/End min/max · Enter commit |
+| **Commit on blur** | Parses, validates, snaps to step, commits value |
+| **Stepper buttons** | When `show-steppers` present: −/+ buttons, 44×44 px minimum, auto-disabled at bounds |
+| **Validation errors** | Announced assertively via `aria-live="assertive"` region |
+| **`inputMode`** | `"numeric"` for integer steps, `"decimal"` for fractional |
+| **High Contrast** | Borders use system `ButtonText` / `FieldText` tokens |
+| **Reduced motion** | All transitions removed |
+| **Dev warnings** | Missing label, `min ≥ max` |
+
+#### Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | — | **Required** (or `aria-label`/`aria-labelledby`). Visible label text |
+| `hint` | `string` | — | Description linked via `aria-describedby` |
+| `error` | `string` | — | External error message — takes priority over internal validation |
+| `value` | `string` (number) | — | Current value |
+| `min` | `string` (number) | — | Minimum allowed value |
+| `max` | `string` (number) | — | Maximum allowed value |
+| `step` | `string` (number) | `1` | Arrow-key / stepper increment |
+| `large-step` | `string` (number) | `step × 10` | Page Up / Down increment |
+| `show-steppers` | boolean | `false` | Show −/+ stepper buttons |
+| `disabled` | boolean | `false` | Disable all interaction |
+| `readonly` | boolean | `false` | Make field read-only |
+| `required` | boolean | `false` | Mark field as required |
+| `placeholder` | `string` | — | Input placeholder |
+| `name` | `string` | — | Name for form submission |
+| `aria-label` | `string` | — | Accessible name (no visible label) |
+| `aria-labelledby` | `string` | — | ID of external labelling element |
+
+#### Events
+
+| Event | `detail` | When |
+|---|---|---|
+| `compa11y-number-field-change` | `{ value: number \| undefined }` | Value committed (blur or Enter) |
+| `compa11y-number-field-input` | `{ rawValue: string }` | Each keystroke |
+
+#### Usage
+
+```html
+<compa11y-number-field
+  label="Quantity"
+  value="1"
+  min="1"
+  max="99"
+  step="1"
+  show-steppers
+  hint="Maximum 99 units per order."
+></compa11y-number-field>
+```
+
+```js
+document.querySelector('compa11y-number-field')
+  .addEventListener('compa11y-number-field-change', (e) => {
+    console.log(e.detail.value); // number | undefined
+  });
+```
+
+---
+
+### SearchField
+
+**Type:** 2 — Stateful
+
+**Component:** `<SearchField>` / `<compa11y-search-field>`
+
+An accessible search input that supports **both** submit-on-Enter and live filter-as-you-type patterns simultaneously. The input is wrapped in a `<form role="search">` landmark, provides a keyboard-accessible clear button, and announces result count changes to screen readers via a polite live region (debounced 300 ms to avoid per-keystroke spam).
+
+#### Accessibility design decisions
+
+**Search landmark** — The `<form role="search">` wrapper lets screen reader users navigate directly to the search area using landmark shortcuts (F6, Ctrl+F8 in JAWS, etc.).
+
+**`type="search"`** — Signals to mobile browsers to show a search-optimised keyboard. The browser's native ❌ cancel button is suppressed via `appearance: none` so only the custom accessible clear button is shown.
+
+**Results count announcements** — When `resultsCount` changes, the component announces "N results" / "1 result" / "No results" via `announcePolite()`. The announcement is debounced 300 ms so rapid keystrokes produce a single announcement, not a stream of them.
+
+**Clear button** — Only rendered when there is text and the field is not disabled. After clearing, focus is programmatically returned to the input (WCAG 2.4.3 Focus Order).
+
+**Loading state** — `isLoading` triggers `useAnnounceLoading`, which announces "Searching…" when loading starts and "Search complete" when it ends.
+
+**Label** — A real `<label htmlFor>` is generated from the `label` prop. Placeholder text is never used as the only label.
+
+#### API
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `label` | `string` | — | Visible label (required unless `aria-label` or `aria-labelledby` provided) |
+| `aria-label` | `string` | — | Hidden accessible name when no visible label |
+| `aria-labelledby` | `string` | — | ID of external labelling element |
+| `value` | `string` | — | Controlled value |
+| `defaultValue` | `string` | `''` | Uncontrolled initial value |
+| `onChange` | `(value: string) => void` | — | Called on every keystroke |
+| `onSubmit` | `(value: string) => void` | — | Called on Enter or Search button click |
+| `onClear` | `() => void` | — | Called when field is cleared |
+| `clearLabel` | `string` | `'Clear search'` | Accessible label for the clear button |
+| `showSearchButton` | `boolean` | `false` | Render a visible Search submit button |
+| `searchButtonLabel` | `string` | `'Search'` | Label for the submit button |
+| `resultsCount` | `number` | — | Current results count; triggers SR announcement when it changes |
+| `resultsLabel` | `string` | — | Custom announcement string (replaces auto "N results") |
+| `isLoading` | `boolean` | `false` | Shows spinner; announces loading/complete to SR |
+| `disabled` | `boolean` | `false` | Disables the entire field |
+| `placeholder` | `string` | — | Placeholder text (not used as label) |
+| `hint` | `ReactNode` | — | Helper text linked via `aria-describedby` |
+| `error` | `ReactNode` | — | Error message; sets `aria-invalid="true"` |
+| `autoFocus` | `boolean` | — | Focus input on mount |
+| `maxLength` | `number` | — | Maximum character length |
+| `name` | `string` | — | Input name for form submission |
+| `style` | `CSSProperties` | — | Inline styles on the root wrapper |
+| `className` | `string` | — | CSS class on the root wrapper |
+| `unstyled` | `boolean` | `false` | Strip all built-in styles |
+
+#### Keyboard behaviour
+
+| Key | Action |
+|---|---|
+| `Enter` | Calls `onSubmit` |
+| `Tab` | Moves to clear button (if visible), then submit button |
+| `Enter` / `Space` on clear button | Clears field and returns focus to input |
+| `Enter` / `Space` on submit button | Triggers form submit |
+
+#### React usage
+
+```tsx
+import { SearchField } from '@compa11y/react';
+
+// Filter-as-you-type
+<SearchField
+  label="Search fruits"
+  value={query}
+  onChange={setQuery}
+  resultsCount={filtered.length}
+/>
+
+// Submit pattern
+<SearchField
+  label="Search products"
+  value={query}
+  onChange={setQuery}
+  onSubmit={runSearch}
+  isLoading={isLoading}
+  showSearchButton
+/>
+
+// Both patterns simultaneously
+<SearchField
+  label="Search"
+  value={query}
+  onChange={setQuery}
+  onSubmit={runSearch}
+  resultsCount={results.length}
+  isLoading={isLoading}
+  hint="Press Enter or click Search."
+/>
+```
+
+#### CSS custom properties
+
+```css
+compa11y-search-field {
+  --compa11y-search-field-bg: white;
+  --compa11y-search-field-border: 1px solid #ccc;
+  --compa11y-search-field-border-focus: #0066cc;
+  --compa11y-search-field-border-error: #ef4444;
+  --compa11y-search-field-radius: 4px;
+  --compa11y-search-field-disabled-bg: #f5f5f5;
+  --compa11y-search-field-label-color: inherit;
+  --compa11y-search-field-label-size: 0.875rem;
+  --compa11y-search-field-label-weight: 500;
+  --compa11y-search-field-font-size: 0.875rem;
+  --compa11y-search-field-hint-color: #666;
+  --compa11y-search-field-error-color: #ef4444;
+  --compa11y-search-field-icon-color: #777;
+  --compa11y-search-field-clear-color: #777;
+  --compa11y-search-field-btn-bg: #0066cc;
+  --compa11y-search-field-btn-color: white;
+  --compa11y-focus-color: #0066cc;
+}
+```
+
+#### Web Component usage
+
+```html
+<!-- Filter-as-you-type -->
+<compa11y-search-field
+  id="sf"
+  label="Search fruits"
+  placeholder="e.g. berry"
+></compa11y-search-field>
+
+<!-- Submit pattern -->
+<compa11y-search-field
+  label="Search products"
+  hint="Press Enter or click Search."
+  show-search-button
+></compa11y-search-field>
+```
+
+```js
+const sf = document.getElementById('sf');
+
+// Fires on every keystroke
+sf.addEventListener('compa11y-search-field-change', (e) => {
+  const filtered = items.filter(i => i.includes(e.detail.value));
+  sf.setAttribute('results-count', String(filtered.length));
+});
+
+// Fires on Enter / Search button
+sf.addEventListener('compa11y-search-field-submit', (e) => {
+  console.log('Search:', e.detail.value);
+  sf.setAttribute('is-loading', '');
+  fetch('/search?q=' + encodeURIComponent(e.detail.value))
+    .then(() => sf.removeAttribute('is-loading'));
+});
+
+// Fires when cleared
+sf.addEventListener('compa11y-search-field-clear', () => {
+  console.log('Cleared');
+});
+```
+
+#### SearchField vs Combobox
+
+| Use SearchField | Use Combobox |
+|---|---|
+| Results are elsewhere on the page / fetched separately | Suggestions appear in an inline dropdown as you type |
+| Simple text input + submit or live filter | Arrow keys navigate a popup listbox |
+| No inline suggestion selection | User selects a suggestion to populate the field |
+
+---
+
+### ErrorSummary
+
+**Type:** 2 — Stateful (focus management)
+
+**Component:** `<ErrorSummary>` / `<compa11y-error-summary>`
+
+An accessible error summary that displays a list of validation or system errors with navigation links to the relevant form fields. Two variants serve different use cases:
+
+- **Form variant** (default) — Appears at the top of a form after a failed submission. Auto-focuses the container so screen readers announce it immediately. Each error links to its corresponding field.
+- **Page variant** — For system/page-level errors (save failed, network error). Uses `role="alert"` for assertive screen reader announcement. Supports action buttons (Retry, Dismiss).
+
+#### Accessibility design decisions
+
+**Form variant — no `role="alert"`** — When `autoFocus` is enabled (the default for form variant), the container receives programmatic focus via `tabIndex={-1}`. Screen readers announce the focused element's content, so adding `role="alert"` would cause double-announcement (once from focus, once from the live region). The component relies solely on focus for announcement, following the GOV.UK Error Summary pattern.
+
+**Page variant — `role="alert"`** — Page-level errors may appear asynchronously (e.g., after a failed API call) when the user's focus is elsewhere. `role="alert"` (assertive) ensures the error is announced immediately regardless of focus position.
+
+**Error links** — Each error with a `fieldId` renders as `<a href="#fieldId">`. The click handler calls `preventDefault()` + `document.getElementById(fieldId).focus()`, which explicitly moves keyboard focus to the target field. Native hash navigation scrolls but does not guarantee focus.
+
+**Real heading** — The title uses a real `<h2>` (configurable via `headingLevel`) so screen reader users can navigate to it via heading shortcuts.
+
+**Touch targets** — All interactive elements (error links, dismiss button) maintain a minimum 44×44px touch target per WCAG 2.5.5.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`tabIndex={-1}`** | Set on the container for programmatic focus (form variant) |
+| **`role="alert"`** | Set on the container for page variant (assertive announcement) |
+| **`role="status"`** | Set when `announce="polite"` |
+| **`aria-labelledby`** | Points to the heading element (auto-generated ID) |
+| **`aria-label`** | Forwarded if provided; overrides `aria-labelledby` |
+| **Auto-focus** | Focuses the container on mount (form variant default) |
+| **Error links** | `<a href="#fieldId">` with click handler that focuses the target field |
+| **Dismiss button** | `aria-label="Dismiss error summary"` |
+| **Heading level** | Configurable 1–6 (default: 2) |
+| **Dev warnings** | Warns when errors array is empty, or form errors are missing `fieldId` |
+
+#### API
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `title` | `string` | `'There is a problem'` | Heading text |
+| `description` | `string` | — | Supporting text below the heading |
+| `errors` | `ErrorSummaryError[]` | — | **Required.** Array of `{ message, fieldId? }` |
+| `variant` | `'form' \| 'page'` | `'form'` | Determines a11y behavior |
+| `headingLevel` | `1–6` | `2` | Heading level for the title |
+| `autoFocus` | `boolean` | `true` (form) / `false` (page) | Focus the summary on mount |
+| `announce` | `'off' \| 'polite' \| 'assertive'` | `'off'` (form) / `'assertive'` (page) | Live region behavior |
+| `actions` | `ReactNode` | — | Action buttons (Retry, Dismiss, etc.) |
+| `onDismiss` | `() => void` | — | Renders a dismiss button; called on click |
+| `ariaLabel` | `string` | — | Custom accessible name |
+| `unstyled` | `boolean` | `false` | Strip default inline styles |
+
+#### Usage — React
+
+```tsx
+// Form validation (auto-focuses, links to fields)
+<ErrorSummary
+  title="There are 3 problems with your submission"
+  errors={[
+    { message: 'Enter your first name', fieldId: 'first-name' },
+    { message: 'Enter a valid email address', fieldId: 'email' },
+    { message: 'Accept the terms and conditions', fieldId: 'terms' },
+  ]}
+/>
+
+// Page/system error (role="alert", actions)
+<ErrorSummary
+  variant="page"
+  title="Something went wrong"
+  description="We could not save your changes."
+  errors={[{ message: 'Server error: connection timed out' }]}
+  actions={<Button onClick={handleRetry}>Retry</Button>}
+  onDismiss={() => setVisible(false)}
+/>
+```
+
+#### `<compa11y-error-summary>`
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `title` | `string` | `'There is a problem'` | Heading text |
+| `description` | `string` | — | Supporting paragraph text |
+| `variant` | `'form' \| 'page'` | `'form'` | Determines a11y behavior |
+| `heading-level` | `number` | `2` | Heading level 1–6 |
+| `auto-focus` | `boolean` | `true` (form) / `false` (page) | Focus on connect |
+| `announce` | `'off' \| 'polite' \| 'assertive'` | `'off'` (form) / `'assertive'` (page) | Live region mode |
+| `errors` | `string` (JSON) | — | JSON array of `{ message, fieldId? }` |
+| `dismissible` | `boolean` | `false` | Show dismiss button |
+
+| Slot | Description |
+|---|---|
+| `actions` | Action buttons (Retry, Dismiss, etc.) |
+
+| Event | Detail | Description |
+|---|---|---|
+| `compa11y-error-summary-dismiss` | — | Dismiss button clicked |
+| `compa11y-error-summary-link-click` | `{ fieldId, message }` | Error link clicked |
+
+| JS Property | Type | Description |
+|---|---|---|
+| `errorsData` | `{ message: string, fieldId?: string }[]` | Get/set errors programmatically |
+
+#### Usage — Web Component
+
+```html
+<!-- Form validation -->
+<compa11y-error-summary
+  title="There are 2 problems"
+  errors='[{"message":"Enter your name","fieldId":"name"},{"message":"Enter your email","fieldId":"email"}]'
+></compa11y-error-summary>
+
+<!-- Page/system error with actions -->
+<compa11y-error-summary
+  variant="page"
+  title="Something went wrong"
+  description="We could not save your changes."
+  errors='[{"message":"Server error: connection timed out"}]'
+  dismissible
+>
+  <div slot="actions">
+    <button>Retry</button>
+  </div>
+</compa11y-error-summary>
+```
+
+#### CSS custom properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-error-summary-bg` | `white` | Background color |
+| `--compa11y-error-summary-border` | `1px solid #e0e0e0` | Border |
+| `--compa11y-error-summary-accent-color` | `#ef4444` | Left border accent |
+| `--compa11y-error-summary-radius` | `6px` | Border radius |
+| `--compa11y-error-summary-padding` | `1rem 1.25rem` | Padding |
+| `--compa11y-error-summary-title-size` | `1.125rem` | Title font size |
+| `--compa11y-error-summary-title-weight` | `600` | Title font weight |
+| `--compa11y-error-summary-title-color` | `inherit` | Title color |
+| `--compa11y-error-summary-link-color` | `#ef4444` | Error link color |
+| `--compa11y-error-summary-link-hover-color` | `#dc2626` | Error link hover color |
+| `--compa11y-error-summary-dismiss-color` | `#999` | Dismiss button color |
+| `--compa11y-focus-color` | `#0066cc` | Focus outline color (shared) |
+
+---
+
+### Stepper
+
+**Type:** 2 — Stateful (dual-mode: progress indicator + step navigation)
+
+**Component:** `<Stepper>` / `<compa11y-stepper>`
+
+An accessible stepper / progress-steps component that supports two explicit modes:
+
+- **Progress mode** (`mode="progress"`) — Non-interactive indicator. Steps are rendered as plain text inside `<ol><li>`. Answers "Where am I in the flow?" without any clickable elements.
+- **Navigation mode** (`mode="navigation"`) — Interactive. Steps are `<button>` elements that users can click to jump between steps. Supports gating via `locked` state.
+
+#### Accessibility design decisions
+
+**Two modes, not one** — Progress indicators and step navigation have fundamentally different a11y expectations. A progress indicator is content (no keyboard interaction); a step navigator is a set of controls. The `mode` prop makes this explicit rather than letting consumers accidentally ship interactive-looking steps that aren't keyboard accessible.
+
+**`<nav>` + `<ol>` baseline** — Both modes wrap steps in a `<nav aria-label>` landmark containing an ordered list. Screen reader users can jump to it via landmark navigation and understand the step sequence from the list semantics.
+
+**`aria-current="step"`** — The current step is marked with `aria-current="step"` (not `aria-selected`, which implies a different widget contract). This works in both modes.
+
+**Plain text in progress mode** — Steps are `<span>` text, not disabled buttons. Disabled buttons are still "controls" conceptually and confuse screen reader users when there's no intention for interaction.
+
+**`<button>` in navigation mode** — Steps that change in-page content use `<button>`, not `<div>` with click handlers. This provides native keyboard support (Tab + Enter/Space) and correct screen reader announcements.
+
+**Locked steps use native `disabled`** — Rather than `aria-disabled` on a `<button>`, which still receives focus, locked steps use the native `disabled` attribute to remove them from the tab order entirely.
+
+**SR-only state suffixes** — Each step includes a visually hidden suffix like "(completed)", "(current step)", "(error)", "(locked)" so screen reader users don't rely on color/icons alone.
+
+**No roving tabindex** — Steps use standard Tab navigation, not arrow keys. Per the spec, roving tabindex is for widgets like tablists, menus, and radio groups. A stepper is a flat set of buttons/links — Tab is the correct model.
+
+**Live region announcements** — Step changes are announced via a pre-mounted `role="status"` live region ("Step 2 of 5: Payment"). The region is always in the DOM; only its text content changes.
+
+#### What the library handles
+
+| Feature | Details |
+|---------|---------|
+| **`<nav aria-label>`** | Landmark wrapper with required label |
+| **`<ol>` list** | Ordered list conveys step sequence |
+| **`aria-current="step"`** | Set on the current step |
+| **`disabled`** | Set on locked steps (navigation mode) |
+| **SR-only state text** | "(completed)", "(current step)", "(error)", "(locked)" |
+| **Live region** | Pre-mounted, announces step transitions |
+| **Controlled + uncontrolled** | `currentStepId` + `defaultStepId` |
+| **Orientation** | `horizontal` (default) / `vertical` |
+| **Step count** | Optional "Step X of Y" display |
+| **Dev warnings** | Missing `ariaLabel`, empty steps, invalid `currentStepId`, duplicate IDs |
+
+#### Step states
+
+| State | Meaning | Navigation mode behavior |
+|-------|---------|--------------------------|
+| `upcoming` | Not yet reached | Clickable (unless gated by consumer logic) |
+| `current` | Active step | Marked with `aria-current="step"` |
+| `completed` | Previously finished | Clickable, shows checkmark |
+| `error` | Has validation problem | Clickable, shows error indicator |
+| `locked` | Cannot access | `disabled` button, removed from tab order |
+
+#### API
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `ariaLabel` | `string` | — | **Required.** Accessible name for the `<nav>` |
+| `mode` | `'progress' \| 'navigation'` | — | **Required.** Component behavior mode |
+| `steps` | `StepItem[]` | — | **Required.** Array of step objects |
+| `currentStepId` | `string` | — | Controlled current step |
+| `defaultStepId` | `string` | — | Uncontrolled initial step |
+| `onStepSelect` | `(stepId: string) => void` | — | Called when a step is clicked (navigation mode) |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Layout direction |
+| `showStepCount` | `boolean` | `false` | Show "Step X of Y" text |
+| `renderIcon` | `(step, index) => ReactNode` | — | Custom icon renderer (wrapped `aria-hidden`) |
+| `getA11yLabel` | `(step, index, total) => string` | — | Custom SR label override |
+| `disabled` | `boolean` | `false` | Disable all steps (navigation mode) |
+| `unstyled` | `boolean` | `false` | Strip default inline styles |
+
+#### Usage — React
+
+```tsx
+import { Stepper, type StepItem } from '@compa11y/react';
+
+// Progress indicator (read-only)
+const steps: StepItem[] = [
+  { id: 'shipping', label: 'Shipping', state: 'completed' },
+  { id: 'payment', label: 'Payment' },
+  { id: 'review', label: 'Review' },
+];
+
+<Stepper
+  ariaLabel="Checkout progress"
+  mode="progress"
+  steps={steps}
+  currentStepId="payment"
+  showStepCount
+/>
+
+// Interactive navigation
+<Stepper
+  ariaLabel="Checkout steps"
+  mode="navigation"
+  steps={[
+    { id: 'shipping', label: 'Shipping', state: 'completed' },
+    { id: 'payment', label: 'Payment', description: 'Enter details' },
+    { id: 'review', label: 'Review', state: 'upcoming' },
+    { id: 'confirm', label: 'Confirm', state: 'locked' },
+  ]}
+  currentStepId={currentStep}
+  onStepSelect={(id) => setCurrentStep(id)}
+/>
+
+// Vertical with error state
+<Stepper
+  ariaLabel="Profile setup"
+  mode="navigation"
+  steps={[
+    { id: 'account', label: 'Account', state: 'completed' },
+    { id: 'profile', label: 'Profile', state: 'error' },
+    { id: 'settings', label: 'Settings' },
+  ]}
+  currentStepId="profile"
+  orientation="vertical"
+  onStepSelect={handleStep}
+/>
+```
+
+#### Usage — Web Component
+
+```html
+<!-- Progress indicator -->
+<compa11y-stepper
+  aria-label="Checkout progress"
+  mode="progress"
+  current-step="payment"
+  show-step-count
+  steps='[
+    {"id":"shipping","label":"Shipping","state":"completed"},
+    {"id":"payment","label":"Payment"},
+    {"id":"review","label":"Review"}
+  ]'
+></compa11y-stepper>
+
+<!-- Interactive navigation -->
+<compa11y-stepper
+  id="checkout-steps"
+  aria-label="Checkout steps"
+  mode="navigation"
+  current-step="payment"
+  steps='[
+    {"id":"shipping","label":"Shipping","state":"completed"},
+    {"id":"payment","label":"Payment"},
+    {"id":"confirm","label":"Confirm","state":"locked"}
+  ]'
+></compa11y-stepper>
+
+<script>
+  document.getElementById('checkout-steps')
+    .addEventListener('compa11y-stepper-select', (e) => {
+      e.target.setAttribute('current-step', e.detail.stepId);
+    });
+</script>
+```
+
+#### Web Component attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `aria-label` | `string` | Accessible name for the nav landmark |
+| `mode` | `'progress' \| 'navigation'` | Component behavior mode |
+| `steps` | JSON string | Array of step objects |
+| `current-step` | `string` | Current step ID |
+| `orientation` | `'horizontal' \| 'vertical'` | Layout direction |
+| `disabled` | boolean attr | Disable all steps |
+| `show-step-count` | boolean attr | Show "Step X of Y" |
+
+#### Web Component events
+
+| Event | Detail | Description |
+|-------|--------|-------------|
+| `compa11y-stepper-select` | `{ stepId: string }` | Fired when a step is clicked (navigation mode) |
+
+#### CSS custom properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--compa11y-stepper-indicator-size` | `32px` | Step circle size |
+| `--compa11y-stepper-indicator-bg-upcoming` | `#e2e8f0` | Upcoming step background |
+| `--compa11y-stepper-indicator-bg-current` | `#0066cc` | Current step background |
+| `--compa11y-stepper-indicator-bg-completed` | `#22c55e` | Completed step background |
+| `--compa11y-stepper-indicator-bg-error` | `#ef4444` | Error step background |
+| `--compa11y-stepper-indicator-bg-locked` | `#94a3b8` | Locked step background |
+| `--compa11y-stepper-indicator-border-current` | `#0066cc` | Current step border |
+| `--compa11y-stepper-connector-bg` | `#e2e8f0` | Connector line color |
+| `--compa11y-stepper-connector-bg-completed` | `#22c55e` | Completed connector color |
+| `--compa11y-stepper-label-size` | `0.875rem` | Label font size |
+| `--compa11y-stepper-label-color-locked` | `#94a3b8` | Locked label color |
+| `--compa11y-stepper-label-color-error` | `#ef4444` | Error label color |
+| `--compa11y-stepper-description-size` | `0.75rem` | Description font size |
+| `--compa11y-stepper-description-color` | `#64748b` | Description color |
+| `--compa11y-stepper-btn-radius` | `8px` | Button border radius |
+| `--compa11y-stepper-btn-hover-bg` | `rgba(0,0,0,0.04)` | Button hover background |
+| `--compa11y-focus-color` | `#0066cc` | Focus outline color (shared) |
+
+---
+
+### TimePicker
+
+**Component:** `<TimePicker>` / `<compa11y-time-picker>`
+
+**Type:** Stateful (Type 2) — input + popup listbox (combobox pattern)
+
+**ARIA Pattern:** Combobox with listbox popup ([WAI-ARIA Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/))
+
+**Semantics:**
+
+| Element | Role / Attribute | Purpose |
+|---|---|---|
+| Text input | `role="combobox"`, `aria-expanded`, `aria-haspopup="listbox"`, `aria-autocomplete="list"` | Primary time entry field |
+| Input (active) | `aria-activedescendant` | Points to highlighted option |
+| Input (invalid) | `aria-invalid="true"`, `aria-describedby` → error | Links error message |
+| Trigger button | `aria-label="Choose time"`, `aria-expanded` | Opens/closes popup |
+| Clear button | `aria-label="Clear time"`, `tabIndex={-1}` | Clears current value |
+| Popup list | `role="listbox"`, `aria-labelledby` | Time suggestions |
+| Time option | `role="option"`, `aria-selected`, `aria-disabled` | Individual time choice |
+| Hint text | `id` linked via `aria-describedby` | Format guidance |
+| Error message | `role="alert"` | Validation feedback |
+
+**Keyboard:**
+
+| Key | Context | Action |
+|---|---|---|
+| `ArrowDown` | Input (closed) | Open popup, highlight first option |
+| `ArrowDown` | Input (open) | Move highlight to next non-disabled option |
+| `ArrowUp` | Input (closed) | Open popup, highlight last option |
+| `ArrowUp` | Input (open) | Move highlight to previous non-disabled option |
+| `Enter` | Input (open) | Select highlighted option |
+| `Enter` | Input (closed) | Commit typed value (parse + validate) |
+| `Escape` | Input (open) | Close popup (value unchanged) |
+| `Tab` | Input (open) | Close popup, move focus naturally |
+| `Home` | Input (open) | Highlight first non-disabled option |
+| `End` | Input (open) | Highlight last non-disabled option |
+| Free typing | Input | Filters time list; accepts formats: "2:30 PM", "14:30", "2pm", "2:30p" |
+
+**Focus Management:**
+- After selecting an option, focus returns to input
+- After clearing, focus returns to input
+- Trigger button opens popup and moves focus to input
+
+**Announcements:**
+- On popup open: "`N` times available" (polite)
+- On option select: "`time` selected" (polite)
+- Validation errors: `role="alert"` (assertive)
+
+**Validation:**
+- Format validation on blur/Enter (specific messages per `hourCycle`)
+- Range validation against `minTime`/`maxTime` with descriptive error
+- `aria-invalid="true"` set on input; error linked via `aria-describedby`
+
+**12h / 24h:**
+- `hourCycle={12}`: Accepts "2pm", "2:30 PM", "2:30p"; displays "H:MM AM/PM"
+- `hourCycle={24}`: Accepts "14:30", "9:05"; displays "HH:MM"
+- Hint text auto-generated: "Format: H:MM AM/PM" or "Format: HH:MM (24h)"
+
+**Dev Warnings:**
+- Missing accessible label (`label`, `aria-label`, or `aria-labelledby`)
+
+**CSS Custom Properties:**
+
+| Token | Default | Purpose |
+|---|---|---|
+| `--compa11y-time-picker-bg` | `#fff` | Input background |
+| `--compa11y-time-picker-border` | `#ccc` | Input/trigger border |
+| `--compa11y-time-picker-radius` | `4px` | Border radius |
+| `--compa11y-time-picker-font-size` | `1rem` | Input font size |
+| `--compa11y-time-picker-label-color` | `inherit` | Label text color |
+| `--compa11y-time-picker-label-size` | `0.875rem` | Label font size |
+| `--compa11y-time-picker-hint-color` | `#666` | Hint text color |
+| `--compa11y-time-picker-error-color` | `#d32f2f` | Error text color |
+| `--compa11y-time-picker-listbox-bg` | `#fff` | Popup background |
+| `--compa11y-time-picker-listbox-border` | `#ccc` | Popup border |
+| `--compa11y-time-picker-listbox-shadow` | `0 4px 12px rgba(0,0,0,0.15)` | Popup shadow |
+| `--compa11y-time-picker-option-highlight-bg` | `#e8f0fe` | Highlighted option background |
+| `--compa11y-time-picker-option-selected-bg` | `#f0f0f0` | Selected option background |
+| `--compa11y-focus-color` | `#2563eb` | Focus outline (shared) |
+
+---
+
+### DatePicker
+
+**Component:** `<DatePicker>` / `<compa11y-date-picker>`
+
+**Type:** Compound (Type 3) + Stateful (Type 2)
+
+**Modes:** Single date, date range, date-only, datetime (12h/24h), popover, modal
+
+**ARIA Pattern:** Dialog + Grid (calendar), Spinbutton (time fields)
+
+**Semantics:**
+- Text input with `inputmode="numeric"` for direct date entry
+- Trigger button: `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`
+- Calendar overlay: `role="dialog"`, `aria-modal` (true for modal, false for popover)
+- Day grid: `<table>` with `role="grid"`, `<th scope="col">` for weekday headers
+- Day buttons: `aria-label` with full date + state ("Saturday, March 7, 2026, today, selected")
+- Today: `aria-current="date"`
+- Selected (single): `aria-pressed="true"`
+- Range start/end: `aria-selected="true"` + SR-only "start date"/"end date"
+- Range days: SR-only "in selected range"
+- Disabled days: native `disabled` attribute
+- Time inputs: `inputmode="numeric"`, `aria-label="Hour"/"Minute"`
+- AM/PM: `role="group"` with `aria-label="AM/PM"`, buttons with `aria-pressed`
+- Range mode: `<fieldset>` + `<legend>` wrapping start/end inputs
+
+**Keyboard Contract:**
+| Key | Action |
+|---|---|
+| `Enter`/`Space` on trigger | Open calendar |
+| `ArrowLeft`/`ArrowRight` | Previous/next day |
+| `ArrowUp`/`ArrowDown` | Previous/next week |
+| `Home`/`End` | Start/end of week |
+| `PageUp`/`PageDown` | Previous/next month |
+| `Shift+PageUp`/`Shift+PageDown` | Previous/next year |
+| `Enter`/`Space` on day | Select focused day |
+| `Escape` | Close calendar, return focus to trigger |
+| `ArrowUp`/`ArrowDown` on time input | Increment/decrement hour/minute |
+| Arrow keys in month/year grid | Navigate cells |
+| `Enter`/`Space` in month/year | Select and return to day view |
+| `Escape` in month/year view | Return to day view |
+
+**Focus Management:**
+- On open: focus moves to selected date (or today if none)
+- Roving tabindex: one day button `tabIndex=0`, all others `-1`
+- Tab moves between calendar controls (nav buttons, time fields, actions)
+- Modal: focus trapped within dialog
+- On close: focus returns to trigger button
+- Disabled dates: skipped during arrow key navigation
+
+**Announcements:**
+- Month changes announced via live region
+- Date selection: "Date selected: [full date label]"
+- Range: "Range start: [date]" / "Range end: [date]"
+- Clear: "Selection cleared"
+- Calendar open/close announced politely
+
+**Standalone Sub-components:**
+- `<Calendar>` — usable independently with own label, mode, value
+- `<TimeField>` — usable independently with own label, hourCycle, AM/PM
+
+**Dev Warnings:**
+- Missing accessible label (no `label` or `aria-label`)
+- `minDate` after `maxDate`
+
+---
+
+### DataGrid
+
+**Component:** `<DataGrid>` / `<compa11y-data-grid>`
+**Type:** Type 3 (Compound) + Type 2 (Stateful) — dual mode: table (default) and ARIA grid
+**Pattern:** [WAI-ARIA Data Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/)
+
+#### When to use which mode
+
+| Use **table mode** (default) | Use **grid mode** |
+|---|---|
+| Content is mostly read-only | Need cell-level arrow-key navigation |
+| Interactions limited to sorting/selection/pagination | Support inline cell editing |
+| Best screen reader compat — native `<table>` semantics | Spreadsheet-like behavior required |
+
+#### Automatic ARIA
+
+| Feature | What's applied |
+|---|---|
+| **Table structure** | Native `<table>`, `<thead>`, `<tbody>`, `<th scope="col/row">`, `<td>` |
+| **Caption** | `<caption>` element for table mode; `aria-label` on grid wrapper for grid mode |
+| **Sorting** | `aria-sort="ascending\|descending\|none"` on `<th>`, sort button with accessible label |
+| **Selection** | `aria-selected` on `<tr>`, real `<input type="checkbox">` with `aria-label="Select {name}"` |
+| **Select all** | Checkbox with `aria-label="Select all rows"`, auto indeterminate state |
+| **Loading** | `aria-busy="true"` on table/grid while loading |
+| **Grid mode** | `role="grid"`, `role="row"`, `role="columnheader"`, `role="gridcell"` on grid wrapper |
+| **Grid row count** | `aria-rowcount` and `aria-colcount` on grid; `aria-rowindex` on paginated rows |
+| **Error state** | `role="alert"` on error cell |
+
+#### Keyboard
+
+**Table mode** — standard Tab navigation:
+
+| Key | Action |
+|---|---|
+| `Tab` | Moves between interactive elements: sort buttons, checkboxes, pagination buttons |
+
+**Grid mode** — arrow key cell navigation:
+
+| Key | Action |
+|---|---|
+| `Arrow keys` | Move focus cell-to-cell (up/down/left/right) |
+| `Home` / `End` | Jump to first/last cell in current row |
+| `Ctrl+Home` / `Ctrl+End` | Jump to first/last cell in entire grid |
+| `PageUp` / `PageDown` | Jump by page size rows |
+| `Enter` / `F2` | Enter edit mode on editable cell |
+| `Escape` | Cancel editing, return to cell navigation |
+| `Space` | Toggle row selection (when selectable) |
+
+#### Screen Reader Announcements
+
+| Event | Announcement |
+|---|---|
+| Sort column activated | `"{Column} sorted ascending"` / `"sort cleared"` |
+| Rows selected | `"3 rows selected"` / `"Selection cleared"` |
+| Select all | `"All 12 rows selected"` |
+| Page changed | `"Page 2 of 5"` |
+| Page size changed | `"Showing 25 rows per page"` |
+| Cell edited | `"Cell updated"` |
+| Loading starts | `"Loading data..."` |
+| Loading ends | `"Data loaded"` |
+
+#### Focus Management
+
+| Scenario | Behavior |
+|---|---|
+| Sort header clicked | Focus preserved on sort button across re-renders |
+| Grid cell click | Cell receives focus, becomes active for arrow navigation |
+| Enter edit mode | Input auto-focused inside cell |
+| Exit edit mode | Focus returns to the cell |
+
+#### Dev Warnings
+
+| Condition | Warning |
+|---|---|
+| No `caption`, `aria-label`, or `aria-labelledby` | `"DataGrid must have an accessible name..."` |
+| `selectable` but rows missing `id` field | `"Each row object must have an id field"` |
+| Editable columns without `onCellEdit` handler | Info: `"Columns are marked editable but no onCellEdit handler is provided"` |
+
+#### Usage (React)
+
+```tsx
+import { DataGrid, type DataGridColumnDef } from '@compa11y/react';
+
+interface Invoice {
+  id: string;
+  number: string;
+  client: string;
+  amount: string;
+}
+
+const columns: DataGridColumnDef<Invoice>[] = [
+  { id: 'number', header: 'Invoice #', accessor: 'number', sortable: true, rowHeader: true },
+  { id: 'client', header: 'Client', accessor: 'client', sortable: true },
+  { id: 'amount', header: 'Amount', accessor: 'amount', sortable: true, align: 'right' },
+];
+
+// Table mode (default) — native <table>
+<DataGrid
+  columns={columns}
+  rows={invoices}
+  caption="Invoices for March 2026"
+  selectable
+  selectedRows={selected}
+  onSelectionChange={setSelected}
+  sortKey={sortKey}
+  sortDirection={sortDir}
+  onSortChange={(key, dir) => { setSortKey(key); setSortDir(dir); }}
+  page={page}
+  pageSize={10}
+  onPageChange={setPage}
+  striped
+/>
+
+// Grid mode — ARIA grid with arrow key navigation
+<DataGrid
+  columns={columns.map(c => ({ ...c, editable: true }))}
+  rows={invoices}
+  caption="Editable invoices"
+  mode="grid"
+  onCellEdit={(rowId, colId, value) => handleEdit(rowId, colId, value)}
+/>
+```
+
+#### Usage (Web Component)
+
+```html
+<compa11y-data-grid
+  id="my-grid"
+  caption="Invoices"
+  selectable
+  page="1"
+  page-size="10"
+></compa11y-data-grid>
+
+<script>
+  const grid = document.querySelector('#my-grid');
+  grid.columns = [
+    { key: 'number', label: 'Invoice #', sortable: true, rowHeader: true },
+    { key: 'client', label: 'Client', sortable: true },
+  ];
+  grid.rows = [
+    { id: '1', number: 'INV-001', client: 'Acme Corp' },
+  ];
+
+  grid.addEventListener('compa11y-datagrid-sort', (e) => {
+    console.log(e.detail); // { sortKey, sortDirection }
+  });
+  grid.addEventListener('compa11y-datagrid-select', (e) => {
+    console.log(e.detail); // { selectedRows: string[] }
+  });
+  grid.addEventListener('compa11y-datagrid-page', (e) => {
+    console.log(e.detail); // { page }
+  });
+  grid.addEventListener('compa11y-datagrid-cell-edit', (e) => {
+    console.log(e.detail); // { rowId, columnId, value }
+  });
+</script>
+```
+
+#### Props (React)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `columns` | `DataGridColumnDef<T>[]` | — | Column definitions (required) |
+| `rows` | `T[]` | — | Row data with `id` field (required) |
+| `caption` | `string` | — | Accessible name (required) |
+| `captionHidden` | `boolean` | `false` | Visually hide caption |
+| `mode` | `'table' \| 'grid'` | `'table'` | Table or grid interaction mode |
+| `sortKey` | `string \| null` | — | Controlled sort column |
+| `sortDirection` | `SortDirection` | `'none'` | Controlled sort direction |
+| `onSortChange` | `(key, dir) => void` | — | Sort change handler |
+| `selectable` | `boolean` | `false` | Enable row selection checkboxes |
+| `selectedRows` | `string[]` | — | Controlled selected row IDs |
+| `defaultSelectedRows` | `string[]` | — | Default selected rows (uncontrolled) |
+| `onSelectionChange` | `(rows) => void` | — | Selection change handler |
+| `page` | `number` | — | Current page (enables pagination) |
+| `pageSize` | `number` | `10` | Rows per page |
+| `totalRows` | `number` | — | Total rows (server-side pagination) |
+| `onPageChange` | `(page) => void` | — | Page change handler |
+| `pageSizeOptions` | `number[]` | `[10,25,50,100]` | Page size options |
+| `onPageSizeChange` | `(size) => void` | — | Page size change handler |
+| `renderRowActions` | `(row) => ReactNode` | — | Row action buttons |
+| `isLoading` | `boolean` | `false` | Loading state |
+| `error` | `ReactNode` | — | Error content |
+| `emptyContent` | `ReactNode` | `"No results found"` | Empty state content |
+| `onCellEdit` | `(rowId, colId, val) => void` | — | Cell edit handler (grid mode) |
+| `toolbar` | `ReactNode` | — | Toolbar content (search, filters) |
+| `stickyHeader` | `boolean` | `false` | Sticky table header |
+| `striped` | `boolean` | `false` | Alternating row colors |
+| `bordered` | `boolean` | `false` | Cell borders |
+| `compact` | `boolean` | `false` | Compact row height |
+
+#### Attributes (Web Component)
+
+| Attribute | Type | Description |
+|---|---|---|
+| `caption` | `string` | Accessible name |
+| `mode` | `'table' \| 'grid'` | Interaction mode |
+| `selectable` | `boolean` | Enable selection |
+| `loading` | `boolean` | Loading state |
+| `error` | `string` | Error message |
+| `empty-message` | `string` | Empty state text |
+| `page` | `number` | Current page (enables pagination) |
+| `page-size` | `number` | Rows per page |
+| `total-rows` | `number` | Total rows (server-side) |
+| `page-size-options` | `string` | Comma-separated sizes |
+| `sort-key` | `string` | Sort column key |
+| `sort-direction` | `string` | Sort direction |
+| `sticky-header` | `boolean` | Sticky header |
+| `striped` | `boolean` | Alternating row colors |
+| `bordered` | `boolean` | Cell borders |
+| `compact` | `boolean` | Compact rows |
+
+#### JS Properties (Web Component)
+
+| Property | Type | Description |
+|---|---|---|
+| `columns` | `ColumnDef[]` | Column definitions |
+| `rows` | `RowData[]` | Row data (each must have `id`) |
+| `selectedRows` | `string[]` | Get/set selected row IDs |
+| `sortKey` | `string \| null` | Get/set sort column |
+| `sortDirection` | `SortDirection` | Get/set sort direction |
+| `page` | `number` | Get/set current page |
+| `pageSize` | `number` | Get/set page size |
+| `totalRows` | `number` | Get/set total row count |
+
+#### Events (Web Component)
+
+| Event | Detail | When |
+|---|---|---|
+| `compa11y-datagrid-sort` | `{ sortKey, sortDirection }` | Sort column changes |
+| `compa11y-datagrid-select` | `{ selectedRows: string[] }` | Selection changes |
+| `compa11y-datagrid-page` | `{ page }` | Page changes |
+| `compa11y-datagrid-page-size` | `{ pageSize }` | Page size changes |
+| `compa11y-datagrid-cell-edit` | `{ rowId, columnId, value }` | Cell edit committed (grid mode) |
+
+#### CSS Custom Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-datagrid-color` | `#1a1a1a` | Text color |
+| `--compa11y-datagrid-bg` | `#ffffff` | Background |
+| `--compa11y-datagrid-head-bg` | `#f5f5f5` | Header background |
+| `--compa11y-datagrid-border-color` | `#d0d0d0` | Border color |
+| `--compa11y-datagrid-cell-padding` | `0.625rem 0.875rem` | Cell padding |
+| `--compa11y-datagrid-compact-padding` | `0.375rem 0.625rem` | Compact padding |
+| `--compa11y-datagrid-stripe-bg` | `#fafafa` | Striped row background |
+| `--compa11y-datagrid-row-hover-bg` | `#f0f0f0` | Row hover background |
+| `--compa11y-datagrid-selected-bg` | `#e8f0fe` | Selected row background |
+| `--compa11y-datagrid-selected-hover-bg` | `#dde7fd` | Selected row hover |
+| `--compa11y-datagrid-pagination-btn-bg` | `#ffffff` | Pagination button background |
+| `--compa11y-datagrid-pagination-active-bg` | `#0066cc` | Active page button |
+| `--compa11y-datagrid-pagination-active-color` | `#ffffff` | Active page text |
+| `--compa11y-datagrid-error-color` | `#d32f2f` | Error text color |
+| `--compa11y-datagrid-muted-color` | `#6b6b6b` | Empty/loading text |
+| `--compa11y-focus-color` | `#0066cc` | Focus outline color (shared) |
+
+---
+
+### TreeView
+
+**Component:** `<TreeView>` / `<compa11y-tree-view>`
+**Type:** Type 3 (Compound) + Type 4 (Roving Tabindex) — dual mode: navigation and widget
+**Pattern:** [WAI-ARIA TreeView](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/)
+
+#### When to use which mode
+
+| Use **navigation mode** | Use **widget mode** |
+|---|---|
+| Tree is site/app navigation (categories, docs, pages) | File explorer behavior needed |
+| Items are links that navigate | Arrow key navigation between items expected |
+| Minimal ARIA risk — semantic HTML lists | Selection is a concept (highlighted row) |
+| Standard Tab/Enter/Space keyboard | Multi-select, rename, type-ahead needed |
+
+#### Automatic ARIA
+
+**Navigation mode:**
+
+| Feature | What's applied |
+|---|---|
+| **Structure** | `<nav>` wrapper with nested `<ul>/<li>` |
+| **Expand/collapse** | `<button>` with `aria-expanded="true/false"`, `aria-controls` pointing to child `<ul>` |
+| **Toggle label** | `aria-label="Expand {name}"` / `"Collapse {name}"` on toggle button |
+| **Active route** | `aria-current="page"` on the active link |
+| **Collapsed children** | Not rendered (removed from DOM — invisible to screen readers) |
+| **Disabled** | Native `disabled` on toggle button; `aria-disabled` + `tabIndex={-1}` on links |
+
+**Widget mode:**
+
+| Feature | What's applied |
+|---|---|
+| **Container** | `role="tree"` with `aria-label` |
+| **Nodes** | `role="treeitem"` with roving `tabIndex` (one `0`, rest `-1`) |
+| **Children** | `role="group"` wrapping child treeitems |
+| **Hierarchy** | `aria-level`, `aria-posinset`, `aria-setsize` on each treeitem |
+| **Expand/collapse** | `aria-expanded="true/false"` on expandable treeitems |
+| **Selection** | `aria-selected="true/false"` when `selectionMode` is `"single"` or `"multiple"` |
+| **Disabled** | `aria-disabled="true"` — not activatable/selectable |
+| **Loading** | `aria-busy="true"` on node during async child load |
+
+#### Keyboard
+
+**Navigation mode** — standard Tab navigation:
+
+| Key | Action |
+|---|---|
+| `Tab` / `Shift+Tab` | Move between interactive elements (toggle buttons, links) |
+| `Enter` | Activate focused link/button |
+| `Space` | Toggle expand button |
+
+**Widget mode** — arrow key tree navigation:
+
+| Key | Action |
+|---|---|
+| `↑` / `↓` | Move focus to previous/next visible node (skips disabled) |
+| `→` | Expand collapsed node; if expanded, focus first child |
+| `←` | Collapse expanded node; if collapsed, focus parent |
+| `Home` / `End` | Focus first / last visible node |
+| `Enter` | Activate focused node |
+| `Space` | Select/toggle selection (when `selectionMode != "none"`) |
+| `*` | Expand all siblings at the same level |
+| Type letters | Type-ahead: jump to next node matching typed prefix |
+
+#### Screen Reader Announcements
+
+| Event | Announcement |
+|---|---|
+| Node expanded | `"Expanded"` (polite) |
+| Node collapsed | `"Collapsed"` (polite) |
+| Toggle via caret (web) | `"{label} expanded"` / `"{label} collapsed"` (polite) |
+
+#### Dev Warnings
+
+| Condition | Warning |
+|---|---|
+| Widget mode without `aria-label` or `aria-labelledby` | `"Widget mode TreeView requires an accessible label..."` |
+| Web component without accessible label | Standard `accessibleLabel` check |
+
+#### Usage (React)
+
+```tsx
+import { TreeView, type TreeNodeData } from '@compa11y/react';
+
+const nodes: TreeNodeData[] = [
+  {
+    id: 'src', label: 'src', children: [
+      { id: 'index', label: 'index.ts' },
+      { id: 'app', label: 'App.tsx' },
+    ]
+  },
+  { id: 'readme', label: 'README.md' },
+];
+
+// Widget mode (file explorer)
+<TreeView
+  nodes={nodes}
+  mode="widget"
+  selectionMode="single"
+  defaultExpandedIds={new Set(['src'])}
+  aria-label="Project files"
+  onActivate={(node) => console.log('Opened:', node.label)}
+/>
+
+// Navigation mode
+<TreeView
+  nodes={navNodes}
+  mode="navigation"
+  aria-label="Documentation"
+/>
+```
+
+#### Usage (Web Component)
+
+```html
+<compa11y-tree-view
+  id="file-tree"
+  mode="widget"
+  selection-mode="single"
+  aria-label="Project files"
+></compa11y-tree-view>
+
+<script>
+  const tree = document.getElementById('file-tree');
+  tree.nodesData = [
+    { id: 'src', label: 'src', children: [
+      { id: 'index', label: 'index.ts' },
+    ]},
+    { id: 'readme', label: 'README.md' },
+  ];
+  tree.expand('src');
+
+  tree.addEventListener('compa11y-tree-view-activate', (e) => {
+    console.log('Activated:', e.detail.nodeId);
+  });
+  tree.addEventListener('compa11y-tree-view-select', (e) => {
+    console.log('Selected:', e.detail.selectedIds);
+  });
+</script>
+```
+
+#### Props (React)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `nodes` | `TreeNodeData[]` | — | Tree data (required) |
+| `mode` | `'navigation' \| 'widget'` | `'widget'` | Operating mode |
+| `selectionMode` | `'none' \| 'single' \| 'multiple'` | `'none'` | Selection behavior |
+| `expandedIds` | `Set<string>` | — | Controlled expanded nodes |
+| `defaultExpandedIds` | `Set<string>` | `new Set()` | Uncontrolled default |
+| `onExpandedChange` | `(ids: Set<string>) => void` | — | Expansion change callback |
+| `selectedIds` | `Set<string>` | — | Controlled selected nodes |
+| `defaultSelectedIds` | `Set<string>` | `new Set()` | Uncontrolled default |
+| `onSelectedChange` | `(ids: Set<string>) => void` | — | Selection change callback |
+| `onActivate` | `(node: TreeNodeData) => void` | — | Node activation callback |
+| `onLoadChildren` | `(node: TreeNodeData) => Promise<void>` | — | Lazy load callback |
+| `renderIcon` | `(node: TreeNodeData) => ReactNode` | — | Custom icon renderer |
+| `renderActions` | `(node: TreeNodeData) => ReactNode` | — | Custom actions renderer |
+| `aria-label` | `string` | — | Accessible label (required for widget mode) |
+
+#### TreeNodeData
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `string` | Unique node identifier |
+| `label` | `string` | Display text |
+| `children` | `TreeNodeData[]` | Child nodes |
+| `hasChildren` | `boolean` | True if lazy-loadable (children not yet fetched) |
+| `disabled` | `boolean` | Prevents interaction |
+| `href` | `string` | Navigation URL (navigation mode) |
+| `data` | `unknown` | Application payload |
+
+#### Web Component Attributes
+
+| Attribute | Type | Description |
+|---|---|---|
+| `mode` | `'navigation' \| 'widget'` | Operating mode (default: `'navigation'`) |
+| `selection-mode` | `'none' \| 'single' \| 'multiple'` | Selection behavior |
+| `nodes` | JSON string | Tree data |
+| `aria-label` | `string` | Accessible label |
+
+#### Web Component Events
+
+| Event | Detail | Description |
+|---|---|---|
+| `compa11y-tree-view-expand` | `{ nodeId }` | Node expanded |
+| `compa11y-tree-view-collapse` | `{ nodeId }` | Node collapsed |
+| `compa11y-tree-view-select` | `{ nodeId, selectedIds }` | Node selected |
+| `compa11y-tree-view-activate` | `{ nodeId }` | Node activated |
+
+#### Web Component JS API
+
+| Method/Property | Description |
+|---|---|
+| `nodesData` | Get/set nodes array |
+| `expandedIds` | Get expanded node IDs (Set) |
+| `selectedIds` | Get selected node IDs (Set) |
+| `expand(id)` | Expand a node |
+| `collapse(id)` | Collapse a node |
+| `toggle(id)` | Toggle expand/collapse |
+| `select(id)` | Select a node |
+| `expandAll()` | Expand all nodes |
+| `collapseAll()` | Collapse all nodes |
+
+#### Data Attributes for Styling
+
+| Attribute | Description |
+|---|---|
+| `data-compa11y-tree-view` | Root container |
+| `data-compa11y-tree-view-node` | Individual node |
+| `data-compa11y-tree-view-row` | Row wrapper (navigation mode) |
+| `data-compa11y-tree-view-toggle` | Expand/collapse button |
+| `data-compa11y-tree-view-label` | Node label text |
+| `data-compa11y-tree-view-icon` | Icon wrapper (`aria-hidden`) |
+| `data-compa11y-tree-view-spacer` | Leaf node indent spacer |
+| `data-compa11y-tree-view-actions` | Actions wrapper |
+| `data-compa11y-tree-view-group` | Children group |
+| `data-expanded` | Node is expanded |
+| `data-selected` | Node is selected |
+| `data-disabled` | Node is disabled |
+| `data-focused` | Node has focus (widget mode) |
+| `data-loading` | Node is loading children |
+| `data-level` | Nesting depth (1-based) |
+
+#### CSS Custom Properties
+
+| Variable | Default | Description |
+|---|---|---|
+| `--compa11y-tree-view-indent` | `20px` | Nesting indentation |
+| `--compa11y-tree-view-node-height` | `32px` | Minimum node row height |
+| `--compa11y-tree-view-color` | `inherit` | Text color |
+| `--compa11y-tree-view-bg` | `transparent` | Background |
+| `--compa11y-tree-view-hover-bg` | `rgba(0,0,0,0.04)` | Hover background |
+| `--compa11y-tree-view-selected-bg` | `rgba(0,102,204,0.08)` | Selected background |
+| `--compa11y-tree-view-focus-outline` | `2px solid var(--compa11y-focus-color)` | Focus ring |
+| `--compa11y-tree-view-toggle-size` | `16px` | Expand/collapse button size |
+| `--compa11y-tree-view-icon-size` | `16px` | Icon size |
+| `--compa11y-tree-view-icon-gap` | `6px` | Gap between icon and label |
+| `--compa11y-tree-view-error-color` | `#c00` | Error text color |
+
+---
+
+### CommandPalette
+
+**Component:** `<CommandPalette>` / `<compa11y-command-palette>`
+**Type:** Type 3 (Compound) + Type 2 (Stateful) — Dialog + Combobox-like hybrid
+**Pattern:** Modal dialog with input-controlled listbox (aria-activedescendant)
+
+#### What the library handles
+
+| Concern | Implementation |
+|---|---|
+| Dialog semantics | `role="dialog"`, `aria-modal="true"`, labeled via Title or `aria-label` |
+| Input ↔ listbox relationship | `role="combobox"` on input, `aria-controls` → listbox, `aria-activedescendant` → highlighted option |
+| Keyboard navigation | Arrow keys (with wrap), Enter to execute, Escape to close, Home/End, Ctrl/Cmd+K global shortcut |
+| Focus management | Focus trap in modal, auto-focus input on open, return focus to trigger on close |
+| Screen reader announcements | Result count (debounced), item selection, palette open/close |
+| Filtering | Default case-insensitive substring on `value` + `keywords`; custom filter override |
+| Disabled items | `aria-disabled="true"`, skipped during keyboard navigation |
+| Groups | `role="group"` + `aria-labelledby` for group headings |
+| Body scroll lock | Stacking-aware lock/unlock (safe with nested dialogs) |
+| Dev warnings | Missing title/label, missing input label, missing item value |
+
+#### Keyboard contract
+
+| Key | Behavior |
+|---|---|
+| `Ctrl/Cmd+K` | Toggle palette open/close (global) |
+| `Escape` | Close palette, return focus |
+| `ArrowDown` | Highlight next option (wraps if `loop`) |
+| `ArrowUp` | Highlight previous option (wraps if `loop`) |
+| `Home` | Highlight first option |
+| `End` | Highlight last option |
+| `Enter` | Execute highlighted option (calls `onSelect`, navigates to `href`) |
+| `Tab` / `Shift+Tab` | Standard dialog focus trap behavior |
+
+#### React compound API
+
+```tsx
+<CommandPalette open={open} onOpenChange={setOpen} aria-label="Command palette">
+  <CommandPalette.Title>Command palette</CommandPalette.Title>
+  <CommandPalette.Description>Type to search commands.</CommandPalette.Description>
+  <CommandPalette.Input placeholder="Type a command..." aria-label="Search commands" />
+  <CommandPalette.List>
+    <CommandPalette.Empty>No results</CommandPalette.Empty>
+    <CommandPalette.Loading>Searching...</CommandPalette.Loading>
+    <CommandPalette.Group label="Navigation">
+      <CommandPalette.Item value="Go to Projects" onSelect={...} />
+    </CommandPalette.Group>
+    <CommandPalette.Separator />
+    <CommandPalette.Group label="Actions">
+      <CommandPalette.Item value="Create project" onSelect={...} shortcut="⌘N" />
+      <CommandPalette.Item value="Danger action" disabled />
+    </CommandPalette.Group>
+  </CommandPalette.List>
+  <CommandPalette.Footer>↑↓ navigate · ↵ select · esc close</CommandPalette.Footer>
+</CommandPalette>
+```
+
+#### Web Component
+
+```html
+<compa11y-command-palette trigger="#open-btn" placeholder="Type a command...">
+  <h2 slot="title">Command palette</h2>
+  <div slot="item" data-value="Go to Projects" data-group="Navigation">Go to Projects</div>
+  <div slot="item" data-value="Create project" data-group="Actions" data-shortcut="⌘N">Create project</div>
+  <div slot="item" data-value="Danger action" data-group="Actions" data-disabled>Danger action</div>
+  <span slot="footer">↑↓ navigate · ↵ select · esc close</span>
+</compa11y-command-palette>
+```
+
+#### Props (React)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `open` | `boolean` | — | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Uncontrolled initial state |
+| `onOpenChange` | `(open: boolean) => void` | — | Called on open/close |
+| `modal` | `boolean` | `true` | Render as modal dialog |
+| `loop` | `boolean` | `true` | Wrap keyboard navigation |
+| `filter` | `(query, value, keywords?) => boolean` | — | Custom filter function |
+| `onSelect` | `(value: string) => void` | — | Global select callback |
+| `loading` | `boolean` | `false` | Async loading state |
+| `aria-label` | `string` | — | Accessible label (if no Title) |
+| `unstyled` | `boolean` | `false` | Remove default styles |
+
+#### Item props
+
+| Prop | Type | Description |
+|---|---|---|
+| `value` | `string` | Searchable value (required) |
+| `keywords` | `string[]` | Additional search terms |
+| `onSelect` | `() => void` | Called on selection |
+| `href` | `string` | Navigate to URL on selection |
+| `shortcut` | `string` | Display-only shortcut hint |
+| `disabled` | `boolean` | Prevents selection, announced |
+
+#### Data attributes (for styling)
+
+| Attribute | Element |
+|---|---|
+| `data-compa11y-command-palette-overlay` | Overlay backdrop |
+| `data-compa11y-command-palette` | Dialog container |
+| `data-compa11y-command-palette-input` | Search input |
+| `data-compa11y-command-palette-list` | Results listbox |
+| `data-compa11y-command-palette-item` | Individual option |
+| `data-compa11y-command-palette-group` | Group container |
+| `data-compa11y-command-palette-group-label` | Group heading |
+| `data-compa11y-command-palette-separator` | Visual separator |
+| `data-compa11y-command-palette-empty` | Empty state |
+| `data-compa11y-command-palette-loading` | Loading state |
+| `data-compa11y-command-palette-footer` | Footer area |
+| `data-compa11y-command-palette-shortcut` | Shortcut kbd |
+| `data-highlighted` | Currently highlighted item |
+| `data-disabled` | Disabled item |
+
+#### CSS custom properties (Web Component)
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-command-palette-z-index` | `9999` | Overlay z-index |
+| `--compa11y-command-palette-overlay-bg` | `rgba(0,0,0,0.5)` | Overlay background |
+| `--compa11y-command-palette-bg` | `white` | Palette background |
+| `--compa11y-command-palette-radius` | `12px` | Border radius |
+| `--compa11y-command-palette-max-width` | `640px` | Max width |
+| `--compa11y-command-palette-max-height` | `70vh` | Max height |
+| `--compa11y-command-palette-shadow` | `0 25px 50px -12px rgba(0,0,0,0.25)` | Box shadow |
+| `--compa11y-command-palette-border-color` | `#e5e5e5` | Border color |
+| `--compa11y-command-palette-highlight-bg` | `#f0f0f0` | Highlighted item background |
+| `--compa11y-command-palette-hover-bg` | `#f5f5f5` | Hovered item background |
+| `--compa11y-command-palette-item-padding` | `8px 12px` | Item padding |
+| `--compa11y-command-palette-item-radius` | `6px` | Item border radius |
+
+---
+
+### `<compa11y-carousel>`
+
+A carousel web component with slide navigation, pagination dots, and optional autoplay.
+
+```html
+<compa11y-carousel aria-label="Featured products" loop>
+  <div slot="slide">Slide 1 content</div>
+  <div slot="slide">Slide 2 content</div>
+  <div slot="slide">Slide 3 content</div>
+</compa11y-carousel>
+```
+
+**Attributes:** `aria-label`, `value` (active index), `loop`, `autoplay`, `autoplay-interval`, `slides-per-view`, `hide-non-active`, `orientation`
+
+**Events:**
+- `compa11y-carousel-change` — `{ activeIndex: number, slideCount: number }`
+
+**Slots:**
+| Name | Purpose |
+|---|---|
+| `slide` | Each slide element |
+| `prev-label` | Custom prev button content |
+| `next-label` | Custom next button content |
+| `pause-label` | Custom pause button content |
+
+**Parts:** `root`, `status`, `controls`, `prev`, `next`, `pause`, `viewport`, `track`, `pagination`, `dot`
+
+**CSS custom properties:**
+
+| Property | Default | Description |
+|---|---|---|
+| `--compa11y-carousel-gap` | `0` | Gap between slides |
+| `--compa11y-carousel-dot-size` | `12px` | Pagination dot diameter |
+| `--compa11y-carousel-dot-color` | `#ccc` | Inactive dot color |
+| `--compa11y-carousel-dot-active-color` | `#333` | Active dot color |
+
+**Keyboard and ARIA:** Same as React Carousel — see [Carousel](#carousel) above.
 
 ---
 

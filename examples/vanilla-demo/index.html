@@ -88,7 +88,14 @@
     compa11y-table:not(:defined),
     compa11y-pagination:not(:defined),
     compa11y-breadcrumbs:not(:defined),
-    compa11y-tooltip:not(:defined) {
+    compa11y-tooltip:not(:defined),
+    compa11y-drawer:not(:defined),
+    compa11y-slider:not(:defined),
+    compa11y-skeleton:not(:defined),
+    compa11y-empty-state:not(:defined),
+    compa11y-file-upload:not(:defined),
+    compa11y-error-summary:not(:defined),
+    compa11y-stepper:not(:defined) {
       display: none;
     }
 
@@ -1474,6 +1481,981 @@
     </compa11y-tooltip>
   </section>
 
+  <!-- ================================================================
+       Drawer
+       ================================================================ -->
+  <section>
+    <h2>Drawer</h2>
+
+    <h3>Side variants</h3>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button id="open-drawer-right">Open Right →</button>
+      <button id="open-drawer-left">← Open Left</button>
+      <button id="open-drawer-top">↑ Open Top</button>
+      <button id="open-drawer-bottom">↓ Open Bottom</button>
+    </div>
+
+    <!-- Right drawer -->
+    <compa11y-drawer id="drawer-right" side="right">
+      <h2 slot="title">Navigation</h2>
+      <p slot="description">Use the links below to navigate the app.</p>
+      <nav>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem">
+          <li><a href="#" style="display:block;padding:0.5rem;border-radius:4px;text-decoration:none;color:#0066cc">Dashboard</a></li>
+          <li><a href="#" style="display:block;padding:0.5rem;border-radius:4px;text-decoration:none;color:#0066cc">Profile</a></li>
+          <li><a href="#" style="display:block;padding:0.5rem;border-radius:4px;text-decoration:none;color:#0066cc">Settings</a></li>
+          <li><a href="#" style="display:block;padding:0.5rem;border-radius:4px;text-decoration:none;color:#0066cc">Help</a></li>
+        </ul>
+      </nav>
+      <div slot="actions" style="margin-top:1.5rem">
+        <button id="confirm-drawer-right" style="background:#0066cc;color:white;border:none;padding:0.5rem 1.25rem;border-radius:6px;cursor:pointer;font-weight:600">Confirm</button>
+      </div>
+    </compa11y-drawer>
+
+    <!-- Left drawer -->
+    <compa11y-drawer id="drawer-left" side="left">
+      <h2 slot="title">Filters</h2>
+      <p slot="description">Narrow down results using the options below.</p>
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer"><input type="checkbox"> Category</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer"><input type="checkbox"> Price range</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer"><input type="checkbox"> Rating</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer"><input type="checkbox"> Availability</label>
+      </div>
+    </compa11y-drawer>
+
+    <!-- Top drawer -->
+    <compa11y-drawer id="drawer-top" side="top">
+      <h2 slot="title">Search</h2>
+      <input
+        type="search"
+        placeholder="Search…"
+        style="width:100%;padding:0.5rem 0.75rem;border:1px solid #ccc;border-radius:6px;font-size:1rem"
+      />
+    </compa11y-drawer>
+
+    <!-- Bottom sheet — draggable: drag the handle down to dismiss -->
+    <compa11y-drawer id="drawer-bottom" side="bottom" draggable>
+      <h2 slot="title">Share</h2>
+      <p slot="description">Drag the handle down to dismiss, or choose an option.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem">
+        <button style="flex:1 1 120px">Copy link</button>
+        <button style="flex:1 1 120px">Email</button>
+        <button style="flex:1 1 120px">Twitter</button>
+        <button style="flex:1 1 120px">LinkedIn</button>
+      </div>
+    </compa11y-drawer>
+
+    <!-- Draggable (drag-to-dismiss) -->
+    <h3 style="margin-top:1.5rem">Draggable (drag-to-dismiss)</h3>
+    <p style="font-size:0.875rem;color:#555;margin:0 0 0.75rem">
+      Add the <code>draggable</code> attribute to enable swipe-to-dismiss via the handle.
+      Drag past 40% of the panel's dimension to close; release earlier to snap back.
+    </p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button id="open-drawer-drag-right">Draggable → Right</button>
+      <button id="open-drawer-drag-bottom">Draggable ↓ Bottom sheet</button>
+    </div>
+
+    <!-- Draggable right drawer -->
+    <compa11y-drawer id="drawer-drag-right" side="right" draggable>
+      <h2 slot="title">Draggable panel</h2>
+      <p slot="description">Grab the handle and drag right to dismiss.</p>
+      <p style="font-size:0.9rem;color:#555;line-height:1.6">
+        Pointer capture keeps tracking even if you move outside the panel.
+        Release before 40% to snap back.
+      </p>
+    </compa11y-drawer>
+
+    <!-- Draggable bottom sheet -->
+    <compa11y-drawer id="drawer-drag-bottom" side="bottom" draggable>
+      <h2 slot="title">Bottom sheet</h2>
+      <p slot="description">Grab the pill at the top and drag down to dismiss.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
+        <button style="flex:1 1 120px">Copy link</button>
+        <button style="flex:1 1 120px">Email</button>
+        <button style="flex:1 1 120px">Twitter</button>
+        <button style="flex:1 1 120px">LinkedIn</button>
+      </div>
+    </compa11y-drawer>
+
+    <h3 style="margin-top:1.5rem">Trigger attribute — auto-connects to a button</h3>
+    <button id="open-drawer-trigger-demo">Open via trigger attribute</button>
+    <compa11y-drawer id="drawer-trigger-demo" side="right" trigger="#open-drawer-trigger-demo">
+      <h2 slot="title">Auto-wired Drawer</h2>
+      <p slot="description">This drawer uses the <code>trigger</code> attribute to connect to the button without any JavaScript.</p>
+      <p>No JS event listener needed — the web component wires itself up.</p>
+    </compa11y-drawer>
+
+    <p style="margin-top:1rem;font-size:0.875rem;color:#555">
+      <strong>Keyboard:</strong> <kbd>Escape</kbd> closes the drawer and returns focus to the trigger.
+      <kbd>Tab</kbd> / <kbd>Shift+Tab</kbd> cycles focus within the drawer.<br>
+      <strong>Drag:</strong> Add the <code>draggable</code> attribute to enable swipe-to-dismiss on the handle. Drag past 40% of the panel to close; release earlier to snap back.
+    </p>
+  </section>
+
+  <section>
+    <h2>Slider</h2>
+
+    <h3 style="margin-bottom:0.5rem">Single thumb (uncontrolled)</h3>
+    <compa11y-slider
+      id="slider-brightness"
+      label="Brightness"
+      min="0"
+      max="100"
+      step="5"
+      value="40"
+    ></compa11y-slider>
+    <p id="slider-brightness-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555">Value: 40</p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Discrete steps with aria-valuetext</h3>
+    <compa11y-slider
+      id="slider-fan"
+      label="Fan speed"
+      min="0"
+      max="4"
+      step="1"
+      value="2"
+      min-thumb-label="Fan speed"
+    ></compa11y-slider>
+    <p id="slider-fan-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555">Level: Medium</p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Range slider</h3>
+    <compa11y-slider
+      id="slider-price"
+      label="Price range"
+      range
+      min="0"
+      max="200"
+      step="5"
+      min-value="20"
+      max-value="80"
+      min-thumb-label="Minimum price"
+      max-thumb-label="Maximum price"
+    ></compa11y-slider>
+    <p id="slider-price-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555">Range: $20 – $80</p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Disabled</h3>
+    <compa11y-slider
+      label="Rating (read-only)"
+      value="70"
+      disabled
+    ></compa11y-slider>
+
+    <p style="margin-top:1rem;font-size:0.875rem;color:#555">
+      <strong>Keyboard:</strong>
+      <kbd>←</kbd> / <kbd>↓</kbd> decrease · <kbd>→</kbd> / <kbd>↑</kbd> increase ·
+      <kbd>Home</kbd> minimum · <kbd>End</kbd> maximum · <kbd>Page Down</kbd> / <kbd>Page Up</kbd> large step.<br>
+      <strong>Mouse / touch:</strong> drag the thumb or click the track to jump.<br>
+      <strong>Screen reader:</strong> <code>role="slider"</code> with <code>aria-valuenow</code>, <code>aria-valuemin</code>, <code>aria-valuemax</code>.
+      Range thumbs are labelled individually.
+    </p>
+  </section>
+
+  <section>
+    <h2>ProgressBar</h2>
+
+    <h3 style="margin-bottom:0.5rem">Determinate — file upload simulation</h3>
+    <compa11y-progress-bar
+      id="pb-upload"
+      label="Profile photo upload"
+      value="0"
+      milestones="25,50,75,100"
+      status-text="Press 'Start upload' to begin"
+    ></compa11y-progress-bar>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap">
+      <button id="pb-start" type="button">Start upload</button>
+      <button id="pb-error" type="button" style="color:#ef4444;border-color:#ef4444">Simulate error</button>
+    </div>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Custom value text — step progress</h3>
+    <compa11y-progress-bar
+      label="Onboarding"
+      value="2"
+      min="0"
+      max="5"
+      status-text="Complete your profile to get started"
+    ></compa11y-progress-bar>
+    <p id="pb-step-out" style="margin-top:0.25rem;font-size:0.8125rem;color:#555">Step 2 of 5</p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Indeterminate</h3>
+    <compa11y-progress-bar
+      label="Loading report data"
+      status-text="Fetching results from the server…"
+    ></compa11y-progress-bar>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Complete</h3>
+    <compa11y-progress-bar
+      label="Video export"
+      value="100"
+      status="complete"
+      status-text="Export ready — check your downloads folder"
+    ></compa11y-progress-bar>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Error</h3>
+    <compa11y-progress-bar
+      label="Database backup"
+      value="37"
+      status="error"
+      status-text="Connection lost. Retry?"
+    ></compa11y-progress-bar>
+
+    <p style="margin-top:1rem;font-size:0.875rem;color:#555">
+      <strong>Screen reader:</strong> <code>role="progressbar"</code> with <code>aria-valuenow</code>,
+      <code>aria-valuemin</code>, <code>aria-valuemax</code>. No <code>aria-valuenow</code> when indeterminate.
+      Milestone crossings and status transitions are announced politely / assertively.
+    </p>
+  </section>
+
+  <section>
+    <h2>Skeleton</h2>
+
+    <h3 style="margin-bottom:0.5rem">Variants</h3>
+    <div style="display:flex;flex-direction:column;gap:0.75rem;max-width:400px">
+      <compa11y-skeleton variant="text" width="80%"></compa11y-skeleton>
+      <compa11y-skeleton variant="text" width="60%"></compa11y-skeleton>
+      <compa11y-skeleton variant="rectangular" height="120px"></compa11y-skeleton>
+      <div style="display:flex;gap:1rem;align-items:center">
+        <compa11y-skeleton variant="circular" width="48px" height="48px"></compa11y-skeleton>
+        <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem">
+          <compa11y-skeleton variant="text" width="60%"></compa11y-skeleton>
+          <compa11y-skeleton variant="text" width="40%"></compa11y-skeleton>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">No animation</h3>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;max-width:300px">
+      <compa11y-skeleton variant="text" animated="false"></compa11y-skeleton>
+      <compa11y-skeleton variant="text" width="70%" animated="false"></compa11y-skeleton>
+      <compa11y-skeleton variant="rectangular" height="80px" animated="false"></compa11y-skeleton>
+    </div>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Card skeleton — container owns a11y</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      The <code>&lt;section&gt;</code> carries <code>aria-busy="true"</code>.
+      Skeleton blocks are wrapped in <code>aria-hidden="true"</code>.
+    </p>
+    <section
+      aria-label="Loading article"
+      aria-busy="true"
+      style="max-width:360px;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden"
+    >
+      <div aria-hidden="true">
+        <compa11y-skeleton variant="rectangular" height="180px" style="border-radius:0"></compa11y-skeleton>
+        <div style="padding:1rem;display:flex;flex-direction:column;gap:0.5rem">
+          <compa11y-skeleton variant="text" width="55%"></compa11y-skeleton>
+          <compa11y-skeleton variant="text"></compa11y-skeleton>
+          <compa11y-skeleton variant="text" width="80%"></compa11y-skeleton>
+        </div>
+      </div>
+    </section>
+
+    <p style="margin-top:1rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Each <code>&lt;compa11y-skeleton&gt;</code> is <code>aria-hidden="true"</code> —
+      purely decorative. The parent region communicates loading via <code>aria-busy="true"</code>.
+      Animation respects <code>prefers-reduced-motion</code>. Shimmer hidden in High Contrast mode.
+    </p>
+  </section>
+
+  <!-- EmptyState -->
+  <section>
+    <h2>EmptyState</h2>
+
+    <h3 style="margin-bottom:0.75rem">Static — brand-new account</h3>
+    <div style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#fafafa">
+      <compa11y-empty-state
+        title="No projects yet"
+        description="Create your first project to get started with your team."
+      >
+        <svg slot="icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+        </svg>
+        <div slot="actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center">
+          <button style="padding:0.5rem 1.25rem;background:#0066cc;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.875rem">Create project</button>
+          <button style="padding:0.5rem 1.25rem;background:transparent;border:1px solid #ccc;border-radius:6px;cursor:pointer;font-size:0.875rem">Browse templates</button>
+        </div>
+      </compa11y-empty-state>
+    </div>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.5rem">Dynamic — search / filter result</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      Toggle results to simulate a filter returning nothing. The empty state uses <code>live</code>
+      so screen readers announce the change.
+    </p>
+    <div style="margin-bottom:0.75rem">
+      <button id="es-toggle-btn" onclick="toggleEmptyState()">Apply filter (clears results)</button>
+    </div>
+    <div id="es-results-container" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#fafafa;min-height:160px">
+      <ul id="es-results" style="padding:1rem;margin:0;list-style:none;display:flex;flex-direction:column;gap:0.5rem">
+        <li style="padding:0.5rem;background:#fff;border-radius:4px;border:1px solid #e2e8f0">Wireless Mouse</li>
+        <li style="padding:0.5rem;background:#fff;border-radius:4px;border:1px solid #e2e8f0">Mechanical Keyboard</li>
+        <li style="padding:0.5rem;background:#fff;border-radius:4px;border:1px solid #e2e8f0">USB-C Hub</li>
+      </ul>
+      <compa11y-empty-state
+        id="es-empty"
+        hidden
+        live
+        title="No results"
+        description="No items match the active filter. Try clearing filters or adjusting your search."
+      >
+        <div slot="actions">
+          <button onclick="toggleEmptyState()" style="padding:0.5rem 1.25rem;background:#0066cc;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.875rem">Clear filters</button>
+        </div>
+      </compa11y-empty-state>
+    </div>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Minimal — no icon, no actions</h3>
+    <div style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#fafafa">
+      <compa11y-empty-state
+        title="No notifications"
+        description="You're all caught up."
+      ></compa11y-empty-state>
+    </div>
+
+    <p style="margin-top:1rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> The <code>title</code> attribute renders as a real heading (<code>heading-level</code> defaults to 2).
+      The <code>icon</code> slot is always <code>aria-hidden</code> — meaning comes from text.
+      Add <code>live</code> for dynamic states (search/filter); omit it for static page content.
+    </p>
+  </section>
+
+  <section>
+    <h2>NumberField</h2>
+
+    <h3 style="margin-bottom:0.75rem">Basic — quantity with steppers</h3>
+    <compa11y-number-field
+      id="nf-quantity"
+      label="Quantity"
+      value="1"
+      min="1"
+      max="99"
+      step="1"
+      hint="Maximum 99 units per order."
+      show-steppers
+      style="max-width:240px"
+    ></compa11y-number-field>
+    <p id="nf-quantity-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555">Value: <strong>1</strong></p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Fractional step — rating (0–10, step 0.5)</h3>
+    <compa11y-number-field
+      id="nf-rating"
+      label="Rating"
+      value="7.5"
+      min="0"
+      max="10"
+      step="0.5"
+      large-step="2"
+      hint="Enter a value from 0 to 10 in 0.5 increments."
+      style="max-width:260px"
+    ></compa11y-number-field>
+    <p id="nf-rating-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555">Value: <strong>7.5</strong></p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Validation — built-in error on blur</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      Type a number outside 1–10 and tab away to see a built-in validation error announced to screen readers.
+    </p>
+    <compa11y-number-field
+      id="nf-score"
+      label="Score"
+      min="1"
+      max="10"
+      step="1"
+      placeholder="1–10"
+      required
+      style="max-width:220px"
+    ></compa11y-number-field>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Disabled</h3>
+    <compa11y-number-field
+      label="Seats reserved"
+      value="4"
+      min="1"
+      max="20"
+      show-steppers
+      disabled
+      style="max-width:220px"
+    ></compa11y-number-field>
+
+    <p style="margin-top:1.5rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Uses <code>role="spinbutton"</code> with <code>aria-valuenow/min/max</code>.
+      Arrow Up/Down step · Page Up/Down large step · Home/End jump to min/max.
+      Validation errors announced assertively on blur.
+    </p>
+  </section>
+
+  <section>
+    <h2>SearchField</h2>
+
+    <h3 style="margin-bottom:0.75rem">Filter-as-you-type</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      Results count is announced politely (debounced 300 ms) as you type.
+    </p>
+    <compa11y-search-field
+      id="sf-filter"
+      label="Search fruits"
+      placeholder="e.g. berry"
+      style="max-width:320px"
+    ></compa11y-search-field>
+    <p id="sf-filter-status" style="margin-top:0.5rem;font-size:0.875rem;color:#555">15 results</p>
+    <ul id="sf-filter-list" style="margin-top:0.5rem;font-size:0.875rem;padding-left:1.25rem"></ul>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Submit pattern with loading state</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      Press Enter or click Search to trigger a simulated async search.
+    </p>
+    <compa11y-search-field
+      id="sf-submit"
+      label="Search products"
+      placeholder="Search…"
+      hint="Press Enter or click Search."
+      show-search-button
+      style="max-width:380px"
+    ></compa11y-search-field>
+    <p id="sf-submit-out" style="margin-top:0.5rem;font-size:0.875rem;color:#555"></p>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">With error</h3>
+    <compa11y-search-field
+      label="Search orders"
+      value="ORD-"
+      error="Search requires at least 3 characters."
+      style="max-width:320px"
+    ></compa11y-search-field>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Disabled</h3>
+    <compa11y-search-field
+      label="Search (unavailable)"
+      disabled
+      style="max-width:320px"
+    ></compa11y-search-field>
+
+    <p style="margin-top:1.5rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Wrapped in <code>form[role="search"]</code>.
+      Results count announced politely, debounced 300 ms.
+      Clear button restores focus to input. Loading state announced via live region.
+    </p>
+  </section>
+
+  <section>
+    <h2>FileUpload</h2>
+
+    <h3 style="margin-bottom:0.75rem">Basic — single file</h3>
+    <compa11y-file-upload
+      id="fu-basic"
+      label="Upload resume"
+      accept=".pdf,.docx"
+      max-size-bytes="5000000"
+    ></compa11y-file-upload>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Multiple files</h3>
+    <compa11y-file-upload
+      id="fu-multi"
+      label="Upload images"
+      accept="image/*"
+      multiple
+      max-files="5"
+      max-size-bytes="5000000"
+    >
+      <span slot="description">PNG, JPG or GIF. Max 5 MB each, up to 5 files.</span>
+    </compa11y-file-upload>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">With external error</h3>
+    <compa11y-file-upload
+      label="Upload document"
+      accept=".pdf"
+      error="Please upload a signed document."
+    ></compa11y-file-upload>
+
+    <h3 style="margin-top:1.5rem;margin-bottom:0.75rem">Disabled</h3>
+    <compa11y-file-upload
+      label="Upload (unavailable)"
+      disabled
+    ></compa11y-file-upload>
+
+    <p id="fu-output" style="margin-top:1rem;font-size:0.875rem;color:#555">
+      Files: <strong>0</strong>
+    </p>
+
+    <p style="margin-top:0.5rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Real <code>&lt;input type="file"&gt;</code> visually hidden.
+      Dropzone has <code>role="button"</code> + keyboard support.
+      Validation errors use <code>role="alert"</code>.
+      File removals announced politely; focus managed after removal.
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- ERROR SUMMARY                                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section>
+    <h2>ErrorSummary</h2>
+
+    <h3>Form validation (default)</h3>
+    <p style="font-size:0.875rem;color:#555;margin-bottom:0.75rem">
+      Click "Submit" to show the error summary. It auto-focuses on render.
+    </p>
+
+    <div id="es-form-container"></div>
+
+    <form id="es-demo-form" style="display:flex;flex-direction:column;gap:1rem;max-width:400px">
+      <div>
+        <label for="es-name" style="display:block;font-weight:500;margin-bottom:0.25rem">Name</label>
+        <input id="es-name" type="text" style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px" />
+      </div>
+      <div>
+        <label for="es-email" style="display:block;font-weight:500;margin-bottom:0.25rem">Email</label>
+        <input id="es-email" type="email" style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px" />
+      </div>
+      <div>
+        <button type="submit" style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer">Submit</button>
+      </div>
+    </form>
+
+    <h3 style="margin-top:1.5rem">Page / system error</h3>
+    <compa11y-error-summary
+      id="es-page"
+      variant="page"
+      title="Something went wrong"
+      description="We could not save your changes. Please try again."
+      errors='[{"message":"Server error: connection timed out"}]'
+      dismissible
+    >
+      <div slot="actions">
+        <button style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer"
+                onclick="alert('Retrying...')">Retry</button>
+      </div>
+    </compa11y-error-summary>
+
+    <p style="margin-top:0.5rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Form variant uses <code>tabindex="-1"</code> + auto-focus (no <code>role="alert"</code> to avoid double-announcement).
+      Page variant uses <code>role="alert"</code> for assertive screen reader announcement.
+      Error links focus the corresponding field on click.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- Stepper                                                             -->
+  <!-- ================================================================== -->
+
+  <section>
+    <h2>Stepper</h2>
+
+    <h3 style="margin-bottom:0.5rem">Progress indicator (non-interactive)</h3>
+    <compa11y-stepper
+      aria-label="Checkout progress"
+      mode="progress"
+      current-step="payment"
+      show-step-count
+      steps='[{"id":"shipping","label":"Shipping","state":"completed"},{"id":"payment","label":"Payment"},{"id":"review","label":"Review"},{"id":"confirm","label":"Confirm"}]'
+    ></compa11y-stepper>
+
+    <h3 style="margin:1.5rem 0 0.5rem">Navigation (interactive)</h3>
+    <p id="stepper-nav-status" style="font-size:0.875rem;color:#666;margin-bottom:0.5rem">
+      Current step: <strong>payment</strong>
+    </p>
+    <compa11y-stepper
+      id="stepper-nav"
+      aria-label="Checkout steps"
+      mode="navigation"
+      current-step="payment"
+      steps='[{"id":"shipping","label":"Shipping","state":"completed","description":"Address confirmed"},{"id":"payment","label":"Payment","description":"Enter payment details"},{"id":"review","label":"Review"},{"id":"confirm","label":"Confirm","state":"locked"}]'
+    ></compa11y-stepper>
+
+    <h3 style="margin:1.5rem 0 0.5rem">Vertical with error state</h3>
+    <compa11y-stepper
+      aria-label="Profile setup"
+      mode="navigation"
+      current-step="profile"
+      orientation="vertical"
+      steps='[{"id":"account","label":"Account","state":"completed"},{"id":"profile","label":"Profile","state":"error"},{"id":"settings","label":"Settings"}]'
+    ></compa11y-stepper>
+
+    <p style="margin-top:0.75rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Uses <code>&lt;nav&gt;</code> + <code>&lt;ol&gt;</code> + <code>aria-current="step"</code>.
+      Progress mode renders plain text; navigation mode renders <code>&lt;button&gt;</code> elements.
+      Locked steps use native <code>disabled</code>. SR-only suffixes convey state.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- DataGrid                                                            -->
+  <!-- ================================================================== -->
+
+  <section>
+    <h2>DataGrid</h2>
+
+    <h3 style="margin-bottom:0.5rem">Table mode — sorting, selection, pagination</h3>
+    <compa11y-data-grid
+      id="datagrid-table"
+      caption="Invoices for March 2026"
+      selectable
+      page="1"
+      page-size="5"
+      striped
+    ></compa11y-data-grid>
+
+    <h3 style="margin:1.5rem 0 0.5rem">Grid mode — arrow key cell navigation</h3>
+    <compa11y-data-grid
+      id="datagrid-grid"
+      caption="Editable invoices"
+      mode="grid"
+      bordered
+    ></compa11y-data-grid>
+
+    <p style="margin-top:0.75rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Table mode uses native <code>&lt;table&gt;</code> with <code>aria-sort</code>,
+      <code>aria-selected</code>, and Tab-based navigation. Grid mode adds ARIA grid role with
+      arrow key cell navigation, <kbd>Enter</kbd>/<kbd>F2</kbd> for editing, <kbd>Escape</kbd> to cancel.
+      Both modes announce sort changes, selection counts, and page transitions via live regions.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- TimePicker                                                         -->
+  <!-- ================================================================== -->
+  <section>
+    <h2>TimePicker</h2>
+
+    <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start">
+      <!-- 12h with 15min steps -->
+      <div>
+        <h3>12-hour (15min steps)</h3>
+        <compa11y-time-picker
+          label="Meeting time"
+          hour-cycle="12"
+          step-minutes="15"
+        ></compa11y-time-picker>
+      </div>
+
+      <!-- 24h with 30min steps -->
+      <div>
+        <h3>24-hour (30min steps)</h3>
+        <compa11y-time-picker
+          label="Departure"
+          hour-cycle="24"
+          step-minutes="30"
+          value="14:30"
+        ></compa11y-time-picker>
+      </div>
+
+      <!-- Constrained -->
+      <div>
+        <h3>Business hours (09:00–17:00)</h3>
+        <compa11y-time-picker
+          label="Appointment"
+          hour-cycle="24"
+          step-minutes="30"
+          min-time="09:00"
+          max-time="17:00"
+        ></compa11y-time-picker>
+      </div>
+
+      <!-- Disabled -->
+      <div>
+        <h3>Disabled</h3>
+        <compa11y-time-picker
+          label="Locked"
+          value="10:00"
+          disabled
+        ></compa11y-time-picker>
+      </div>
+    </div>
+
+    <p id="time-picker-output" style="margin-top:1rem;font-size:0.875rem"></p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- DatePicker                                                         -->
+  <!-- ================================================================== -->
+  <section>
+    <h2>DatePicker</h2>
+
+    <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start">
+      <!-- Single date -->
+      <div>
+        <h3 style="margin-bottom:0.75rem">Single Date</h3>
+        <compa11y-date-picker
+          label="Appointment date"
+          hint="MM/DD/YYYY"
+        ></compa11y-date-picker>
+      </div>
+
+      <!-- DateTime with 24h -->
+      <div>
+        <h3 style="margin-bottom:0.75rem">DateTime (24h, Modal)</h3>
+        <compa11y-date-picker
+          label="Meeting time"
+          precision="datetime"
+          hour-cycle="24"
+          overlay="modal"
+        ></compa11y-date-picker>
+      </div>
+
+      <!-- Range -->
+      <div>
+        <h3 style="margin-bottom:0.75rem">Date Range</h3>
+        <compa11y-date-picker
+          label="Trip dates"
+          mode="range"
+          id="range-picker"
+        ></compa11y-date-picker>
+        <p id="range-output" style="margin-top:0.5rem;font-size:0.875rem"></p>
+      </div>
+
+      <!-- With min/max -->
+      <div>
+        <h3 style="margin-bottom:0.75rem">With Constraints</h3>
+        <compa11y-date-picker
+          label="Available dates"
+          min-date="2026-03-01"
+          max-date="2026-12-31"
+          hint="March 2026 onwards"
+        ></compa11y-date-picker>
+      </div>
+    </div>
+
+    <p style="margin-top:0.75rem;font-size:0.875rem;color:#555">
+      <strong>A11y:</strong> Calendar grid uses roving tabindex with arrow key navigation.
+      Days are announced with full labels (e.g. "Saturday, March 7, 2026, today").
+      <kbd>PageUp</kbd>/<kbd>PageDown</kbd> navigate months, <kbd>Shift+PageUp</kbd>/<kbd>Shift+PageDown</kbd> navigate years.
+      <kbd>Escape</kbd> closes and returns focus to trigger. Supports both popover and modal overlay modes.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- TreeView                                                          -->
+  <!-- ================================================================== -->
+  <section>
+    <h2>TreeView</h2>
+
+    <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start">
+      <!-- Widget mode (file explorer) -->
+      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:1rem;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);min-width:280px;flex:1 1 280px">
+        <h3 style="margin:0 0 0.75rem;font-size:0.95rem;font-weight:600;color:#1a202c">File Explorer (Single-Select)</h3>
+          <compa11y-tree-view
+            id="tree-widget"
+            mode="widget"
+            selection-mode="single"
+            aria-label="Project files"
+          ></compa11y-tree-view>
+        <p id="tree-widget-output" style="margin-top:0.75rem;font-size:0.8rem;color:#4a5568;border-top:1px solid #e2e8f0;padding-top:0.5rem"></p>
+      </div>
+
+      <!-- Navigation mode -->
+      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:1rem;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);min-width:280px;flex:1 1 280px">
+        <h3 style="margin:0 0 0.75rem;font-size:0.95rem;font-weight:600;color:#1a202c">Documentation Nav</h3>
+          <compa11y-tree-view
+            id="tree-nav"
+            mode="navigation"
+            aria-label="Documentation navigation"
+          ></compa11y-tree-view>
+      </div>
+    </div>
+
+    <p style="margin-top:1rem;font-size:0.8rem;color:#718096">
+      <strong>Widget mode:</strong> <kbd>↑↓</kbd> navigate · <kbd>→</kbd> expand · <kbd>←</kbd> collapse · <kbd>Space</kbd> select · <kbd>Enter</kbd> activate · <kbd>*</kbd> expand siblings · type-ahead search.
+      <strong>Navigation mode:</strong> semantic <code>&lt;nav&gt;</code> + nested lists, standard Tab/Enter.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- CommandPalette                                                     -->
+  <!-- ================================================================== -->
+  <section>
+    <h2>CommandPalette</h2>
+    <button id="open-command-palette" style="padding:8px 16px;border-radius:6px;border:1px solid #d1d5db;background:#f9fafb;cursor:pointer;display:inline-flex;align-items:center;gap:8px">
+      Open Command Palette
+      <kbd style="font-size:0.75rem;padding:2px 6px;background:#e5e7eb;border-radius:4px">⌘K</kbd>
+    </button>
+
+    <compa11y-command-palette trigger="#open-command-palette" placeholder="Type a command...">
+      <h2 slot="title">Command Palette</h2>
+      <p slot="description">Search for commands and navigate.</p>
+
+      <div slot="item" data-value="Go to Dashboard" data-group="Navigation" data-keywords="home,main">Go to Dashboard</div>
+      <div slot="item" data-value="Go to Projects" data-group="Navigation" data-keywords="work">Go to Projects</div>
+      <div slot="item" data-value="Go to Settings" data-group="Navigation" data-keywords="preferences,config">Go to Settings</div>
+      <div slot="item" data-value="Create new project" data-group="Actions" data-shortcut="⌘N">Create new project</div>
+      <div slot="item" data-value="Invite team member" data-group="Actions" data-shortcut="⌘I">Invite team member</div>
+      <div slot="item" data-value="Delete account" data-group="Actions" data-disabled>Delete account</div>
+      <div slot="item" data-value="Switch to light mode" data-group="Theme" data-keywords="theme,appearance">Switch to light mode</div>
+      <div slot="item" data-value="Switch to dark mode" data-group="Theme" data-keywords="theme,appearance">Switch to dark mode</div>
+
+      <span slot="footer" style="display:flex;gap:16px;font-size:0.75rem;color:#999">
+        <span><kbd>↑↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </span>
+    </compa11y-command-palette>
+
+    <p style="margin-top:0.75rem;font-size:0.85rem;color:#6b7280">
+      Press <kbd style="padding:2px 6px;background:#e5e7eb;border-radius:4px;font-size:0.75rem">⌘K</kbd> /
+      <kbd style="padding:2px 6px;background:#e5e7eb;border-radius:4px;font-size:0.75rem">Ctrl+K</kbd> anywhere to open.
+    </p>
+  </section>
+
+  <!-- Carousel -->
+  <section>
+    <h2 style="margin-bottom:1rem;font-size:1.25rem">Carousel</h2>
+
+    <h3>Single-slide (with transition)</h3>
+    <compa11y-carousel aria-label="Featured products" loop>
+      <div slot="slide" style="padding:2.5rem 1.5rem;background:#dbeafe;border-radius:8px;text-align:center">
+        <h3 style="margin:0 0 0.5rem">Product A</h3>
+        <p style="color:#374151">Slides transition smoothly between items.</p>
+        <button style="margin-top:12px;padding:6px 12px;border:1px solid #ccc;border-radius:4px;background:white;cursor:pointer">View Product A</button>
+      </div>
+      <div slot="slide" style="padding:2.5rem 1.5rem;background:#ede9fe;border-radius:8px;text-align:center">
+        <h3 style="margin:0 0 0.5rem">Product B</h3>
+        <p style="color:#374151">Use the arrow buttons or pagination dots to navigate.</p>
+        <button style="margin-top:12px;padding:6px 12px;border:1px solid #ccc;border-radius:4px;background:white;cursor:pointer">View Product B</button>
+      </div>
+      <div slot="slide" style="padding:2.5rem 1.5rem;background:#fce7f3;border-radius:8px;text-align:center">
+        <h3 style="margin:0 0 0.5rem">Product C</h3>
+        <p style="color:#374151">Respects <code>prefers-reduced-motion</code> for instant snapping.</p>
+        <button style="margin-top:12px;padding:6px 12px;border:1px solid #ccc;border-radius:4px;background:white;cursor:pointer">View Product C</button>
+      </div>
+      <div slot="slide" style="padding:2.5rem 1.5rem;background:#d1fae5;border-radius:8px;text-align:center">
+        <h3 style="margin:0 0 0.5rem">Product D</h3>
+        <p style="color:#374151">Full keyboard + screen reader support built in.</p>
+        <button style="margin-top:12px;padding:6px 12px;border:1px solid #ccc;border-radius:4px;background:white;cursor:pointer">View Product D</button>
+      </div>
+    </compa11y-carousel>
+
+    <h3 style="margin-top:1.5rem">Multi-slide (3 per view)</h3>
+    <compa11y-carousel aria-label="Trending articles" slides-per-view="3" loop>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 1</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 2</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 3</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 4</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 5</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 6</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 7</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 8</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+      <div slot="slide" style="padding:1.25rem 0.75rem;text-align:center"><div style="background:#fef3c7;border-radius:8px;padding:1.5rem 0.75rem"><strong>Article 9</strong><p style="margin:0.5rem 0 0;color:#92400e;font-size:0.85rem">Card content</p></div></div>
+    </compa11y-carousel>
+
+    <h3 style="margin-top:1.5rem">With autoplay</h3>
+    <compa11y-carousel aria-label="Auto-rotating banners" loop autoplay autoplay-interval="4000">
+      <div slot="slide" style="padding:3rem 2rem;background:#dbeafe;border-radius:8px;text-align:center">
+        <h3 style="margin:0">Banner 1 &mdash; Spring Sale</h3>
+        <p style="margin:0.5rem 0 0;color:#4b5563">Autoplay pauses on hover or focus.</p>
+      </div>
+      <div slot="slide" style="padding:3rem 2rem;background:#dcfce7;border-radius:8px;text-align:center">
+        <h3 style="margin:0">Banner 2 &mdash; New Arrivals</h3>
+        <p style="margin:0.5rem 0 0;color:#4b5563">Respects reduced motion preference.</p>
+      </div>
+      <div slot="slide" style="padding:3rem 2rem;background:#fef9c3;border-radius:8px;text-align:center">
+        <h3 style="margin:0">Banner 3 &mdash; Free Shipping</h3>
+        <p style="margin:0.5rem 0 0;color:#4b5563">Pause button provided for WCAG compliance.</p>
+      </div>
+    </compa11y-carousel>
+
+    <p style="margin-top:1rem;font-size:0.85rem;color:#6b7280">
+      Slides transition with <code>transform</code>. Users with <code>prefers-reduced-motion</code> see instant snapping.
+    </p>
+  </section>
+
+  <!-- TreeView setup moved to module script below (after @compa11y/web import) -->
+
+  <script>
+    // DataGrid demo data
+    var dgInvoices = [
+      { id: '1', number: 'INV-001', client: 'Acme Corp', amount: '$1,200.00', status: 'Paid', date: '2026-03-01' },
+      { id: '2', number: 'INV-002', client: 'Globex Inc', amount: '$3,450.00', status: 'Pending', date: '2026-03-02' },
+      { id: '3', number: 'INV-003', client: 'Initech', amount: '$890.00', status: 'Overdue', date: '2026-02-15' },
+      { id: '4', number: 'INV-004', client: 'Umbrella Co', amount: '$2,100.00', status: 'Paid', date: '2026-03-04' },
+      { id: '5', number: 'INV-005', client: 'Stark Industries', amount: '$15,000.00', status: 'Pending', date: '2026-03-05' },
+      { id: '6', number: 'INV-006', client: 'Wayne Enterprises', amount: '$8,750.00', status: 'Paid', date: '2026-03-06' },
+      { id: '7', number: 'INV-007', client: 'Oscorp', amount: '$4,200.00', status: 'Overdue', date: '2026-02-20' },
+      { id: '8', number: 'INV-008', client: 'LexCorp', amount: '$6,300.00', status: 'Pending', date: '2026-03-07' },
+      { id: '9', number: 'INV-009', client: 'Cyberdyne', amount: '$950.00', status: 'Paid', date: '2026-02-28' },
+      { id: '10', number: 'INV-010', client: 'Weyland-Yutani', amount: '$11,400.00', status: 'Pending', date: '2026-03-03' },
+      { id: '11', number: 'INV-011', client: 'Soylent Corp', amount: '$2,800.00', status: 'Paid', date: '2026-02-25' },
+      { id: '12', number: 'INV-012', client: 'Tyrell Corp', amount: '$7,600.00', status: 'Overdue', date: '2026-02-10' },
+    ];
+    var dgColumns = [
+      { key: 'number', label: 'Invoice #', sortable: true, rowHeader: true },
+      { key: 'client', label: 'Client', sortable: true },
+      { key: 'amount', label: 'Amount', sortable: true, align: 'right' },
+      { key: 'status', label: 'Status', sortable: true },
+      { key: 'date', label: 'Date', sortable: true },
+    ];
+
+    // Table mode datagrid
+    var dgTable = document.getElementById('datagrid-table');
+    dgTable.columns = dgColumns;
+    dgTable.rows = dgInvoices;
+    dgTable.addEventListener('compa11y-datagrid-sort', function(e) {
+      console.log('Sort:', e.detail);
+    });
+    dgTable.addEventListener('compa11y-datagrid-select', function(e) {
+      console.log('Selected:', e.detail.selectedRows);
+    });
+    dgTable.addEventListener('compa11y-datagrid-page', function(e) {
+      console.log('Page:', e.detail.page);
+    });
+
+    // Grid mode datagrid
+    var dgGrid = document.getElementById('datagrid-grid');
+    dgGrid.columns = dgColumns.map(function(c) {
+      return Object.assign({}, c, { editable: c.key === 'client' || c.key === 'amount' });
+    });
+    dgGrid.rows = dgInvoices.slice(0, 5);
+    dgGrid.addEventListener('compa11y-datagrid-cell-edit', function(e) {
+      console.log('Cell edit:', e.detail);
+      alert('Edit row ' + e.detail.rowId + ', col ' + e.detail.columnId + ': ' + e.detail.value);
+    });
+  </script>
+
+  <script>
+    var SF_ITEMS = [
+      'Apples','Avocados','Bananas','Blueberries','Cherries',
+      'Grapes','Kiwi','Mangoes','Oranges','Papayas',
+      'Peaches','Pears','Pineapples','Raspberries','Strawberries'
+    ];
+    var sfFilter = document.getElementById('sf-filter');
+    var sfFilterStatus = document.getElementById('sf-filter-status');
+    var sfFilterList = document.getElementById('sf-filter-list');
+
+    function renderFilterList(query) {
+      var filtered = SF_ITEMS.filter(function(item) {
+        return item.toLowerCase().includes(query.toLowerCase());
+      });
+      sfFilter.setAttribute('results-count', String(filtered.length));
+      sfFilterStatus.textContent = filtered.length === 0
+        ? 'No results'
+        : filtered.length + ' result' + (filtered.length === 1 ? '' : 's');
+      sfFilterList.innerHTML = filtered.map(function(i) {
+        return '<li>' + i + '</li>';
+      }).join('');
+    }
+    renderFilterList('');
+    sfFilter?.addEventListener('compa11y-search-field-change', function(e) {
+      renderFilterList(e.detail.value);
+    });
+
+    var sfSubmit = document.getElementById('sf-submit');
+    var sfSubmitOut = document.getElementById('sf-submit-out');
+    sfSubmit?.addEventListener('compa11y-search-field-submit', function(e) {
+      sfSubmitOut.textContent = 'Last search: ' + e.detail.value;
+      sfSubmit.setAttribute('is-loading', '');
+      setTimeout(function() { sfSubmit.removeAttribute('is-loading'); }, 1200);
+    });
+  </script>
+
+  <script>
+    var _esShowResults = true;
+    function toggleEmptyState() {
+      _esShowResults = !_esShowResults;
+      document.getElementById('es-results').hidden = !_esShowResults;
+      document.getElementById('es-empty').hidden = _esShowResults;
+      document.getElementById('es-toggle-btn').textContent = _esShowResults
+        ? 'Apply filter (clears results)'
+        : 'Clear filter (restore results)';
+    }
+  </script>
+
   <!-- Load compa11y - this registers all custom elements automatically -->
   <script type="module">
     // For local development with Vite:
@@ -1876,6 +2858,69 @@
       tableEmpty.rows = [];
     }
 
+    // ── TreeView setup ────────────────────────────────────────────────────────
+    const treeWidget = document.getElementById('tree-widget');
+    const treeWidgetOutput = document.getElementById('tree-widget-output');
+    if (treeWidget) {
+      treeWidget.nodesData = [
+        {
+          id: 'src', label: 'src', children: [
+            { id: 'components', label: 'components', children: [
+              { id: 'button-tsx', label: 'Button.tsx' },
+              { id: 'dialog-tsx', label: 'Dialog.tsx' },
+              { id: 'tree-view-tsx', label: 'TreeView.tsx' },
+            ]},
+            { id: 'hooks', label: 'hooks', children: [
+              { id: 'use-id-ts', label: 'use-id.ts' },
+              { id: 'use-announcer-ts', label: 'use-announcer.ts' },
+            ]},
+            { id: 'index-ts', label: 'index.ts' },
+            { id: 'app-tsx', label: 'App.tsx' },
+          ]
+        },
+        {
+          id: 'public', label: 'public', children: [
+            { id: 'favicon-ico', label: 'favicon.ico' },
+            { id: 'index-html', label: 'index.html' },
+          ]
+        },
+        { id: 'package-json', label: 'package.json' },
+        { id: 'tsconfig-json', label: 'tsconfig.json' },
+        { id: 'readme-md', label: 'README.md' },
+      ];
+      treeWidget.expand('src');
+      treeWidget.addEventListener('compa11y-tree-view-activate', (e) => {
+        if (treeWidgetOutput) treeWidgetOutput.textContent = 'Activated: ' + e.detail.nodeId;
+      });
+      treeWidget.addEventListener('compa11y-tree-view-select', (e) => {
+        if (treeWidgetOutput) treeWidgetOutput.textContent = 'Selected: ' + e.detail.selectedIds.join(', ');
+      });
+    }
+
+    const treeNav = document.getElementById('tree-nav');
+    if (treeNav) {
+      treeNav.nodesData = [
+        {
+          id: 'getting-started', label: 'Getting Started', href: '#getting-started', children: [
+            { id: 'installation', label: 'Installation', href: '#installation' },
+            { id: 'quick-start', label: 'Quick Start', href: '#quick-start' },
+          ]
+        },
+        {
+          id: 'components', label: 'Components', href: '#components', children: [
+            { id: 'button', label: 'Button', href: '#button' },
+            { id: 'dialog', label: 'Dialog', href: '#dialog' },
+            { id: 'forms', label: 'Forms', href: '#forms', children: [
+              { id: 'input', label: 'Input', href: '#input' },
+              { id: 'select', label: 'Select', href: '#select' },
+            ]},
+          ]
+        },
+        { id: 'api', label: 'API Reference', href: '#api', disabled: true },
+      ];
+      treeNav.expand('components');
+    }
+
   </script>
 
   <script>
@@ -1915,6 +2960,30 @@
       });
     }
 
+    // Drawer — side variant buttons
+    const drawerRight = document.querySelector('#drawer-right');
+    const drawerLeft  = document.querySelector('#drawer-left');
+    const drawerTop   = document.querySelector('#drawer-top');
+    const drawerBottom = document.querySelector('#drawer-bottom');
+
+    document.querySelector('#open-drawer-right')?.addEventListener('click', () => drawerRight?.show());
+    document.querySelector('#open-drawer-left')?.addEventListener('click', () => drawerLeft?.show());
+    document.querySelector('#open-drawer-top')?.addEventListener('click', () => drawerTop?.show());
+    document.querySelector('#open-drawer-bottom')?.addEventListener('click', () => drawerBottom?.show());
+    document.querySelector('#confirm-drawer-right')?.addEventListener('click', () => drawerRight?.close());
+
+    // Draggable drawers
+    const drawerDragRight  = document.querySelector('#drawer-drag-right');
+    const drawerDragBottom = document.querySelector('#drawer-drag-bottom');
+    document.querySelector('#open-drawer-drag-right')?.addEventListener('click',  () => drawerDragRight?.show());
+    document.querySelector('#open-drawer-drag-bottom')?.addEventListener('click', () => drawerDragBottom?.show());
+
+    // Drawer events
+    [drawerRight, drawerLeft, drawerTop, drawerBottom].forEach(drawer => {
+      drawer?.addEventListener('compa11y-drawer-open', () => console.log('Drawer opened:', drawer.getAttribute('side')));
+      drawer?.addEventListener('compa11y-drawer-close', () => console.log('Drawer closed:', drawer.getAttribute('side')));
+    });
+
     // Tooltip events
     document.querySelectorAll('compa11y-tooltip').forEach(tip => {
       tip.addEventListener('compa11y-tooltip-show', () => {
@@ -1923,6 +2992,158 @@
       tip.addEventListener('compa11y-tooltip-hide', () => {
         console.log('Tooltip hidden:', tip.getAttribute('label'));
       });
+    });
+
+    // ProgressBar — upload simulation
+    const pbUpload = document.querySelector('#pb-upload');
+    const pbStart = document.querySelector('#pb-start');
+    const pbError = document.querySelector('#pb-error');
+    let pbInterval = null;
+
+    pbStart?.addEventListener('click', () => {
+      if (pbInterval) clearInterval(pbInterval);
+      pbUpload.value = 0;
+      pbUpload.setAttribute('status', 'active');
+      pbUpload.setAttribute('status-text', 'Uploading…');
+      pbStart.disabled = true;
+      pbError.disabled = true;
+      let v = 0;
+      pbInterval = setInterval(() => {
+        v += Math.floor(Math.random() * 8) + 3;
+        if (v >= 100) {
+          pbUpload.value = 100;
+          pbUpload.setAttribute('status', 'complete');
+          pbUpload.setAttribute('status-text', 'Upload complete — file is ready');
+          pbStart.disabled = false;
+          pbError.disabled = false;
+          clearInterval(pbInterval);
+        } else {
+          pbUpload.value = v;
+          pbUpload.setAttribute('status-text', `Uploading… ${Math.min(v, 100)}% complete`);
+        }
+      }, 300);
+    });
+
+    pbError?.addEventListener('click', () => {
+      if (pbInterval) clearInterval(pbInterval);
+      pbUpload.value = 42;
+      pbUpload.setAttribute('status', 'error');
+      pbUpload.setAttribute('status-text', 'Upload failed. Check your connection and retry.');
+      pbStart.disabled = false;
+      pbError.disabled = false;
+    });
+
+    pbUpload?.addEventListener('compa11y-progress-milestone', (e) => {
+      console.log('Milestone reached:', e.detail);
+    });
+
+    // Slider events
+    const fanLabels = ['Off', 'Low', 'Medium', 'High', 'Max'];
+
+    const sliderBrightness = document.querySelector('#slider-brightness');
+    const sliderBrightnessOut = document.querySelector('#slider-brightness-out');
+    sliderBrightness?.addEventListener('compa11y-slider-change', (e) => {
+      sliderBrightnessOut.textContent = `Value: ${e.detail.value}`;
+    });
+
+    const sliderFan = document.querySelector('#slider-fan');
+    const sliderFanOut = document.querySelector('#slider-fan-out');
+    sliderFan?.addEventListener('compa11y-slider-change', (e) => {
+      sliderFanOut.textContent = `Level: ${fanLabels[e.detail.value] ?? e.detail.value}`;
+    });
+
+    const sliderPrice = document.querySelector('#slider-price');
+    const sliderPriceOut = document.querySelector('#slider-price-out');
+    sliderPrice?.addEventListener('compa11y-slider-range-change', (e) => {
+      sliderPriceOut.textContent = `Range: $${e.detail.minValue} – $${e.detail.maxValue}`;
+    });
+
+    // NumberField events
+    const nfQuantity = document.querySelector('#nf-quantity');
+    const nfQuantityOut = document.querySelector('#nf-quantity-out strong');
+    nfQuantity?.addEventListener('compa11y-number-field-change', (e) => {
+      nfQuantityOut.textContent = e.detail.value ?? '—';
+    });
+
+    const nfRating = document.querySelector('#nf-rating');
+    const nfRatingOut = document.querySelector('#nf-rating-out strong');
+    nfRating?.addEventListener('compa11y-number-field-change', (e) => {
+      nfRatingOut.textContent = e.detail.value ?? '—';
+    });
+
+    // FileUpload events
+    const fuBasic = document.querySelector('#fu-basic');
+    const fuMulti = document.querySelector('#fu-multi');
+    const fuOutput = document.querySelector('#fu-output strong');
+
+    function updateFuOutput() {
+      const basicCount = fuBasic?.files?.length ?? 0;
+      const multiCount = fuMulti?.files?.length ?? 0;
+      fuOutput.textContent = String(basicCount + multiCount);
+    }
+
+    fuBasic?.addEventListener('compa11y-file-upload-change', updateFuOutput);
+    fuMulti?.addEventListener('compa11y-file-upload-change', updateFuOutput);
+
+    // ErrorSummary form demo
+    var esForm = document.getElementById('es-demo-form');
+    var esContainer = document.getElementById('es-form-container');
+    esForm?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Remove previous summary if any
+      var prev = esContainer.querySelector('compa11y-error-summary');
+      if (prev) prev.remove();
+      // Create a new error summary
+      var summary = document.createElement('compa11y-error-summary');
+      summary.setAttribute('title', 'There are 2 problems');
+      summary.setAttribute('errors', JSON.stringify([
+        { message: 'Enter your name', fieldId: 'es-name' },
+        { message: 'Enter a valid email address', fieldId: 'es-email' }
+      ]));
+      summary.style.marginBottom = '1rem';
+      esContainer.appendChild(summary);
+    });
+
+    // ErrorSummary page dismiss
+    var esPage = document.getElementById('es-page');
+    esPage?.addEventListener('compa11y-error-summary-dismiss', function() {
+      esPage.remove();
+    });
+
+    // TimePicker change demo
+    var timeOutput = document.getElementById('time-picker-output');
+    document.querySelectorAll('compa11y-time-picker').forEach(function(tp) {
+      tp.addEventListener('compa11y-time-picker-change', function(e) {
+        var d = e.detail;
+        var text = 'Selected: ' + String(d.hours).padStart(2, '0') + ':' + String(d.minutes).padStart(2, '0');
+        if (d.period) text += ' ' + d.period;
+        timeOutput.textContent = text + ' (from: ' + tp.getAttribute('label') + ')';
+      });
+    });
+
+    // DatePicker range demo
+    var rangePicker = document.getElementById('range-picker');
+    var rangeOutput = document.getElementById('range-output');
+    rangePicker?.addEventListener('compa11y-date-picker-range', function(e) {
+      var d = e.detail;
+      if (d.start && d.end) {
+        rangeOutput.textContent = 'Range: ' + d.start + ' \u2013 ' + d.end;
+      }
+    });
+
+    // CommandPalette demo
+    var cmdPalette = document.querySelector('compa11y-command-palette');
+    cmdPalette?.addEventListener('compa11y-command-palette-select', function(e) {
+      alert('Selected: ' + e.detail.value);
+    });
+
+    // Stepper navigation demo
+    var stepperNav = document.getElementById('stepper-nav');
+    var stepperNavStatus = document.getElementById('stepper-nav-status');
+    stepperNav?.addEventListener('compa11y-stepper-select', function(e) {
+      var stepId = e.detail.stepId;
+      stepperNav.setAttribute('current-step', stepId);
+      stepperNavStatus.innerHTML = 'Current step: <strong>' + stepId + '</strong>';
     });
   </script>
 </body>

@@ -1,0 +1,26 @@
+export {
+  CarouselCompound,
+  CarouselCompound as Carousel,
+  Carousel as CarouselBase,
+  CarouselContent,
+  CarouselItem,
+  CarouselControls,
+  CarouselPrev,
+  CarouselNext,
+  CarouselPause,
+  CarouselPagination,
+  CarouselStatus,
+  type CarouselProps,
+  type CarouselContentProps,
+  type CarouselItemProps,
+  type CarouselControlsProps,
+  type CarouselPrevProps,
+  type CarouselNextProps,
+  type CarouselPauseProps,
+  type CarouselPaginationProps,
+  type CarouselStatusProps,
+} from './carousel';
+export {
+  useCarouselContext,
+  type CarouselContextValue,
+} from './carousel-context';
