@@ -1147,6 +1147,7 @@ export const DataGrid = forwardRef(function DataGrid<
                       data-col={colIndex}
                       data-sortable={isSortable || undefined}
                       aria-sort={ariaSort}
+                      aria-colindex={isGrid ? colIndex + 1 : undefined}
                       role={isGrid ? 'columnheader' : undefined}
                       style={{
                         textAlign: col.align,
@@ -1373,6 +1374,7 @@ export const DataGrid = forwardRef(function DataGrid<
                             data-col={cellColIndex}
                             data-editable={col.editable || undefined}
                             role={isGrid ? 'gridcell' : undefined}
+                            aria-colindex={isGrid ? cellColIndex + 1 : undefined}
                             tabIndex={isGrid ? (isFocused ? 0 : -1) : undefined}
                             style={{ textAlign: col.align }}
                             onClick={

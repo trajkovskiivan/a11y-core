@@ -53,6 +53,25 @@ export class Compa11yTabs extends Compa11yElement {
   }
 
   protected setupAccessibility(): void {
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      const tabs = this.querySelectorAll('[slot="tab"]');
+      const panels = this.querySelectorAll('[slot="panel"]');
+      if (tabs.length === 0) {
+        console.warn(
+          '[compa11y/Tabs] Tabs component has no tab elements. Add elements with slot="tab".\n' +
+            '💡 Suggestion: <button slot="tab">Tab 1</button>'
+        );
+      }
+      if (tabs.length !== panels.length) {
+        console.warn(
+          `[compa11y/Tabs] Mismatched tab/panel count: ${tabs.length} tabs vs ${panels.length} panels. Each tab must have a corresponding panel.`
+        );
+      }
+    }
+
     this.updateTabsAndPanels();
   }
 

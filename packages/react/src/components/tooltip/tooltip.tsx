@@ -270,6 +270,24 @@ export function Tooltip({
     }
   }
 
+  // Warn if tooltip DOM contains interactive elements (WCAG 1.4.13)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (!isOpen) return;
+    const el = tooltipRef.current;
+    if (!el) return;
+    const interactive = el.querySelector(
+      'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (interactive) {
+      warnings.warning(
+        'Tooltip contains interactive content (e.g. buttons, links). ' +
+          'Per WCAG 1.4.13, tooltip content should be non-interactive. ' +
+          'Consider using a Popover instead.'
+      );
+    }
+  }, [isOpen]);
+
   if (!isValidElement(children)) {
     return children as unknown as React.ReactElement;
   }

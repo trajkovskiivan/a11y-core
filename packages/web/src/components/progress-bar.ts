@@ -184,7 +184,8 @@ export class Compa11yProgressBar extends Compa11yElement {
             id="${labelId}"
             class="progress-bar-label"
             part="label"
-          >${label}</span>
+            data-compa11y-progress-bar-label
+          ><slot name="label">${label}</slot></span>
           ${
             shouldShowValue
               ? `<span class="progress-bar-value" part="value" aria-hidden="true">${Math.round(percentage)}%</span>`

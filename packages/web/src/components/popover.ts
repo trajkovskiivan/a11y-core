@@ -484,7 +484,7 @@ export class Compa11yPopover extends Compa11yElement {
     });
 
     this._addGlobalListeners();
-    this.emit('compa11y-popover-open');
+    this.emit('compa11y-popover-open', { placement: this.getAttribute('placement') || 'bottom' });
   }
 
   private _hide(): void {
@@ -523,7 +523,7 @@ export class Compa11yPopover extends Compa11yElement {
       this._triggerEl?.focus();
     }
 
-    this.emit('compa11y-popover-close');
+    this.emit('compa11y-popover-close', { placement: this.getAttribute('placement') || 'bottom' });
   }
 
   // ─── Positioning ───────────────────────────────────────────────────────────

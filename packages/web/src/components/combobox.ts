@@ -9,9 +9,11 @@
  * </compa11y-combobox>
  */
 
-import { announce } from '@compa11y/core';
+import { announce, createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { COMBOBOX_STYLES } from '../utils/styles';
+
+const warnings = createComponentWarnings('Combobox');
 
 interface ComboboxOption {
   value: string;
@@ -31,7 +33,7 @@ export class Compa11yCombobox extends Compa11yElement {
   private _listboxElement: HTMLElement | null = null;
 
   static get observedAttributes() {
-    return ['open', 'value', 'placeholder', 'disabled', 'clearable'];
+    return ['open', 'value', 'placeholder', 'disabled', 'clearable', 'label'];
   }
 
   get open(): boolean {
@@ -65,20 +67,41 @@ export class Compa11yCombobox extends Compa11yElement {
     this.setAttribute('value', val || '');
   }
 
+  private _hasLabelSlot = false;
+
   protected setupAccessibility(): void {
-    // Accessibility is set up in render()
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    this._hasLabelSlot = Boolean(slottedLabel);
+
+    const hasLabel =
+      this.hasAttribute('label') ||
+      this.hasAttribute('aria-label') ||
+      this.hasAttribute('aria-labelledby') ||
+      this._hasLabelSlot;
+    if (!hasLabel) {
+      warnings.error(
+        'Combobox has no accessible label. Add label="...", aria-label="...", aria-labelledby="...", or use <span slot="label">...</span>.\n' +
+          '💡 Suggestion: <compa11y-combobox label="Search items">...</compa11y-combobox>'
+      );
+    }
   }
 
   protected render(): void {
     const shadow = this.attachShadow({ mode: 'open' });
     const inputId = `${this._id}-input`;
     const listboxId = `${this._id}-listbox`;
+    const labelId = `${this._id}-label`;
     const placeholder = this.getAttribute('placeholder') || 'Search...';
+    const label = this.getAttribute('label') || '';
+    const ariaLabel = this.getAttribute('aria-label') || '';
+    const ariaLabelledBy = this.getAttribute('aria-labelledby') || '';
     const clearable = this.hasAttribute('clearable');
 
     shadow.innerHTML = `
       <style>${COMBOBOX_STYLES}</style>
       <div class="combobox-wrapper" part="wrapper">
+        <label id="${labelId}" for="${inputId}" part="label" data-compa11y-combobox-label ${!label ? 'hidden' : ''}><slot name="label">${label}</slot></label>
         <div class="input-wrapper" part="input-wrapper">
           <input
             id="${inputId}"
@@ -89,6 +112,8 @@ export class Compa11yCombobox extends Compa11yElement {
             aria-controls="${listboxId}"
             aria-haspopup="listbox"
             aria-autocomplete="list"
+            ${ariaLabelledBy ? `aria-labelledby="${ariaLabelledBy}"` : !ariaLabel ? `aria-labelledby="${labelId}"` : ''}
+            ${!label && ariaLabel && !ariaLabelledBy ? `aria-label="${ariaLabel}"` : ''}
             placeholder="${placeholder}"
             part="input"
           />
@@ -142,8 +167,12 @@ export class Compa11yCombobox extends Compa11yElement {
     document.addEventListener('mousedown', this.handleOutsideClick);
 
     // Slot change
-    const slot = this.shadowRoot?.querySelector('slot');
+    const slot = this.shadowRoot?.querySelector('slot:not([name])');
     slot?.addEventListener('slotchange', this.updateOptions);
+
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
 
     // Initial options
     this.updateOptions();
@@ -175,6 +204,22 @@ export class Compa11yCombobox extends Compa11yElement {
       }
     }
   }
+
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('[data-compa11y-combobox-label]');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
 
   private updateOptions = (): void => {
     const optionElements = Array.from(this.querySelectorAll('option'));

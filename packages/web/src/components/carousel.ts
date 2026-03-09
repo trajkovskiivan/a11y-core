@@ -36,7 +36,7 @@ import { announcePolite, createComponentWarnings, prefersReducedMotion } from '@
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { CAROUSEL_STYLES } from '../utils/styles';
 
-const warn = createComponentWarnings('Carousel');
+const warnings = createComponentWarnings('Carousel');
 
 export class Compa11yCarousel extends Compa11yElement {
   // Internal state
@@ -89,15 +89,26 @@ export class Compa11yCarousel extends Compa11yElement {
     this._orientation =
       (this.getAttribute('orientation') as 'horizontal' | 'vertical') ?? 'horizontal';
 
-    if (process.env.NODE_ENV !== 'production') {
-      const hasLabel =
-        this.hasAttribute('aria-label') || this.hasAttribute('aria-labelledby');
-      if (!hasLabel) {
-        warn.error(
-          'compa11y-carousel requires an accessible name.',
-          'Add an aria-label or aria-labelledby attribute.'
-        );
-      }
+    const hasLabel =
+      this.hasAttribute('aria-label') || this.hasAttribute('aria-labelledby');
+    if (!hasLabel) {
+      warnings.error(
+        'Carousel has no accessible label. Add aria-label="..." or aria-labelledby="..." attribute.\n' +
+          '💡 Suggestion: <compa11y-carousel aria-label="Featured items">...</compa11y-carousel>'
+      );
+    }
+
+    // Warn if autoplay is enabled but no pause control will be available
+    if (this.hasAttribute('autoplay')) {
+      requestAnimationFrame(() => {
+        const pauseBtn = this.shadowRoot?.querySelector('.carousel-pause');
+        if (!pauseBtn) {
+          warnings.warning(
+            'Carousel with autoplay should include a pause control for accessibility.\n' +
+              '💡 Suggestion: Ensure autoplay is not suppressed by prefers-reduced-motion, or provide a custom pause mechanism.'
+          );
+        }
+      });
     }
   }
 

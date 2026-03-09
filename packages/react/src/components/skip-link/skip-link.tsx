@@ -23,7 +23,10 @@
  * Keyboard: Tab to reveal, Enter to activate.
  */
 
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useEffect } from 'react';
+import { createComponentWarnings } from '@compa11y/core';
+
+const warnings = createComponentWarnings('SkipLink');
 
 export interface SkipLinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -75,6 +78,21 @@ export const SkipLink = forwardRef<HTMLAnchorElement, SkipLinkProps>(
     ref
   ) {
     const [isFocused, setIsFocused] = React.useState(false);
+
+    // Dev warning: target selector doesn't match any element
+    useEffect(() => {
+      if (process.env.NODE_ENV !== 'production') {
+        // Check after mount to allow target to render
+        const timer = setTimeout(() => {
+          if (!document.querySelector(target)) {
+            warnings.warning(
+              `Target selector "${target}" does not match any element in the DOM. The skip link will not function.`
+            );
+          }
+        }, 0);
+        return () => clearTimeout(timer);
+      }
+    }, [target]);
 
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLAnchorElement>) => {

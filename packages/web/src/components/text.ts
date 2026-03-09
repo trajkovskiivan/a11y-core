@@ -35,7 +35,10 @@
  * @cssprop --compa11y-focus-color - Focus outline color
  */
 
+import { createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
+
+const headingWarnings = createComponentWarnings('Heading');
 
 const SHARED_STYLES = `
   :host {
@@ -162,7 +165,16 @@ export class Compa11yHeading extends Compa11yElement {
   }
 
   protected setupAccessibility(): void {
-    // Semantic heading element handles accessibility
+    const levelAttr = this.getAttribute('level');
+    if (levelAttr) {
+      const level = parseInt(levelAttr, 10);
+      if (isNaN(level) || level < 1 || level > 6) {
+        headingWarnings.error(
+          `Invalid heading level "${levelAttr}". Heading level must be between 1 and 6. Defaulting to 2.`,
+          '<compa11y-heading level="2">Section Title</compa11y-heading>'
+        );
+      }
+    }
   }
 
   protected render(): void {

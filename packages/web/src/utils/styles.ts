@@ -1179,6 +1179,7 @@ export const CHECKBOX_STYLES = `
     border: var(--compa11y-checkbox-border, 2px solid #666);
     border-radius: var(--compa11y-checkbox-radius, 3px);
     background: var(--compa11y-checkbox-bg, white);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1212,24 +1213,31 @@ export const CHECKBOX_STYLES = `
 
   /* Check mark SVG */
   .checkbox-check {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     opacity: 0;
-    transform: scale(0);
+    transform: translate(-50%, -50%) scale(0);
     transition: all 0.15s ease;
     color: var(--compa11y-checkbox-check-color, white);
   }
 
   :host([checked]) .checkbox-check {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   :host([indeterminate]) .checkbox-check {
     opacity: 0;
-    transform: scale(0);
+    transform: translate(-50%, -50%) scale(0);
   }
 
   /* Indeterminate dash */
   .checkbox-dash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     opacity: 0;
     transition: all 0.15s ease;
     color: var(--compa11y-checkbox-check-color, white);

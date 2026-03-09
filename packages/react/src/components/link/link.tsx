@@ -23,6 +23,10 @@
  */
 
 import React, { forwardRef } from 'react';
+import { useFocusVisible } from '../../hooks/use-focus-visible';
+import { createComponentWarnings } from '@compa11y/core';
+
+const warnings = createComponentWarnings('Link');
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'aria-current'> {
@@ -87,6 +91,17 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
     },
     ref
   ) {
+    const { isFocusVisible, focusProps } = useFocusVisible();
+
+    // Dev warning: missing accessible name
+    if (process.env.NODE_ENV !== 'production') {
+      if (!children && !props['aria-label'] && !props['aria-labelledby']) {
+        warnings.error(
+          'Link requires visible text content, an `aria-label`, or `aria-labelledby` for an accessible name.'
+        );
+      }
+    }
+
     const resolvedStyle = unstyled
       ? style
       : {
@@ -128,10 +143,20 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         data-compa11y-link
         data-external={external || undefined}
         data-disabled={disabled || undefined}
-        style={resolvedStyle}
+        data-focus-visible={isFocusVisible || undefined}
+        style={{
+          ...resolvedStyle,
+          ...(isFocusVisible && !unstyled
+            ? {
+                outline: '2px solid var(--compa11y-focus-color, #0066cc)',
+                outlineOffset: '2px',
+              }
+            : undefined),
+        }}
         onClick={handleClick}
         {...linkProps}
         {...props}
+        {...focusProps}
       >
         {children}
         {external && (

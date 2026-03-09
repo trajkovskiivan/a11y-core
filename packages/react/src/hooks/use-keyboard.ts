@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   KeyboardPatterns,
   createTypeAhead,
@@ -204,6 +204,3 @@ export function useKeyPressed(targetKey: string): boolean {
 
   return pressed;
 }
-
-// Need to import useState
-import { useState } from 'react';

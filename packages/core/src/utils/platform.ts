@@ -83,6 +83,22 @@ export function prefersDarkMode(): boolean {
 }
 
 /**
+ * Detect if the primary pointer is coarse (touch/stylus)
+ */
+export function pointerCoarse(): boolean {
+  if (!isBrowser()) return false;
+  return window.matchMedia('(pointer: coarse)').matches;
+}
+
+/**
+ * Detect if the primary pointer is fine (mouse/trackpad)
+ */
+export function pointerFine(): boolean {
+  if (!isBrowser()) return false;
+  return window.matchMedia('(pointer: fine)').matches;
+}
+
+/**
  * Get the current screen reader mode (if detectable)
  * Note: This is not 100% reliable and should not be depended upon
  */

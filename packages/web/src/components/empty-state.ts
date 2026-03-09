@@ -108,8 +108,29 @@ export class Compa11yEmptyState extends Compa11yElement {
     `;
   }
 
-  protected setupEventListeners(): void {}
-  protected cleanupEventListeners(): void {}
+  protected setupEventListeners(): void {
+    const actionsSlot = this.shadowRoot?.querySelector('slot[name="actions"]') as HTMLSlotElement | null;
+    actionsSlot?.addEventListener('slotchange', () => {
+      const assigned = actionsSlot.assignedElements({ flatten: true });
+      assigned.forEach((el) => {
+        el.addEventListener('click', this._handleActionClick);
+      });
+    });
+  }
+
+  protected cleanupEventListeners(): void {
+    // Cleanup handled by element removal
+  }
+
+  private _handleActionClick = (e: Event): void => {
+    const target = e.target as HTMLElement;
+    const button = target.closest('button, a, [role="button"]') as HTMLElement | null;
+    if (button) {
+      this.emit('compa11y-empty-state-action', {
+        action: button.textContent?.trim() || '',
+      });
+    }
+  };
 
   protected onAttributeChange(
     _name: string,

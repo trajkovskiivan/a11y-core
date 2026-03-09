@@ -619,13 +619,14 @@ export class Compa11yFileUpload extends Compa11yElement {
       case 'accept':
       case 'multiple':
       case 'name':
-        // These affect the hidden input — sync them
+        // Sync to the hidden input
         if (this._inputEl) {
           if (name === 'accept') {
             if (next) this._inputEl.setAttribute('accept', next);
             else this._inputEl.removeAttribute('accept');
           } else if (name === 'multiple') {
             this._inputEl.toggleAttribute('multiple', next !== null);
+            this.toggleAttribute('multiple', next !== null);
           } else if (name === 'name') {
             if (next) this._inputEl.setAttribute('name', next);
             else this._inputEl.removeAttribute('name');

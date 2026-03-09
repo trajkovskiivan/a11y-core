@@ -242,6 +242,111 @@ export const KeyboardPatterns = {
 };
 
 /**
+ * Composable keymap with priority support
+ *
+ * Allows nested components to register keymaps with explicit priority levels.
+ * Higher priority handlers are checked first, enabling nested components
+ * (e.g., menu inside dialog) to handle key conflicts cleanly.
+ */
+export interface KeymapLayer {
+  /** Unique identifier for this layer */
+  id: string;
+  /** Priority level (higher = checked first). Default: 0 */
+  priority: number;
+  /** Key handlers for this layer */
+  handlers: KeyboardHandlers;
+  /** Whether this layer should prevent lower-priority layers from handling the same key */
+  exclusive?: boolean;
+}
+
+export interface ComposableKeymap {
+  /** Add a keymap layer */
+  add: (layer: KeymapLayer) => void;
+  /** Remove a keymap layer by ID */
+  remove: (id: string) => void;
+  /** Handle a keyboard event through the priority stack */
+  handle: (event: KeyboardEvent) => boolean;
+  /** Attach to an element */
+  attach: (element: HTMLElement) => void;
+  /** Detach from current element */
+  detach: () => void;
+  /** Destroy the keymap */
+  destroy: () => void;
+}
+
+export function createComposableKeymap(
+  options: Omit<KeyboardManagerOptions, 'targetSelector'> = {}
+): ComposableKeymap {
+  const { preventDefault = true, stopPropagation = true } = options;
+
+  const layers: KeymapLayer[] = [];
+  let attachedElement: HTMLElement | null = null;
+
+  function sortLayers(): void {
+    layers.sort((a, b) => b.priority - a.priority);
+  }
+
+  function add(layer: KeymapLayer): void {
+    // Remove existing layer with same ID
+    remove(layer.id);
+    layers.push(layer);
+    sortLayers();
+  }
+
+  function remove(id: string): void {
+    const index = layers.findIndex((l) => l.id === id);
+    if (index > -1) {
+      layers.splice(index, 1);
+    }
+  }
+
+  function handle(event: KeyboardEvent): boolean {
+    const combo = getKeyCombo(event);
+    const key = normalizeKey(event);
+
+    for (const layer of layers) {
+      const handler = layer.handlers[combo] ?? layer.handlers[key];
+      if (handler) {
+        const result = handler(event);
+        if (result !== false) {
+          if (preventDefault) event.preventDefault();
+          if (stopPropagation) event.stopPropagation();
+        }
+        // If exclusive, stop checking lower-priority layers
+        if (layer.exclusive !== false) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function handleKeyDown(event: KeyboardEvent): void {
+    handle(event);
+  }
+
+  function attach(element: HTMLElement): void {
+    if (attachedElement) detach();
+    attachedElement = element;
+    element.addEventListener('keydown', handleKeyDown);
+  }
+
+  function detach(): void {
+    if (attachedElement) {
+      attachedElement.removeEventListener('keydown', handleKeyDown);
+      attachedElement = null;
+    }
+  }
+
+  function destroy(): void {
+    detach();
+    layers.length = 0;
+  }
+
+  return { add, remove, handle, attach, detach, destroy };
+}
+
+/**
  * Type-ahead search for menus and listboxes
  */
 export interface TypeAhead {

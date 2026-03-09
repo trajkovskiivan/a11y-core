@@ -18,6 +18,9 @@
  */
 
 import React, { forwardRef } from 'react';
+import { createComponentWarnings } from '@compa11y/core';
+
+const warnings = createComponentWarnings('Heading');
 
 // ============================================================================
 // Shared types
@@ -110,6 +113,15 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref
   ) {
+    // Dev warning: invalid heading level
+    if (process.env.NODE_ENV !== 'production') {
+      if (!HEADING_SIZES[level]) {
+        warnings.warning(
+          `Invalid heading level "${level}". Must be 1–6. Falling back to h2.`
+        );
+      }
+    }
+
     const Tag = `h${level}` as const;
     const defaults = HEADING_SIZES[level] ?? HEADING_SIZES[2]!;
 

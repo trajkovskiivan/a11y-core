@@ -105,11 +105,25 @@ export class Compa11ySkipLink extends Compa11yElement {
 
   protected setupEventListeners(): void {
     this.addEventListener('click', this.handleClick);
+    const link = this.shadowRoot?.querySelector('.skip-link');
+    link?.addEventListener('focus', this.handleFocus);
+    link?.addEventListener('blur', this.handleBlur);
   }
 
   protected cleanupEventListeners(): void {
     this.removeEventListener('click', this.handleClick);
+    const link = this.shadowRoot?.querySelector('.skip-link');
+    link?.removeEventListener('focus', this.handleFocus);
+    link?.removeEventListener('blur', this.handleBlur);
   }
+
+  private handleFocus = (): void => {
+    this.toggleAttribute('focused', true);
+  };
+
+  private handleBlur = (): void => {
+    this.removeAttribute('focused');
+  };
 
   private handleClick = (event: Event): void => {
     const target = this.getAttribute('target') || '#main-content';
@@ -124,6 +138,7 @@ export class Compa11ySkipLink extends Compa11yElement {
       element.focus();
       // Scroll into view
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.emit('compa11y-skip-link-activate', { target: this.getAttribute('target') || '' });
     }
   };
 

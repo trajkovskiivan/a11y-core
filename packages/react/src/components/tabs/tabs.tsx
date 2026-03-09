@@ -1,12 +1,15 @@
-import React, { forwardRef, useCallback, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
 import { useAnnouncer } from '../../hooks/use-announcer';
+import { createComponentWarnings } from '@compa11y/core';
 import {
   TabsProvider,
   useTabsContext,
   type TabsContextValue,
 } from './tabs-context';
+
+const warnings = createComponentWarnings('Tabs');
 
 export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Default selected tab value */
@@ -215,14 +218,23 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab(
   } = useTabsContext();
   const { announce } = useAnnouncer();
 
+  const isSelected = selectedValue === value;
+  const tabId = `${baseId}-tab-${value}`;
+  const panelId = `${baseId}-panel-${value}`;
+
   React.useEffect(() => {
     registerTab(value);
     return () => unregisterTab(value);
   }, [value, registerTab, unregisterTab]);
 
-  const isSelected = selectedValue === value;
-  const tabId = `${baseId}-tab-${value}`;
-  const panelId = `${baseId}-panel-${value}`;
+  // Dev warning: Tab must have an accessible name
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    const el = document.getElementById(tabId);
+    if (el) {
+      warnings.checks.accessibleLabel(el);
+    }
+  }, [tabId]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);

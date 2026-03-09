@@ -213,7 +213,7 @@ export class Compa11yButton extends Compa11yElement {
       event.stopPropagation();
       return;
     }
-    this.emit('compa11y-button-click');
+    this.emit('compa11y-button-click', { type: this.getAttribute('type') || 'button', variant: this.variant });
   };
 
   // =========================================================================

@@ -10,6 +10,7 @@ import {
   getNextFocusable,
   getPreviousFocusable,
 } from '../utils/dom';
+import { createComponentWarnings } from '../dev/warnings';
 
 export interface FocusScopeOptions {
   /** Whether to contain focus within the scope */
@@ -202,6 +203,8 @@ export interface RovingTabindex {
   destroy: () => void;
 }
 
+const rovingWarnings = createComponentWarnings('RovingTabindex');
+
 export function createRovingTabindex(
   container: HTMLElement,
   selector: string,
@@ -219,6 +222,14 @@ export function createRovingTabindex(
 
   function update(): void {
     elements = Array.from(container.querySelectorAll<HTMLElement>(selector));
+
+    if (elements.length === 0) {
+      rovingWarnings.warning(
+        `No elements matching "${selector}" found in the container. Roving tabindex has nothing to manage.`,
+        'Ensure the container has child elements matching the selector.',
+        container
+      );
+    }
 
     // Update tabindex attributes
     elements.forEach((el, index) => {

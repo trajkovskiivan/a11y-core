@@ -27,6 +27,10 @@
  */
 
 import React, { forwardRef, useCallback } from 'react';
+import { useFocusVisible } from '../../hooks/use-focus-visible';
+import { createComponentWarnings } from '@compa11y/core';
+
+const warnings = createComponentWarnings('Alert');
 
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
@@ -125,6 +129,16 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
     ref
   ) {
     const alertRole = type === 'error' || type === 'warning' ? 'alert' : 'status';
+    const { isFocusVisible, focusProps } = useFocusVisible();
+
+    // Dev warning: Alert should have content
+    if (process.env.NODE_ENV !== 'production') {
+      if (!title && !children) {
+        warnings.warning(
+          'Alert has no title and no children. Provide at least one for a meaningful alert.'
+        );
+      }
+    }
 
     const handleDismiss = useCallback(() => {
       onDismiss?.();
@@ -180,7 +194,17 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
             onClick={handleDismiss}
             aria-label="Dismiss alert"
             data-compa11y-alert-close
-            style={unstyled ? undefined : closeButtonStyles}
+            data-focus-visible={isFocusVisible || undefined}
+            style={unstyled ? undefined : {
+              ...closeButtonStyles,
+              ...(isFocusVisible
+                ? {
+                    outline: '2px solid var(--compa11y-focus-color, #0066cc)',
+                    outlineOffset: '2px',
+                  }
+                : undefined),
+            }}
+            {...focusProps}
           >
             &times;
           </button>

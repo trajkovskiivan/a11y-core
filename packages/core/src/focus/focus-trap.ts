@@ -11,6 +11,7 @@ import {
   containsFocus,
   resolveElement,
 } from '../utils/dom';
+import { createComponentWarnings } from '../dev/warnings';
 
 interface FocusTrap {
   activate: () => void;
@@ -25,6 +26,8 @@ interface FocusTrap {
 
 // Track active focus traps in a stack (for nested traps)
 const focusTrapStack: FocusTrap[] = [];
+
+const devWarnings = createComponentWarnings('FocusTrap');
 
 /**
  * Create a focus trap for a container element
@@ -146,6 +149,11 @@ export function createFocusTrap(
           first.focus();
         } else {
           // If no focusable elements, focus the container itself
+          devWarnings.warning(
+            'No focusable elements found inside the focus trap container. The container itself will be focused.',
+            'Add focusable elements (buttons, inputs, links) inside the trap container.',
+            container
+          );
           container.setAttribute('tabindex', '-1');
           container.focus();
         }

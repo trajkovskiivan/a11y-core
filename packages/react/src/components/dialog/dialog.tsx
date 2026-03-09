@@ -161,6 +161,7 @@ function DialogOverlay({
     escapeDeactivates: closeOnEscape,
     // Don't use clickOutsideDeactivates - we handle this in handleOverlayClick
     clickOutsideDeactivates: false,
+    returnFocus: true,
     onDeactivate: close,
   });
 

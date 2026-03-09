@@ -104,6 +104,7 @@ export class Compa11yCheckbox extends Compa11yElement {
     if (value !== oldValue) {
       this.updateVisualState();
       this.emit('change', { checked: value, value: this.value });
+      this.emit('compa11y-checkbox-change', { checked: value, value: this.value });
     }
   }
 
@@ -291,8 +292,8 @@ export class Compa11yCheckbox extends Compa11yElement {
         ${
           hasLabel || hasHint || hasError
             ? `<div class="checkbox-content">
-            ${hasLabel ? `<label for="${inputId}" id="${labelId}" class="checkbox-label" part="label">${this.label}${this.required ? '<span class="checkbox-required" aria-hidden="true">*</span>' : ''}</label>` : ''}
-            ${hasHint ? `<div id="${hintId}" class="checkbox-hint" part="hint">${this.hint}</div>` : ''}
+            ${hasLabel ? `<label for="${inputId}" id="${labelId}" class="checkbox-label" part="label"><slot name="label">${this.label}</slot>${this.required ? '<span class="checkbox-required" aria-hidden="true">*</span>' : ''}</label>` : ''}
+            ${hasHint ? `<div id="${hintId}" class="checkbox-hint" part="hint"><slot name="hint">${this.hint}</slot></div>` : ''}
             ${hasError ? `<div id="${errorId}" class="checkbox-error" role="alert" part="error">${this.error}</div>` : ''}
           </div>`
             : ''
@@ -373,6 +374,7 @@ export class Compa11yCheckbox extends Compa11yElement {
 
     this.updateVisualState();
     this.emit('change', { checked: this._checked, value: this.value });
+    this.emit('compa11y-checkbox-change', { checked: this._checked, value: this.value });
 
     // Announce state change
     const labelText =
@@ -586,11 +588,11 @@ export class Compa11yCheckboxGroup extends Compa11yElement {
         ${hasError ? `aria-describedby="${errorId}"` : ''}
         ${this.disabled ? 'disabled' : ''}
       >
-        ${hasLegend ? `<legend part="legend">${this.legend}</legend>` : ''}
+        ${hasLegend ? `<legend part="legend"><slot name="legend">${this.legend}</slot></legend>` : ''}
         <div class="checkbox-group-items" part="items">
           <slot></slot>
         </div>
-        ${hasError ? `<div id="${errorId}" class="checkbox-group-error" role="alert" part="error">${this.error}</div>` : ''}
+        ${hasError ? `<div id="${errorId}" class="checkbox-group-error" role="alert" part="error"><slot name="error">${this.error}</slot></div>` : ''}
       </fieldset>
     `;
   }
@@ -649,6 +651,7 @@ export class Compa11yCheckboxGroup extends Compa11yElement {
     }
 
     this.emit('change', { value: this._value });
+    this.emit('compa11y-checkbox-group-change', { values: this._value });
   };
 
   /**

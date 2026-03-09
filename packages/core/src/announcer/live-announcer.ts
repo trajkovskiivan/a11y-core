@@ -24,6 +24,11 @@ let messageQueue: Array<{
 }> = [];
 let queueTimeout: ReturnType<typeof setTimeout> | null = null;
 
+// Deduplication tracking
+let lastMessage: string | null = null;
+let lastMessageTime = 0;
+const DEDUP_WINDOW_MS = 500;
+
 /**
  * Create the visually hidden styles for live regions
  */
@@ -94,6 +99,8 @@ export function initAnnouncer(): () => void {
       queueTimeout = null;
     }
     messageQueue = [];
+    lastMessage = null;
+    lastMessageTime = 0;
     isInitialized = false;
   };
 }
@@ -131,6 +138,14 @@ export function announce(
   } = options;
 
   ensureAnnouncer();
+
+  // Deduplicate repeated messages within the dedup window
+  const now = Date.now();
+  if (message === lastMessage && now - lastMessageTime < DEDUP_WINDOW_MS) {
+    return;
+  }
+  lastMessage = message;
+  lastMessageTime = now;
 
   const region = politeness === 'assertive' ? assertiveRegion : politeRegion;
   if (!region) return;

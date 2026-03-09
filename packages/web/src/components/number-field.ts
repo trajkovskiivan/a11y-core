@@ -75,6 +75,8 @@ export class Compa11yNumberField extends Compa11yElement {
   private _showSteppers = false;
   private _isFocused = false;
 
+  private _hasLabelSlot = false;
+
   // ── DOM refs ────────────────────────────────────────────────────────────────
   private _inputEl: HTMLInputElement | null = null;
   private _decBtn: HTMLButtonElement | null = null;
@@ -176,16 +178,21 @@ export class Compa11yNumberField extends Compa11yElement {
       this._value = isNaN(n) ? undefined : n;
     }
 
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    this._hasLabelSlot = Boolean(slottedLabel);
+
     // Dev warnings
     if (process.env.NODE_ENV !== 'production') {
       const hasLabel =
         this.hasAttribute('label') ||
         this.hasAttribute('aria-label') ||
-        this.hasAttribute('aria-labelledby');
+        this.hasAttribute('aria-labelledby') ||
+        this._hasLabelSlot;
       if (!hasLabel) {
         warn.error(
           'compa11y-number-field requires an accessible label.',
-          'Add a label, aria-label, or aria-labelledby attribute.',
+          'Add a label, aria-label, aria-labelledby attribute, or use <span slot="label">...</span>.',
         );
       }
       if (
@@ -227,12 +234,13 @@ export class Compa11yNumberField extends Compa11yElement {
       ? `aria-describedby="${describedParts.join(' ')}"`
       : '';
 
-    // Label / aria wiring
+    // Label / aria wiring — always wire aria-labelledby to the label element
+    // (which contains the slot) unless an explicit aria-label/aria-labelledby is provided
     const ariaLabelAttr = !label && ariaLabel ? `aria-label="${ariaLabel}"` : '';
-    const ariaLabelledByAttr = label
-      ? `aria-labelledby="${labelId}"`
-      : ariaLabelledBy
-        ? `aria-labelledby="${ariaLabelledBy}"`
+    const ariaLabelledByAttr = ariaLabelledBy
+      ? `aria-labelledby="${ariaLabelledBy}"`
+      : !ariaLabel
+        ? `aria-labelledby="${labelId}"`
         : '';
 
     const displayValue =
@@ -263,17 +271,13 @@ export class Compa11yNumberField extends Compa11yElement {
       ></div>
 
       <div class="number-field-wrapper" part="wrapper">
-        ${
-          label
-            ? `<label id="${labelId}" for="${fieldId}" class="number-field-label" part="label">
-                ${label}${
-                  this._required
-                    ? `<span class="number-field-required" aria-hidden="true" part="required">*</span>`
-                    : ''
-                }
-              </label>`
-            : ''
-        }
+        <label id="${labelId}" for="${fieldId}" class="number-field-label" part="label" data-compa11y-number-field-label ${!label ? 'hidden' : ''}>
+          <slot name="label">${label}</slot>${
+            this._required
+              ? `<span class="number-field-required" aria-hidden="true" part="required">*</span>`
+              : ''
+          }
+        </label>
 
         <div class="number-field-control" part="control">
           ${
@@ -325,13 +329,13 @@ export class Compa11yNumberField extends Compa11yElement {
 
         ${
           hint
-            ? `<div id="${hintId}" class="number-field-hint" part="hint">${hint}</div>`
+            ? `<div id="${hintId}" class="number-field-hint" part="hint"><slot name="hint">${hint}</slot></div>`
             : ''
         }
 
         ${
           hasError
-            ? `<div id="${errorId}" class="number-field-error" role="alert" part="error">${error}</div>`
+            ? `<div id="${errorId}" class="number-field-error" role="alert" part="error"><slot name="error">${error}</slot></div>`
             : ''
         }
       </div>
@@ -353,6 +357,10 @@ export class Compa11yNumberField extends Compa11yElement {
     this._inputEl?.addEventListener('blur', this.handleBlur as EventListener);
     this._decBtn?.addEventListener('click', this.handleDec as EventListener);
     this._incBtn?.addEventListener('click', this.handleInc as EventListener);
+
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected cleanupEventListeners(): void {
@@ -362,6 +370,9 @@ export class Compa11yNumberField extends Compa11yElement {
     this._inputEl?.removeEventListener('blur', this.handleBlur as EventListener);
     this._decBtn?.removeEventListener('click', this.handleDec as EventListener);
     this._incBtn?.removeEventListener('click', this.handleInc as EventListener);
+
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.removeEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected onAttributeChange(
@@ -440,6 +451,22 @@ export class Compa11yNumberField extends Compa11yElement {
   }
 
   // ── Event handlers ─────────────────────────────────────────────────────────
+
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('.number-field-label');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
 
   private handleInput = (e: Event): void => {
     const input = e.target as HTMLInputElement;

@@ -54,7 +54,10 @@
  * @cssprop --compa11y-focus-color - Focus outline color
  */
 
+import { createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
+
+const warnings = createComponentWarnings('FormField');
 
 const FORM_FIELD_STYLES = `
   :host {
@@ -126,16 +129,11 @@ export class Compa11yFormField extends Compa11yElement {
   }
 
   protected setupAccessibility(): void {
-    if (
-      typeof process !== 'undefined' &&
-      process.env?.NODE_ENV !== 'production'
-    ) {
-      if (!this.hasAttribute('label')) {
-        console.warn(
-          '[compa11y/FormField] FormField has no label. Add label="..." attribute.\n' +
-            '💡 Suggestion: <compa11y-form-field label="Email">...</compa11y-form-field>'
-        );
-      }
+    if (!this.hasAttribute('label')) {
+      warnings.error(
+        'FormField has no label. Add label="..." attribute.\n' +
+          '💡 Suggestion: <compa11y-form-field label="Email">...</compa11y-form-field>'
+      );
     }
   }
 
@@ -283,6 +281,19 @@ export class Compa11yFormField extends Compa11yElement {
     if (['label', 'hint', 'error', 'required', 'disabled'].includes(name)) {
       this.render();
       this.setupEventListeners();
+
+      if (name === 'error') {
+        this.emit('compa11y-form-field-error-change', {
+          error: _newValue,
+          hasError: _newValue !== null && _newValue !== '',
+        });
+      }
+
+      if (name === 'disabled') {
+        this.emit('compa11y-form-field-disabled-change', {
+          disabled: _newValue !== null,
+        });
+      }
     }
   }
 }

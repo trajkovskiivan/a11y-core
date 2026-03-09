@@ -18,8 +18,11 @@
  *   </compa11y-toast>
  */
 
+import { createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { TOAST_STYLES } from '../utils/styles';
+
+const warnings = createComponentWarnings('Toast');
 
 export interface ToastOptions {
   type?: 'info' | 'success' | 'warning' | 'error';
@@ -73,6 +76,27 @@ export class Compa11yToast extends Compa11yElement {
 
   protected setupAccessibility(): void {
     // Accessibility attributes are set on the shadow DOM container in render()
+
+    // Warn about declarative toast slots missing title/type
+    const declarativeToasts = this.querySelectorAll('[slot="toast"]');
+    declarativeToasts.forEach((toast) => {
+      const hasTitle = toast.querySelector('[slot="title"]') || toast.getAttribute('data-title');
+      const hasText = toast.textContent?.trim();
+      if (!hasTitle && !hasText) {
+        warnings.warning(
+          'Declarative toast has no title or text content. Provide at least one for screen reader users.',
+          '<div slot="toast" data-type="info"><span slot="title">Hello</span></div>'
+        );
+      }
+
+      const type = toast.getAttribute('data-type');
+      if (!type) {
+        warnings.info(
+          'Declarative toast has no data-type attribute. It will default to "info".',
+          '<div slot="toast" data-type="success">...</div>'
+        );
+      }
+    });
   }
 
   protected render(): void {
@@ -129,6 +153,19 @@ export class Compa11yToast extends Compa11yElement {
    * Add a toast notification. Returns the toast ID.
    */
   add(options: ToastOptions): string {
+    if (!options.title && !options.description) {
+      warnings.error(
+        'Toast added with no title or description. Provide at least one for screen reader users.\n' +
+          '💡 Suggestion: toast.add({ type: "info", title: "Saved", description: "Your changes have been saved." })'
+      );
+    }
+    if (options.action && !options.action.label) {
+      warnings.error(
+        'Toast action has no label. Action buttons must have a visible label.\n' +
+          '💡 Suggestion: toast.add({ action: { label: "Undo", onClick: handler } })'
+      );
+    }
+
     const id = `toast-${++this._counter}`;
     const duration = options.duration ?? this.duration;
 
@@ -157,6 +194,7 @@ export class Compa11yToast extends Compa11yElement {
 
     this._renderToast(entry);
     this._startTimer(entry);
+    this._syncActiveCount();
 
     this.emit('compa11y-toast-add', { id, ...options });
 
@@ -174,6 +212,7 @@ export class Compa11yToast extends Compa11yElement {
     if (entry && entry.timerId) clearTimeout(entry.timerId);
     this._toasts.splice(index, 1);
     this._removeElement(id);
+    this._syncActiveCount();
 
     this.emit('compa11y-toast-remove', { id });
   }
@@ -189,6 +228,7 @@ export class Compa11yToast extends Compa11yElement {
     if (this._containerEl) {
       this._containerEl.innerHTML = '';
     }
+    this._syncActiveCount();
   }
 
   // ---------------------------------------------------------------------------
@@ -281,6 +321,12 @@ export class Compa11yToast extends Compa11yElement {
       this.removeToast(actionId);
     }
   };
+
+  private _syncActiveCount(): void {
+    const count = this._toasts.length;
+    this.setAttribute('active-count', String(count));
+    this.toggleAttribute('has-toasts', count > 0);
+  }
 
   private _escapeHtml(str: string): string {
     const div = document.createElement('div');

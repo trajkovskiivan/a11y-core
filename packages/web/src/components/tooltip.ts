@@ -397,7 +397,7 @@ export class Compa11yTooltip extends Compa11yElement {
         this._visualEl?.setAttribute('data-open', '');
       });
       document.addEventListener('keydown', this._onDocumentKeyDown, true);
-      this.emit('compa11y-tooltip-show');
+      this.emit('compa11y-tooltip-show', { label: this.getAttribute('label') || '', placement: this.getAttribute('placement') || 'top' });
     }, immediate ? 0 : this._delay);
   }
 
@@ -407,7 +407,7 @@ export class Compa11yTooltip extends Compa11yElement {
       this._open = false;
       this._visualEl?.removeAttribute('data-open');
       document.removeEventListener('keydown', this._onDocumentKeyDown, true);
-      this.emit('compa11y-tooltip-hide');
+      this.emit('compa11y-tooltip-hide', { label: this.getAttribute('label') || '', placement: this.getAttribute('placement') || 'top' });
     }, immediate ? 0 : this._hideDelay);
   }
 

@@ -7,11 +7,14 @@ import React, {
 } from 'react';
 import { useId } from '../../hooks/use-id';
 import { useKeyboard } from '../../hooks/use-keyboard';
+import { createComponentWarnings } from '@compa11y/core';
 import {
   ActionMenuProvider,
   useActionMenuContext,
   type ActionMenuContextValue,
 } from './menu-context';
+
+const warnings = createComponentWarnings('ActionMenu');
 
 // ============================================================================
 // ActionMenu Root
@@ -56,9 +59,21 @@ export function ActionMenu({
 
       if (!value) {
         setHighlightedIndex(-1);
+        // Restore focus to trigger on close (unless focus already moved elsewhere,
+        // e.g. user clicked outside — their click determines focus destination)
+        const trigger = document.getElementById(triggerId);
+        const menu = document.getElementById(menuId);
+        const active = document.activeElement as HTMLElement | null;
+        if (
+          trigger &&
+          active !== trigger &&
+          (active === document.body || menu?.contains(active))
+        ) {
+          trigger.focus();
+        }
       }
     },
-    [controlledOpen, onOpenChange]
+    [controlledOpen, onOpenChange, triggerId, menuId]
   );
 
   const open = useCallback(() => setOpen(true), [setOpen]);
@@ -124,6 +139,15 @@ export const ActionMenuTrigger = forwardRef<
   HTMLButtonElement,
   ActionMenuTriggerProps
 >(function ActionMenuTrigger({ children, onClick, onKeyDown, ...props }, ref) {
+  // Dev warning: missing accessible name on trigger button
+  if (process.env.NODE_ENV !== 'production') {
+    if (!children && !props['aria-label'] && !props['aria-labelledby']) {
+      warnings.error(
+        'ActionMenu.Trigger requires visible text content, an `aria-label`, or `aria-labelledby` for an accessible name.'
+      );
+    }
+  }
+
   const {
     isOpen,
     toggle,

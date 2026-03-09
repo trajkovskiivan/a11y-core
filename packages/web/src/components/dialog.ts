@@ -65,7 +65,18 @@ export class Compa11yDialog extends Compa11yElement {
   }
 
   protected setupAccessibility(): void {
-    // Accessibility is set up in render()
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      const titleSlot = this.querySelector('[slot="title"]');
+      if (!titleSlot) {
+        console.warn(
+          '[compa11y/Dialog] Dialog has no title. Add a <h2 slot="title">...</h2> element.\n' +
+            '💡 Suggestion: <compa11y-dialog><h2 slot="title">Dialog Title</h2>...</compa11y-dialog>'
+        );
+      }
+    }
   }
 
   protected render(): void {
@@ -276,7 +287,7 @@ export class Compa11yDialog extends Compa11yElement {
     announce('Dialog opened', { politeness: 'polite' });
 
     // Emit event
-    this.emit('compa11y-dialog-open');
+    this.emit('compa11y-dialog-open', { trigger: this._triggerElement });
   }
 
   private hideDialog(): void {
@@ -293,7 +304,7 @@ export class Compa11yDialog extends Compa11yElement {
     announce('Dialog closed', { politeness: 'polite' });
 
     // Emit event
-    this.emit('compa11y-dialog-close');
+    this.emit('compa11y-dialog-close', { trigger: this._triggerElement });
   }
 
   /**

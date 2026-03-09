@@ -106,6 +106,25 @@ export class Compa11yDrawer extends Compa11yElement {
     this._side = (this.getAttribute('side') as DrawerSide) || 'right';
     this._open = this.hasAttribute('open');
     this._draggable = this.hasAttribute('draggable');
+
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      const titleSlot = this.querySelector('[slot="title"]');
+      if (!titleSlot) {
+        console.warn(
+          '[compa11y/Drawer] Drawer has no title. Add a <h2 slot="title">...</h2> element for accessible labeling.\n' +
+            '💡 Suggestion: <compa11y-drawer><h2 slot="title">Drawer Title</h2>...</compa11y-drawer>'
+        );
+      }
+      const side = this.getAttribute('side');
+      if (side && !['left', 'right', 'top', 'bottom'].includes(side)) {
+        console.warn(
+          `[compa11y/Drawer] Invalid side="${side}". Must be one of: left, right, top, bottom.`
+        );
+      }
+    }
   }
 
   protected render(): void {
@@ -389,7 +408,7 @@ export class Compa11yDrawer extends Compa11yElement {
 
     lockBodyScroll();
     announce('Drawer opened', { politeness: 'polite' });
-    this.emit('compa11y-drawer-open');
+    this.emit('compa11y-drawer-open', { side: this.getAttribute('side') || 'right' });
   }
 
   private hideDrawer(): void {
@@ -401,7 +420,7 @@ export class Compa11yDrawer extends Compa11yElement {
     this._previouslyFocused = null;
 
     announce('Drawer closed', { politeness: 'polite' });
-    this.emit('compa11y-drawer-close');
+    this.emit('compa11y-drawer-close', { side: this.getAttribute('side') || 'right' });
   }
 
   /** Programmatic open */

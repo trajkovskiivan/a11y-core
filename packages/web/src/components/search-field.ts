@@ -209,7 +209,7 @@ export class Compa11ySearchField extends Compa11yElement {
             for="${inputId}"
             class="search-field-label"
             part="label"
-          >${label}</label>
+          ><slot name="label">${label}</slot></label>
         ` : ''}
 
         ${hint ? `
@@ -323,6 +323,7 @@ export class Compa11ySearchField extends Compa11yElement {
   private _handleInput = (e: Event): void => {
     const input = e.target as HTMLInputElement;
     this._value = input.value;
+    this.setAttribute('value', this._value);
     this._syncClearButton();
     this.emit('compa11y-search-field-change', { value: this._value });
   };
@@ -340,6 +341,7 @@ export class Compa11ySearchField extends Compa11yElement {
 
   private _handleClear = (): void => {
     this._value = '';
+    this.setAttribute('value', '');
     this._syncInput();
     this._syncClearButton();
     this.emit('compa11y-search-field-clear', {});

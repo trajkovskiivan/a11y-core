@@ -12,9 +12,11 @@
  * </compa11y-select>
  */
 
-import { announce, createTypeAhead } from '@compa11y/core';
+import { announce, createComponentWarnings, createTypeAhead } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { SELECT_STYLES } from '../utils/styles';
+
+const warnings = createComponentWarnings('Select');
 
 interface SelectOption {
   value: string;
@@ -33,7 +35,7 @@ export class Compa11ySelect extends Compa11yElement {
   private _typeAhead: ReturnType<typeof createTypeAhead> | null = null;
 
   static get observedAttributes() {
-    return ['open', 'value', 'placeholder', 'disabled'];
+    return ['open', 'value', 'placeholder', 'disabled', 'label'];
   }
 
   get open(): boolean {
@@ -61,22 +63,45 @@ export class Compa11ySelect extends Compa11yElement {
     this.setAttribute('value', val || '');
   }
 
+  private _hasLabelSlot = false;
+
   protected setupAccessibility(): void {
-    // Accessibility is set up in render()
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    this._hasLabelSlot = Boolean(slottedLabel);
+
+    const hasLabel =
+      this.hasAttribute('label') ||
+      this.hasAttribute('aria-label') ||
+      this.hasAttribute('aria-labelledby') ||
+      this._hasLabelSlot;
+    if (!hasLabel) {
+      warnings.error(
+        'Select has no accessible label. Add label="...", aria-label="...", aria-labelledby="...", or use <span slot="label">...</span>.\n' +
+          '💡 Suggestion: <compa11y-select label="Country">...</compa11y-select>'
+      );
+    }
   }
 
   protected render(): void {
     const shadow = this.attachShadow({ mode: 'open' });
     const triggerId = `${this._id}-trigger`;
     const listboxId = `${this._id}-listbox`;
+    const labelId = `${this._id}-label`;
     const placeholder =
       this.getAttribute('placeholder') || 'Select an option...';
+    const label = this.getAttribute('label') || '';
     const ariaLabel = this.getAttribute('aria-label') || '';
     const ariaLabelledBy = this.getAttribute('aria-labelledby') || '';
+
+    // Determine what labels the trigger — always wire to label element
+    // (which contains the slot) unless an explicit aria-labelledby is provided
+    const triggerLabelledBy = ariaLabelledBy || (!ariaLabel ? labelId : '');
 
     shadow.innerHTML = `
       <style>${SELECT_STYLES}</style>
       <div class="select-wrapper" part="wrapper">
+        <label id="${labelId}" for="${triggerId}" part="label" data-compa11y-select-label ${!label ? 'hidden' : ''}><slot name="label">${label}</slot></label>
         <button
           id="${triggerId}"
           type="button"
@@ -84,8 +109,8 @@ export class Compa11ySelect extends Compa11yElement {
           aria-expanded="false"
           aria-controls="${listboxId}"
           aria-haspopup="listbox"
-          ${ariaLabel ? `aria-label="${ariaLabel}"` : ''}
-          ${ariaLabelledBy ? `aria-labelledby="${ariaLabelledBy}"` : ''}
+          ${!label && ariaLabel ? `aria-label="${ariaLabel}"` : ''}
+          ${triggerLabelledBy ? `aria-labelledby="${triggerLabelledBy}"` : ''}
           class="select-trigger"
           part="trigger"
         >
@@ -95,7 +120,7 @@ export class Compa11ySelect extends Compa11yElement {
         <ul
           id="${listboxId}"
           role="listbox"
-          aria-labelledby="${triggerId}"
+          aria-labelledby="${triggerLabelledBy || triggerId}"
           class="listbox"
           tabindex="-1"
           hidden
@@ -126,8 +151,12 @@ export class Compa11ySelect extends Compa11yElement {
     document.addEventListener('mousedown', this.handleOutsideClick);
 
     // Slot change
-    const slot = this.shadowRoot?.querySelector('slot');
+    const slot = this.shadowRoot?.querySelector('slot:not([name])');
     slot?.addEventListener('slotchange', this.updateOptions);
+
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
 
     // Initial options
     this.updateOptions();
@@ -157,6 +186,22 @@ export class Compa11ySelect extends Compa11yElement {
       this.updateTriggerText();
     }
   }
+
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('[data-compa11y-select-label]');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
 
   private updateOptions = (): void => {
     const optionElements = Array.from(this.querySelectorAll('option'));

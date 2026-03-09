@@ -160,17 +160,15 @@ export class Compa11yRichTextEditor extends Compa11yElement {
       }
     }
 
-    // Dev warnings
-    if (process.env.NODE_ENV !== 'production') {
-      requestAnimationFrame(() => {
-        if (!this.getAttribute('label') && !this.getAttribute('aria-label')) {
-          warnings.warning(
-            'RichTextEditor has no accessible label.',
-            'Add label="..." or aria-label="..." attribute.'
-          );
-        }
-      });
-    }
+    // Accessible name check
+    requestAnimationFrame(() => {
+      if (!this.getAttribute('label') && !this.getAttribute('aria-label')) {
+        warnings.error(
+          'RichTextEditor has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
+            '💡 Suggestion: <compa11y-rich-text-editor label="Message">...</compa11y-rich-text-editor>'
+        );
+      }
+    });
   }
 
   protected render(): void {

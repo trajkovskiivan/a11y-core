@@ -151,7 +151,13 @@ export class Compa11yTextarea extends Compa11yElement {
   // Lifecycle
   // =========================================================================
 
+  private _hasLabelSlot = false;
+
   protected setupAccessibility(): void {
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    this._hasLabelSlot = Boolean(slottedLabel);
+
     if (
       typeof process !== 'undefined' &&
       process.env?.NODE_ENV !== 'production'
@@ -159,10 +165,11 @@ export class Compa11yTextarea extends Compa11yElement {
       const hasLabel =
         this.hasAttribute('label') ||
         this.hasAttribute('aria-label') ||
-        this.hasAttribute('aria-labelledby');
+        this.hasAttribute('aria-labelledby') ||
+        this._hasLabelSlot;
       if (!hasLabel) {
         console.warn(
-          '[compa11y/Textarea] Textarea has no accessible label. Add label="...", aria-label="...", or aria-labelledby="..." attribute.\n' +
+          '[compa11y/Textarea] Textarea has no accessible label. Add label="...", aria-label="...", aria-labelledby="...", or use <span slot="label">...</span>.\n' +
             '💡 Suggestion: <compa11y-textarea label="Description"></compa11y-textarea>'
         );
       }
@@ -200,13 +207,14 @@ export class Compa11yTextarea extends Compa11yElement {
       ? `aria-describedby="${describedByParts.join(' ')}"`
       : '';
 
-    // Label attributes
+    // Label attributes — always wire aria-labelledby to the label element
+    // (which contains the slot) unless an explicit aria-label/aria-labelledby is provided
     const ariaLabelAttr =
       !label && ariaLabel ? `aria-label="${ariaLabel}"` : '';
     const ariaLabelledByAttr =
-      !label && ariaLabelledBy
+      ariaLabelledBy
         ? `aria-labelledby="${ariaLabelledBy}"`
-        : label
+        : !ariaLabel
           ? `aria-labelledby="${labelId}"`
           : '';
 
@@ -216,13 +224,9 @@ export class Compa11yTextarea extends Compa11yElement {
     shadow.innerHTML = `
       <style>${TEXTAREA_STYLES}</style>
       <div class="textarea-wrapper" part="wrapper">
-        ${
-          label
-            ? `<label id="${labelId}" for="${fieldId}" class="textarea-label" part="label">
-                ${label}${isRequired ? '<span class="textarea-required" aria-hidden="true" part="required">*</span>' : ''}
-              </label>`
-            : ''
-        }
+        <label id="${labelId}" for="${fieldId}" class="textarea-label" part="label" data-compa11y-textarea-label ${!label ? 'hidden' : ''}>
+          <slot name="label">${label}</slot>${isRequired ? '<span class="textarea-required" aria-hidden="true" part="required">*</span>' : ''}
+        </label>
         <textarea
           id="${fieldId}"
           rows="${rows}"
@@ -242,12 +246,12 @@ export class Compa11yTextarea extends Compa11yElement {
         >${this._value}</textarea>
         ${
           hint
-            ? `<div id="${hintId}" class="textarea-hint" part="hint">${hint}</div>`
+            ? `<div id="${hintId}" class="textarea-hint" part="hint"><slot name="hint">${hint}</slot></div>`
             : ''
         }
         ${
           hasError
-            ? `<div id="${errorId}" class="textarea-error" role="alert" part="error">${error}</div>`
+            ? `<div id="${errorId}" class="textarea-error" role="alert" part="error"><slot name="error">${error}</slot></div>`
             : ''
         }
       </div>
@@ -272,6 +276,10 @@ export class Compa11yTextarea extends Compa11yElement {
     this._textareaEl?.addEventListener('change', this.handleChange);
     this._textareaEl?.addEventListener('focus', this.handleFocus);
     this._textareaEl?.addEventListener('blur', this.handleBlur);
+
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected cleanupEventListeners(): void {
@@ -279,6 +287,9 @@ export class Compa11yTextarea extends Compa11yElement {
     this._textareaEl?.removeEventListener('change', this.handleChange);
     this._textareaEl?.removeEventListener('focus', this.handleFocus);
     this._textareaEl?.removeEventListener('blur', this.handleBlur);
+
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.removeEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected onAttributeChange(
@@ -415,24 +426,42 @@ export class Compa11yTextarea extends Compa11yElement {
   // Event handlers
   // =========================================================================
 
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('.textarea-label');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
+
   private handleInput = (event: Event): void => {
     const target = event.target as HTMLTextAreaElement;
     this._value = target.value;
     this.emit('input', { value: this._value });
+    this.emit('compa11y-textarea-input', { value: this._value });
   };
 
   private handleChange = (event: Event): void => {
     const target = event.target as HTMLTextAreaElement;
     this._value = target.value;
     this.emit('change', { value: this._value });
+    this.emit('compa11y-textarea-change', { value: this._value });
   };
 
   private handleFocus = (): void => {
-    this.emit('compa11y-textarea-focus');
+    this.emit('compa11y-textarea-focus', { value: this._value });
   };
 
   private handleBlur = (): void => {
-    this.emit('compa11y-textarea-blur');
+    this.emit('compa11y-textarea-blur', { value: this._value });
   };
 
   // =========================================================================

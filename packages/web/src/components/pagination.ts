@@ -148,6 +148,12 @@ export class Compa11yPagination extends Compa11yElement {
     shadow.innerHTML = `
       <style>${PAGINATION_STYLES}</style>
       <nav part="nav" data-compa11y-pagination>
+        <span
+          id="${this._id}-label"
+          class="sr-only"
+          part="nav-label"
+          data-compa11y-pagination-label
+        ><slot name="label">${this._ariaLabel()}</slot></span>
         <div
           class="sr-only"
           role="status"
@@ -226,8 +232,12 @@ export class Compa11yPagination extends Compa11yElement {
         this._disabled = newValue !== null;
         break;
       case 'aria-label': {
-        const nav = this.shadowRoot?.querySelector('nav');
-        if (nav) nav.setAttribute('aria-label', newValue ?? 'Pagination');
+        // Update fallback text in the label slot
+        const labelEl = this.shadowRoot?.querySelector('[data-compa11y-pagination-label] slot[name="label"]');
+        if (labelEl) {
+          const fallback = labelEl.childNodes[0];
+          if (fallback) fallback.textContent = newValue ?? 'Pagination';
+        }
         return; // No full re-render needed
       }
     }
@@ -358,7 +368,18 @@ export class Compa11yPagination extends Compa11yElement {
     if (!this.shadowRoot) return;
 
     const nav = this.shadowRoot.querySelector('nav');
-    if (nav) nav.setAttribute('aria-label', this._ariaLabel());
+    if (nav) nav.setAttribute('aria-labelledby', `${this._id}-label`);
+
+    // Update the label slot fallback text
+    const labelSlot = this.shadowRoot.querySelector('[data-compa11y-pagination-label]');
+    if (labelSlot) {
+      const slot = labelSlot.querySelector('slot[name="label"]');
+      if (slot) {
+        // Update default text; slotted content takes priority automatically
+        const fallback = slot.childNodes[0];
+        if (fallback) fallback.textContent = this._ariaLabel();
+      }
+    }
 
     this._renderList();
     this._renderExtras();
@@ -384,7 +405,7 @@ export class Compa11yPagination extends Compa11yElement {
             data-action="first"
             ${isFirst || d ? 'disabled' : ''}
             part="btn btn-first"
-          >«</button>
+          ><slot name="first-label">\u00AB</slot></button>
         </li>`
       );
     }
@@ -398,7 +419,7 @@ export class Compa11yPagination extends Compa11yElement {
           data-action="prev"
           ${isFirst || d ? 'disabled' : ''}
           part="btn btn-prev"
-        >‹</button>
+        ><slot name="prev-label">\u2039</slot></button>
       </li>`
     );
 
@@ -444,7 +465,7 @@ export class Compa11yPagination extends Compa11yElement {
           data-action="next"
           ${isLast || d ? 'disabled' : ''}
           part="btn btn-next"
-        >›</button>
+        ><slot name="next-label">\u203A</slot></button>
       </li>`
     );
 
@@ -458,7 +479,7 @@ export class Compa11yPagination extends Compa11yElement {
             data-action="last"
             ${isLast || d ? 'disabled' : ''}
             part="btn btn-last"
-          >»</button>
+          ><slot name="last-label">\u00BB</slot></button>
         </li>`
       );
     }

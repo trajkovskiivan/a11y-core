@@ -31,7 +31,11 @@ import {
   OPTION_STYLES,
   OPTGROUP_STYLES,
 } from '../utils/styles';
-import { announcePolite, createTypeAhead } from '@compa11y/core';
+import { announcePolite, createComponentWarnings, createTypeAhead } from '@compa11y/core';
+
+const warnings = createComponentWarnings('Listbox');
+const optionWarnings = createComponentWarnings('Option');
+const optgroupWarnings = createComponentWarnings('Optgroup');
 
 // ============================================================================
 // Compa11yOptgroup
@@ -80,6 +84,13 @@ export class Compa11yOptgroup extends Compa11yElement {
     this._disabled = this.hasAttribute('disabled');
     if (this._disabled) {
       this.setAttribute('aria-disabled', 'true');
+    }
+
+    if (!this._label) {
+      optgroupWarnings.error(
+        'Optgroup has no label attribute. Screen readers use this to announce the group name.',
+        '<compa11y-optgroup label="Citrus Fruits">...</compa11y-optgroup>'
+      );
     }
 
     // aria-labelledby set after render when we have the label element ID
@@ -194,6 +205,7 @@ export class Compa11yOption extends Compa11yElement {
     if (this._selected !== newValue) {
       this._selected = newValue;
       this.setAttribute('aria-selected', String(newValue));
+      this.toggleAttribute('selected', newValue);
     }
   }
 
@@ -222,6 +234,22 @@ export class Compa11yOption extends Compa11yElement {
     this._disabled = this.hasAttribute('disabled');
     if (this._disabled) {
       this.setAttribute('aria-disabled', 'true');
+    }
+
+    if (!this.getAttribute('value')) {
+      optionWarnings.warning(
+        'Option has no value attribute. A value is needed to identify the selected option.',
+        '<compa11y-option value="apple">Apple</compa11y-option>'
+      );
+    }
+
+    const textContent = this.textContent?.trim();
+    const ariaLabel = this.getAttribute('aria-label');
+    if (!textContent && !ariaLabel) {
+      optionWarnings.error(
+        'Option has no accessible label. Provide text content or an aria-label attribute.',
+        '<compa11y-option value="apple">Apple</compa11y-option>'
+      );
     }
 
     const discoverableAttr = this.getAttribute('discoverable');
@@ -318,6 +346,7 @@ export class Compa11yListbox extends Compa11yElement {
       'disabled',
       'discoverable',
       'orientation',
+      'label',
       'aria-label',
       'aria-labelledby',
     ];
@@ -405,13 +434,24 @@ export class Compa11yListbox extends Compa11yElement {
     this.setAttribute('role', 'listbox');
     this.setAttribute('aria-orientation', this._orientation);
 
+    // Wire label attribute to aria-labelledby if present
+    const labelAttr = this.getAttribute('label');
+    if (labelAttr) {
+      // Label will be rendered in the shadow DOM
+    }
+
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    const _hasLabelSlot = Boolean(slottedLabel);
+
     const hasLabel =
+      this.hasAttribute('label') ||
       this.hasAttribute('aria-label') ||
-      this.hasAttribute('aria-labelledby');
-    if (!hasLabel && process.env.NODE_ENV !== 'production') {
-      console.warn(
-        '[Compa11y Listbox]: Listbox has no accessible label. ' +
-          'Use aria-label or aria-labelledby.'
+      this.hasAttribute('aria-labelledby') ||
+      _hasLabelSlot;
+    if (!hasLabel) {
+      warnings.error(
+        'Listbox has no accessible label. Add label="...", aria-label="...", aria-labelledby="...", or use <span slot="label">...</span>.'
       );
     }
 
@@ -459,8 +499,17 @@ export class Compa11yListbox extends Compa11yElement {
       this.attachShadow({ mode: 'open' });
     }
 
+    const label = this.getAttribute('label') || '';
+    const labelId = `${this._id}-label`;
+
+    // Always wire aria-labelledby to label element unless external aria-label/aria-labelledby is set
+    if (!this.hasAttribute('aria-label') || label) {
+      this.setAttribute('aria-labelledby', labelId);
+    }
+
     this.shadowRoot!.innerHTML = `
       <style>${LISTBOX_STYLES}</style>
+      <div id="${labelId}" part="label" data-compa11y-listbox-label style="font-weight:600;margin-bottom:4px" ${!label ? 'hidden' : ''}><slot name="label">${label}</slot></div>
       <div class="listbox-wrapper" part="wrapper">
         <slot></slot>
       </div>
@@ -472,8 +521,12 @@ export class Compa11yListbox extends Compa11yElement {
     this.addEventListener('focus', this.handleFocus);
     this.addEventListener('option-select', this.handleOptionSelect as EventListener);
 
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
+
     // Watch for slotchange to re-index options
-    const slot = this.shadowRoot?.querySelector('slot');
+    const slot = this.shadowRoot?.querySelector('slot:not([name])');
     if (slot) {
       slot.addEventListener('slotchange', () => {
         this.rebuildTypeAhead();
@@ -491,6 +544,22 @@ export class Compa11yListbox extends Compa11yElement {
     this.removeEventListener('focus', this.handleFocus);
     this.removeEventListener('option-select', this.handleOptionSelect as EventListener);
   }
+
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('[data-compa11y-listbox-label]');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
 
   // ===== Option Queries =====
 
@@ -967,6 +1036,13 @@ export class Compa11yListbox extends Compa11yElement {
         }
         break;
 
+      case 'label': {
+        const labelEl = this.shadowRoot?.querySelector('[data-compa11y-listbox-label]');
+        if (labelEl) {
+          labelEl.textContent = newValue || '';
+        }
+        break;
+      }
       case 'aria-label':
       case 'aria-labelledby':
         // Handled natively

@@ -41,7 +41,7 @@ export function useToast() {
 
 export interface ToastProviderProps {
   children: React.ReactNode;
-  /** Default duration for toasts in ms */
+  /** Default duration for toasts in ms (default: 8000 — allows screen reader users time to read) */
   duration?: number;
   /** Maximum number of visible toasts */
   maxToasts?: number;
@@ -49,7 +49,7 @@ export interface ToastProviderProps {
 
 export function ToastProvider({
   children,
-  duration = 5000,
+  duration = 8000,
   maxToasts = 5,
 }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -180,7 +180,7 @@ interface ToastItemProps {
 function ToastItem({ toast, onClose }: ToastItemProps) {
   const [isVisible, setIsVisible] = useState(true);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const remainingRef = useRef(toast.duration || 5000);
+  const remainingRef = useRef(toast.duration || 8000);
   const startTimeRef = useRef(Date.now());
 
   const startTimer = useCallback(() => {

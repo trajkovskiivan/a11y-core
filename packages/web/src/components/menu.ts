@@ -11,9 +11,11 @@
  * </compa11y-menu>
  */
 
-// No core imports needed - using base element
+import { createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { MENU_STYLES } from '../utils/styles';
+
+const menuItemWarnings = createComponentWarnings('MenuItem');
 
 export class Compa11yMenu extends Compa11yElement {
   private _open = false;
@@ -53,6 +55,36 @@ export class Compa11yMenu extends Compa11yElement {
       if (!trigger.hasAttribute('tabindex')) {
         trigger.setAttribute('tabindex', '0');
       }
+    }
+
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      if (!trigger) {
+        console.warn(
+          '[compa11y/Menu] Menu has no trigger element. Add a <button slot="trigger">...</button> element.\n' +
+            '💡 Suggestion: <compa11y-menu><button slot="trigger">Open Menu</button>...</compa11y-menu>'
+        );
+      }
+      const menuItems = this.querySelectorAll('[role="menuitem"]');
+      if (menuItems.length === 0) {
+        console.warn(
+          '[compa11y/Menu] Menu has no menu items. Add elements with role="menuitem".\n' +
+            '💡 Suggestion: <button role="menuitem">Option 1</button>'
+        );
+      }
+
+      menuItems.forEach((item) => {
+        const textContent = item.textContent?.trim();
+        const ariaLabel = item.getAttribute('aria-label');
+        if (!textContent && !ariaLabel) {
+          menuItemWarnings.error(
+            'Menu item has no accessible name. Provide text content or an aria-label attribute.',
+            '<button role="menuitem">Option 1</button>'
+          );
+        }
+      });
     }
   }
 

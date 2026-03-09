@@ -42,9 +42,11 @@
  * @cssprop --compa11y-focus-color - Focus outline color
  */
 
-import { announcePolite } from '@compa11y/core';
+import { announcePolite, createComponentWarnings } from '@compa11y/core';
 import { Compa11yElement, defineElement } from '../utils/base-element';
 import { SWITCH_STYLES } from '../utils/styles';
+
+const warnings = createComponentWarnings('Switch');
 
 export class Compa11ySwitch extends Compa11yElement {
   private _checked = false;
@@ -70,6 +72,7 @@ export class Compa11ySwitch extends Compa11yElement {
     if (value !== oldValue) {
       this.updateVisualState();
       this.emit('change', { checked: value });
+      this.emit('compa11y-switch-change', { checked: value });
     }
   }
 
@@ -120,16 +123,11 @@ export class Compa11ySwitch extends Compa11yElement {
     }
 
     // Warn if no accessible label
-    if (
-      typeof process !== 'undefined' &&
-      process.env?.NODE_ENV !== 'production'
-    ) {
-      if (!this.label && !this.getAttribute('aria-label')) {
-        console.warn(
-          '[compa11y/Switch] Switch has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
-            '💡 Suggestion: <compa11y-switch label="Enable feature"></compa11y-switch>'
-        );
-      }
+    if (!this.label && !this.getAttribute('aria-label')) {
+      warnings.error(
+        'Switch has no accessible label. Add label="..." or aria-label="..." attribute.\n' +
+          '💡 Suggestion: <compa11y-switch label="Enable feature"></compa11y-switch>'
+      );
     }
   }
 
@@ -165,7 +163,7 @@ export class Compa11ySwitch extends Compa11yElement {
         </button>
         ${
           hasLabel
-            ? `<label id="${labelId}" class="switch-label ${this.disabled ? 'disabled' : ''}" part="label">${this.label}</label>`
+            ? `<label id="${labelId}" class="switch-label ${this.disabled ? 'disabled' : ''}" part="label"><slot name="label">${this.label}</slot></label>`
             : ''
         }
       </div>
@@ -251,6 +249,8 @@ export class Compa11ySwitch extends Compa11yElement {
    * Update the visual state (checked class and aria-checked)
    */
   private updateVisualState(): void {
+    // Reflect aria-checked on both the internal button and the host
+    this.setAttribute('aria-checked', String(this._checked));
     if (this._button) {
       this._button.setAttribute('aria-checked', String(this._checked));
       this._button.classList.toggle('checked', this._checked);

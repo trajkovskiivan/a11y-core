@@ -106,7 +106,27 @@ export class Compa11yLink extends Compa11yElement {
   }
 
   protected setupAccessibility(): void {
-    // Accessibility setup happens in render via anchor attributes
+    if (
+      typeof process !== 'undefined' &&
+      process.env?.NODE_ENV !== 'production'
+    ) {
+      const hasLabel =
+        this.textContent?.trim() ||
+        this.hasAttribute('aria-label') ||
+        this.hasAttribute('aria-labelledby');
+      if (!hasLabel) {
+        console.warn(
+          '[compa11y/Link] Link has no accessible label. Add text content, aria-label="...", or aria-labelledby="..." attribute.\n' +
+            '💡 Suggestion: <compa11y-link href="/about">About Us</compa11y-link>'
+        );
+      }
+      if (!this.hasAttribute('href')) {
+        console.warn(
+          '[compa11y/Link] Link has no href attribute. Links should have an href.\n' +
+            '💡 Suggestion: <compa11y-link href="/page">Link text</compa11y-link>'
+        );
+      }
+    }
   }
 
   protected render(): void {
@@ -156,6 +176,15 @@ export class Compa11yLink extends Compa11yElement {
         <slot></slot>${externalIcon}${srHint}
       </a>
     `;
+
+    // Emit click event
+    const anchor = this.shadowRoot?.querySelector('a');
+    anchor?.addEventListener('click', () => {
+      this.emit('compa11y-link-click', {
+        href: this.getAttribute('href') || '',
+        external: this.hasAttribute('external'),
+      });
+    });
   }
 
   protected onAttributeChange(

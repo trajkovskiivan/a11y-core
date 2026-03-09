@@ -70,6 +70,8 @@ export class Compa11ySlider extends Compa11yElement {
   private _range = false;
   private _orientation: 'horizontal' | 'vertical' = 'horizontal';
 
+  private _hasLabelSlot = false;
+
   // Drag state
   private _activeThumb: 0 | 1 | null = null;
   private _activePointerId = -1;
@@ -169,16 +171,21 @@ export class Compa11ySlider extends Compa11yElement {
     this._orientation =
       (this.getAttribute('orientation') as 'horizontal' | 'vertical') ?? 'horizontal';
 
+    // Check for slotted label content
+    const slottedLabel = this.querySelector('[slot="label"]');
+    this._hasLabelSlot = Boolean(slottedLabel);
+
     // Dev warnings
     if (process.env.NODE_ENV !== 'production') {
       const hasLabel =
         this.hasAttribute('label') ||
         this.hasAttribute('aria-label') ||
-        this.hasAttribute('aria-labelledby');
+        this.hasAttribute('aria-labelledby') ||
+        this._hasLabelSlot;
       if (!hasLabel) {
         warn.error(
           'compa11y-slider requires an accessible label.',
-          'Add a label, aria-label, or aria-labelledby attribute.',
+          'Add a label, aria-label, aria-labelledby attribute, or use <span slot="label">...</span>.',
         );
       }
       if (this._range) {
@@ -225,7 +232,12 @@ export class Compa11ySlider extends Compa11yElement {
       "></div>
 
       <div class="slider-root" part="root">
-        ${labelText ? `<label id="${labelId}" class="slider-label" part="label">${labelText}</label>` : ''}
+        <label id="${labelId}" class="slider-label" part="label" data-compa11y-slider-label ${!labelText ? 'hidden' : ''}><slot name="label">${labelText}</slot></label>
+
+        <div class="slider-range-labels" part="range-labels" data-compa11y-slider-range-labels>
+          <span class="slider-min-label" part="min-label" data-compa11y-slider-min-label><slot name="min-label">${this._min}</slot></span>
+          <span class="slider-max-label" part="max-label" data-compa11y-slider-max-label><slot name="max-label">${this._max}</slot></span>
+        </div>
 
         <div class="slider-track" part="track">
           <div class="slider-fill" part="fill" aria-hidden="true"></div>
@@ -289,6 +301,10 @@ export class Compa11ySlider extends Compa11yElement {
       thumb1.addEventListener('pointerup', this.handleThumbPointerUp as EventListener);
       thumb1.addEventListener('pointercancel', this.handleThumbPointerUp as EventListener);
     }
+
+    // Show/hide label when slot content changes
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.addEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected cleanupEventListeners(): void {
@@ -311,6 +327,9 @@ export class Compa11ySlider extends Compa11yElement {
       thumb1.removeEventListener('pointerup', this.handleThumbPointerUp as EventListener);
       thumb1.removeEventListener('pointercancel', this.handleThumbPointerUp as EventListener);
     }
+
+    const labelSlot = this.shadowRoot?.querySelector('slot[name="label"]');
+    labelSlot?.removeEventListener('slotchange', this.handleLabelSlotChange);
   }
 
   protected onAttributeChange(
@@ -350,6 +369,22 @@ export class Compa11ySlider extends Compa11yElement {
         (next as 'horizontal' | 'vertical' | null) ?? 'horizontal';
     }
   }
+
+  private handleLabelSlotChange = (event: Event): void => {
+    const slot = event.target as HTMLSlotElement;
+    const assigned = slot.assignedNodes({ flatten: true });
+    const hasContent = assigned.some(
+      (node) => node.nodeType === Node.ELEMENT_NODE || (node.textContent?.trim() ?? '') !== ''
+    );
+    const labelEl = this.shadowRoot?.querySelector('.slider-label');
+    if (labelEl) {
+      if (hasContent) {
+        labelEl.removeAttribute('hidden');
+      } else if (!this.getAttribute('label')) {
+        labelEl.setAttribute('hidden', '');
+      }
+    }
+  };
 
   // ── DOM helpers ───────────────────────────────────────────────────────────
 

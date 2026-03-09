@@ -392,6 +392,7 @@ export class Compa11yBreadcrumbs extends Compa11yElement {
   private _handleExpand = (): void => {
     this._isExpanded = true;
     this.render();
+    this.emit('compa11y-breadcrumbs-expand');
 
     // Focus first newly revealed link (index 1 in the full list)
     const links = Array.from(

@@ -51,6 +51,9 @@ import React, {
   type ReactNode,
 } from 'react';
 import { FormFieldContext, useFormFieldContext } from './form-field-context';
+import { createComponentWarnings } from '@compa11y/core';
+
+const warnings = createComponentWarnings('FormField');
 
 // =============================================================================
 // Types
@@ -321,6 +324,21 @@ const FormFieldRoot = forwardRef<HTMLDivElement, FormFieldProps>(
     const setHasHint = useCallback((value: boolean) => {
       setCompoundHasHint(value);
     }, []);
+
+    // Dev warning: FormField should have a label
+    useEffect(() => {
+      if (process.env.NODE_ENV === 'production') return;
+      // Defer check so sub-components have time to mount
+      const frameId = requestAnimationFrame(() => {
+        const labelEl = document.getElementById(labelId);
+        if (!labelEl) {
+          warnings.warning(
+            'FormField has no label. Provide a `label` prop or use <FormField.Label>.'
+          );
+        }
+      });
+      return () => cancelAnimationFrame(frameId);
+    }, [labelId, label]);
 
     const contextValue = {
       controlId,

@@ -276,9 +276,8 @@ export class Compa11yStepper extends Compa11yElement {
       const isLast = i === steps.length - 1;
 
       // Indicator content
-      let indicatorContent = String(i + 1);
-      if (step.state === 'completed') indicatorContent = '\u2713';
-      if (step.state === 'error') indicatorContent = '!';
+      const defaultIndicator = step.state === 'completed' ? '\u2713' : step.state === 'error' ? '!' : String(i + 1);
+      const indicatorContent = `<slot name="indicator-${this._esc(step.id)}">${defaultIndicator}</slot>`;
 
       // SR-only state suffix
       const stateLabels: Record<StepState, string> = {
@@ -289,6 +288,9 @@ export class Compa11yStepper extends Compa11yElement {
         locked: ' (locked)',
       };
       const srSuffix = stateLabels[step.state];
+
+      // Label slot – allows consumers to provide custom label content per step
+      const labelContent = `<slot name="label-${this._esc(step.id)}">${this._esc(step.label)}</slot>`;
 
       // Description
       const descHtml = step.description
@@ -312,7 +314,7 @@ export class Compa11yStepper extends Compa11yElement {
             <span class="stepper-indicator" data-state="${step.state}" aria-hidden="true" data-compa11y-stepper-indicator part="indicator">${indicatorContent}</span>
             <span class="stepper-text" data-compa11y-stepper-text>
               <span class="stepper-label" data-compa11y-stepper-label part="label">
-                ${this._esc(step.label)}
+                ${labelContent}
                 <span class="sr-only">${srSuffix}</span>
               </span>
               ${descHtml}
@@ -343,7 +345,7 @@ export class Compa11yStepper extends Compa11yElement {
               <span class="stepper-indicator" data-state="${step.state}" aria-hidden="true" data-compa11y-stepper-indicator part="indicator">${indicatorContent}</span>
               <span class="stepper-text" data-compa11y-stepper-text>
                 <span class="stepper-label" data-compa11y-stepper-label part="label">
-                  ${this._esc(step.label)}
+                  ${labelContent}
                 </span>
                 ${descHtml}
               </span>

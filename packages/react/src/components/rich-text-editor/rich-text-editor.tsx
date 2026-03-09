@@ -569,6 +569,8 @@ export const RTEContent = forwardRef<HTMLDivElement, RTEContentProps>(
         aria-invalid={ctx.invalid || undefined}
         aria-required={ctx.required || undefined}
         aria-disabled={ctx.disabled || undefined}
+        aria-live="polite"
+        aria-relevant="text"
         {...props}
       />
     );
